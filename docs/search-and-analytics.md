@@ -85,7 +85,10 @@ Set `gtmId` to load Google Tag Manager on every page. Every page view and event 
 - **Finding things.** `pas_filter` (filter_type, filter_value, school): filter_type is `kind`, `program_type`, `grade`,
   `age`, `relation`, `neighborhood`, `cost`, `day` or `school`. `pas_filter_open` (school, from). `pas_search`
   (search_term, results, school) fires when someone pauses typing in a school page's search box; searches with zero
-  results show what parents want that isn't listed. `pas_near` (from) and `pas_map_open`. `pas_school_pick` (school,
+  results show what parents want that isn't listed. `pas_near` (from: school, me, zip, hood or off) and `pas_map_open`.
+  `pas_hero_tab` (hero_tab: after, off, summer or weekend) when someone picks a tab of the home page search by hand, and
+  `pas_hero_search` (hero_tab; place: zip, neighborhood or none; day_off: next, later or all, on the Days Off tab) when
+  that search sends them to a list. Never which ZIP code or neighborhood. `pas_school_pick` (school,
   covered) when someone picks a school in the finder, `pas_school_request` (school) when they ask for one that isn't
   covered, `pas_school_save` (school) when they save a school as theirs, `pas_school_notify` (school).
   `pas_program_pick` (program_id, method): method is `home_search`, `roster_search`, `program_page`, or `plan_my_week` (from Kids' Playground's "Plan my week" classes, with the day picked).

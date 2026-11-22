@@ -2692,6 +2692,138 @@
         "tagFiringOption": "ONCE_PER_EVENT",
         "parentFolderId": "1",
         "notes": "Someone back on the Support page from paying a contribution on Stripe, once per checkout. The amount is not known to the page. Skipped for a Stripe test-mode checkout (pas_test)."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "44",
+        "name": "GA4 - Event - pas_hero_tab",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_hero_tab"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "hero_tab"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - hero_tab}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "42"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1",
+        "notes": "A tab picked by hand in the home page search: after, off, summer or weekend."
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "tagId": "45",
+        "name": "GA4 - Event - pas_hero_search",
+        "type": "gaawe",
+        "parameter": [
+          {
+            "type": "BOOLEAN",
+            "key": "sendEcommerceData",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "eventName",
+            "value": "pas_hero_search"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "measurementIdOverride",
+            "value": "{{GA4 Measurement ID}}"
+          },
+          {
+            "type": "LIST",
+            "key": "eventSettingsTable",
+            "list": [
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "hero_tab"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - hero_tab}}"
+                  }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "place"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - place}}"
+                  }
+                ]
+              },
+              {
+                "type": "MAP",
+                "map": [
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameter",
+                    "value": "day_off"
+                  },
+                  {
+                    "type": "TEMPLATE",
+                    "key": "parameterValue",
+                    "value": "{{DLV - day_off}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "firingTriggerId": [
+          "43"
+        ],
+        "tagFiringOption": "ONCE_PER_EVENT",
+        "parentFolderId": "1",
+        "notes": "The home page search sent someone to a list. place: zip, neighborhood or none (never which one). day_off on the Days Off tab: next, later or all."
       }
     ],
     "trigger": [
@@ -3760,6 +3892,56 @@
           }
         ],
         "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "42",
+        "name": "CE - pas_hero_tab",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_hero_tab"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "triggerId": "43",
+        "name": "CE - pas_hero_search",
+        "type": "CUSTOM_EVENT",
+        "customEventFilter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{_event}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "pas_hero_search"
+              }
+            ]
+          }
+        ],
+        "parentFolderId": "1"
       }
     ],
     "variable": [
@@ -4782,6 +4964,56 @@
             "type": "TEMPLATE",
             "key": "name",
             "value": "pas_test"
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "43",
+        "name": "DLV - hero_tab",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "hero_tab"
+          }
+        ],
+        "parentFolderId": "1"
+      },
+      {
+        "accountId": "0",
+        "containerId": "0",
+        "variableId": "44",
+        "name": "DLV - day_off",
+        "type": "v",
+        "parameter": [
+          {
+            "type": "INTEGER",
+            "key": "dataLayerVersion",
+            "value": "2"
+          },
+          {
+            "type": "BOOLEAN",
+            "key": "setDefaultValue",
+            "value": "false"
+          },
+          {
+            "type": "TEMPLATE",
+            "key": "name",
+            "value": "day_off"
           }
         ],
         "parentFolderId": "1"

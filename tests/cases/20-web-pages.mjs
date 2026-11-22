@@ -1,7 +1,7 @@
 // The pages in a browser: they load clean, the sign-up notice sits where it should, quiet pages call nobody,
 // and signing in through the page works end to end.
-import { test, ok, eq, includes, excludes, matches, someone, codeIn } from '../lib/harness.mjs';
-import { schools, programs } from '../lib/data.mjs';
+import { test, ok, eq, includes, excludes, matches, someone, codeIn, TODAY } from '../lib/harness.mjs';
+import { schools, programs, daysOff } from '../lib/data.mjs';
 const flat = s => s.replace(/\s+/g, ' ').trim();
 
 const ANALYTICS = /googletagmanager|google-analytics|clarity\.ms|klaviyo/;
@@ -220,6 +220,70 @@ test('each list starts with its question (the school, or a ZIP code that puts th
   includes(await page.locator('#board-focus .focus-name').innerText(), schools()[0].shortName);
   eq(await page.locator('#explore-school').inputValue(), schools()[0].id, 'and browsing starts there too');
   await t2.close();
+});
+
+test('the home page search: a tab for each part of the year, and a ZIP code or a neighborhood opens that list closest first', async (ctx) => {
+  const b = await ctx.browser();
+  const t = await b.context(ctx.site, { width: 390, height: 844, mobile: true });
+  const trim = a => a.map(s => s.replace(/\s+/g, ' ').trim());
+  const on = async pg => (await pg.locator('.hs-tab[aria-selected="true"]').innerText()).trim();
+  let page = await t.open('/');
+  // Four tabs above the box, After-School open: the school or program finder.
+  eq(trim(await page.locator('.hs-tab').allInnerTexts()).join(' | '), 'After-School | Days Off | Summer Camps | Weekends', 'the tabs, in order');
+  eq(await on(page), 'After-School', 'After-School opens first');
+  ok(await page.locator('#find-school').isVisible(), 'with the school or program search');
+  excludes(await page.locator('main').innerText(), 'When do you need coverage', 'the four tiles further down are gone: the tabs do their job');
+  // The arrow keys move between tabs, and a tab is a tab to a screen reader.
+  await page.locator('#hs-t-after').focus(); await page.keyboard.press('ArrowRight');
+  eq(await on(page), 'Days Off', 'the right arrow moves to the next tab');
+  eq(await page.locator('.hs-tabs').getAttribute('role'), 'tablist');
+  // Summer Camps: a neighborhood picked from what's typed; the list opens with the closest first.
+  await page.click('#hs-t-summer');
+  ok(!(await page.locator('#find-school').isVisible()), 'the school box gives way to the ZIP code or neighborhood box');
+  ok(await page.evaluate(() => (window.dataLayer || []).some(x => x.event === 'pas_hero_tab' && x.hero_tab === 'summer')), 'analytics hears which tab');
+  await page.fill('#hs-q-summer', 'fish');
+  await page.waitForSelector('#hs-q-summer-list:not([hidden])');
+  const picks = trim(await page.locator('#hs-q-summer-list b').allInnerTexts());
+  eq(picks.filter(x => /fishtown/i.test(x)).length, 1, 'Fishtown is offered once: ' + picks.join(', '));
+  await Promise.all([page.waitForURL(/\/summer-camps\/$/), page.locator('#hs-q-summer-list button').first().click()]);
+  await page.waitForSelector('.focus .focus-on:not([hidden])');
+  includes(await page.locator('.focus-name').innerText(), 'Fishtown', 'the summer list starts from the neighborhood');
+  ok(await page.locator('[data-item] .mi-pill').count() > 2, 'with distances on the camps');
+  // Back on the home page: the tab last used opens, with the place already in the box.
+  page = await t.open('/');
+  eq(await on(page), 'Summer Camps', 'the last tab used opens');
+  includes(await page.inputValue('#hs-q-summer'), 'Fishtown', 'and the box remembers where');
+  // Weekends with a ZIP code. One the site doesn't know is said plainly, and nothing moves.
+  await page.click('#hs-t-weekend');
+  await page.fill('#hs-q-weekend', '00000'); await page.click('#hs-p-weekend .hs-go');
+  matches(await page.locator('#hs-p-weekend .hs-say').innerText(), /isn’t one this site knows/, 'an unknown ZIP code');
+  await page.fill('#hs-q-weekend', 'qqqq'); await page.click('#hs-p-weekend .hs-go');
+  matches(await page.locator('#hs-p-weekend .hs-say').innerText(), /neighborhood this site knows/, 'an unknown neighborhood');
+  await page.fill('#hs-q-weekend', '19147');
+  await Promise.all([page.waitForURL(/\/weekends\/$/), page.click('#hs-p-weekend .hs-go')]);
+  await page.waitForSelector('.focus .focus-on:not([hidden])');
+  includes(await page.locator('.focus-name').innerText(), '19147', 'the weekend list starts from the ZIP code');
+  // Days Off: which day, the next one picked, or all of them for planning the year.
+  page = await t.open('/');
+  await page.click('#hs-t-off');
+  const next = daysOff().days.find(d => (d.end || d.date) >= TODAY);
+  matches(await page.locator('#hs-day option').first().innerText(), /All days off/, '"All days off" is in the list');
+  includes(await page.locator('#hs-day option:checked').innerText(), next.name.replace(/\brecess\b/i, 'break'), 'the next day off is picked');
+  includes(await page.locator('#hs-day').inputValue(), next.date, 'and leads to its own page');
+  await page.selectOption('#hs-day', { index: 0 });
+  await page.fill('#hs-q-off', 'south philly');
+  await Promise.all([page.waitForURL(/\/day-camps\/$/), page.press('#hs-q-off', 'Enter')]);
+  await page.waitForSelector('.focus .focus-on:not([hidden])');
+  includes(await page.locator('.focus-name').innerText(), 'South Philadelphia', '"All days off" opens every day-off camp, closest first, from what people call it');
+  // The list's own question takes a neighborhood too.
+  await page.locator('.focus-change').click();
+  await page.fill('#focus-zip', 'passyunk sq');
+  await page.waitForSelector('#focus-zip-list:not([hidden])');
+  await page.locator('#focus-zip-list button').first().click();
+  includes(await page.locator('.focus-name').innerText(), 'Passyunk Square', 'picked from the list on the page');
+  ok(!t.outside.some(u => /19147|fishtown|passyunk|philly/i.test(u)), 'where someone lives went nowhere');
+  eq(t.errors.length, 0, 'no page errors: ' + t.errors.join(' | '));
+  await t.close();
 });
 
 test('“Get the app”: on a phone the steps (or the browser’s own prompt), on a computer in the footer only, and not where a site can’t be installed', async (ctx) => {

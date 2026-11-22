@@ -1519,6 +1519,158 @@ document.addEventListener('click', function (e) {
     });
     return out;
   }
+  // ----- where you live: a ZIP code or a neighborhood (placeInput in build.mjs) -----
+  // The home page's search and the question at the top of each closest-first list. A neighborhood is picked from what
+  // is typed (the names in data-hoods: [slug, name, lat, lng, other names]); five digits are a ZIP code. What was
+  // picked is kept on this device only: "pas-my-near" holds "zip:19147" or "hood:passyunk-square" (the newest answer
+  // wins), and a ZIP code also goes in "pas-my-zip", where the lists kept it before neighborhoods.
+  function placeLists(box) {
+    var z = {}, h = [];
+    try { z = JSON.parse(box.getAttribute('data-zips')) || {}; } catch (e) { z = {}; }
+    try { h = JSON.parse(box.getAttribute('data-hoods')) || []; } catch (e) { h = []; }
+    return { zips: z, hoods: h };
+  }
+  var plain = function (s) { return String(s || '').toLowerCase().replace(/[’'.]/g, '').replace(/[–—\-\/,]+/g, ' ').replace(/\s+/g, ' ').trim(); };
+  function hoodsLike(hoods, text) {
+    var q = plain(text); if (!q) return [];
+    var words = q.split(' ');
+    var scored = [];
+    hoods.forEach(function (r) {
+      var name = plain(r[1]), hay = (name + ' ' + plain(r[4])).split(' ');
+      if (!words.every(function (w) { return hay.some(function (x) { return x.indexOf(w) === 0; }); })) return;
+      scored.push({ r: r, s: name === q ? 0 : name.indexOf(q) === 0 ? 1 : (' ' + plain(r[4]) + ' ').indexOf(' ' + q) > -1 ? 2 : 3 });
+    });
+    scored.sort(function (a, b) { return a.s - b.s || a.r[1].localeCompare(b.r[1]); });
+    return scored.map(function (x) { return x.r; });
+  }
+  function placeFrom(lists, text) {
+    var q = String(text || '').trim();
+    if (!q) return { error: 'Type your ZIP code or neighborhood.' };
+    if (/^[\d\s-]+$/.test(q)) {
+      var z = q.replace(/\D/g, '').slice(0, 5);
+      if (z.length < 5) return { error: 'Type a five-digit ZIP code.' };
+      if (!lists.zips[z]) return { error: 'That ZIP code isn’t one this site knows. It has the ones in and around Philadelphia.' };
+      return { kind: 'zip', key: 'zip:' + z, text: z, label: 'ZIP code ' + z, ll: lists.zips[z] };
+    }
+    var hit = hoodsLike(lists.hoods, q)[0];
+    if (!hit) return { error: 'That isn’t a Philadelphia neighborhood this site knows. Try your ZIP code.' };
+    return { kind: 'hood', key: 'hood:' + hit[0], text: hit[1], label: hit[1], ll: [hit[2], hit[3]] };
+  }
+  function savedPlace(lists) {
+    var k = store('pas-my-near') || '', z = store('pas-my-zip') || '';
+    if (/^hood:/.test(k)) {
+      var slug = k.slice(5), r = null;
+      lists.hoods.forEach(function (x) { if (x[0] === slug) r = x; });
+      if (r) return { kind: 'hood', key: k, text: r[1], label: r[1], ll: [r[2], r[3]] };
+    }
+    if (/^zip:\d{5}$/.test(k)) z = k.slice(4);
+    if (z && lists.zips[z]) return { kind: 'zip', key: 'zip:' + z, text: z, label: 'ZIP code ' + z, ll: lists.zips[z] };
+    return null;
+  }
+  function keepPlace(p) { store('pas-my-near', p.key); if (p.kind === 'zip') store('pas-my-zip', p.text); }
+  function forgetPlace() { try { window.localStorage.removeItem('pas-my-near'); window.localStorage.removeItem('pas-my-zip'); } catch (e) { /* nothing saved */ } }
+  // The suggestions under the box: neighborhoods that match what's typed. Picking one (a tap, or Enter on a highlighted
+  // one) fills the box and calls picked(place).
+  function placePicker(input, lists, picked) {
+    var list = document.getElementById(input.getAttribute('aria-controls')), shown = [], active = -1;
+    var close = function () { if (!list) return; list.hidden = true; input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); active = -1; };
+    var mark = function () {
+      all(list, 'li').forEach(function (li, i) { li.setAttribute('aria-selected', String(i === active)); });
+      if (active > -1) input.setAttribute('aria-activedescendant', list.id + '-' + active); else input.removeAttribute('aria-activedescendant');
+    };
+    var choose = function (r) {
+      input.value = r[1]; close();
+      picked({ kind: 'hood', key: 'hood:' + r[0], text: r[1], label: r[1], ll: [r[2], r[3]] });
+    };
+    var render = function () {
+      if (!list) return;
+      list.textContent = ''; active = -1;
+      var q = input.value.trim();
+      shown = /^[\d\s-]*$/.test(q) ? [] : hoodsLike(lists.hoods, q).slice(0, 6);
+      if (!shown.length) { close(); return; }
+      shown.forEach(function (r, i) {
+        var li = el('li'); li.id = list.id + '-' + i; li.setAttribute('role', 'option');
+        var b = el('button'); b.type = 'button'; b.tabIndex = -1;
+        b.appendChild(el('b', null, r[1]));
+        b.addEventListener('mousedown', function (e) { e.preventDefault(); });   // keep the box focused until the tap lands
+        b.addEventListener('click', function () { choose(r); });
+        li.appendChild(b); list.appendChild(li);
+      });
+      list.hidden = false; input.setAttribute('aria-expanded', 'true');
+    };
+    input.addEventListener('input', render);
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        if (!shown.length || !list || list.hidden) return;
+        e.preventDefault();
+        active = e.key === 'ArrowDown' ? (active + 1) % shown.length : (active <= 0 ? shown.length - 1 : active - 1);
+        mark();
+      } else if (e.key === 'Enter' && active > -1 && shown[active]) { e.preventDefault(); choose(shown[active]); }
+      else if (e.key === 'Escape') close();
+    });
+    input.addEventListener('blur', function () { setTimeout(close, 150); });
+    return { close: close };
+  }
+
+  // ----- the home page's search: a tab for each part of the year (heroSearch in build.mjs) -----
+  var hs = document.querySelector('[data-hero-search]');
+  if (hs) (function () {
+    var tabRow = hs.querySelector('.hs-tabs'), tabs = all(hs, '.hs-tab'), panels = all(hs, '[data-panel]');
+    var lists = placeLists(hs);
+    var pick = function (id, byHand) {
+      tabs.forEach(function (t) {
+        var on = t.getAttribute('data-tab') === id;
+        t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; t.removeAttribute('aria-current');
+      });
+      panels.forEach(function (p) { p.hidden = p.getAttribute('data-panel') !== id; });
+      if (byHand) { store('pas-hero-tab', id); track({ event: 'pas_hero_tab', hero_tab: id }); }
+    };
+    tabRow.setAttribute('role', 'tablist');
+    tabs.forEach(function (t, i) {
+      t.setAttribute('role', 'tab');
+      t.addEventListener('click', function (e) { e.preventDefault(); pick(t.getAttribute('data-tab'), true); });
+      t.addEventListener('keydown', function (e) {
+        var to = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : null;
+        if (to === null) return;
+        e.preventDefault();
+        to = (to + tabs.length) % tabs.length;
+        pick(tabs[to].getAttribute('data-tab'), true); tabs[to].focus();
+      });
+    });
+    var open = panels.filter(function (p) { return !p.hidden; })[0];
+    pick(open ? open.getAttribute('data-panel') : 'after', false);
+    // Days Off: the days still ahead, the next one picked, and "All days off" for planning the whole year.
+    var day = hs.querySelector('.hs-day-pick');
+    if (day) {
+      all(day, 'option[data-until]').forEach(function (o) { if (o.getAttribute('data-until') < today) day.removeChild(o); });
+      var next = day.querySelector('option[data-until]');
+      (next || day.querySelector('option[data-all]')).selected = true;
+    }
+    var mine = savedPlace(lists);
+    all(hs, 'form[data-panel]').forEach(function (form) {
+      var input = form.querySelector('.place-q'), say = form.querySelector('.hs-say'), tab = form.getAttribute('data-panel');
+      if (mine && !input.value) input.value = mine.text;
+      var go = function (p) {
+        var to = day && tab === 'off' ? day.value : form.getAttribute('action');
+        if (p) keepPlace(p);
+        var when = '';
+        if (day && tab === 'off') { var o = day.options[day.selectedIndex]; when = o.hasAttribute('data-all') ? 'all' : o === day.querySelector('option[data-until]') ? 'next' : 'later'; }
+        track({ event: 'pas_hero_search', hero_tab: tab, place: p ? (p.kind === 'zip' ? 'zip' : 'neighborhood') : 'none', day_off: when });
+        location.href = to;
+      };
+      placePicker(input, lists, go);
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (!input.value.trim()) { forgetPlace(); go(null); return; }   // nothing typed: the whole list, in its own order
+        var p = placeFrom(lists, input.value);
+        if (p.error) { say.textContent = p.error; input.focus(); return; }
+        say.textContent = '';
+        go(p);
+      });
+      input.addEventListener('input', function () { if (say.textContent) say.textContent = ''; });
+    });
+  })();
+
   var finderCache = null;
   function loadFinder(box, done) {
     if (finderCache) { done(finderCache); return; }
@@ -5656,23 +5808,27 @@ document.addEventListener('click', function (e) {
         wide.addEventListener('click', function () { state.hood = 'ALL'; keepHood('ALL'); asking = false; apply(); track({ event: 'pas_focus', focus: 'neighborhood', how: 'wide' }); });
       } else if (focusMode === 'near') {
         if (!nearApi) { focusEl.hidden = true; return; }
-        var zips = {}; try { zips = JSON.parse(focusEl.getAttribute('data-zips')) || {}; } catch (e) { zips = {}; }
+        var lists = placeLists(focusEl);
         var zipIn = focusEl.querySelector('.focus-zip'), form = focusEl.querySelector('form'), meGo = focusEl.querySelector('.focus-me'), schoolGo = focusEl.querySelector('.focus-school');
-        var useZip = function (z, quiet) {
-          z = String(z || '').replace(/\D/g, '').slice(0, 5);
-          if (!zips[z]) { if (note) note.textContent = z.length === 5 ? 'That ZIP code isn’t one this site knows. It has the ones in and around Philadelphia.' : 'Type a five-digit ZIP code.'; return; }
+        var usePlace = function (p, quiet) {
           if (note) note.textContent = '';
-          store('pas-my-zip', z); asking = false;
-          nearApi.set({ ll: zips[z], label: 'ZIP code ' + z, kind: 'zip' }, 'Measured from the middle of the ZIP code, which stays on this device.', quiet);
+          keepPlace(p); asking = false;
+          nearApi.set({ ll: p.ll, label: p.label, kind: p.kind }, p.kind === 'zip' ? 'Measured from the middle of the ZIP code, which stays on this device.' : 'Measured from the middle of the neighborhood.', quiet);
         };
+        placePicker(zipIn, lists, function (p) { usePlace(p); });
         focusPaint = function () { var r = nearApi.ref(); show(r ? r.label : ''); };
         nearApi.onChange = function () { asking = false; focusPaint(); };
-        form.addEventListener('submit', function (e) { e.preventDefault(); useZip(zipIn.value); });
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var p = placeFrom(lists, zipIn.value);
+          if (p.error) { if (note) note.textContent = p.error; return; }
+          usePlace(p);
+        });
         if (meGo) { if (nearApi.me && !nearApi.me.hidden) meGo.addEventListener('click', function () { nearApi.me.click(); }); else meGo.hidden = true; }
         if (schoolGo) { if (nearApi.school) { schoolGo.hidden = false; schoolGo.textContent = nearApi.school.textContent; schoolGo.addEventListener('click', function () { nearApi.school.click(); }); } else schoolGo.hidden = true; }
-        wide.addEventListener('click', function () { try { window.localStorage.removeItem('pas-my-zip'); } catch (e) { /* nothing saved */ } nearApi.set(null); });
-        var savedZip = store('pas-my-zip');
-        if (savedZip && zips[savedZip]) { zipIn.value = savedZip; useZip(savedZip, true); }
+        wide.addEventListener('click', function () { forgetPlace(); nearApi.set(null); });
+        var saved = savedPlace(lists);
+        if (saved) { zipIn.value = saved.text; usePlace(saved, true); }
       }
       focusEl.hidden = false;
     })();
