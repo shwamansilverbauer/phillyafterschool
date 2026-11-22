@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-11-21",
+  "generated": "2026-11-22",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -2661,76 +2661,6 @@
       "text": "You asked to be told. 3 programs are listed for Steel so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/steel/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
-    },
-    {
-      "id": "reg-fleisher-art-memorial-2026-11-21",
-      "schools": [
-        "nebinger",
-        "meredith",
-        "coppin",
-        "vare-washington",
-        "mccall",
-        "kirkbride"
-      ],
-      "programs": [
-        "fleisher-art-memorial"
-      ],
-      "part": "after",
-      "title": "Fleisher Art Memorial",
-      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing",
-      "kind": "register",
-      "date": "2026-11-21",
-      "sendOn": "2026-11-15",
-      "when": "Saturday, November 21",
-      "text": "Last day of winter term registration for enrolled students."
-    },
-    {
-      "id": "reg-fleisher-art-memorial-2026-11-21-day",
-      "schools": [
-        "nebinger",
-        "meredith",
-        "coppin",
-        "vare-washington",
-        "mccall",
-        "kirkbride"
-      ],
-      "programs": [
-        "fleisher-art-memorial"
-      ],
-      "part": "after",
-      "title": "Fleisher Art Memorial",
-      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing",
-      "kind": "today",
-      "date": "2026-11-21",
-      "sendOn": "2026-11-21",
-      "when": "Today, Saturday, November 21",
-      "text": "Last day of winter term registration for enrolled students."
-    },
-    {
-      "id": "reg-fleisher-art-memorial-2026-11-21-eve",
-      "schools": [
-        "nebinger",
-        "meredith",
-        "coppin",
-        "vare-washington",
-        "mccall",
-        "kirkbride"
-      ],
-      "programs": [
-        "fleisher-art-memorial"
-      ],
-      "part": "after",
-      "title": "Fleisher Art Memorial",
-      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing",
-      "kind": "soon",
-      "date": "2026-11-21",
-      "sendOn": "2026-11-20",
-      "expires": "2026-11-20",
-      "when": "Tomorrow, Saturday, November 21",
-      "text": "Last day of winter term registration for enrolled students."
     },
     {
       "id": "reg-the-philadelphia-school-2026-11-23",
