@@ -116,7 +116,9 @@ These are the only parts of the site that store anything about a child on the se
   The build works out each listing's address and hands the list to the server (`claimListings()` in `build.mjs`):
   programs are `p:<id>`, summer camps `c:<id>`. Where the address is shared by many unrelated people the claim is
   `manual` and waits for the owner: any `.gov` or `.edu`, the names in `CLAIM_SHARED` (the school district,
-  booking and site-builder services, the library, the YMCA), and every school-clubs listing. Add a name to
+  booking and site-builder services, the library, the YMCA, and franchise chains whose locations share one website,
+  such as School of Rock, Code Ninjas and Brooklyn Robot Foundry), and every school-clubs listing (any listing with
+  `clubs`). Add a name to
   `CLAIM_SHARED` when a listing's website turns out to be shared. A personal address (Gmail and the like) can never
   claim anything, because no listing's website is there.
   A claimed listing shows a "Claimed" mark, fetched from `groups/api.php?action=claimed` (listing keys only, never
