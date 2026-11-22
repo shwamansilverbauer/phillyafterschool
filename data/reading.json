@@ -232,5 +232,35 @@
     "how": "person",
     "why": "Its robots.txt closes the site to ClaudeBot and other AI crawlers, so its program sites are taken from the City’s locator.",
     "seen": "2026-11-21"
+  },
+  {
+    "match": "www.kippphiladelphia.org",
+    "how": "person",
+    "why": "The site answered HTTP 403 to a plain request on 2026-11-22, so KIPP schools were passed over in the new-schools run.",
+    "seen": "2026-11-22"
+  },
+  {
+    "match": "www.philadelphiahebrewpublic.org",
+    "how": "person",
+    "why": "The site answered HTTP 403 to a plain request on 2026-11-22.",
+    "seen": "2026-11-22"
+  },
+  {
+    "match": "cadekids.org",
+    "how": "person",
+    "why": "The site answered HTTP 403 to a plain request on 2026-11-22, so CADEkids is listed from McClure’s own page.",
+    "seen": "2026-11-22"
+  },
+  {
+    "match": "glacharter.org",
+    "how": "browser",
+    "why": "A Squarespace site that builds its pages with JavaScript; a plain fetch of a campus page gets little text, and the handbooks are PDFs linked from Important Links.",
+    "seen": "2026-11-22"
+  },
+  {
+    "match": "ppa.stringtheoryschools.org",
+    "how": "browser",
+    "why": "A Finalsite site built with JavaScript; its aftercare page showed no text even in a browser on 2026-11-22.",
+    "seen": "2026-11-22"
   }
 ]
