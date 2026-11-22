@@ -27,7 +27,8 @@ at a folder that has it. Without Playwright the browser tests are reported as sk
    password made up for the run; the real password is never anywhere but a hash in the config.
 2. starts one small HTTP server that stands in for the outside world: Postmark (what the site would email lands in
    `ctx.mail`), Google's token check (a test registers a credential and the claims it should carry), a browser's push
-   service, and GitHub. The site is pointed at it with the `PAS_TEST_*` variables the server honours only under PHP's
+   service, and GitHub (the private backup and ops repositories, and this repository's pull requests, files, merges,
+   the GraphQL revert, workflow runs and issues: `github.repo`). The site is pointed at it with the `PAS_TEST_*` variables the server honours only under PHP's
    built-in server.
 3. starts `php -S` on the built copy, with a fresh accounts database under `tests/.scratch/phillyafterschool-data/`
    and a stand-in Postmark key (the key's shape is checked; the value never leaves the machine), with no proxy.
@@ -52,7 +53,8 @@ time. When `data/days-off.json` moves to a new school year, move it (one place) 
 | `15-api-claims.mjs` | claiming a listing with a work email, a parent's question passed to its holders, a proposed change, the manager's emails switch |
 | `17-api-passport.mjs` | the Passport: suggestions from the plans, confirming and ranking, sealed on disk, co-parents sharing it |
 | `18-api-health.mjs` | the health answer's report on the key `/edit/` publishes with: working, days left, refused, replaced, never shown; the note for each new account; the copy off the host and its restore drill |
-| `19-api-queue.mjs` | the private queue: suggestions, a proposed change and a school ask written to a stand-in ops repository with no address in it, only when changed; outcome files answering each sender once in the site's words (a run's own words ignored), "it's on the site" only after the merge; `/edit/queue/` as a view, "Not for the run", a note, Rush; the sign-up digest |
+| `19-api-queue.mjs` | the private queue: suggestions, a proposed change and a school ask written to a stand-in ops repository with no address in it, only when changed; outcome files answering each sender once in the site's words (a run's own words ignored), "it's on the site" only after the merge; `/edit/queue/` as a view, "Not for the run", a note, Rush; the sign-up digest (with the morning summary off) |
+| `24-api-needs.mjs` | the Needs-you page, the autopilot log and the morning summary against a stand-in GitHub: a held run pull request shows with the gate's reason (a look-alike comment ignored), Approve merges the commit shown and refuses one that touches the switch, Decline closes; the switch is one commit keeping its `about` line, and on needs the shadow test or a tick; the log's changes and quotes, the warning that an email may have gone, Undo through GitHub's revert, a clash refused; the spot-check; a claim decided from the page; the summary's email and push, once a day, the digest giving way; a failed publish pushed once; the sign-in and no key file |
 | `16-edit-gate.mjs` | `/edit/` asks for a sign-in, refuses a wrong password, and the cookie opens the editor and the queue |
 | `20-web-pages.mjs` | pages load without errors; the finder; the privacy page says what the notice promises; the sign-up notice sits under the email form; signing in through the page; quiet pages (account, profile, Passport, calendar, to-do) ask no other site for anything, fonts included, and the email list hears nothing about a child |
 | `21-web-planners.mjs` | each planner, signed in: a first name and a pick keep the plan in the profile, and it comes back on another device |

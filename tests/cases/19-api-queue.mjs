@@ -200,7 +200,7 @@ test('/edit/queue/ is a view: no ticking or Send, “Not for the run” takes an
   noKey(site);
 });
 
-test('sign-ups in digest mode: a parent’s new account sends the owner nothing at once, and one email the next morning counts it', async ({ api, site, mail }) => {
+test('sign-ups in digest mode (morning summary off): a parent’s new account sends the owner nothing at once, and one email the next morning counts it', async ({ api, site, mail }) => {
   const email = someone('digest');
   const parent = api().as(email, '', '');
   await parent.okay('POST', 'set_name', { first: 'Jo', last: 'Digest' });
@@ -208,11 +208,11 @@ test('sign-ups in digest mode: a parent’s new account sends the owner nothing 
   ok(!mail.to('contact@phillyafterschool.org').some(m => /New Parent Account Signup/.test(m.Subject) && m.TextBody.includes(email)), 'no email of its own');
   // The next morning's digest: a count, and nobody's address.
   const tomorrow = new Date(Date.now() + 864e5).toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
-  const d = (await api().okay('POST', 'push_run', { digest_force: true, digest_today: tomorrow })).digest;
+  const d = (await api().okay('POST', 'push_run', { digest_force: true, digest_today: tomorrow, summary_mode: 'off' })).digest;   // with the morning summary on, it carries these counts (24-api-needs.mjs)
   eq(d.state, 'sent', JSON.stringify(d)); ok(d.n >= 1);
   const m = await mail.waitFor('contact@phillyafterschool.org', /New parent accounts yesterday: \d+/);
   matches(m.TextBody, /\d+ new parent accounts? on \w+day/); excludes(m.TextBody, email, 'counts only');
   // Once a day.
-  const again = (await api().okay('POST', 'push_run', { digest_today: tomorrow })).digest;
+  const again = (await api().okay('POST', 'push_run', { digest_today: tomorrow, summary_mode: 'off' })).digest;
   ok(again.state !== 'sent', 'not twice the same day');
 });

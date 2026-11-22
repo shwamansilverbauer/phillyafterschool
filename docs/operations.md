@@ -96,6 +96,10 @@ than a minute-by-minute alarm; for that, point a free uptime service at the home
 scheduled jobs in a repository that has had no changes for 60 days; merging the monthly check keeps that from
 happening, and the check itself says so if a daily job stops.
 
+**The owner's own notices.** The morning summary (`docs/emails.md`, "The morning summary") says each day how the runs,
+the site check, the last publish and the copy off the host stand, and a failed publish is pushed to the site admins'
+phones at once. Both come from the hourly `push_run`.
+
 ## Sending email
 
 The site's own emails (sign-in codes, invitations, notices to managers and to you, and what the forms send to the

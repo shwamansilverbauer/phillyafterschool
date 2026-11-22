@@ -77,6 +77,17 @@ export async function startStandin() {
   // Pull requests on the main repository, as GET /repos/o/r/pulls/<n> answers: a test sets github.pulls[n] =
   // { state, merged, merged_at }. One that isn't set answers as open.
   github.pulls = {};
+  // The public repository itself, for the Needs-you page, the autopilot log and the morning summary. A pull request
+  // with a head (a whole one, as GitHub gives it) is also listed by GET /pulls; github.repo.prFiles[n] lists its files
+  // and github.repo.comments[n] its comments; PUT .../merge merges it (refused when the sha isn't its head), PATCH
+  // closes it. Files on a branch or at a commit: github.repo.put(path, text, ref = 'main'), and PUT /contents writes one
+  // (github.repo.commits has each write). POST /graphql makes GitHub's revert of a merged pull request (a new pull
+  // request), or answers github.repo.revertFails as an error. github.repo.runs: the publish workflow's runs;
+  // github.repo.issues: the open issues. github.repo.merges records each merge.
+  const repo = { files: new Map(), commits: [], merges: [], prFiles: {}, comments: {}, runs: [], issues: [], revertFails: '',
+    put(p, text, ref = 'main') { const sha = gid(); this.files.set(ref + ':' + p, { text: Buffer.from(text), sha }); return sha; },
+    read(p, ref = 'main') { const f = this.files.get(ref + ':' + p); return f ? f.text.toString() : null; } };
+  github.repo = repo;
   const server = http.createServer((req, res) => {
     let body = '';
     req.on('data', c => { body += c; });
@@ -134,6 +145,60 @@ export async function startStandin() {
         }
         const pull = u.pathname.match(/^\/github\/repos\/[^/]+\/[^/]+\/pulls\/(\d+)$/);
         if (pull && req.method === 'GET') return json(200, { number: +pull[1], state: 'open', merged: false, merged_at: null, ...(github.pulls[pull[1]] || {}) });
+        let b = {}; try { b = JSON.parse(body || '{}'); } catch (e) { /* not json */ }
+        const stamp = () => new Date().toISOString().replace(/\.\d+Z$/, 'Z');
+        if (u.pathname === '/github/graphql' && req.method === 'POST') {
+          if (repo.revertFails) return json(200, { data: { revertPullRequest: null }, errors: [{ message: repo.revertFails }] });
+          const id = b.variables && b.variables.id;
+          const was = Object.values(github.pulls).find(p => p && p.node_id === id && p.merged);
+          if (!/revertPullRequest/.test(b.query || '') || !was) return json(200, { errors: [{ message: 'Could not resolve to a node with the global id' }] });
+          const number = Math.max(0, ...Object.keys(github.pulls).map(Number)) + 1, sha = gid();
+          github.pulls[number] = { number, state: 'open', merged: false, merged_at: null, title: b.variables.title, node_id: 'PR_' + number, user: { login: was.user.login }, created_at: stamp(), updated_at: stamp(),
+            head: { ref: `revert-${was.number}-${was.head.ref}`, sha, repo: was.head.repo }, base: { ref: 'main', repo: was.base.repo } };
+          return json(200, { data: { revertPullRequest: { revertPullRequest: { number, headRefOid: sha, url: 'https://github.test/pull/' + number } } } });
+        }
+        const r = u.pathname.match(/^\/github\/repos\/[^/]+\/[^/]+\/(.+)$/);
+        if (r) {
+          const rest = r[1]; let m;
+          if (rest === 'pulls' && req.method === 'GET') {
+            const st = u.searchParams.get('state') || 'open';
+            const list = Object.values(github.pulls).filter(p => p && p.head && (st === 'all' || p.state === st));
+            return json(200, list.sort((x, y) => String(y.updated_at || '').localeCompare(String(x.updated_at || ''))));
+          }
+          if ((m = /^pulls\/(\d+)\/files$/.exec(rest)) && req.method === 'GET') return json(200, (repo.prFiles[m[1]] || []).map(filename => ({ filename })));
+          if ((m = /^pulls\/(\d+)\/merge$/.exec(rest)) && req.method === 'PUT') {
+            const p = github.pulls[m[1]];
+            if (!p || !p.head) return json(404, { message: 'Not Found' });
+            if (p.state !== 'open' || p.mergeable === false) return json(405, { message: 'Pull Request is not mergeable' });
+            if (b.sha && b.sha !== p.head.sha) return json(409, { message: 'Head branch was modified' });
+            Object.assign(p, { state: 'closed', merged: true, merged_at: stamp(), closed_at: stamp(), updated_at: stamp(), merge_commit_sha: gid(), merged_by: { login: 'shwamansilverbauer' } });
+            repo.merges.push({ pr: +m[1], ...b });
+            return json(200, { merged: true, sha: p.merge_commit_sha, message: 'Pull Request successfully merged' });
+          }
+          if ((m = /^pulls\/(\d+)$/.exec(rest)) && req.method === 'PATCH') {
+            const p = github.pulls[m[1]];
+            if (!p) return json(404, { message: 'Not Found' });
+            if (b.state === 'closed') Object.assign(p, { state: 'closed', closed_at: stamp(), updated_at: stamp() });
+            return json(200, p);
+          }
+          if ((m = /^issues\/(\d+)\/comments$/.exec(rest)) && req.method === 'GET') return json(200, repo.comments[m[1]] || []);
+          if (rest === 'issues' && req.method === 'GET') return json(200, repo.issues);
+          if (rest === 'actions/workflows/publish.yml/runs' && req.method === 'GET') return json(200, { total_count: repo.runs.length, workflow_runs: repo.runs });
+          if ((m = /^contents\/(.+)$/.exec(rest))) {
+            const p = decodeURIComponent(m[1]);
+            if (req.method === 'GET') {
+              const f = repo.files.get((u.searchParams.get('ref') || 'main') + ':' + p);
+              return f ? json(200, { type: 'file', name: p.split('/').pop(), path: p, sha: f.sha, encoding: 'base64', content: f.text.toString('base64').replace(/(.{60})/g, '$1\n') }) : json(404, { message: 'Not Found' });
+            }
+            if (req.method === 'PUT') {
+              const ref = b.branch || 'main', had = repo.files.get(ref + ':' + p);
+              if (had && b.sha !== had.sha) return json(409, { message: 'sha does not match' });
+              const sha = repo.put(p, Buffer.from(b.content || '', 'base64').toString(), ref);
+              repo.commits.push({ path: p, message: b.message || '', branch: ref });
+              return json(had ? 200 : 201, { content: { path: p, sha }, commit: { sha: gid(), html_url: 'https://github.test/commit' } });
+            }
+          }
+        }
         if (github.expires) res.setHeader('github-authentication-token-expiration', github.expires);
         return json(200, { ok: true });
       }
@@ -151,7 +216,7 @@ export async function startSite({ scratch, standin, log = () => {} } = {}) {
   const copy = path.join(dir, 'repo'), pub = path.join(dir, 'public'), dataDir = path.join(dir, 'phillyafterschool-data');
   fs.rmSync(copy, { recursive: true, force: true }); fs.rmSync(pub, { recursive: true, force: true }); fs.rmSync(dataDir, { recursive: true, force: true });
   for (const f of ['phillyafterschool-github.key', 'phillyafterschool-github-check.json']) fs.rmSync(path.join(dir, f), { force: true });   // left by a run that stopped part way
-  for (const f of ['phillyafterschool-suggestions.log', 'phillyafterschool-queue.json', 'phillyafterschool-school-requests.log', 'phillyafterschool-queue-rush.json']) fs.rmSync(path.join(dir, f), { force: true });   // the queue starts empty
+  for (const f of ['phillyafterschool-suggestions.log', 'phillyafterschool-queue.json', 'phillyafterschool-school-requests.log', 'phillyafterschool-queue-rush.json', 'phillyafterschool-needs-write.json', 'phillyafterschool-needs-sync.json']) fs.rmSync(path.join(dir, f), { force: true });   // the queue starts empty, and the owner's pages' hourly caps with it
   fs.mkdirSync(copy, { recursive: true });
   // A copy of what the build reads, so the repository's own dist/ is left alone.
   for (const f of ['build.mjs', 'site.config.json', 'data', 'src', 'email', 'scripts']) fs.cpSync(path.join(ROOT, f), path.join(copy, f), { recursive: true });

@@ -93,7 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     }
   }
-  header('Location: ./?said=' . rawurlencode($msg), true, 303);
+  // "Not for the run" pressed on the Needs-you page (edit/needs/) goes back there with the message.
+  header('Location: ' . (isset($_POST['back']) && $_POST['back'] === 'needs' ? '../needs/' : './') . '?said=' . rawurlencode($msg), true, 303);
   exit;
 }
 

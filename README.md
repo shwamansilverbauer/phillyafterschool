@@ -13,14 +13,14 @@ agents: the commands, the standing rules and which file to open for a task.
 | [`docs/setup.md`](docs/setup.md) | **Setup, building and publishing.** What is in the repository, the settings file, the build, and how a change reaches the live site. |
 | [`docs/tests.md`](docs/tests.md) | **Tests.** Running the tests, and building the site for a fixed day. |
 | [`docs/operations.md`](docs/operations.md) | **Backups, monitoring and sending email.** The accounts database backups, the restore drill, monitoring, and how the site sends email. |
-| [`docs/listings.md`](docs/listings.md) | **Schools and listings: adding, editing, keeping current.** Adding a school, editing a listing, the scheduled research runs, the monthly check and the autopilot gate. |
+| [`docs/listings.md`](docs/listings.md) | **Schools and listings: adding, editing, keeping current.** Adding a school, editing a listing, the scheduled research runs, the monthly check, the autopilot gate and the Needs-you page. |
 | [`docs/pages.md`](docs/pages.md) | **The public pages.** Program, school and neighborhood pages, finding programs, the menu, the map and the small pages. |
 | [`docs/camps-and-weekends.md`](docs/camps-and-weekends.md) | **Summer camps and weekend classes.** The summer camp pages and plan, and the weekend classes list. |
 | [`docs/planners.md`](docs/planners.md) | **The planners.** Build your week, the days-off and summer plans, the calendar, rosters, and why planners need an account. |
 | [`docs/accounts.md`](docs/accounts.md) | **Accounts, profiles and sharing.** Sign-in, accounts, co-parents, share groups, claiming a listing, follows and favorites, the profile and account pages. |
 | [`docs/kids-playground.md`](docs/kids-playground.md) | **Kids' Playground.** The kids' section: lightbulbs, pins, the map, the showdown, bingo and Plan my week. |
 | [`docs/program-managers.md`](docs/program-managers.md) | **Program managers, premium listings and reviews.** What managers can do, premium listings, the monthly numbers, space, granting a claim by hand, and reviews. |
-| [`docs/emails.md`](docs/emails.md) | **Editing the wording, and emails to parents.** The /edit/ wording and email editor, date emails, push notifications, this week at your school, and the owner notes. |
+| [`docs/emails.md`](docs/emails.md) | **Editing the wording, and emails to parents.** The /edit/ wording and email editor, date emails, push notifications, this week at your school, the owner notes and the morning summary. |
 | [`docs/search-and-analytics.md`](docs/search-and-analytics.md) | **Search engines and analytics.** Being found by search engines, analytics, and telling parents and managers apart in it. |
 
 ## Every section, and where it is
@@ -47,6 +47,7 @@ The docs refer to each other by section name ("see \"Site admins\""). This list 
   - [A school's clubs, listed one by one](docs/listings.md#a-schools-clubs-listed-one-by-one)
   - [Keeping it current](docs/listings.md#keeping-it-current)
   - [The autopilot gate](docs/listings.md#the-autopilot-gate)
+  - [The Needs-you page, the log, Undo and the switch](docs/listings.md#the-needs-you-page-the-log-undo-and-the-switch)
 - [`docs/pages.md`](docs/pages.md)
   - [Schools that aren't covered yet](docs/pages.md#schools-that-arent-covered-yet)
   - [Terms of use](docs/pages.md#terms-of-use)
@@ -95,6 +96,7 @@ The docs refer to each other by section name ("see \"Site admins\""). This list 
   - [Dates by email](docs/emails.md#dates-by-email)
   - [This week at your school](docs/emails.md#this-week-at-your-school)
   - [An email to you for each new account](docs/emails.md#an-email-to-you-for-each-new-account)
+  - [The morning summary](docs/emails.md#the-morning-summary)
 - [`docs/search-and-analytics.md`](docs/search-and-analytics.md)
   - [Parents and program managers, told apart](docs/search-and-analytics.md#parents-and-program-managers-told-apart)
   - [Being found by search engines](docs/search-and-analytics.md#being-found-by-search-engines)
