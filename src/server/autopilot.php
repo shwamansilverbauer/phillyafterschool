@@ -380,7 +380,7 @@ function ap_emailed(PDO $db, array $row): array {
 // Claims, photos, words and offers, premium sign-ups and queue items held for a decision: what /edit/claims/ and
 // /edit/queue/ show with buttons today. A table from a later version that isn't there yet counts as none.
 function needs_held(?PDO $db): array {
-  $out = array('claims' => array(), 'photos' => array(), 'extras' => array(), 'premium' => array(), 'queue' => array());
+  $out = array('claims' => array(), 'photos' => array(), 'extras' => array(), 'premium' => array(), 'queue' => array(), 'mail' => array());
   if ($db === null) return $out;
   $rows = function ($sql) use ($db) { try { return $db->query($sql)->fetchAll(PDO::FETCH_ASSOC); } catch (Exception $e) { return array(); } };
   $out['claims'] = $rows("SELECT c.id, c.listing, c.domain, c.created, u.email, u.first, u.last FROM claims c JOIN users u ON u.id = c.user_id WHERE c.status = 'pending' ORDER BY c.id DESC");
@@ -388,7 +388,10 @@ function needs_held(?PDO $db): array {
   if (!$out['photos']) $out['photos'] = $rows("SELECT p.id, p.listing, p.alt, p.created, 'photo' AS kind, u.email, u.first, u.last FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.status = 'new' AND c.status = 'ok' ORDER BY p.id DESC");   // from before logos
   $out['extras'] = $rows("SELECT e.id, e.listing, e.kind, e.body, e.until, e.created, u.email, u.first, u.last FROM extras e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.status = 'new' AND c.status = 'ok' ORDER BY e.id DESC");
   $out['premium'] = $rows("SELECT a.claim_id, a.plan, a.created, c.listing, u.email, u.first, u.last FROM premium_asks a JOIN claims c ON c.id = a.claim_id JOIN users u ON u.id = c.user_id WHERE c.status = 'ok' AND NOT EXISTS (SELECT 1 FROM premium p WHERE p.listing = c.listing) ORDER BY a.created DESC");
-  $out['queue'] = $rows("SELECT id, kind, listing, what, pr, reason, decided FROM queue_items WHERE state = 'held' ORDER BY decided DESC");
+  // An email a run held is shown with the mail (below), with its message and a draft, not here.
+  $out['queue'] = $rows("SELECT id, kind, listing, what, pr, reason, decided FROM queue_items WHERE state = 'held' AND substr(id, 1, 1) != 'm' ORDER BY decided DESC");
+  // Mail from people the hold list (or a run) kept for the owner (the mailbox, Phase 5). Sealed: the page opens it.
+  $out['mail'] = $rows("SELECT id, gid, thread, via, sealed, draft, subject, domain, dkim, listings, shared, account, outreach, attachments, hold, created FROM mail_in WHERE state = 'held' ORDER BY created DESC LIMIT 60");
   return $out;
 }
 function needs_count(array $held, array $prs): int { $n = count($prs); foreach ($held as $list) $n += count($list); return $n; }

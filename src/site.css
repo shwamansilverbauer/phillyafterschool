@@ -1365,6 +1365,8 @@ pre.edit-ask{white-space:pre-wrap;font:inherit;background:var(--bg);border:1px s
 .needs .needs-anyway{display:flex;gap:8px;align-items:center;flex-basis:100%;font-size:.95rem}
 .needs .ap-changes{padding-left:18px}.needs .ap-changes li{margin:0 0 10px}
 .needs .needs-gate summary{cursor:pointer;font-weight:600}
+.needs .needs-reply label{font-weight:700;display:block;margin:10px 0 4px}
+.needs .needs-reply textarea{font:inherit;width:100%;min-height:180px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);line-height:1.5;resize:vertical}
 
 /* ---------- for directors: the home page panel, benefits, photos; and the contact page ---------- */
 ul.benefits{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px 22px}

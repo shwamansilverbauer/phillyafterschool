@@ -3,7 +3,8 @@
 // program's website read and judged (suggestions of programs and camps, updates to listings, changes managers have
 // proposed, the owner's own notes), and where each item stands. Generated into edit/queue/index.php by build.mjs,
 // which fills in the marked lines (the mailer, the config, the sign-in check, the GitHub helpers, the shared queue
-// code) and adds the page itself; edit this file, not the copy in dist/.
+// code, and the mailbox's, which opens an email's scrubbed copy for the queue) and adds the page itself; edit this
+// file, not the copy in dist/.
 //
 // Nothing is ticked or sent from here any more. The site writes the queue to the private ops repository by itself
 // every hour (push_run in groups/api.php, with the code in src/server/queue.php), and the runs answer each item there.
@@ -14,6 +15,7 @@
 /*AUTH*/
 /*GH*/
 /*QUEUE*/
+/*MAIL*/
 if (!edit_signed_in()) { header('Location: ../', true, 303); exit; }
 $ROOT = dirname((string) $_SERVER['DOCUMENT_ROOT']);
 $STATE_FILE = $ROOT . '/phillyafterschool-queue.json';
@@ -24,10 +26,12 @@ function queue_save() {
   @file_put_contents($STATE_FILE, json_encode($state, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT), LOCK_EX);
 }
 function ny($iso) { try { $d = is_numeric($iso) ? new DateTime('@' . (int) $iso) : new DateTime((string) $iso); $d->setTimezone(new DateTimeZone('America/New_York')); return $d->format('M j, Y'); } catch (Exception $e) { return substr((string) $iso, 0, 10); } }
+// The Rush reminder ("press Run now"): X-PAS-Kind "rush", which the mailbox script leaves in the inbox, since it asks
+// the owner to do something.
 function record_email($subject, $body) {
   global $TO, $SITE;
-  $headers = array('From: ' . $SITE . ' <' . $TO . '>', 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=UTF-8', 'Content-Transfer-Encoding: base64');
-  return pas_postmark($SITE, $TO, $TO, $subject, $body) === 1 || @mail($TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', chunk_split(base64_encode($body)), implode("\r\n", $headers));
+  $headers = array('From: ' . $SITE . ' <' . $TO . '>', 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=UTF-8', 'Content-Transfer-Encoding: base64', 'X-PAS-Kind: rush');
+  return pas_postmark($SITE, $TO, $TO, $subject, $body, '', '', 'rush') === 1 || @mail($TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', chunk_split(base64_encode($body)), implode("\r\n", $headers));
 }
 // The host's own key (made by groups/api.php), for the sender tokens; '' before the API has made it.
 function host_secret() {
@@ -56,7 +60,7 @@ function queue_askers() {
 
 $csrf = hash_hmac('sha256', 'queue-form', edit_key());
 $said = isset($_GET['said']) && is_string($_GET['said']) ? substr($_GET['said'], 0, 400) : '';
-$KIND = array('program' => 'A program that’s missing', 'camp' => 'A camp that’s missing', 'update' => 'An update to a listing', 'proposal' => 'Proposed by the people who run it', 'note' => 'Your note');
+$KIND = array('program' => 'A program that’s missing', 'camp' => 'A camp that’s missing', 'update' => 'An update to a listing', 'proposal' => 'Proposed by the people who run it', 'note' => 'Your note', 'mail' => 'An email someone wrote');
 $OUTCOME = array('published' => 'Published', 'held' => 'Held for you', 'declined' => 'Declined', 'duplicate' => 'Already listed', 'needs-info' => 'Needs more information', 'no-change' => 'Already right on the site', 'failed' => 'The run couldn’t finish it', 'earlier' => 'Sent to the weekly run before the private queue');
 
 // ----- the buttons -----

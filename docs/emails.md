@@ -57,7 +57,11 @@ The emails the site sends itself (sign-in link and code, the invitations to a gr
 numbers and the other notes to the people who run a listing, a parent's question passed on, and the answers to
 whoever sent a suggestion or a proposed change once a research run has settled it: "It's on the site", "It's
 already listed", "We couldn't confirm this yet" and "We can't list this one", see "The private queue" in
-`docs/listings.md`) are edited the same way.
+`docs/listings.md`) are edited the same way. So are the words the mailbox script sends from the site's address (see
+"The mailbox script" below): the fixed replies to mail ("Thanks, it's updated", how to claim a listing, delete an
+account, stop the emails or ask for a school, and the last lines of every reply), the starting draft for a held email,
+and the three outreach sequences (the claim invite, "your school's page is live", the camp sponsor invite) with the
+foot every outreach email carries.
 `/edit/emails/` is linked from the edit page and needs the same sign-in; it shows every email once, with made-up
 names and numbers in place of the real ones, and each sentence edits like any other. Words in curly braces, such as
 `{site}`, `{code}`, `{listing}` or `{first}`, are filled in when an email goes out, so they stay in the sentence. A
@@ -292,21 +296,26 @@ are sent.
 ## The morning summary
 
 One email to the site's contact address and one notification on the site admins' own devices, each morning, from
-the first `push_run` at or after 7:30 (`owner_summary()` in `src/server/groups-api.php`). Until the mailbox script
-(Phase 5) calls `push_run` every ten minutes, that is the hourly workflow's 7:55 run. `"ownerNotes": { "summary": "on" }`
+the first `push_run` at or after 7:30 (`owner_summary()` in `src/server/groups-api.php`). The mailbox script (below)
+calls `push_run` every ten minutes, so that is about 7:30-7:40; without it, the hourly workflow's 7:55 run. `"ownerNotes": { "summary": "on" }`
 in `site.config.json` turns it on (it is); `"off"` stops it, and the sign-up digest above comes back. It is editable at
 `/edit/emails/` as "The morning summary". What it says, counts and links only, never a parent's address:
 
 - **Published yesterday:** each run pull request merged, by the autopilot or by hand, with what it changed by kind
   (from its evidence file), the answers emailed to senders, managers' photos and words published, and anything undone.
-- **Waiting for you:** how many things the Needs-you page holds, by kind, with its link, and the autopilot's mode.
+- **Waiting for you:** how many things the Needs-you page holds, by kind (held mail included), with its link, and the
+  autopilot's mode.
+- **Mail:** emails from people that came in yesterday and how many were held, replies that went from the site's
+  address, replies that couldn't be sent this week, and the outreach sender's day (sent against the cap) and week
+  (sent, replies, opt-outs, bounces), or that it is paused.
 - **New accounts:** parents and program managers yesterday, parents in the last seven days, and the listings claimed.
 - **Schools asked for:** the top five, as the private queue counts them.
-- **Health:** each run's last pull request, the last answer to the queue, the mailbox script's last check-in (once
-  Phase 5 is in), the hourly site check (an open "Site check:" issue means failing), the last publish, and the copy of
-  the database off the host.
+- **Health:** each run's last pull request, the last answer to the queue, the mailbox script's last check-in (and,
+  when it says so, that it can't send from the site's address or what went wrong in its last run), the hourly site
+  check (an open "Site check:" issue means failing), the last publish, and the copy of the database off the host.
 - **Cost this week:** run pull requests, answers to the queue, the model tokens the runs reported in their outcome
-  files, and the emails sent through Postmark (the mailer counts them day by day in `phillyafterschool-mail.json`).
+  files, the emails sent through Postmark (the mailer counts them day by day in `phillyafterschool-mail.json`), and
+  the emails the mailbox sent (replies and outreach, inside the Google account's own sending limits).
   Klaviyo's profile count isn't readable from the site, which holds no Klaviyo key, so the summary says to look there.
 
 The notification says how many things wait and opens `/edit/needs/`. Notifications go to every device on which an
@@ -315,5 +324,130 @@ notifications on this device"), signed in as that address.
 
 **A failed publish is pushed at once.** `push_run` also looks at the last finished `publish.yml` run on main (at most
 every nine minutes, `publish_watch()`); a failed one sends one notification, "The site didn't publish", which opens
-the Needs-you page, where the link to the run is. Each failure is told once. A legal or safety email, a sponsor
-inquiry (Phase 5) and a closure alert (Phase 8) will use the same notification (`owner_push()`).
+the Needs-you page, where the link to the run is. Each failure is told once. An email from a person with legal words,
+a safety complaint or a sponsor or partner inquiry is pushed the same way the moment it comes in (`owner_push()`, from
+`mail_store()`), and a closure alert (Phase 8) will be too.
+
+## The mailbox script
+
+A Google Apps Script inside the contact@ Google account (`mail/Code.gs`, pasted into script.google.com, the way
+`analytics/ga4_admin.gs` is) files the site's own notices out of the inbox and hands mail a person wrote to the site.
+Nothing outside Google and the site reads the mailbox. Its site side is "the mailbox" in `src/server/groups-api.php`,
+with the shared code in `src/server/mail.php`.
+
+**Every ten minutes** (a time trigger on `run()`), each step running even if an earlier one failed:
+
+1. **Sorting the inbox** (the newest 60 threads in it).
+   - *Site notices.* The site's mailer adds a header, `X-PAS-Kind`, to every email it sends to its own address:
+     `signup`, `suggestion`, `review`, `claim`, `needs-yes`, `manager-content`, `school-ask`, `summary`, and `copy`
+     (a publish from `/edit/`); `school-date`, `idea`, `rush` and `copy-email` for the few the forms and the edit
+     pages send; `contact` for the contact form. The script labels each `PAS/Site/<kind>` and archives it, except
+     `review`, `school-date`, `rush` and `copy-email`, which stay in the inbox with their label because each asks the
+     owner to do something no page shows yet (reviews move to the Needs-you page with Phase 6). Older mail, from before
+     the header, is matched by its subject. A notice is trusted only when Google's own Authentication-Results header
+     says it passed DKIM or SPF for the site's domain; one that claims to be the site's and isn't is labeled
+     `PAS/Suspicious` and left in the inbox. The contact form's email is a person's message: it is posted like any
+     other, answered at its Reply-To address.
+   - *Service mail.* GitHub, Stripe, Postmark, Klaviyo, UptimeRobot, Hostinger and Google (each only when signed by
+     its own domain) get a `PAS/Service/<name>` label and are archived. Four kinds stay in the inbox with a star: the
+     site check's issue ("Site check:"), a failed payment or a dispute from Stripe, a refusal from Postmark (a bounce,
+     a spam complaint, a paused server), and a downtime alert from UptimeRobot.
+   - *Bulk mail.* Anything with a `List-Unsubscribe` header is labeled `PAS/Newsletters` and archived. Bounces go to
+     `PAS/Bounces` and automatic replies (out of office) to `PAS/Auto-replies`, archived; a bounce of an outreach
+     email stops that row's sequence.
+   - *Mail a person wrote.* Everything left is posted to the site, one signed request per email
+     (`groups/api.php?action=mail_in`), and labeled `PAS/People/Queued` and archived, or `PAS/People/Needs Josh` and
+     kept in the inbox when the site holds it. Mail older than the day `setup` first ran is never posted: it stays
+     where it is, so nobody gets an answer to a months-old email. A message the site refuses for good is labeled
+     `PAS/Suspicious` and left for a person.
+2. **Outreach** (below), when it is switched on.
+3. **Replies out.** The script asks the site for replies waiting to go (`action=mail_out`), sends each from
+   contact@phillyafterschool.org as a reply in its own thread (a contact-form message gets a new email to its
+   Reply-To address), changes the thread labels the site asks for (`PAS/People/Answered`, `PAS/People/Done`,
+   `PAS/Spam`, or back to Needs Josh), and says what went (`action=mail_sent`). A reply handed out and never confirmed
+   is handed out again after 20 minutes, three times at most, and the script remembers the last 400 it sent, so a
+   lost confirmation never sends one twice. While the site's address isn't one the account can send from, the site
+   hands out nothing.
+4. **The site's hourly jobs.** It calls `push_run`, so the private queue, the morning summary, the copy off the host
+   and the rest no longer wait on GitHub's scheduler, which often runs late.
+
+**The heartbeat.** `mail_out` is also the script's check-in: its version, whether it can send from the site's address,
+which steps went wrong in its last run (a short phrase each, addresses taken out), and the outreach counts. The health
+answer shows `mailbox` (`on` once the key file is on the host, `last`, `ageMinutes`, `alias`, `problems`), the hourly
+site check fails after two silent hours (or when replies can't leave from the site's address), and the morning summary
+says when it last checked in.
+
+**What is posted for a person's email,** and nothing else: the Gmail message and thread ids, the sender's name and
+address (and the Reply-To), the subject, the date, the plain text (the first 8,000 characters, with quoted history
+trimmed), attachment names, and the SPF, DKIM and DMARC results from the topmost `Authentication-Results` header,
+the one Google adds (a sender can add look-alikes lower down, never above it).
+
+**On the site** (`mail_store()`):
+
+- Each request is signed: `X-PAS-Sign: t=<unix time>,n=<one-time value>,s=<HMAC-SHA256 over "<t>.<n>.<action>.<body>">`
+  with the secret in `phillyafterschool-mailin.key` next to the public folder and in the script's properties. The
+  site refuses anything unsigned, signed with another secret, more than five minutes old or new, or repeated (each
+  one-time value is kept for a quarter hour), and shuts an address out for the hour after 30 refusals. Without the
+  key file the mailbox answers "off".
+- The message is stored sealed (AES-256-GCM, a key of its own derived from `secret.key`, the way a child's details are
+  sealed), with a scrubbed copy sealed beside it: email addresses, phone numbers and the words of the sender's own name
+  taken out. In clear, only what the host worked out: the sender's domain, whether DKIM passed for it, which listing's
+  website shares that domain (a domain many organizations share, like a city's, is only flagged), whether the address
+  belongs to an account and its role, whether the thread answers an outreach email, and the sender's token (as in the
+  private queue). A settled message's text is dropped after 180 days; the row stays for the counts.
+- The hold list (`mail_hold_reason()` in `src/server/mail.php`): text that addresses an AI or asks to skip a rule
+  (marked suspicious), legal words, a safety complaint, a request for someone's data, a refund or payment dispute, a
+  school district or City address, the press, and a sponsor, partner or advertising inquiry. A held email goes to the
+  Needs-you page with a starting draft (editable at `/edit/emails/`); legal, safety and sponsor ones also go to the
+  owner's phone at once. Everything else goes to the private queue as an `m…` item (see "The private queue" in
+  `docs/listings.md`), where a run answers it.
+- Replies are fixed templates filled in by the host, or the owner's own words from the Needs-you page. No sentence a
+  run writes is ever sent.
+
+**The outreach sender** (`sendOutreach()`, the same script). It reads the tabs named in `OUTREACH_TABS` of the sheet in
+`OUTREACH_SHEET_ID`, starting with "Programs" in the claim-outreach sheet (`Programs=claim`), and sends each row its
+next email from contact@ as plain text. The wording comes from the site (`action=outreach_copy`, editable at
+`/edit/emails/`): the claim invite (day 0, and day 10; a row whose "Can they claim with this email?" starts with "Not"
+gets the version that says to reply), "your school's page is live" (day 0 and day 7) and the camp sponsor invite (three
+emails a week apart). The quarterly email with a listing's numbers waits for the numbers export (Phase 9).
+
+- Only weekdays from 9 to 4, New York time, four a run. Caps: 30 a day to start, raised by 10 a week while bounces stay
+  under 3% and opt-outs under 2% (with at least 20 sent that week), never above 150; 8% bounced or 5% opted out pauses
+  it (`OUTREACH_PAUSED`), which the morning summary says until the owner clears it.
+- Every email carries the opt-out line ("reply “stop”") and the postal address (`POSTAL_ADDRESS`, never a home); with
+  no postal address nothing is sent. A short "stop" (or "unsubscribe", "remove us"…) in reply notes "Opted out" in
+  "Reply / notes" and is never posted to the site; a bounce notes "Bounced"; any other reply is posted (marked as an
+  answer to outreach) and notes "Replied". Any of the three stops the row's sequence.
+- A row is written to only when its organization published the address ("Email found on" holds the page), its
+  listing isn't claimed (the sheet's "Already claimed", or the site's own list of claimed listings), and nobody emailed
+  it by hand ("Emailed on" filled with no step from the script). The script fills in "Emailed on", and keeps its own
+  two columns, "Outreach step" ("1 of 2 · 2026-12-07") and "Outreach thread", which it adds at the end of the heading
+  row the first time.
+
+**Script properties** (Project Settings > Script properties): `MAIL_SECRET` (made by `makeSecret`), `STARTED` (set by
+`setup`), and for outreach `OUTREACH_ON` (`yes`), `OUTREACH_SHEET_ID`, `OUTREACH_TABS`, `POSTAL_ADDRESS`,
+`OUTREACH_SIGNATURE` (the name it signs with; the site's name if empty). `OUTREACH_CAP`, `OUTREACH_PAUSED` and the
+counts are the script's own. `SITE_URL` points it at another copy of the site (the tests do).
+
+**Setting it up,** signed in as the contact@ account:
+
+1. Open script.google.com, New project, name it "Philly After School mailbox", paste `mail/Code.gs` over `Code.gs`, and
+   save.
+2. Run `makeSecret`. Copy the line it logs into a file named `phillyafterschool-mailin.key` next to the public folder
+   on the host (beside `phillyafterschool-postmark.key`). **Never put it in this repository, in an issue or in a
+   chat.** The file's name is covered by `.gitignore`.
+3. Run `setup` and approve the permissions. It makes the labels and the 10-minute trigger, checks that the site takes
+   the secret, and says whether replies can leave from contact@phillyafterschool.org. If not: Gmail > Settings >
+   Accounts > "Send mail as", add the address, confirm it, and run `setup` again.
+4. Optional, once: run `fileOldMail` (as often as it takes) to file the older notices, service mail and newsletters
+   already in the inbox. It never touches mail a person wrote.
+5. For outreach: share the sheet with the contact@ account (edit), set the outreach properties, and set `OUTREACH_ON`
+   to `yes` once the wording has had its pass.
+
+**Turning it off.** `stopOutreach` (or `OUTREACH_ON` anything but `yes`) stops outreach. Deleting the trigger (Triggers
+in the script's left bar) stops the script; the inbox is then as it was. Deleting `phillyafterschool-mailin.key` from
+the host makes the site refuse the script (the hourly check stops looking at it, and the site's jobs go back to GitHub's
+schedule).
+
+**Limits.** A Workspace account gets 100,000 URL fetches and 1,500 email recipients a day from Apps Script, far above
+this use; a run takes seconds, inside the six hours of trigger time a day.

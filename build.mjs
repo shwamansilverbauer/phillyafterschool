@@ -2985,16 +2985,20 @@ $body = "Type: $kind\\n"
 
 $what = $newschool !== '' ? $newschool : $program;
 $subject = one_line("[$SITE] $kind" . ($what !== '' ? ": $what" : '') . ($school !== '' ? " ($school)" : ''));
+// The mailbox script files this by its kind (docs/emails.md, "The mailbox script"): what the private queue reads from
+// the log leaves the inbox; a date for a school and a feature idea, which only this email carries, stay in it.
+$mailKind = $kind === 'A school to add' ? 'school-ask' : ($kind === 'A date at a school' ? 'school-date' : ($kind === 'A feature idea' ? 'idea' : 'suggestion'));
 $headers = array(
   'From: ' . $SITE . ' <' . $TO . '>',
   'MIME-Version: 1.0',
   'Content-Type: text/plain; charset=UTF-8',
+  'X-PAS-Kind: ' . $mailKind,
 );
 if ($email !== '') {
   $headers[] = 'Reply-To: ' . $email;
 }
 
-$sent = pas_postmark($SITE, $TO, $TO, $subject, $body, '', isset($email) ? (string) $email : '') === 1 || @mail($TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, implode("\\r\\n", $headers));
+$sent = pas_postmark($SITE, $TO, $TO, $subject, $body, '', isset($email) ? (string) $email : '', $mailKind) === 1 || @mail($TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, implode("\\r\\n", $headers));
 $log = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-suggestions.log';
 $saved = @file_put_contents($log, date('c') . ($sent ? ' (emailed)' : ' (EMAIL FAILED)') . "\\n" . $body . "----\\n", FILE_APPEND | LOCK_EX);
 
@@ -3113,8 +3117,9 @@ $recent[$who][] = time();
 
 $body = "Topic: $topic\\n" . "Name: $name\\n" . "Email: $email\\n\\n" . "Message:\\n$message\\n";
 $subject = one_line("[$SITE] Contact: $topic" . ($name !== '' ? " ($name)" : ''));
-$headers = array('From: ' . $SITE . ' <' . $TO . '>', 'Reply-To: ' . $email, 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=UTF-8');
-$sent = pas_postmark($SITE, $TO, $TO, $subject, $body, '', isset($email) ? (string) $email : '') === 1 || @mail($TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, implode("\\r\\n", $headers));
+// "contact": the mailbox script hands it to the site like mail a person wrote, answering the Reply-To address.
+$headers = array('From: ' . $SITE . ' <' . $TO . '>', 'Reply-To: ' . $email, 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=UTF-8', 'X-PAS-Kind: contact');
+$sent = pas_postmark($SITE, $TO, $TO, $subject, $body, '', isset($email) ? (string) $email : '', 'contact') === 1 || @mail($TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, implode("\\r\\n", $headers));
 $log = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-suggestions.log';
 $saved = @file_put_contents($log, date('c') . ($sent ? ' (emailed)' : ' (EMAIL FAILED)') . "\\n" . $body . "----\\n", FILE_APPEND | LOCK_EX);
 if (!$sent && $saved === false) fail('Something went wrong on our side. Please email ' . $TO . ' instead.', 500);
@@ -4581,11 +4586,15 @@ function groupsApiPhp() {
   if (!src.includes('/*MAILER*/')) throw new Error('src/server/groups-api.php has lost its /*MAILER*/ marker');
   if (!src.includes('/*QUEUE*/')) throw new Error('src/server/groups-api.php has lost its /*QUEUE*/ marker');
   if (!src.includes('/*AUTOPILOT*/')) throw new Error('src/server/groups-api.php has lost its /*AUTOPILOT*/ marker');
-  return src.replace('/*MAILER*/', () => mailerPhp()).replace('/*QUEUE*/', () => queuePhp()).replace('/*AUTOPILOT*/', () => autopilotPhp()).replace(`'/*CONFIG*/'`, () => `'` + conf.replace(/\\/g, '\\\\').replace(/'/g, `\\'`) + `'`);
+  if (!src.includes('/*MAIL*/')) throw new Error('src/server/groups-api.php has lost its /*MAIL*/ marker');
+  return src.replace('/*MAILER*/', () => mailerPhp()).replace('/*QUEUE*/', () => queuePhp()).replace('/*AUTOPILOT*/', () => autopilotPhp()).replace('/*MAIL*/', () => mailPhp()).replace(`'/*CONFIG*/'`, () => `'` + conf.replace(/\\/g, '\\\\').replace(/'/g, `\\'`) + `'`);
 }
 // The private queue's shared code (src/server/queue.php), pasted into the API and the queue page at their /*QUEUE*/
 // marker. The ops repository is where the queue lives (opsRepo in site.config.json); with none, the queue is off.
 const queuePhp = () => fs.readFileSync(path.join(ROOT, 'src/server/queue.php'), 'utf8');
+// The mailbox's shared code (src/server/mail.php, scaling plan Phase 5): pasted into the API and the Needs-you page at
+// their /*MAIL*/ marker.
+const mailPhp = () => fs.readFileSync(path.join(ROOT, 'src/server/mail.php'), 'utf8');
 const OPS_REPO = /^[\w.-]+\/[\w.-]+$/.test(cfg.opsRepo || '') ? cfg.opsRepo : '';
 // Which notes to the site's own address go one at a time ("each", the default) and which go once a day ("digest"); and
 // whether the morning summary goes out ("summary": "on"), which then carries the sign-up digest's counts too.
@@ -5021,9 +5030,10 @@ $headers = array(
   'Reply-To: ' . $email,
   'MIME-Version: 1.0',
   'Content-Type: text/plain; charset=UTF-8',
+  'X-PAS-Kind: review',
 );
 
-$sent = pas_postmark($SITE, $TO, $TO, $subject, $body, '', isset($email) ? (string) $email : '') === 1 || @mail($TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, implode("\\r\\n", $headers));
+$sent = pas_postmark($SITE, $TO, $TO, $subject, $body, '', isset($email) ? (string) $email : '', 'review') === 1 || @mail($TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, implode("\\r\\n", $headers));
 $log = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-reviews.log';
 $saved = @file_put_contents($log, date('c') . ($sent ? ' (emailed)' : ' (EMAIL FAILED)') . "\\n" . $body . "----\\n", FILE_APPEND | LOCK_EX);
 
@@ -5075,9 +5085,12 @@ function pas_mail_week() {
   if (is_array($d) && isset($d['week']) && is_array($d['week'])) foreach ($d['week'] as $k => $v) if ((string) $k >= $from) $n += (int) $v;
   return $n;
 }
+// The header the mailbox script files the site's own notices by (scaling plan, Phase 5): on an email to the site's own
+// address, what kind of notice it is. A word from a fixed set, or nothing.
+function pas_mail_kind($kind) { return is_string($kind) && preg_match('/^[a-z][a-z-]{1,23}$/', $kind) ? $kind : ''; }
 // Gives 1: sent. 0: the service won't send to this address (it bounced before, or the person marked our mail as spam),
 // so don't try another way. -1: not sent here, use the host's mail.
-function pas_postmark($fromName, $from, $to, $subject, $text, $html = '', $replyTo = '') {
+function pas_postmark($fromName, $from, $to, $subject, $text, $html = '', $replyTo = '', $kind = '') {
   $key = pas_mail_key();
   if ($key === '' || !function_exists('curl_init')) return -1;
   $base = 'https://api.postmarkapp.com/email';
@@ -5087,6 +5100,7 @@ function pas_postmark($fromName, $from, $to, $subject, $text, $html = '', $reply
     'MessageStream' => 'outbound', 'TrackOpens' => false, 'TrackLinks' => 'None',   // we don't watch who opens or clicks
     'Headers' => array(array('Name' => 'Auto-Submitted', 'Value' => 'auto-generated'), array('Name' => 'X-Auto-Response-Suppress', 'Value' => 'All')),
   );
+  if (pas_mail_kind($kind) !== '') $msg['Headers'][] = array('Name' => 'X-PAS-Kind', 'Value' => pas_mail_kind($kind));
   if ((string) $html !== '') $msg['HtmlBody'] = (string) $html;
   if ((string) $replyTo !== '' && filter_var($replyTo, FILTER_VALIDATE_EMAIL) && !preg_match('/[\r\n]/', (string) $replyTo)) $msg['ReplyTo'] = (string) $replyTo;
   $json = json_encode($msg, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
@@ -5109,7 +5123,8 @@ function pas_mail_via() { return 'host'; }
 function pas_mail_note($how, $result) { }
 function pas_mail_state() { return array('via' => 'host', 'last' => ''); }
 function pas_mail_week() { return -1; }
-function pas_postmark($fromName, $from, $to, $subject, $text, $html = '', $replyTo = '') { return -1; }
+function pas_mail_kind($kind) { return is_string($kind) && preg_match('/^[a-z][a-z-]{1,23}$/', $kind) ? $kind : ''; }
+function pas_postmark($fromName, $from, $to, $subject, $text, $html = '', $replyTo = '', $kind = '') { return -1; }
 `;
 const mailerPhp = () => (POSTMARK ? MAILER_ON : MAILER_OFF);
 
@@ -5387,7 +5402,9 @@ ${page}`;
 // The site's own emails, each rendered once with sample values so their sentences can be edited like a page's.
 // Sentences come from __T("…") in src/server/groups-api.php (see phpCopy); {words} show the sample here and are
 // filled in for real when an email is sent.
-const EMAIL_SAMPLE = { site: cfg.siteName, code: '123 456', minutes: '20', name: 'Sam Rivera', from: 'Sam Rivera (sam@example.com)', first: 'Sam', email: 'you@example.com', contact: cfg.contactEmail || 'contact@example.com', times: '120 times', before: '96', address: 'you@example.com', newAddress: 'new@example.com', group: 'Tuesday crew', listing: 'Maple Street Arts Club', program: 'Maple Street Arts Club', count: '3', n: '3', question: 'Is the Thursday clinic still 3:30 to 5:30?', days: '7', numbers: 'Opened 120 times, 14 clicks to your sign-up page, on 9 plans.', todo: 'Mark whether there’s space.', more: '1', school: 'Nebinger', programs: '3 programs are', what: 'Maple Street Arts Club', pr: '41', title: 'Weekly queue, 30 Nov', undo: '44', list: '2 run pull requests, 1 claim', mode: 'shadow', parents: '4', managers: '1', week: '19', run: 'Five schools a day', when: 'Mon Nov 30, 6:12 am', day: 'Monday, November 30', why: 'github 502', prs: '9', files: '12', tokens: '1,840,000', emails: '212' };
+const EMAIL_SAMPLE = { site: cfg.siteName, code: '123 456', minutes: '20', name: 'Sam Rivera', from: 'Sam Rivera (sam@example.com)', first: 'Sam', email: 'you@example.com', contact: cfg.contactEmail || 'contact@example.com', times: '120 times', before: '96', address: 'you@example.com', newAddress: 'new@example.com', group: 'Tuesday crew', listing: 'Maple Street Arts Club', program: 'Maple Street Arts Club', count: '3', n: '3', question: 'Is the Thursday clinic still 3:30 to 5:30?', days: '7', numbers: 'Opened 120 times, 14 clicks to your sign-up page, on 9 plans.', todo: 'Mark whether there’s space.', more: '1', school: 'Nebinger', programs: '3 programs are', what: 'Maple Street Arts Club', pr: '41', title: 'Weekly queue, 30 Nov', undo: '44', list: '2 run pull requests, 1 claim', mode: 'shadow', parents: '4', managers: '1', week: '19', run: 'Five schools a day', when: 'Mon Nov 30, 6:12 am', day: 'Monday, November 30', why: 'github 502', prs: '9', files: '12', tokens: '1,840,000', emails: '212',
+  // the mailbox's replies and the outreach sender's emails (scaling plan, Phase 5)
+  org: 'Maple Street Arts Club', link: (cfg.siteUrl || '') + '/programs/maple-street-arts-club/', domain: 'maplestreetarts.org', signature: cfg.siteName, postal: 'PO Box 100, Philadelphia, PA 19103', managers: (cfg.siteUrl || '') + '/managers/', held: '1', sent: '28', cap: '30', replied: '3', optout: '1', bounced: '0' };
 function editEmailsPage() {
   const hero = `    <h1>The site’s emails</h1>
     <p class="lede">Every email the site sends itself, with made-up names and numbers in place of the real ones. Turn on editing at <a href="../">the edit page</a>, then click a sentence here and type; words in curly braces are filled in when an email goes out.</p>`;
@@ -5488,7 +5505,7 @@ const ghPhp = () => fs.readFileSync(path.join(ROOT, 'src/server/gh.php'), 'utf8'
 // ---------- the research runs' queue: the owner's view of the private queue the site writes every hour ----------
 function editQueuePhp() {
   const src = fs.readFileSync(path.join(ROOT, 'src/server/edit-queue.php'), 'utf8');
-  for (const m of ['/*MAILER*/', '/*CONFIG*/', '/*AUTH*/', '/*GH*/', '/*QUEUE*/']) if (!src.includes(m)) throw new Error('src/server/edit-queue.php has lost its ' + m + ' marker');
+  for (const m of ['/*MAILER*/', '/*CONFIG*/', '/*AUTH*/', '/*GH*/', '/*QUEUE*/', '/*MAIL*/']) if (!src.includes(m)) throw new Error('src/server/edit-queue.php has lost its ' + m + ' marker');
   const php = v => JSON.stringify(v).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
   const names = php(Object.fromEntries(Object.entries(claimListings()).map(([k, v]) => [k, v.n])));
   const city = php(Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`])));
@@ -5499,7 +5516,7 @@ $REPO = ${JSON.stringify(cfg.repo || '')};
 $OPS = ${JSON.stringify(OPS_REPO)};
 $NAMES = json_decode('${names}', true);
 $CITY = json_decode('${city}', true);`;
-  const logic = src.replace('/*MAILER*/', () => mailerPhp()).replace('/*CONFIG*/', () => config).replace('/*AUTH*/', () => editAuthPhp()).replace('/*GH*/', () => ghPhp()).replace('/*QUEUE*/', () => queuePhp());
+  const logic = src.replace('/*MAILER*/', () => mailerPhp()).replace('/*CONFIG*/', () => config).replace('/*AUTH*/', () => editAuthPhp()).replace('/*GH*/', () => ghPhp()).replace('/*QUEUE*/', () => queuePhp()).replace('/*MAIL*/', () => mailPhp());
   const e = v => `<?php echo htmlspecialchars(${v}, ENT_QUOTES, 'UTF-8'); ?>`;
   const pr = x => `<?php if ((int) ${x}["row"]["pr"] > 0 && $REPO !== '') { ?> · <a href="https://github.com/${e('$REPO')}/pull/<?php echo (int) ${x}["row"]["pr"]; ?>" rel="noopener" target="_blank">pull request #<?php echo (int) ${x}["row"]["pr"]; ?></a><?php } ?>`;
   // One item: what it is, where it came from, and (for an open one) the button that takes it off.
@@ -5580,7 +5597,7 @@ $REPO = ${JSON.stringify(/^[\w.-]+\/[\w.-]+$/.test(cfg.repo || '') ? cfg.repo : 
 $AP = json_decode('${php(AP_CONF)}', true);
 $LABELS = json_decode('${php(labels)}', true);`;
   const page = layout({ title, description, pathName, depth: 2, current: null, hero, body, noindex: true, quiet: true });
-  return logic.replace('/*CONFIG*/', () => config).replace('/*AUTH*/', () => editAuthPhp()).replace('/*GH*/', () => ghPhp()).replace('/*AUTOPILOT*/', () => autopilotPhp()) + '\n' + page;
+  return logic.replace('/*CONFIG*/', () => config).replace('/*AUTH*/', () => editAuthPhp()).replace('/*GH*/', () => ghPhp()).replace('/*AUTOPILOT*/', () => autopilotPhp()).replace('/*MAIL*/', () => mailPhp()) + '\n' + page;
 }
 const editNeedsPhp = () => editAutopilotPage('src/server/edit-needs.php', { title: 'Needs you', description: 'Everything waiting for the owner’s say.', pathName: 'edit/needs/' });
 const editAutopilotPhp = () => editAutopilotPage('src/server/edit-autopilot.php', { title: 'What the autopilot merged', description: 'Every merge the autopilot made, with Undo.', pathName: 'edit/autopilot/' });

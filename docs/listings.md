@@ -236,17 +236,23 @@ reaches the public repository. (Until November 2026 the owner ticked items on `/
 
 - **What goes in.** Suggestions of programs and camps and updates to listings from the suggestion form (read from
   the log the form keeps next to the public folder, the last 90 days), changes the people who run a listing proposed
-  (status `new` in the accounts database), and the owner's notes from `/edit/queue/`. Feature ideas, contact
-  messages and dates for a school are not research and don't go in. A later phase adds mail, reviews and managers'
-  words.
+  (status `new` in the accounts database), the owner's notes from `/edit/queue/`, and mail people wrote to the site's
+  address that the hold list didn't keep for the owner (handed over by the mailbox script; see "The mailbox script" in
+  `docs/emails.md`). Feature ideas and dates for a school are not research and don't go in. A later phase adds
+  reviews and managers' words.
 - **How it gets there.** The hourly `push_run` call (`.github/workflows/alerts.yml` makes it every hour, and
   `scripts/send-alerts.mjs` in the morning) writes `queue/open.json` to the ops repository through the same key file
   `/edit/` publishes with (`phillyafterschool-github.key`, whose token needs that repository: Contents, read and
   write). One commit, made only when the queue has changed, at most once in 50 minutes. The shared code is
   `src/server/queue.php`, pasted into `groups/api.php` and `/edit/queue/` by the build.
 - **What the file holds.** `items`, each with its stable `id` (`s…` a suggestion, `e…` a proposed change, `n…` a
-  note), `kind` (`program`, `camp`, `update`, `proposal`, `note`), `when`, and as given `program`, `website`,
-  `listing`, `school`, `pickup`, `campType`, `sentBy` and `details`; and `schoolsAsked`, the count of families asking
+  note, `m…` an email), `kind` (`program`, `camp`, `update`, `proposal`, `note`, `mail`), `when`, and as given
+  `program`, `website`, `listing`, `school`, `pickup`, `campType`, `sentBy` and `details`. An email carries its
+  scrubbed `subject` and `details` (addresses, phone numbers and the sender's own name taken out), `attachments` (a
+  count), `inThread` (an earlier email's id in the same thread), and `from`, what the host worked out in place of the
+  address: `domain`, `dkim` (whether DKIM passed for that domain), `listings` (the listings whose website shares it),
+  `sharedDomain` (a domain many organizations share), `account` (`parent`, `manager`, `admin` or `none`), `via`
+  (`email` or `contact form`) and `answersOutreach` (the sequence, when it answers an outreach email); and `schoolsAsked`, the count of families asking
   for each school without a page (one per account from the "ask for your school" button, plus the form's "A school
   to add"), most asked first, with the school's `id` where it is known. Email addresses and phone numbers are taken
   out of the free text. In place of any address an item carries `sender`, a token (`k` and 16 hex digits, a keyed
@@ -257,8 +263,11 @@ reaches the public repository. (Until November 2026 the owner ticked items on `/
   "published", "listing": "p:example", "pr": 23 }] }`. `outcome` is one of `published`, `held`, `declined`,
   `duplicate`, `needs-info`, `no-change` or `failed`; `reason`, for `needs-info` and `declined`, one of `need-page`,
   `need-website`, `need-school`, `not-a-program`, `outside`, `no-own-site` or `closed`; `pr` on an item overrides
-  the file's; `tokens` is how many model tokens the run used, if it knows. Nothing else in the file is read: any
-  words a run writes there are ignored, and an item that isn't in the queue (`school:…`, `monthly:…`) is skipped.
+  the file's; `tokens` is how many model tokens the run used, if it knows. An email (`m…`) can also be `answered`,
+  with `reply` one of `how-to-claim`, `delete-account`, `stop-emails` or `add-school`, or `spam` (settled with no
+  reply); and `published` with `"reply": "thanks-updated"` for a program's own word (DKIM passed for a listing's own
+  domain, about that listing), recorded as a `told` entry. Nothing else in the file is read: any words a run writes
+  there are ignored, and an item that isn't in the queue (`school:…`, `monthly:…`) is skipped.
 - **What happens to an item.** `push_run` reads each new or changed outcome file once. `declined`, `duplicate`,
   `needs-info` and `no-change` settle the item at once. `published`, and `held` with a pull request, wait for that
   pull request: about 20 minutes after it is merged (time for the site to publish) the item is published; a pull
@@ -270,7 +279,10 @@ reaches the public repository. (Until November 2026 the owner ticked items on `/
   an invitation to save their school or follow the listing), duplicate and no-change ("It's already listed", with
   the link), needs-info ("We couldn't confirm this yet", and what would help, by `reason`), declined ("We can't list
   this one", with the rule in a sentence, by `reason`). Held and failed send nothing. The run picks the outcome and
-  the reason; the host writes the words, so no sentence a run wrote is ever emailed to anyone. At most 30 answers go
+  the reason; the host writes the words, so no sentence a run wrote is ever emailed to anyone. An email's answer
+  goes from the site's address as a reply in its own thread, sent by the mailbox script, not by the site's mailer: the
+  same words, or the fixed reply the run chose ("Thanks, it's updated" waits for the merge like "It's on the site").
+  An email a run holds goes to the Needs-you page with its message and a draft. At most 30 answers go
   in one run, a failed send is tried on the next two, and `queue_items.told` records when each went.
   `"queueReplies": false` in `site.config.json` stops the answers (items still settle). What came in before the
   private queue began (the day it first ran, `queue_since` in the accounts database's `meta`) is worked like the
@@ -415,7 +427,8 @@ arrive with those phases.
 | What's new | Always, for now: it's the site's own words, with no provider page to check |
 | Reviews | Always, until Phase 6 supplies the account checks; the comment also says when a review holds a link, contact details or what may be an accusation |
 | `data/reading.json`, `data/geo.json` | A page's reading is loosened or removed; a map place already there moves, or a new one isn't in Philadelphia |
-| The sender, mail, manager words, photos, claims, payments | *Later* (Phases 2, 5 and 6) |
+| Mail from people | Text that addresses an AI or asks to skip a rule, legal words (lawyer, subpoena, takedown), a safety complaint, a request for someone's data, a refund or payment dispute, a school district or City address, the press, or a sponsor or partner inquiry (the last, legal and safety also push to Josh's phone at once). Checked by the host when the email comes in, before any run sees it (`mail_hold_reason()` in `src/server/mail.php`) |
+| The sender, manager words, photos, claims, payments | *Later* (Phases 4 and 6) |
 
 **Where the numbers live.** The data thresholds and the templates are starting values in `scripts/gate.config.json`.
 Sender and spam thresholds will live in a private file on the host, because the repository is public.
@@ -457,7 +470,12 @@ words as on `/edit/claims/`). Without the key file the page says so and shows wh
 - **Held items from the accounts database:** claims waiting for a yes, photos, words, offers, pins and links, premium
   sign-ups not yet premium, and queue items a run held. Their buttons post to `/edit/claims/` and `/edit/queue/`, which
   send their emails as before and come back to this page (`back=needs`).
-- **Reviews and mail** still arrive by email; they move here with Phases 6 and 5.
+- **Mail for you,** shown to a site admin's account only: each email the hold list or a run kept, opened, with who
+  sent it, why it's here, what the host worked out (its domain, whether its signature checks out, which listing's
+  website it shares, the account's role, whether it answers outreach), and a draft to edit. **Send** queues the reply,
+  which the mailbox script sends from the site's address in the email's own thread within ten minutes. **Done, no
+  reply** settles it. **Give it to the runs** puts it in the private queue (not for one marked suspicious).
+- **Reviews** still arrive by email, and stay in the inbox; they move here with Phase 6.
 - **The shadow report,** while the switch is `shadow`: the same sums as `node scripts/gate.mjs --report`, from the
   gate's comments, and whether the test for switching on is passed.
 - **The spot-check:** ten of the changes the autopilot merged in the last seven days, picked at random and the same
