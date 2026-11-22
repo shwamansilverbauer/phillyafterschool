@@ -24,14 +24,25 @@ function pas_mail_note($how, $result) {
   $file = dirname((string) $_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-mail.json';
   $d = json_decode((string) @file_get_contents($file), true);
   $day = gmdate('Y-m-d');
+  $week = (is_array($d) && isset($d['week']) && is_array($d['week'])) ? $d['week'] : array();
   if (!is_array($d) || !isset($d['day']) || $d['day'] !== $day) $d = array('day' => $day, 'postmark' => 0, 'host' => 0, 'failed' => 0, 'last' => (is_array($d) && isset($d['last']) && is_string($d['last'])) ? $d['last'] : '');
   if ($result === 'ok') $d[$how] = (int) (isset($d[$how]) ? $d[$how] : 0) + 1; else $d['failed'] = (int) (isset($d['failed']) ? $d['failed'] : 0) + 1;
   if ($how === 'postmark') $d['last'] = $result;
+  // Sent through Postmark, day by day for the last eight days (the morning summary's cost line).
+  if ($how === 'postmark' && $result === 'ok') $week[$day] = (int) (isset($week[$day]) ? $week[$day] : 0) + 1;
+  ksort($week); $d['week'] = array_slice($week, -8, 8, true);
   @file_put_contents($file, json_encode($d), LOCK_EX);
 }
 function pas_mail_state() {
   $d = json_decode((string) @file_get_contents(dirname((string) $_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-mail.json'), true);
   return array('via' => pas_mail_via(), 'last' => (is_array($d) && isset($d['last']) && is_string($d['last'])) ? $d['last'] : '');
+}
+// Emails sent through Postmark in the last seven days (UTC days, today included).
+function pas_mail_week() {
+  $d = json_decode((string) @file_get_contents(dirname((string) $_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-mail.json'), true);
+  $n = 0; $from = gmdate('Y-m-d', time() - 6 * 86400);
+  if (is_array($d) && isset($d['week']) && is_array($d['week'])) foreach ($d['week'] as $k => $v) if ((string) $k >= $from) $n += (int) $v;
+  return $n;
 }
 // Gives 1: sent. 0: the service won't send to this address (it bounced before, or the person marked our mail as spam),
 // so don't try another way. -1: not sent here, use the host's mail.
@@ -543,7 +554,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     }
   }
-  header('Location: ./?said=' . rawurlencode($msg), true, 303);
+  // "Not for the run" pressed on the Needs-you page (edit/needs/) goes back there with the message.
+  header('Location: ' . (isset($_POST['back']) && $_POST['back'] === 'needs' ? '../needs/' : './') . '?said=' . rawurlencode($msg), true, 303);
   exit;
 }
 
@@ -605,7 +617,7 @@ function told_line($r) {
 <meta name="theme-color" content="#0A3566">
 <link rel="preload" href="../../assets/fonts/atkinson-hyperlegible-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../../assets/fonts/luckiest-guy-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../../assets/site.css?v=5fb548d0">
+<link rel="stylesheet" href="../../assets/site.css?v=e10e4d0e">
 </head>
 <body>
 <script>document.documentElement.className+=' js';document.documentElement.setAttribute('data-quiet','');try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>

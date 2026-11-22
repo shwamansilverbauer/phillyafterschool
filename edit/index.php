@@ -133,7 +133,7 @@ if (!edit_signed_in()) {
 <meta name="theme-color" content="#0A3566">
 <link rel="preload" href="../assets/fonts/atkinson-hyperlegible-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/luckiest-guy-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/site.css?v=5fb548d0">
+<link rel="stylesheet" href="../assets/site.css?v=e10e4d0e">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>
@@ -292,7 +292,7 @@ if (!edit_signed_in()) {
 <meta name="theme-color" content="#0A3566">
 <link rel="preload" href="../assets/fonts/atkinson-hyperlegible-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/luckiest-guy-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/site.css?v=5fb548d0">
+<link rel="stylesheet" href="../assets/site.css?v=e10e4d0e">
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MKNWQ3BC" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><script>document.documentElement.className+=' js';try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>
@@ -323,6 +323,7 @@ if (!edit_signed_in()) {
     <noscript><p>Editing needs JavaScript turned on.</p></noscript>
   </div>
   <?php if (edit_admin() !== '') { ?><p class="hint" id="edit-admin">You’re here through your account, <?php echo htmlspecialchars(edit_admin(), ENT_QUOTES, 'UTF-8'); ?>, which is a site admin. <a href="../account/#sign-out">Sign out of your account</a> to close these pages. Anyone who can read that address’s inbox can sign in as you, so keep 2-step verification on for it.</p><?php } elseif (edit_editor() !== null) { ?><p class="hint" id="edit-editor">You’re here through your account, <?php echo htmlspecialchars(edit_editor()['email'], ENT_QUOTES, 'UTF-8'); ?>, which is on the editors list as <?php echo htmlspecialchars(edit_editor()['name'], ENT_QUOTES, 'UTF-8'); ?>. <a href="../account/#sign-out">Sign out of your account</a> to close these pages.</p><?php } else { ?><p class="hint">You’re signed in on this device for 30 days. <a href="?out=1">Sign out</a></p><?php } ?>
+  <p><a class="btn primary" href="needs/">Needs you: everything waiting for your say</a> <a class="btn" href="autopilot/">What the autopilot merged</a></p>
   <p><a class="btn" href="stats/">Site numbers: accounts, shared weeks and groups</a> <a class="btn" href="claims/">Claims and proposed changes</a></p>
   <h2>How it works</h2>
   <ol>
