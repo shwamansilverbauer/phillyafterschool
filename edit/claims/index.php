@@ -35,9 +35,12 @@ function pas_mail_week() {
   if (is_array($d) && isset($d['week']) && is_array($d['week'])) foreach ($d['week'] as $k => $v) if ((string) $k >= $from) $n += (int) $v;
   return $n;
 }
+// The header the mailbox script files the site's own notices by (scaling plan, Phase 5): on an email to the site's own
+// address, what kind of notice it is. A word from a fixed set, or nothing.
+function pas_mail_kind($kind) { return is_string($kind) && preg_match('/^[a-z][a-z-]{1,23}$/', $kind) ? $kind : ''; }
 // Gives 1: sent. 0: the service won't send to this address (it bounced before, or the person marked our mail as spam),
 // so don't try another way. -1: not sent here, use the host's mail.
-function pas_postmark($fromName, $from, $to, $subject, $text, $html = '', $replyTo = '') {
+function pas_postmark($fromName, $from, $to, $subject, $text, $html = '', $replyTo = '', $kind = '') {
   $key = pas_mail_key();
   if ($key === '' || !function_exists('curl_init')) return -1;
   $base = 'https://api.postmarkapp.com/email';
@@ -47,6 +50,7 @@ function pas_postmark($fromName, $from, $to, $subject, $text, $html = '', $reply
     'MessageStream' => 'outbound', 'TrackOpens' => false, 'TrackLinks' => 'None',   // we don't watch who opens or clicks
     'Headers' => array(array('Name' => 'Auto-Submitted', 'Value' => 'auto-generated'), array('Name' => 'X-Auto-Response-Suppress', 'Value' => 'All')),
   );
+  if (pas_mail_kind($kind) !== '') $msg['Headers'][] = array('Name' => 'X-PAS-Kind', 'Value' => pas_mail_kind($kind));
   if ((string) $html !== '') $msg['HtmlBody'] = (string) $html;
   if ((string) $replyTo !== '' && filter_var($replyTo, FILTER_VALIDATE_EMAIL) && !preg_match('/[\r\n]/', (string) $replyTo)) $msg['ReplyTo'] = (string) $replyTo;
   $json = json_encode($msg, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
@@ -378,7 +382,7 @@ if ($have) {
 <meta name="theme-color" content="#0A3566">
 <link rel="preload" href="../../assets/fonts/atkinson-hyperlegible-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../../assets/fonts/luckiest-guy-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../../assets/site.css?v=e10e4d0e">
+<link rel="stylesheet" href="../../assets/site.css?v=c5cdad25">
 </head>
 <body>
 <script>document.documentElement.className+=' js';document.documentElement.setAttribute('data-quiet','');try{if(localStorage.getItem('pas-in')==='1'){document.documentElement.className+=' signed';if(localStorage.getItem('pas-role')==='parent')document.documentElement.className+=' parent'}}catch(e){}</script>

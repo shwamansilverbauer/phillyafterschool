@@ -35,9 +35,12 @@ function pas_mail_week() {
   if (is_array($d) && isset($d['week']) && is_array($d['week'])) foreach ($d['week'] as $k => $v) if ((string) $k >= $from) $n += (int) $v;
   return $n;
 }
+// The header the mailbox script files the site's own notices by (scaling plan, Phase 5): on an email to the site's own
+// address, what kind of notice it is. A word from a fixed set, or nothing.
+function pas_mail_kind($kind) { return is_string($kind) && preg_match('/^[a-z][a-z-]{1,23}$/', $kind) ? $kind : ''; }
 // Gives 1: sent. 0: the service won't send to this address (it bounced before, or the person marked our mail as spam),
 // so don't try another way. -1: not sent here, use the host's mail.
-function pas_postmark($fromName, $from, $to, $subject, $text, $html = '', $replyTo = '') {
+function pas_postmark($fromName, $from, $to, $subject, $text, $html = '', $replyTo = '', $kind = '') {
   $key = pas_mail_key();
   if ($key === '' || !function_exists('curl_init')) return -1;
   $base = 'https://api.postmarkapp.com/email';
@@ -47,6 +50,7 @@ function pas_postmark($fromName, $from, $to, $subject, $text, $html = '', $reply
     'MessageStream' => 'outbound', 'TrackOpens' => false, 'TrackLinks' => 'None',   // we don't watch who opens or clicks
     'Headers' => array(array('Name' => 'Auto-Submitted', 'Value' => 'auto-generated'), array('Name' => 'X-Auto-Response-Suppress', 'Value' => 'All')),
   );
+  if (pas_mail_kind($kind) !== '') $msg['Headers'][] = array('Name' => 'X-PAS-Kind', 'Value' => pas_mail_kind($kind));
   if ((string) $html !== '') $msg['HtmlBody'] = (string) $html;
   if ((string) $replyTo !== '' && filter_var($replyTo, FILTER_VALIDATE_EMAIL) && !preg_match('/[\r\n]/', (string) $replyTo)) $msg['ReplyTo'] = (string) $replyTo;
   $json = json_encode($msg, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
@@ -73,7 +77,7 @@ $GRADES = array("PK", "K", "1", "2", "3", "4", "5", "6", "7", "8");
 function fail($msg, $code) {
   http_response_code($code);
   header('Content-Type: text/html; charset=utf-8');
-  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css?v=e10e4d0e"></head><body><main class="wrap"><h1>That did not send</h1><p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p><p><a href="javascript:history.back()">Go back to the form</a></p></main></body></html>';
+  echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css?v=c5cdad25"></head><body><main class="wrap"><h1>That did not send</h1><p>' . htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') . '</p><p><a href="javascript:history.back()">Go back to the form</a></p></main></body></html>';
   exit;
 }
 function field($key, $max) {
@@ -165,9 +169,10 @@ $headers = array(
   'Reply-To: ' . $email,
   'MIME-Version: 1.0',
   'Content-Type: text/plain; charset=UTF-8',
+  'X-PAS-Kind: review',
 );
 
-$sent = pas_postmark($SITE, $TO, $TO, $subject, $body, '', isset($email) ? (string) $email : '') === 1 || @mail($TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, implode("\r\n", $headers));
+$sent = pas_postmark($SITE, $TO, $TO, $subject, $body, '', isset($email) ? (string) $email : '', 'review') === 1 || @mail($TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, implode("\r\n", $headers));
 $log = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-reviews.log';
 $saved = @file_put_contents($log, date('c') . ($sent ? ' (emailed)' : ' (EMAIL FAILED)') . "\n" . $body . "----\n", FILE_APPEND | LOCK_EX);
 
