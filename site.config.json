@@ -27,6 +27,8 @@
   "instagram": "https://www.instagram.com/phillyafterschool/",
   "repo": "shwamansilverbauer/phillyafterschool",
   "backupRepo": "shwamansilverbauer/phillyafterschool-backups",
+  "opsRepo": "shwamansilverbauer/phillyafterschool-ops",
+  "ownerNotes": { "parentSignup": "digest" },
   "privacyUpdated": "2026-11-12",
   "mail": { "postmark": true },
   "indexNowKey": "3a981b7516d126f1620f04d4cd69e645",

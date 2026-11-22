@@ -51,7 +51,8 @@ time. When `data/days-off.json` moves to a new school year, move it (one place) 
 | `14-api-follow.mjs` | follows and favorites, the stop links in emails (and the public stopped list carrying only hashes), asking for a school |
 | `15-api-claims.mjs` | claiming a listing with a work email, a parent's question passed to its holders, a proposed change, the manager's emails switch |
 | `17-api-passport.mjs` | the Passport: suggestions from the plans, confirming and ranking, sealed on disk, co-parents sharing it |
-| `18-api-health.mjs` | the health answer's report on the key `/edit/` publishes with: working, days left, refused, replaced, never shown |
+| `18-api-health.mjs` | the health answer's report on the key `/edit/` publishes with: working, days left, refused, replaced, never shown; the note for each new account; the copy off the host and its restore drill |
+| `19-api-queue.mjs` | the private queue: suggestions, a proposed change and a school ask written to a stand-in ops repository with no address in it, only when changed; outcome files answering each sender once in the site's words (a run's own words ignored), "it's on the site" only after the merge; `/edit/queue/` as a view, "Not for the run", a note, Rush; the sign-up digest |
 | `16-edit-gate.mjs` | `/edit/` asks for a sign-in, refuses a wrong password, and the cookie opens the editor and the queue |
 | `20-web-pages.mjs` | pages load without errors; the finder; the privacy page says what the notice promises; the sign-up notice sits under the email form; signing in through the page; quiet pages (account, profile, Passport, calendar, to-do) ask no other site for anything, fonts included, and the email list hears nothing about a child |
 | `21-web-planners.mjs` | each planner, signed in: a first name and a pick keep the plan in the profile, and it comes back on another device |

@@ -54,7 +54,10 @@ Words in curly braces, like `{school}`, are filled in per page. If a sentence is
 ### The emails
 
 The emails the site sends itself (sign-in link and code, the invitations to a group, "someone joined", the monthly
-numbers and the other notes to the people who run a listing, a parent's question passed on) are edited the same way.
+numbers and the other notes to the people who run a listing, a parent's question passed on, and the answers to
+whoever sent a suggestion or a proposed change once a research run has settled it: "It's on the site", "It's
+already listed", "We couldn't confirm this yet" and "We can't list this one", see "The private queue" in
+`docs/listings.md`) are edited the same way.
 `/edit/emails/` is linked from the edit page and needs the same sign-in; it shows every email once, with made-up
 names and numbers in place of the real ones, and each sentence edits like any other. Words in curly braces, such as
 `{site}`, `{code}`, `{listing}` or `{first}`, are filled in when an email goes out, so they stay in the sentence. A
@@ -262,10 +265,16 @@ The things a family has to remember that aren't on the district calendar: pictur
 ## An email to you for each new account
 
 Each new account sends one email to the site's contact address (`tell_owner()` and `signup_note()` in
-`src/server/groups-api.php`):
+`src/server/groups-api.php`), except a parent's in digest mode:
 
-- **New Parent Account Signup**: the email address and name. It goes when the account first has a name: at once
-  with Google, after the name step with an emailed code.
+- **The sign-up digest** (`"ownerNotes": { "parentSignup": "digest" }` in `site.config.json`, which is set): a
+  parent's new account sends nothing at once. Instead, on the first hourly run after 7 in the morning
+  (`signup_digest()`, from `push_run`), one email, "New parent accounts yesterday: N", says how many parent accounts
+  were made the day before and in the last seven days. Counts only, no addresses; none on a day with no new parent
+  account. `/edit/stats/` keeps the numbers day by day. Take the setting out (or set `"each"`) for an email per
+  account again. Program managers' sign-ups keep their own email either way, since each one is a lead.
+- **New Parent Account Signup** (without the digest): the email address and name. It goes when the account first
+  has a name: at once with Google, after the name step with an emailed code.
 - **New Program Manager Signup**: the email address, name and the listing's name. It goes with the account's first
   claim, in place of the plain "Listing claimed" email, and says whether the claim stands or waits for your yes
   (then the subject ends "(claim needs your yes)"). A parent who later claims a listing gets this one as well.

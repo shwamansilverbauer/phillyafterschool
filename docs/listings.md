@@ -83,9 +83,10 @@ A scheduled task ("Philly After School: five new schools a day", every morning) 
 steps and proposes them as one pull request for Josh to merge. It never pushes to `main` or `live`.
 
 - **Which schools.** `node scripts/next-schools.mjs [n]` lists the schools without a page that teach some of K to
-  5th grade, in order: first `data/school-queue.json` (Josh's own order, most often schools parents asked for: add
-  `{ "id": <its id in data/all-schools.json>, "why": "parents asked" }`), then schools a stored pickup list already
-  names (the match is rough and prints the list's own words, so it's a lead to read), then the nearest to a school
+  5th grade, in order: first `data/school-queue.json` (Josh's own order: add `{ "id": <its id in
+  data/all-schools.json>, "why": "parents asked" }`), then, with `--asks <file>` (`queue/open.json` from the private
+  ops repository, see "The private queue"), the schools families asked for, most asked first, then schools a stored
+  pickup list already names (the match is rough and prints the list's own words, so it's a lead to read), then the nearest to a school
   that has a page, so coverage grows outward. A school the run can't do well (no site to read, a charter whose
   calendar it can't read, fewer than two programs that run there or pick up there) is skipped and named in the pull
   request, and the next one is taken.
@@ -212,29 +213,77 @@ accounts and terms. Each ends in a pull request for the owner to merge, with an 
 
 - **The monthly check** (the first of the month) re-reads every listing, weekend block and summer camp against the
   provider's own site, using the worklist above, and the district calendar.
-- **The weekly run** works a queue instead: what came in through the site that needs a program's website read and
-  judged. `/edit/queue/` (behind the edit sign-in) lists it: suggestions of programs and camps and updates to
-  listings from the suggestion form (read from the log the form keeps next to the public folder), changes the
-  people who run a listing have proposed (status `new` in the accounts database), and notes the owner types on
-  the page. Feature ideas, contact messages and dates for a school are not research and don't appear. Each item is
-  shown as it will be sent, with email addresses and phone numbers already taken out; the sender's name is never
-  included. Ticking the items and choosing "Send" writes `data/queue.json` as one commit on the repository's
-  `queue` branch (through the same key file publishing uses, never on `main`, so nothing deploys), with the batch's
-  id, the items, and a count of the schools people have asked for (from the "ask for your school" page and the
-  form). The weekly run reads that file, checks each item against the provider's own site under the monthly
-  check's rules, runs `node scripts/linkcheck.mjs` for dead and moved links, and opens a pull request named
-  `weekly-<batch>`; a batch that already has its branch is not worked twice. **Rush:** ticking it emails the owner
-  a one-line reminder to press "Run now" on the task in the Claude app, so the pull request follows within the hour
-  instead of on the run's next morning. The page keeps what was sent (in `phillyafterschool-queue.json` next to the
-  public folder) and links each batch to its pull request; "Done, take it off" and "Not for the run" hide items.
-  The monthly check leaves queued items to the weekly run. The repository is public, so the owner unticks anything
-  that shouldn't be in it before sending.
+- **The weekly run** works the private queue instead (see "The private queue" below): what came in through the
+  site that needs a program's website read and judged. It reads `queue/open.json` from the private ops repository,
+  checks each item against the provider's own site under the monthly check's rules, runs `node
+  scripts/linkcheck.mjs` for dead and moved links, opens a pull request named `weekly-<date>-<time>`, and answers each item
+  it worked in `outcomes/<run>.json` there. "Run now" on the task in the Claude app runs it any day. The monthly
+  check leaves queued items to the weekly run.
 
 `scripts/linkcheck.mjs` sweeps every outside address in the data files (programs, camps, schools, the district
 calendar): status code and final address only, six at a time, honoring `robots.txt` (a page closed to `*`,
 ClaudeBot, Claude-Web, anthropic-ai or GPTBot is reported as not checked, never fetched). `--list` only prints the
 addresses and where each is used. It writes `linkcheck.json` (ignored by git) and prints what didn't answer 200 and
 what moved.
+
+### The private queue
+
+Everything that comes in through the site and needs a program's website read goes to the research runs through one
+private queue, with no ticking or sending by hand. It lives in the private ops repository (`opsRepo` in
+`site.config.json`, `shwamansilverbauer/phillyafterschool-ops`), never in this public one, and nothing a person typed
+reaches the public repository. (Until November 2026 the owner ticked items on `/edit/queue/` and sent them as
+`data/queue.json` on a public `queue` branch. That branch is retired.)
+
+- **What goes in.** Suggestions of programs and camps and updates to listings from the suggestion form (read from
+  the log the form keeps next to the public folder, the last 90 days), changes the people who run a listing proposed
+  (status `new` in the accounts database), and the owner's notes from `/edit/queue/`. Feature ideas, contact
+  messages and dates for a school are not research and don't go in. A later phase adds mail, reviews and managers'
+  words.
+- **How it gets there.** The hourly `push_run` call (`.github/workflows/alerts.yml` makes it every hour, and
+  `scripts/send-alerts.mjs` in the morning) writes `queue/open.json` to the ops repository through the same key file
+  `/edit/` publishes with (`phillyafterschool-github.key`, whose token needs that repository: Contents, read and
+  write). One commit, made only when the queue has changed, at most once in 50 minutes. The shared code is
+  `src/server/queue.php`, pasted into `groups/api.php` and `/edit/queue/` by the build.
+- **What the file holds.** `items`, each with its stable `id` (`s…` a suggestion, `e…` a proposed change, `n…` a
+  note), `kind` (`program`, `camp`, `update`, `proposal`, `note`), `when`, and as given `program`, `website`,
+  `listing`, `school`, `pickup`, `campType`, `sentBy` and `details`; and `schoolsAsked`, the count of families asking
+  for each school without a page (one per account from the "ask for your school" button, plus the form's "A school
+  to add"), most asked first, with the school's `id` where it is known. Email addresses and phone numbers are taken
+  out of the free text. In place of any address an item carries `sender`, a token (`k` and 16 hex digits, a keyed
+  hash of the address): the same person always has the same token, so a run can see three items from one sender,
+  and only the host can match it to an address, through the `queue_items` table in the accounts database.
+- **Answers come back.** Each run writes `outcomes/<run>.json` to the ops repository:
+  `{ "run": "weekly-2026-11-30", "pr": 23, "tokens": 180000, "items": [{ "item": "s1a2b3c4d5", "outcome":
+  "published", "listing": "p:example", "pr": 23 }] }`. `outcome` is one of `published`, `held`, `declined`,
+  `duplicate`, `needs-info`, `no-change` or `failed`; `reason`, for `needs-info` and `declined`, one of `need-page`,
+  `need-website`, `need-school`, `not-a-program`, `outside`, `no-own-site` or `closed`; `pr` on an item overrides
+  the file's; `tokens` is how many model tokens the run used, if it knows. Nothing else in the file is read: any
+  words a run writes there are ignored, and an item that isn't in the queue (`school:…`, `monthly:…`) is skipped.
+- **What happens to an item.** `push_run` reads each new or changed outcome file once. `declined`, `duplicate`,
+  `needs-info` and `no-change` settle the item at once. `published`, and `held` with a pull request, wait for that
+  pull request: about 20 minutes after it is merged (time for the site to publish) the item is published; a pull
+  request closed without a merge leaves it held. `held` with no pull request waits for the owner. `failed` puts the
+  item back in the queue for the next run. A settled or worked item leaves `queue/open.json`. A manager's proposed
+  change that a run settles is marked published or declined on `/edit/claims/` too.
+- **The sender hears once.** When an item is settled, its sender gets one email in the site's own words (editable
+  at `/edit/emails/`, see "The emails" in `docs/emails.md`): published ("It's on the site", the listing's link, and
+  an invitation to save their school or follow the listing), duplicate and no-change ("It's already listed", with
+  the link), needs-info ("We couldn't confirm this yet", and what would help, by `reason`), declined ("We can't list
+  this one", with the rule in a sentence, by `reason`). Held and failed send nothing. The run picks the outcome and
+  the reason; the host writes the words, so no sentence a run wrote is ever emailed to anyone. At most 30 answers go
+  in one run, a failed send is tried on the next two, and `queue_items.told` records when each went.
+  `"queueReplies": false` in `site.config.json` stops the answers (items still settle). What came in before the
+  private queue began (the day it first ran, `queue_since` in the accounts database's `meta`) is worked like the
+  rest, but its sender isn't emailed, since the owner answered those by hand; an item already sent to a weekly batch
+  the old way counts as done.
+- **`/edit/queue/`** (behind the edit sign-in) is a view of all this: what is in the queue as the runs see it, what
+  is waiting for a merge, what is held, what settled recently and whether its sender was told, the schools asked for
+  (with the addresses of the families who asked from an account, for writing to them when the school goes up; those
+  stay on the page), and when the queue was last written. "Not for the run" takes an item off for good (its sender
+  isn't emailed). A note added there is an item like the others. **Rush** writes the queue at once and emails the
+  owner a reminder to press "Run now" on the weekly run.
+- **Which schools next.** `node scripts/next-schools.mjs --asks <queue/open.json>` puts the schools families asked
+  for right after `data/school-queue.json`, most asked first (see "Five schools a day").
 
 ## The autopilot gate
 

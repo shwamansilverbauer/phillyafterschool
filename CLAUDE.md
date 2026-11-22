@@ -53,7 +53,8 @@ without `phillyafterschool-private.json`, which only the Actions runs have.
 | `build.mjs` | The whole build: validation, every page, the data files the pages read |
 | `src/site.js`, `src/groups.js`, `src/kids-corner.js`, `src/edit.js` | The pages' scripts: lists and planners, accounts, Kids' Playground, the edit pages |
 | `src/server/groups-api.php` | The accounts API (built into `groups/api.php`): sign-in, plans, sharing, follows, claims, premium, push, backups |
-| `src/server/edit-queue.php`, `edit-send.php`, `gh.php` | `/edit/` publishing and the queue, through the GitHub key on the host |
+| `src/server/edit-queue.php`, `edit-send.php`, `gh.php` | `/edit/` publishing and the queue's page, through the GitHub key on the host |
+| `src/server/queue.php` | The private queue's shared code (pasted into the API and the queue page): gathers the items, writes `queue/open.json` to the ops repository |
 | `tests/` | The tests (`tests/README.md` says how to write one) |
 | `scripts/gate.mjs`, `scripts/gate.config.json` | The autopilot gate and its thresholds and templates |
 | `.github/workflows/` | `publish.yml` (build, test, publish to `live`), `test.yml` (every pull request), `autopilot.yml` (the gate on run pull requests), `alerts.yml`, `monitor.yml`, `precheck.yml` |
@@ -67,7 +68,8 @@ without `phillyafterschool-private.json`, which only the Actions runs have.
 |---|---|
 | Add a school | [`docs/listings.md`](docs/listings.md): "Add a school" and "Five schools a day" |
 | Edit or add a listing | [`docs/listings.md`](docs/listings.md): "Edit a listing" (every field) |
-| The monthly check, the weekly run, the queue | [`docs/listings.md`](docs/listings.md): "Keeping it current" and "Two scheduled runs" |
+| The monthly check, the weekly run | [`docs/listings.md`](docs/listings.md): "Keeping it current" and "Two scheduled runs" |
+| The private queue, outcome files, the answers to senders | [`docs/listings.md`](docs/listings.md): "The private queue" |
 | Evidence files, the autopilot gate, what waits for Josh | [`docs/listings.md`](docs/listings.md): "The autopilot gate" |
 | A school's own clubs | [`docs/listings.md`](docs/listings.md): "A school's clubs, listed one by one" |
 | Summer camps, weekend classes | [`docs/camps-and-weekends.md`](docs/camps-and-weekends.md) |

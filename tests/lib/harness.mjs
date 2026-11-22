@@ -42,7 +42,7 @@ export const freePort = () => new Promise((res, rej) => { const s = net.createSe
 //   /postmark        what the site would email (Postmark's API shape); tests read it back from `mail.messages`
 //   /tokeninfo       Google's check of a sign-in credential; a test registers a credential with `google.allow()`
 //   /push/...        a browser's notification service; what the site posts lands in `push.posts`
-//   /github/...      GitHub's API, for the edit queue (recorded only)
+//   /github/...      GitHub's API: the key check, the private "-backups" and "-ops" repositories, pull requests
 export async function startStandin() {
   const mail = { messages: [], clear() { this.messages.length = 0; },
     // The newest message to an address, waiting a little for it to arrive.
@@ -68,6 +68,15 @@ export async function startStandin() {
   bk.file = p => { const sha = bk.trees.get(bk.commits.get(bk.main).tree).get(p); return sha ? bk.blobs.get(sha) : null; };
   bk.log = () => { const out = []; for (let c = bk.main; c; c = (bk.commits.get(c).parents || [])[0]) out.push(bk.commits.get(c).message); return out; };
   github.backup = bk;
+  // The private "-ops" repository, for the queue: files by path through the contents API (GET a file or a folder, PUT
+  // a file with the sha it replaces), each PUT one commit. A test puts a run's outcome file in with ops.put(path, text).
+  const ops = { files: new Map(), commits: [], noAccess: false,
+    put(p, text, message = 'test') { const sha = gid(); this.files.set(p, { text: Buffer.from(text), sha }); this.commits.push({ path: p, message }); return sha; },
+    read(p) { const f = this.files.get(p); return f ? f.text.toString() : null; } };
+  github.ops = ops;
+  // Pull requests on the main repository, as GET /repos/o/r/pulls/<n> answers: a test sets github.pulls[n] =
+  // { state, merged, merged_at }. One that isn't set answers as open.
+  github.pulls = {};
   const server = http.createServer((req, res) => {
     let body = '';
     req.on('data', c => { body += c; });
@@ -103,6 +112,28 @@ export async function startStandin() {
           if (req.method === 'PATCH' && kind === 'refs' && id === 'heads/main') { if (!bk.commits.has(b.sha) || (bk.commits.get(b.sha).parents || [])[0] !== bk.main) return json(422, { message: 'Update is not a fast forward' }); bk.main = b.sha; return json(200, { object: { sha: b.sha } }); }
           return json(404, { message: 'Not Found' });
         }
+        const o = u.pathname.match(/^\/github\/repos\/[^/]+\/[^/]+-ops\/contents\/(.+)$/);
+        if (o) {
+          if (ops.noAccess) return json(404, { message: 'Not Found' });
+          const p = decodeURIComponent(o[1]);
+          if (req.method === 'GET') {
+            const f = ops.files.get(p);
+            if (f) return json(200, { type: 'file', name: p.split('/').pop(), path: p, sha: f.sha, encoding: 'base64', content: f.text.toString('base64').replace(/(.{60})/g, '$1\n') });
+            const kids = [...ops.files].filter(([k]) => k.startsWith(p + '/') && !k.slice(p.length + 1).includes('/'));
+            return kids.length ? json(200, kids.map(([k, f]) => ({ type: 'file', name: k.split('/').pop(), path: k, sha: f.sha }))) : json(404, { message: 'Not Found' });
+          }
+          if (req.method === 'PUT') {
+            let b = {}; try { b = JSON.parse(body || '{}'); } catch (e) { /* not json */ }
+            const had = ops.files.get(p);
+            if (had && b.sha !== had.sha) return json(409, { message: 'sha does not match' });
+            if (!had && b.sha) return json(422, { message: 'sha given for a new file' });
+            const sha = ops.put(p, Buffer.from(b.content || '', 'base64').toString(), b.message || '');
+            return json(had ? 200 : 201, { content: { path: p, sha }, commit: { sha: gid(), html_url: 'https://github.test/commit' } });
+          }
+          return json(405, { message: 'no' });
+        }
+        const pull = u.pathname.match(/^\/github\/repos\/[^/]+\/[^/]+\/pulls\/(\d+)$/);
+        if (pull && req.method === 'GET') return json(200, { number: +pull[1], state: 'open', merged: false, merged_at: null, ...(github.pulls[pull[1]] || {}) });
         if (github.expires) res.setHeader('github-authentication-token-expiration', github.expires);
         return json(200, { ok: true });
       }
@@ -120,6 +151,7 @@ export async function startSite({ scratch, standin, log = () => {} } = {}) {
   const copy = path.join(dir, 'repo'), pub = path.join(dir, 'public'), dataDir = path.join(dir, 'phillyafterschool-data');
   fs.rmSync(copy, { recursive: true, force: true }); fs.rmSync(pub, { recursive: true, force: true }); fs.rmSync(dataDir, { recursive: true, force: true });
   for (const f of ['phillyafterschool-github.key', 'phillyafterschool-github-check.json']) fs.rmSync(path.join(dir, f), { force: true });   // left by a run that stopped part way
+  for (const f of ['phillyafterschool-suggestions.log', 'phillyafterschool-queue.json', 'phillyafterschool-school-requests.log', 'phillyafterschool-queue-rush.json']) fs.rmSync(path.join(dir, f), { force: true });   // the queue starts empty
   fs.mkdirSync(copy, { recursive: true });
   // A copy of what the build reads, so the repository's own dist/ is left alone.
   for (const f of ['build.mjs', 'site.config.json', 'data', 'src', 'email', 'scripts']) fs.cpSync(path.join(ROOT, f), path.join(copy, f), { recursive: true });

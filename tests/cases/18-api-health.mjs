@@ -47,17 +47,18 @@ test('health: the publishing key is reported as working, with the days it has le
   fs.unlinkSync(keyFile); fresh();
 });
 
-test('the note to the owner about a new account goes out on any hourly run, not only in the morning', async ({ api, mail }) => {
+test('the note to the owner about a new account goes out on any hourly run, not only in the morning (with a note for each account)', async ({ api, mail }) => {
   const email = someone('late');
   api().as(email, '', '');   // an account whose address was proven, no name given yet (seeded: no sign-in email spent)
   // Every run sends those due, twenty at a time (the other tests' accounts are waiting too); run until none are left.
+  // The site's config sends parents' notes as one digest a day (19-api-queue.mjs tests that); "each" is asked for here.
   let sent = 0;
-  for (let i = 0; i < 20; i++) { const r = await api().okay('POST', 'push_run', { told_age: -5 }); ok(typeof r.told === 'number', JSON.stringify(r)); if (!r.told) break; sent += r.told; }
+  for (let i = 0; i < 20; i++) { const r = await api().okay('POST', 'push_run', { told_age: -5, owner_notes: 'each' }); ok(typeof r.told === 'number', JSON.stringify(r)); if (!r.told) break; sent += r.told; }
   ok(sent >= 1, 'notes sent');
   const note = mail.to('contact@phillyafterschool.org').find(m => /New Parent Account Signup/.test(m.Subject) && m.TextBody.includes(email));
   ok(note, 'the owner hears about it');
   ok(note.TextBody.includes('Name: not added yet'));
-  eq((await api().okay('POST', 'push_run', { told_age: -5 })).told || 0, 0, 'once');
+  eq((await api().okay('POST', 'push_run', { told_age: -5, owner_notes: 'each' })).told || 0, 0, 'once');
 });
 
 test('the copy off the host: encrypted, sent once a day, then fetched back and opened (the restore drill)', async ({ api, site, github }) => {
