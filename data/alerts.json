@@ -288,6 +288,26 @@
     {
       "id": "olney",
       "name": "Olney Elementary"
+    },
+    {
+      "id": "catharine",
+      "name": "Catharine"
+    },
+    {
+      "id": "mcclure",
+      "name": "McClure"
+    },
+    {
+      "id": "belmont-academy",
+      "name": "Belmont Academy"
+    },
+    {
+      "id": "bluford",
+      "name": "Bluford"
+    },
+    {
+      "id": "bryant",
+      "name": "Bryant"
     }
   ],
   "programs": [
@@ -1267,7 +1287,7 @@
     },
     {
       "id": "zhang-sah-school-based",
-      "name": "Zhang Sah School-Based Programs at J.B. Kelly",
+      "name": "Zhang Sah School-Based Programs",
       "parts": [
         "after"
       ]
@@ -1931,6 +1951,76 @@
     {
       "id": "ziehler-playground",
       "name": "Ziehler Playground",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "sunrise-bluford",
+      "name": "Sunrise of Philadelphia at Bluford",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "legacy-mcclure",
+      "name": "LEGACY Champions on the Rise at McClure",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "belmont-academy-ost",
+      "name": "Belmont Academy after school (OST)",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "greener-partners-belmont-academy",
+      "name": "Greener Partners at Belmont Academy",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "catharine-clubs",
+      "name": "School clubs and partners at Catharine",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "mcclure-clubs",
+      "name": "School clubs and partners at McClure",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "bluford-clubs",
+      "name": "School clubs, teams and partners at Bluford",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "mccreesh-playground",
+      "name": "McCreesh Playground",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "sunrise-bryant",
+      "name": "Sunrise of Philadelphia at Bryant",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "bryant-clubs",
+      "name": "School clubs and partners at Bryant",
       "parts": [
         "after"
       ]
@@ -2663,6 +2753,91 @@
       "button": "See the page"
     },
     {
+      "id": "added-belmont-academy",
+      "kind": "added",
+      "date": "2026-11-22",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-24",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "belmont-academy-charter-school"
+      ],
+      "when": "New",
+      "title": "Belmont Academy now has a page",
+      "text": "You asked to be told. 2 programs are listed for Belmont Academy so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/belmont-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-bluford",
+      "kind": "added",
+      "date": "2026-11-22",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-24",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "guion-s-bluford-elementary-school"
+      ],
+      "when": "New",
+      "title": "Bluford now has a page",
+      "text": "You asked to be told. 2 programs are listed for Bluford so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/bluford/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-bryant",
+      "kind": "added",
+      "date": "2026-11-22",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-24",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "william-c-bryant-school"
+      ],
+      "when": "New",
+      "title": "Bryant now has a page",
+      "text": "You asked to be told. 3 programs are listed for Bryant so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/bryant/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-catharine",
+      "kind": "added",
+      "date": "2026-11-22",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-24",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "joseph-w-catharine-school"
+      ],
+      "when": "New",
+      "title": "Catharine now has a page",
+      "text": "You asked to be told. 3 programs are listed for Catharine so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/catharine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-mcclure",
+      "kind": "added",
+      "date": "2026-11-22",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-24",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "alexander-k-mcclure-school"
+      ],
+      "when": "New",
+      "title": "McClure now has a page",
+      "text": "You asked to be told. 3 programs are listed for McClure so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/mcclure/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
       "id": "reg-the-philadelphia-school-2026-11-23",
       "schools": [],
       "programs": [
@@ -2905,7 +3080,8 @@
         "mastery-harrity",
         "mastery-wister",
         "northwood",
-        "mastery-clymer"
+        "mastery-clymer",
+        "belmont-academy"
       ],
       "when": "Wednesday, November 25",
       "title": "No school: Staff professional development",
@@ -2927,6 +3103,21 @@
       "text": "From Ad Prima’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
       "url": "https://phillyafterschool.org/ad-prima/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Ad Prima’s week"
+    },
+    {
+      "id": "off-belmont-academy-2026-11-25",
+      "kind": "dayoff",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-15",
+      "schools": [
+        "belmont-academy"
+      ],
+      "programs": [],
+      "when": "Wednesday, November 25 to Friday, November 27",
+      "title": "No school at Belmont Academy: Fall break",
+      "text": "From Belmont Academy’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
+      "url": "https://phillyafterschool.org/belmont-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Belmont Academy’s week"
     },
     {
       "id": "off-byers-2026-11-25",
@@ -3117,7 +3308,8 @@
         "mastery-harrity",
         "mastery-wister",
         "northwood",
-        "mastery-clymer"
+        "mastery-clymer",
+        "belmont-academy"
       ],
       "when": "Thursday, November 26 to Friday, November 27",
       "title": "No school: Thanksgiving recess",
@@ -3380,6 +3572,38 @@
       "button": "See Bayard Taylor’s week"
     },
     {
+      "id": "week-belmont-academy-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "belmont-academy"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Belmont Academy",
+      "text": "Wednesday: No school: Fall break. Thursday: No school: Fall break. Friday: No school: Fall break.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Fall break"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Fall break"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Fall break"
+        }
+      ],
+      "first": "Wednesday: no school, Fall break; Thursday: no school, Fall break",
+      "url": "https://phillyafterschool.org/belmont-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Belmont Academy’s week"
+    },
+    {
       "id": "week-blaine-2026-11-23",
       "kind": "week",
       "date": "2026-11-27",
@@ -3444,6 +3668,70 @@
       "button": "See Blankenburg’s week"
     },
     {
+      "id": "week-bluford-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "bluford"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Bluford",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/bluford/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Bluford’s week"
+    },
+    {
+      "id": "week-bryant-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "bryant"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Bryant",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/bryant/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Bryant’s week"
+    },
+    {
       "id": "week-byers-2026-11-23",
       "kind": "week",
       "date": "2026-11-27",
@@ -3474,6 +3762,38 @@
       "first": "Wednesday: no school, Thanksgiving break; Thursday: no school, Thanksgiving break",
       "url": "https://phillyafterschool.org/byers/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Russell Byers’s week"
+    },
+    {
+      "id": "week-catharine-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "catharine"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Catharine",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/catharine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Catharine’s week"
     },
     {
       "id": "week-cayuga-2026-11-23",
@@ -4862,6 +5182,38 @@
       "first": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students; Wednesday: no school, Staff professional development",
       "url": "https://phillyafterschool.org/mccall/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See McCall’s week"
+    },
+    {
+      "id": "week-mcclure-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mcclure"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at McClure",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/mcclure/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See McClure’s week"
     },
     {
       "id": "week-mcdaniel-2026-11-23",
@@ -6955,6 +7307,21 @@
       "text": "Last day of winter term registration for new students."
     },
     {
+      "id": "off-belmont-academy-2026-12-21",
+      "kind": "dayoff",
+      "date": "2026-12-21",
+      "sendOn": "2026-12-06",
+      "schools": [
+        "belmont-academy"
+      ],
+      "programs": [],
+      "when": "Monday, December 21 to Friday, January 1",
+      "title": "No school at Belmont Academy: Winter break",
+      "text": "From Belmont Academy’s own calendar. 14 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Hudson Table, Kids on 12th, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "url": "https://phillyafterschool.org/belmont-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Belmont Academy’s week"
+    },
+    {
       "id": "off-byers-2026-12-21",
       "kind": "dayoff",
       "date": "2026-12-21",
@@ -7289,7 +7656,8 @@
         "mastery-harrity",
         "mastery-wister",
         "northwood",
-        "mastery-clymer"
+        "mastery-clymer",
+        "belmont-academy"
       ],
       "when": "Wednesday, December 23 to Friday, January 1",
       "title": "No school: Winter recess",
@@ -7861,7 +8229,8 @@
         "mastery-harrity",
         "mastery-wister",
         "northwood",
-        "mastery-clymer"
+        "mastery-clymer",
+        "belmont-academy"
       ],
       "when": "Friday, January 15",
       "title": "No school: Staff professional development",
@@ -8010,7 +8379,8 @@
         "mastery-harrity",
         "mastery-wister",
         "northwood",
-        "mastery-clymer"
+        "mastery-clymer",
+        "belmont-academy"
       ],
       "when": "Monday, January 18",
       "title": "No school: Dr. Martin Luther King Jr. Day",
@@ -8032,6 +8402,21 @@
       "text": "From Ad Prima’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/ad-prima/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Ad Prima’s week"
+    },
+    {
+      "id": "off-belmont-academy-2027-01-18",
+      "kind": "dayoff",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [
+        "belmont-academy"
+      ],
+      "programs": [],
+      "when": "Monday, January 18",
+      "title": "No school at Belmont Academy: Martin Luther King Jr. Day",
+      "text": "From Belmont Academy’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/belmont-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Belmont Academy’s week"
     },
     {
       "id": "off-byers-2027-01-18",
@@ -8542,7 +8927,8 @@
         "mastery-harrity",
         "mastery-wister",
         "northwood",
-        "mastery-clymer"
+        "mastery-clymer",
+        "belmont-academy"
       ],
       "when": "Friday, January 29",
       "title": "No school: Report card conferences",
@@ -8677,6 +9063,21 @@
       "sendOn": "2027-02-01",
       "when": "Today, Monday, February 1",
       "text": "Last day of early-bird tuition ($645 a week; $695 after)."
+    },
+    {
+      "id": "off-belmont-academy-2027-02-01",
+      "kind": "dayoff",
+      "date": "2027-02-01",
+      "sendOn": "2027-01-17",
+      "schools": [
+        "belmont-academy"
+      ],
+      "programs": [],
+      "when": "Monday, February 1",
+      "title": "No school at Belmont Academy: Professional development day",
+      "text": "From Belmont Academy’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/belmont-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Belmont Academy’s week"
     },
     {
       "id": "camp-butchers-sew-shop-2027-02-12",
@@ -8836,7 +9237,8 @@
         "mastery-harrity",
         "mastery-wister",
         "northwood",
-        "mastery-clymer"
+        "mastery-clymer",
+        "belmont-academy"
       ],
       "when": "Friday, February 12",
       "title": "No school: Staff professional development",
@@ -9083,7 +9485,8 @@
         "mastery-harrity",
         "mastery-wister",
         "northwood",
-        "mastery-clymer"
+        "mastery-clymer",
+        "belmont-academy"
       ],
       "when": "Monday, February 15",
       "title": "No school: Presidents’ Day",
@@ -9105,6 +9508,21 @@
       "text": "From Ad Prima’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
       "url": "https://phillyafterschool.org/ad-prima/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Ad Prima’s week"
+    },
+    {
+      "id": "off-belmont-academy-2027-02-15",
+      "kind": "dayoff",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [
+        "belmont-academy"
+      ],
+      "programs": [],
+      "when": "Monday, February 15",
+      "title": "No school at Belmont Academy: Presidents’ Day",
+      "text": "From Belmont Academy’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
+      "url": "https://phillyafterschool.org/belmont-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Belmont Academy’s week"
     },
     {
       "id": "off-byers-2027-02-15",
@@ -9687,7 +10105,8 @@
         "mastery-harrity",
         "mastery-wister",
         "northwood",
-        "mastery-clymer"
+        "mastery-clymer",
+        "belmont-academy"
       ],
       "when": "Wednesday, March 10",
       "title": "No school: Eid al-Fitr",
@@ -9709,6 +10128,21 @@
       "text": "From Ad Prima’s own calendar. 10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/ad-prima/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Ad Prima’s week"
+    },
+    {
+      "id": "off-belmont-academy-2027-03-10",
+      "kind": "dayoff",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [
+        "belmont-academy"
+      ],
+      "programs": [],
+      "when": "Wednesday, March 10",
+      "title": "No school at Belmont Academy: Eid al-Fitr",
+      "text": "From Belmont Academy’s own calendar. 10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/belmont-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Belmont Academy’s week"
     },
     {
       "id": "off-byers-2027-03-10",
@@ -10161,7 +10595,8 @@
         "mastery-harrity",
         "mastery-wister",
         "northwood",
-        "mastery-clymer"
+        "mastery-clymer",
+        "belmont-academy"
       ],
       "when": "Monday, March 22 to Friday, March 26",
       "title": "No school: Spring recess and Good Friday",
@@ -10183,6 +10618,21 @@
       "text": "From Ad Prima’s own calendar. 11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/ad-prima/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Ad Prima’s week"
+    },
+    {
+      "id": "off-belmont-academy-2027-03-22",
+      "kind": "dayoff",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "belmont-academy"
+      ],
+      "programs": [],
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "No school at Belmont Academy: Spring break",
+      "text": "From Belmont Academy’s own calendar. 11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/belmont-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Belmont Academy’s week"
     },
     {
       "id": "off-byers-2027-03-22",
@@ -10505,7 +10955,8 @@
         "mastery-harrity",
         "mastery-wister",
         "northwood",
-        "mastery-clymer"
+        "mastery-clymer",
+        "belmont-academy"
       ],
       "when": "Monday, March 29",
       "title": "No school: Staff professional development",
@@ -10662,6 +11113,21 @@
       "text": "From Mastery Wister’s own calendar. No listed program has posted a camp for it yet.",
       "url": "https://phillyafterschool.org/mastery-wister/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Wister’s week"
+    },
+    {
+      "id": "off-belmont-academy-2027-04-12",
+      "kind": "dayoff",
+      "date": "2027-04-12",
+      "sendOn": "2027-03-28",
+      "schools": [
+        "belmont-academy"
+      ],
+      "programs": [],
+      "when": "Monday, April 12",
+      "title": "No school at Belmont Academy: Professional development day",
+      "text": "From Belmont Academy’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/belmont-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Belmont Academy’s week"
     },
     {
       "id": "off-esperanza-elementary-2027-04-14",
@@ -10836,7 +11302,8 @@
         "mastery-harrity",
         "mastery-wister",
         "northwood",
-        "mastery-clymer"
+        "mastery-clymer",
+        "belmont-academy"
       ],
       "when": "Friday, April 16",
       "title": "No school: Report card conferences",
@@ -11151,7 +11618,8 @@
         "mastery-harrity",
         "mastery-wister",
         "northwood",
-        "mastery-clymer"
+        "mastery-clymer",
+        "belmont-academy"
       ],
       "when": "Monday, May 17",
       "title": "No school: Eid al-Adha",
@@ -11456,7 +11924,8 @@
         "mastery-harrity",
         "mastery-wister",
         "northwood",
-        "mastery-clymer"
+        "mastery-clymer",
+        "belmont-academy"
       ],
       "when": "Tuesday, May 18",
       "title": "No school: Election Day",
@@ -11608,7 +12077,8 @@
         "mastery-harrity",
         "mastery-wister",
         "northwood",
-        "mastery-clymer"
+        "mastery-clymer",
+        "belmont-academy"
       ],
       "when": "Monday, May 31",
       "title": "No school: Memorial Day",
@@ -11630,6 +12100,21 @@
       "text": "From Ad Prima’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
       "url": "https://phillyafterschool.org/ad-prima/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Ad Prima’s week"
+    },
+    {
+      "id": "off-belmont-academy-2027-05-31",
+      "kind": "dayoff",
+      "date": "2027-05-31",
+      "sendOn": "2027-05-16",
+      "schools": [
+        "belmont-academy"
+      ],
+      "programs": [],
+      "when": "Monday, May 31",
+      "title": "No school at Belmont Academy: Memorial Day",
+      "text": "From Belmont Academy’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
+      "url": "https://phillyafterschool.org/belmont-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Belmont Academy’s week"
     },
     {
       "id": "off-byers-2027-05-31",

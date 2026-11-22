@@ -13577,6 +13577,21 @@
           }
         ],
         "checked": "2026-11-12"
+      },
+      "catharine": {
+        "relation": "onsite",
+        "note": "Zhang Sah’s own page lists Joseph Catharine among its school-based programs, and Catharine’s own site names Zhang Sah Karate among its community partners.",
+        "sources": [
+          {
+            "label": "Zhang Sah after-school program",
+            "url": "https://zhangsah.org/after-school-program/"
+          },
+          {
+            "label": "Catharine: after-school programming, partners and clubs",
+            "url": "https://catharine.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-22"
       }
     },
     "pickupLists": [
@@ -15696,6 +15711,12 @@
         "distance": "about a third of a mile west",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-15"
+      },
+      "mcclure": {
+        "relation": "nearby",
+        "distance": "about a quarter mile west",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-22"
       }
     }
   },
@@ -19895,6 +19916,12 @@
         "distance": "about half a mile south",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-20"
+      },
+      "bryant": {
+        "relation": "nearby",
+        "distance": "about half a mile southeast, on 55th St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-22"
       }
     }
   },
@@ -21721,5 +21748,999 @@
         "checked": "2026-11-21"
       }
     }
+  },
+  {
+    "id": "sunrise-bluford",
+    "name": "Sunrise of Philadelphia at Bluford",
+    "what": "Free after-school program inside Bluford, with small-group academic help, a snack, STEM and social-emotional activities",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "Sunrise",
+      "homework help",
+      "Bluford",
+      "West Philadelphia",
+      "childcare",
+      "Carroll Park",
+      "before care"
+    ],
+    "address": "5720 Media St",
+    "grades": "K-8",
+    "gradeNote": "For Bluford students",
+    "hours": "After school on every open school day until June 8, 2027. Sunrise’s typical day ends with pickup between 5:00 and 5:30 pm; it says start and end times differ by school.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "cost": "Free",
+    "price": "free",
+    "phone": "267-231-4827",
+    "email": "",
+    "website": "https://www.sunriseofphila.org/school-year",
+    "register": {
+      "how": "online",
+      "url": "https://www.sunriseofphila.org/services-8",
+      "note": "Sunrise’s enrollment page has its K–8 application; choose Bluford. Sunrise says students in K–5 must come at least 4 days a week, and 6th–8th graders at least 3."
+    },
+    "note": "Sunrise’s own page lists Guion S. Bluford Elementary School among its sites, with the phone number used here, marks it as one of the sites with before care, and says its after-school programs are free at every site. Bluford’s own site says Sunrise is its after-school provider. Ask Sunrise for this site’s hours and its before-care times.",
+    "sources": [
+      {
+        "label": "Sunrise of Philadelphia: school-year program and sites",
+        "url": "https://www.sunriseofphila.org/school-year"
+      },
+      {
+        "label": "Sunrise enrollment",
+        "url": "https://www.sunriseofphila.org/services-8"
+      },
+      {
+        "label": "Bluford: after-school programming, partners and clubs",
+        "url": "https://bluford.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-22",
+    "schools": {
+      "bluford": {
+        "relation": "onsite",
+        "note": "Bluford’s own site says its after-school provider is Sunrise of Philadelphia, and Sunrise’s own list of sites names the school.",
+        "sources": [
+          {
+            "label": "Sunrise of Philadelphia: school-year program and sites",
+            "url": "https://www.sunriseofphila.org/school-year"
+          },
+          {
+            "label": "Bluford: after-school programming, partners and clubs",
+            "url": "https://bluford.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-22"
+      }
+    }
+  },
+  {
+    "id": "legacy-mcclure",
+    "name": "LEGACY Champions on the Rise at McClure",
+    "what": "A free after-school program inside McClure, built around tennis, with homework help, literacy, STEM, the arts and social-emotional learning, plus before care",
+    "types": [
+      "aftercare",
+      "movement"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "before care",
+      "free",
+      "tennis",
+      "sports",
+      "homework",
+      "literacy",
+      "STEM",
+      "LEGACY",
+      "Legacy Youth Tennis",
+      "McClure",
+      "Hunting Park"
+    ],
+    "address": "600 W Hunting Park Ave",
+    "grades": "K-5",
+    "gradeNote": "McClure students; the City’s listing says grades 1 to 5 in its description and K to 5 in its grade boxes",
+    "hours": "3:00–6:00 pm, Monday to Friday, September 2, 2026 to June 8, 2027, according to the City’s listing. Before care runs 7:30–8:30 am.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-487-3477",
+    "email": "",
+    "website": "https://legacyyte.org/community-programs/after-school-program/",
+    "register": {
+      "how": "online",
+      "url": "https://legacyyte.jotform.com/form/McClure-OST",
+      "label": "Register",
+      "note": "The City’s listing says registration is required; this is the sign-up form it links for McClure."
+    },
+    "note": "Hours and dates come from the City’s program locator, which also says meals and snacks are provided and there is no transportation. The City’s listing gives 3698 N Randolph St as the address, which is Bayard Taylor’s, but names McClure as the school; LEGACY’s own page lists McClure as one of its four school sites and McClure’s own page names LEGACY among its partners.",
+    "sources": [
+      {
+        "label": "LEGACY Champions on the Rise",
+        "url": "https://legacyyte.org/community-programs/after-school-program/"
+      },
+      {
+        "label": "City program locator: LEGACY at McClure After School 26–27",
+        "url": "https://www.phila.gov/ost/program-locator/?address=600+W+Hunting+Park+Ave&resource=ost_152"
+      },
+      {
+        "label": "City program locator: LEGACY at McClure Before School 26–27",
+        "url": "https://www.phila.gov/ost/program-locator/?address=600+W+Hunting+Park+Ave&resource=ost_150"
+      },
+      {
+        "label": "McClure: about us and partners",
+        "url": "https://mcclure.philasd.org/about-us/"
+      }
+    ],
+    "lastVerified": "2026-11-22",
+    "schools": {
+      "mcclure": {
+        "relation": "onsite",
+        "note": "LEGACY’s own page lists Alexander K. McClure Elementary as one of its four school sites, McClure’s page names Legacy Youth Tennis and Education among its partners, and the City’s program locator lists the program for McClure.",
+        "sources": [
+          {
+            "label": "LEGACY Champions on the Rise",
+            "url": "https://legacyyte.org/community-programs/after-school-program/"
+          },
+          {
+            "label": "McClure: about us and partners",
+            "url": "https://mcclure.philasd.org/about-us/"
+          },
+          {
+            "label": "City program locator: LEGACY at McClure After School 26–27",
+            "url": "https://www.phila.gov/ost/program-locator/?address=600+W+Hunting+Park+Ave&resource=ost_152"
+          }
+        ],
+        "checked": "2026-11-22"
+      }
+    }
+  },
+  {
+    "id": "belmont-academy-ost",
+    "name": "Belmont Academy after school (OST)",
+    "what": "The Belmont Charter Network’s own after-school program for Belmont Academy’s pre-K and kindergarten children, run with the school-day staff",
+    "types": [
+      "aftercare",
+      "movement",
+      "nature",
+      "art",
+      "games"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "OST",
+      "out of school time",
+      "pre-K",
+      "kindergarten",
+      "soccer",
+      "Kat Academy",
+      "gardening",
+      "arts and crafts",
+      "Belmont Academy",
+      "Belmont Charter",
+      "West Philadelphia"
+    ],
+    "address": "907 N 41st St",
+    "grades": "PK-K",
+    "gradeNote": "Belmont Academy students (Head Start, pre-K and kindergarten)",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-386-5768",
+    "email": "",
+    "website": "https://www.belmontcharternetwork.org/ost-programming/",
+    "register": {
+      "how": "school",
+      "note": "Ask Belmont Academy’s office (215-386-5768); the network’s page says to contact the school’s OST site director."
+    },
+    "note": "The network’s page says its out-of-school-time program gives extended school care, and that at Belmont Academy the school-day staff run it to keep children with the adults they know. It lists soccer with Kat Academy, gardening and outdoor classrooms with Greener Partners, arts and crafts, and station activities and open play. It doesn’t give days, hours or a price, so ask the school.",
+    "sources": [
+      {
+        "label": "Belmont Charter Network: OST programming",
+        "url": "https://www.belmontcharternetwork.org/ost-programming/"
+      },
+      {
+        "label": "Belmont Charter Network: out-of-school time",
+        "url": "https://www.belmontcharternetwork.org/after-school-daycare/"
+      },
+      {
+        "label": "Belmont Academy Charter School",
+        "url": "https://www.belmontcharternetwork.org/bacs/"
+      }
+    ],
+    "lastVerified": "2026-11-22",
+    "schools": {
+      "belmont-academy": {
+        "relation": "onsite",
+        "note": "The Belmont Charter Network’s own OST page describes the program at Belmont Academy.",
+        "sources": [
+          {
+            "label": "Belmont Charter Network: OST programming",
+            "url": "https://www.belmontcharternetwork.org/ost-programming/"
+          }
+        ],
+        "checked": "2026-11-22"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Soccer with Kat Academy",
+        "tags": [
+          "movement"
+        ],
+        "note": "Named on the network’s OST page. We couldn’t find a website for Kat Academy."
+      },
+      {
+        "name": "Gardening and outdoor classrooms with Greener Partners",
+        "tags": [
+          "nature"
+        ]
+      },
+      {
+        "name": "Arts and crafts",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Station activities and open play",
+        "tags": [
+          "games"
+        ]
+      }
+    ],
+    "offers": [
+      "Soccer with Kat Academy",
+      "Gardening and outdoor classrooms with Greener Partners",
+      "Arts and crafts",
+      "Station activities and open play"
+    ]
+  },
+  {
+    "id": "greener-partners-belmont-academy",
+    "name": "Greener Partners at Belmont Academy",
+    "what": "Garden-based after-school sessions and outdoor classroom time from an urban farming nonprofit, part of its Healthy Schools Project with the Belmont Charter Network",
+    "types": [
+      "nature"
+    ],
+    "keywords": [
+      "gardening",
+      "garden",
+      "farm",
+      "nature",
+      "outdoors",
+      "food",
+      "Greener Partners",
+      "Farm Explorer",
+      "Belmont Academy",
+      "Belmont Charter",
+      "West Philadelphia"
+    ],
+    "address": "907 N 41st St",
+    "grades": "PK-K",
+    "gradeNote": "Belmont Academy students",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-386-5768",
+    "email": "",
+    "website": "https://greenerpartners.org/partner-with-us/school-community-partnerships/",
+    "register": {
+      "how": "school",
+      "note": "Part of Belmont Academy’s after-school program; ask the school office (215-386-5768)."
+    },
+    "note": "Greener Partners’ own page describes its Healthy Schools Project in Belmont Charter Network schools, including after-school garden sessions; the page’s figures are for 2023. The network’s OST page lists gardening and outdoor classrooms with Greener Partners in Belmont Academy’s after-school program. Neither gives days or times. The phone number is the school’s.",
+    "sources": [
+      {
+        "label": "Greener Partners: school and community partnerships",
+        "url": "https://greenerpartners.org/partner-with-us/school-community-partnerships/"
+      },
+      {
+        "label": "Belmont Charter Network: OST programming",
+        "url": "https://www.belmontcharternetwork.org/ost-programming/"
+      }
+    ],
+    "lastVerified": "2026-11-22",
+    "schools": {
+      "belmont-academy": {
+        "relation": "onsite",
+        "note": "The Belmont Charter Network’s OST page lists gardening with Greener Partners at Belmont Academy, and Greener Partners’ own page describes after-school garden sessions in the network’s schools.",
+        "sources": [
+          {
+            "label": "Belmont Charter Network: OST programming",
+            "url": "https://www.belmontcharternetwork.org/ost-programming/"
+          },
+          {
+            "label": "Greener Partners: school and community partnerships",
+            "url": "https://greenerpartners.org/partner-with-us/school-community-partnerships/"
+          }
+        ],
+        "checked": "2026-11-22"
+      }
+    }
+  },
+  {
+    "id": "catharine-clubs",
+    "name": "School clubs and partners",
+    "what": "Clubs and community partners Catharine names on its own site: homework help, arts and crafts, cheerleading, ArtWell, Musicopia, ballroom dancing and an Artist Year residency",
+    "types": [
+      "clubs",
+      "academics",
+      "art",
+      "movement",
+      "nature",
+      "music"
+    ],
+    "keywords": [
+      "clubs",
+      "homework help",
+      "arts and crafts",
+      "cheerleading",
+      "garden",
+      "band",
+      "orchestra",
+      "ArtWell",
+      "Musicopia",
+      "ballroom dancing",
+      "Artist Year",
+      "Catharine",
+      "Paschall"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies; band and orchestra lessons are for 4th and 5th graders",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-8150",
+    "email": "",
+    "website": "https://catharine.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-8150)."
+    },
+    "note": "Catharine’s own site lists these under community partnerships and extracurricular clubs and activities, without days, times or grades, and doesn’t say which meet after dismissal. Some partners may work with classes during the school day. Ask the office what runs after school and for whom.",
+    "sources": [
+      {
+        "label": "Catharine: after-school programming, partners and clubs",
+        "url": "https://catharine.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-22",
+    "schools": {
+      "catharine": {
+        "relation": "onsite",
+        "checked": "2026-11-22"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Homework Help",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Arts and crafts",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "status": "Coming soon, the school’s site says",
+        "tags": [
+          "nature"
+        ]
+      },
+      {
+        "name": "Band and orchestra lessons",
+        "grades": "4-5",
+        "what": "Once a week with the school’s band or orchestra teachers, with winter and spring concerts",
+        "tags": [
+          "music"
+        ],
+        "roster": false
+      },
+      {
+        "name": "ArtWell",
+        "what": "An arts-education nonprofit, named as a community partner",
+        "tags": [
+          "art"
+        ],
+        "note": "artwell.org"
+      },
+      {
+        "name": "Musicopia",
+        "what": "A music-education nonprofit, named as a community partner",
+        "tags": [
+          "music"
+        ],
+        "note": "musicopia.net"
+      },
+      {
+        "name": "Ballroom dancing",
+        "what": "Named as a community partnership; the site doesn’t say who teaches it",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Artist Year residency",
+        "what": "Named as a community partnership",
+        "tags": [
+          "art"
+        ],
+        "note": "artistyear.org"
+      }
+    ],
+    "offers": [
+      "Homework Help",
+      "Arts and crafts",
+      "Cheerleading",
+      "Garden Club",
+      "ArtWell",
+      "Musicopia",
+      "Ballroom dancing",
+      "Artist Year residency"
+    ]
+  },
+  {
+    "id": "mcclure-clubs",
+    "name": "School clubs and partners",
+    "what": "Programs McClure names on its own page of partners: My Daughter’s Kitchen, Need in Deed, CADEkids, Villanova University mentors, a FAST program for kindergarten families and the safety patrol",
+    "types": [
+      "clubs",
+      "academics"
+    ],
+    "keywords": [
+      "clubs",
+      "cooking",
+      "My Daughter’s Kitchen",
+      "Need in Deed",
+      "service learning",
+      "CADEkids",
+      "mentors",
+      "Villanova",
+      "FAST",
+      "safety patrol",
+      "McClure"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies; ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-3870",
+    "email": "",
+    "website": "https://mcclure.philasd.org/about-us/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-3870)."
+    },
+    "note": "McClure’s page lists these among its “points of pride” and partnerships, without days, times or grades, and doesn’t say which meet after dismissal. Some may run during the school day. Ask the office what runs after school and for whom.",
+    "sources": [
+      {
+        "label": "McClure: about us and partners",
+        "url": "https://mcclure.philasd.org/about-us/"
+      }
+    ],
+    "lastVerified": "2026-11-22",
+    "schools": {
+      "mcclure": {
+        "relation": "onsite",
+        "checked": "2026-11-22"
+      }
+    },
+    "clubs": [
+      {
+        "name": "My Daughter’s Kitchen",
+        "what": "Cooking program",
+        "tags": [
+          "clubs"
+        ],
+        "note": "We couldn’t reach a website for it."
+      },
+      {
+        "name": "Need in Deed",
+        "what": "Service-learning program for grades 3 to 8, according to its own site",
+        "tags": [
+          "academics"
+        ],
+        "note": "needindeed.org"
+      },
+      {
+        "name": "CADEkids",
+        "tags": [
+          "academics"
+        ],
+        "note": "Its website turned away our reader."
+      },
+      {
+        "name": "Villanova University mentors",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "FAST program for kindergarten families",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Safety patrol",
+        "tags": [
+          "clubs"
+        ],
+        "roster": false
+      }
+    ],
+    "offers": [
+      "My Daughter’s Kitchen",
+      "Need in Deed",
+      "CADEkids",
+      "Villanova University mentors"
+    ]
+  },
+  {
+    "id": "bluford-clubs",
+    "name": "School clubs, teams and partners",
+    "what": "Teams, clubs and partners Bluford names on its own site: basketball, soccer, intramurals, art and theater, math and Lego clubs, the Father’s Day Rallying Committee and the Renegades mentor program",
+    "types": [
+      "clubs",
+      "movement",
+      "art",
+      "theater",
+      "stem",
+      "music",
+      "academics"
+    ],
+    "keywords": [
+      "clubs",
+      "basketball",
+      "soccer",
+      "intramurals",
+      "sports",
+      "art",
+      "theater",
+      "math",
+      "Lego",
+      "mentoring",
+      "drumming",
+      "Father’s Day Rallying Committee",
+      "Renegades",
+      "Father’s Read365",
+      "TGR",
+      "Bluford"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies; intramurals are for K–5 and the Middle Grades Conference teams for 6–8",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-9170",
+    "email": "",
+    "website": "https://bluford.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-9170). Sports need a physical form signed by a doctor."
+    },
+    "note": "Bluford’s own site lists these under sports, arts, community partnerships and extracurricular clubs, without days or times, and doesn’t say which meet after dismissal. Ask the office what runs after school and for whom.",
+    "sources": [
+      {
+        "label": "Bluford: after-school programming, partners and clubs",
+        "url": "https://bluford.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-22",
+    "schools": {
+      "bluford": {
+        "relation": "onsite",
+        "checked": "2026-11-22"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Basketball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Elementary intramural sports",
+        "grades": "K-5",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Art and theater",
+        "tags": [
+          "art",
+          "theater"
+        ]
+      },
+      {
+        "name": "Math clubs",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Lego Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Father’s Day Rallying Committee",
+        "what": "Mentorship, arts and drumming",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Renegades Mentor Program",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Father’s Read365",
+        "what": "Named as a community partner",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "TGR",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [
+          "stem"
+        ],
+        "roster": false
+      }
+    ],
+    "offers": [
+      "Basketball",
+      "Soccer",
+      "Elementary intramural sports",
+      "Art and theater",
+      "Math clubs",
+      "Lego Club",
+      "Father’s Day Rallying Committee",
+      "Renegades Mentor Program"
+    ]
+  },
+  {
+    "id": "mccreesh-playground",
+    "name": "McCreesh Playground",
+    "what": "City rec center next to Catharine: after-school program with homework help, arts and crafts, active games and a snack",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "playground",
+      "city",
+      "after school",
+      "aftercare",
+      "homework",
+      "arts and crafts",
+      "free",
+      "Catharine",
+      "Southwest Philadelphia",
+      "Paschall"
+    ],
+    "address": "6744 Regent St",
+    "neighborhoods": [
+      "Paschall"
+    ],
+    "grades": "1-6",
+    "gradeNote": "Ages 6–12",
+    "hours": "The City’s 2016 entry says 3:00–6:00 pm, Monday to Friday, and from early dismissal to 6:00 pm on early-dismissal days. Call for this year’s hours.",
+    "cost": "Free in the City’s 2016 entry; later entries list $10 a month (2018) and no fee (2019). Call to confirm.",
+    "phone": "215-685-2696",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the rec center. There is no online sign-up."
+    },
+    "note": "The City’s Parks & Rec data holds three after-school entries for McCreesh, from 2016, 2018 and 2019. The 2016 one says the program follows the School District’s calendar, closes when schools close, includes homework help, arts and crafts, games and a snack, and can only take children who go to Catharine or who are dropped off by a parent, since it can’t pick up. Call to confirm this year’s days, hours and price.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-22",
+    "schools": {
+      "catharine": {
+        "relation": "nearby",
+        "distance": "next to the school, on Regent St",
+        "note": "The City’s 2016 entry says the program takes Catharine students and doesn’t pick up from other schools.",
+        "checked": "2026-11-22"
+      }
+    }
+  },
+  {
+    "id": "sunrise-bryant",
+    "name": "Sunrise of Philadelphia at Bryant",
+    "what": "Free after-school program inside Bryant, with small-group academic help, a snack, STEM and social-emotional activities",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "Sunrise",
+      "homework help",
+      "Bryant",
+      "Cobbs Creek",
+      "West Philadelphia",
+      "childcare"
+    ],
+    "address": "6001 Cedar Ave",
+    "grades": "K-8",
+    "gradeNote": "For Bryant students",
+    "hours": "After school on every open school day until June 8, 2027. Sunrise’s typical day ends with pickup between 5:00 and 5:30 pm; it says start and end times differ by school.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "cost": "Free",
+    "price": "free",
+    "phone": "445-239-5620",
+    "email": "",
+    "website": "https://www.sunriseofphila.org/school-year",
+    "register": {
+      "how": "online",
+      "url": "https://www.sunriseofphila.org/services-8",
+      "note": "Sunrise’s enrollment page has its K–8 application; choose Bryant. Sunrise says students in K–5 must come at least 4 days a week, and 6th–8th graders at least 3."
+    },
+    "note": "Sunrise’s own page lists W. C. Bryant Elementary among its sites, at 6001 Cedar Ave, with the phone number used here, and says its after-school programs are free at every site. Bryant’s own site lists the Sunrise Program among its extracurricular activities. The City’s program locator doesn’t list Sunrise at Bryant this year, so ask Sunrise for this site’s hours.",
+    "sources": [
+      {
+        "label": "Sunrise of Philadelphia: school-year program and sites",
+        "url": "https://www.sunriseofphila.org/school-year"
+      },
+      {
+        "label": "Sunrise enrollment",
+        "url": "https://www.sunriseofphila.org/services-8"
+      },
+      {
+        "label": "Bryant: after-school programming, partners and clubs",
+        "url": "https://bryant.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-22",
+    "schools": {
+      "bryant": {
+        "relation": "onsite",
+        "note": "Sunrise’s own list of sites names W. C. Bryant Elementary, and Bryant’s own site lists the Sunrise Program.",
+        "sources": [
+          {
+            "label": "Sunrise of Philadelphia: school-year program and sites",
+            "url": "https://www.sunriseofphila.org/school-year"
+          },
+          {
+            "label": "Bryant: after-school programming, partners and clubs",
+            "url": "https://bryant.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-22"
+      }
+    }
+  },
+  {
+    "id": "bryant-clubs",
+    "name": "School clubs and partners",
+    "what": "Clubs, arts and partners Bryant names on its own site: flag football, cheerleading, Lego, debate, math, technology and more, band and visual arts",
+    "types": [
+      "clubs",
+      "movement",
+      "art",
+      "academics",
+      "games",
+      "stem",
+      "music"
+    ],
+    "keywords": [
+      "clubs",
+      "flag football",
+      "cheerleading",
+      "crochet",
+      "debate",
+      "homework help",
+      "Lego",
+      "math",
+      "Sanrio",
+      "student government",
+      "technology",
+      "band",
+      "visual arts",
+      "Bryant"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-7910",
+    "email": "",
+    "website": "https://bryant.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-7910)."
+    },
+    "note": "Bryant’s own site lists these under arts, community partnerships and extracurricular clubs and activities, without days, times or grades, and doesn’t say which meet after dismissal. Ask the office what runs after school and for whom.",
+    "sources": [
+      {
+        "label": "Bryant: after-school programming, partners and clubs",
+        "url": "https://bryant.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-22",
+    "schools": {
+      "bryant": {
+        "relation": "onsite",
+        "checked": "2026-11-22"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Alpha Order Flag Football Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cheerleading Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Crochet Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Debate and Research Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Homework Help and Learning Games Club",
+        "tags": [
+          "academics",
+          "games"
+        ]
+      },
+      {
+        "name": "Lego Design Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Lego Masters Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Life 101 and Friendship Club",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Math Madness Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Mental Health and Wellness Club",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Sanrio Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Student Government Association Club",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Technology Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Band",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Visual Arts",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Church of Christian Compassion",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [
+          "clubs"
+        ],
+        "roster": false
+      }
+    ],
+    "offers": [
+      "Alpha Order Flag Football Club",
+      "Cheerleading Club",
+      "Crochet Club",
+      "Debate and Research Club",
+      "Homework Help and Learning Games Club",
+      "Lego Design Club",
+      "Lego Masters Club",
+      "Life 101 and Friendship Club",
+      "Math Madness Club",
+      "Mental Health and Wellness Club",
+      "Sanrio Club",
+      "Student Government Association Club",
+      "Technology Club",
+      "Band",
+      "Visual Arts"
+    ]
   }
 ]

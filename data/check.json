@@ -1,10 +1,10 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. docs/listings.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 367,
-    "pagesNeedingABrowser": 61,
+    "pages": 378,
+    "pagesNeedingABrowser": 65,
     "pagesNeedingAPerson": 18,
-    "links": 354,
+    "links": 367,
     "pickupLinks": 132,
     "pickupOnAStoredList": 112,
     "pickupFromAThirdPartyList": 0,
@@ -2898,6 +2898,84 @@
       "school": "olney",
       "relation": "nearby",
       "checked": "2026-11-21"
+    },
+    {
+      "program": "belmont-academy-ost",
+      "school": "belmont-academy",
+      "relation": "onsite",
+      "checked": "2026-11-22"
+    },
+    {
+      "program": "bluford-clubs",
+      "school": "bluford",
+      "relation": "onsite",
+      "checked": "2026-11-22"
+    },
+    {
+      "program": "bryant-clubs",
+      "school": "bryant",
+      "relation": "onsite",
+      "checked": "2026-11-22"
+    },
+    {
+      "program": "catharine-clubs",
+      "school": "catharine",
+      "relation": "onsite",
+      "checked": "2026-11-22"
+    },
+    {
+      "program": "christy-rec",
+      "school": "bryant",
+      "relation": "nearby",
+      "checked": "2026-11-22"
+    },
+    {
+      "program": "greener-partners-belmont-academy",
+      "school": "belmont-academy",
+      "relation": "onsite",
+      "checked": "2026-11-22"
+    },
+    {
+      "program": "hunting-park-rec",
+      "school": "mcclure",
+      "relation": "nearby",
+      "checked": "2026-11-22"
+    },
+    {
+      "program": "legacy-mcclure",
+      "school": "mcclure",
+      "relation": "onsite",
+      "checked": "2026-11-22"
+    },
+    {
+      "program": "mcclure-clubs",
+      "school": "mcclure",
+      "relation": "onsite",
+      "checked": "2026-11-22"
+    },
+    {
+      "program": "mccreesh-playground",
+      "school": "catharine",
+      "relation": "nearby",
+      "checked": "2026-11-22"
+    },
+    {
+      "program": "sunrise-bluford",
+      "school": "bluford",
+      "relation": "onsite",
+      "checked": "2026-11-22"
+    },
+    {
+      "program": "sunrise-bryant",
+      "school": "bryant",
+      "relation": "onsite",
+      "checked": "2026-11-22"
+    },
+    {
+      "program": "zhang-sah-school-based",
+      "school": "catharine",
+      "relation": "onsite",
+      "checked": "2026-11-22"
     }
   ],
   "pages": [
@@ -2936,7 +3014,8 @@
         "shissler-rec",
         "christy-rec",
         "miles-mack-playground",
-        "ziehler-playground"
+        "ziehler-playground",
+        "mccreesh-playground"
       ],
       "lists": []
     },
@@ -3011,6 +3090,21 @@
       "lists": []
     },
     {
+      "url": "https://www.sunriseofphila.org/school-year",
+      "how": "fetch",
+      "programs": [
+        "sunrise-mccall",
+        "sunrise-stanton",
+        "sunrise-kirkbride",
+        "sunrise-southwark",
+        "sunrise-blankenburg",
+        "sunrise-mcmichael",
+        "sunrise-bluford",
+        "sunrise-bryant"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://gpy.tfaforms.net/134",
       "how": "fetch",
       "programs": [
@@ -3024,15 +3118,15 @@
       "lists": []
     },
     {
-      "url": "https://www.sunriseofphila.org/school-year",
+      "url": "https://www.sunriseofphila.org/services-8",
       "how": "fetch",
       "programs": [
         "sunrise-mccall",
         "sunrise-stanton",
         "sunrise-kirkbride",
         "sunrise-southwark",
-        "sunrise-blankenburg",
-        "sunrise-mcmichael"
+        "sunrise-bluford",
+        "sunrise-bryant"
       ],
       "lists": []
     },
@@ -3082,17 +3176,6 @@
         "ymca-gideon",
         "ymca-blaine",
         "ymca-hopkinson"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://www.sunriseofphila.org/services-8",
-      "how": "fetch",
-      "programs": [
-        "sunrise-mccall",
-        "sunrise-stanton",
-        "sunrise-kirkbride",
-        "sunrise-southwark"
       ],
       "lists": []
     },
@@ -3272,6 +3355,33 @@
       "lists": []
     },
     {
+      "url": "https://bluford.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "sunrise-bluford",
+        "bluford-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://bryant.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "sunrise-bryant",
+        "bryant-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://catharine.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "zhang-sah-school-based",
+        "catharine-clubs"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://comegys.philasd.org/",
       "how": "fetch",
       "programs": [
@@ -3353,6 +3463,15 @@
       "lists": []
     },
     {
+      "url": "https://legacyyte.org/community-programs/after-school-program/",
+      "how": "fetch",
+      "programs": [
+        "legacy-champions-on-the-rise",
+        "legacy-mcclure"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://mariananderson.philasd.org/",
       "how": "fetch",
       "programs": [
@@ -3412,6 +3531,15 @@
       "programs": [
         "mastermindz-thomas",
         "safehaven-thomas"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://mcclure.philasd.org/about-us/",
+      "how": "fetch",
+      "programs": [
+        "legacy-mcclure",
+        "mcclure-clubs"
       ],
       "lists": []
     },
@@ -3511,6 +3639,15 @@
       "programs": [
         "vare-washington-edey",
         "vare-washington-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.belmontcharternetwork.org/ost-programming/",
+      "how": "fetch",
+      "programs": [
+        "belmont-academy-ost",
+        "greener-partners-belmont-academy"
       ],
       "lists": []
     },
@@ -4081,7 +4218,8 @@
     },
     {
       "url": "https://glacharter.org/s/GLASW-Family-Scholar-Handbook-2026.pdf",
-      "how": "fetch",
+      "how": "browser",
+      "why": "A Squarespace site that builds its pages with JavaScript; a plain fetch of a campus page gets little text, and the handbooks are PDFs linked from Important Links.",
       "programs": [
         "gla-southwest-clubs"
       ],
@@ -4089,7 +4227,8 @@
     },
     {
       "url": "https://glacharter.org/southwest",
-      "how": "fetch",
+      "how": "browser",
+      "why": "A Squarespace site that builds its pages with JavaScript; a plain fetch of a campus page gets little text, and the handbooks are PDFs linked from Important Links.",
       "programs": [
         "gla-southwest-clubs"
       ],
@@ -4100,6 +4239,14 @@
       "how": "fetch",
       "programs": [
         "christian-street-ymca"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://greenerpartners.org/partner-with-us/school-community-partnerships/",
+      "how": "fetch",
+      "programs": [
+        "greener-partners-belmont-academy"
       ],
       "lists": []
     },
@@ -4240,15 +4387,15 @@
       "lists": []
     },
     {
-      "url": "https://legacyyte.jotform.com/form/wright-ost",
+      "url": "https://legacyyte.jotform.com/form/McClure-OST",
       "how": "fetch",
       "programs": [
-        "legacy-champions-on-the-rise"
+        "legacy-mcclure"
       ],
       "lists": []
     },
     {
-      "url": "https://legacyyte.org/community-programs/after-school-program/",
+      "url": "https://legacyyte.jotform.com/form/wright-ost",
       "how": "fetch",
       "programs": [
         "legacy-champions-on-the-rise"
@@ -5027,6 +5174,22 @@
       "how": "fetch",
       "programs": [
         "palumbo-rec"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.belmontcharternetwork.org/after-school-daycare/",
+      "how": "fetch",
+      "programs": [
+        "belmont-academy-ost"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.belmontcharternetwork.org/bacs/",
+      "how": "fetch",
+      "programs": [
+        "belmont-academy-ost"
       ],
       "lists": []
     },
@@ -5820,6 +5983,24 @@
       "why": "A JavaScript app: a plain fetch returns no listings.",
       "programs": [
         "philly-kidz-greenberg"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=600+W+Hunting+Park+Ave&resource=ost_150",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "legacy-mcclure"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=600+W+Hunting+Park+Ave&resource=ost_152",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "legacy-mcclure"
       ],
       "lists": []
     },

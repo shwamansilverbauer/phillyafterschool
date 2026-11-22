@@ -3164,5 +3164,211 @@
         "Children’s Hospital of Philadelphia"
       ]
     }
+  },
+  {
+    "id": "catharine",
+    "name": "Joseph W. Catharine School",
+    "shortName": "Catharine",
+    "aliases": [
+      "Joseph W. Catharine",
+      "Joseph Catharine",
+      "Catharine Elementary",
+      "Catharine School",
+      "Catherine Elementary School"
+    ],
+    "address": "6600 Chester Ave, Philadelphia, PA 19142",
+    "neighborhood": "Paschall",
+    "grades": "PK-5",
+    "dismissal": "2:09 pm",
+    "dismissalNote": "the school’s bell schedule gives the school day as 7:30 am to 2:09 pm",
+    "phone": "215-400-8150",
+    "website": "https://catharine.philasd.org/",
+    "lastReviewed": "2026-11-22",
+    "added": "2026-11-22",
+    "notes": [
+      "Catharine’s own site names Zhang Sah Karate among its community partners, and Zhang Sah’s own page lists Joseph Catharine among its school-based programs. It has a listing here; Zhang Sah doesn’t post days, hours or a price for it, so ask.",
+      "The site also names ArtWell, Musicopia, ballroom dancing and an Artist Year residency as community partners, and lists homework help, arts and crafts, cheerleading and a garden club (coming soon) as extracurricular activities, with band or orchestra lessons once a week for 4th and 5th graders. They are listed here as the school’s clubs and partners. The site doesn’t say which meet after dismissal, so ask the office.",
+      "McCreesh Playground is next to the school, on Regent St. An entry in the City’s Parks & Rec data, from 2016, describes a free after-school program there for ages 6 to 12, 3:00 to 6:00 pm, that takes Catharine students and doesn’t pick up from other schools. Call the rec center to see what runs this year.",
+      "Catharine’s day ends at 2:09 pm. The site points to its parent and student handbook for early dismissals.",
+      "If you know a program that serves Catharine and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "mcclure",
+    "name": "Alexander K. McClure School",
+    "shortName": "McClure",
+    "aliases": [
+      "Alexander K. McClure",
+      "Alexander McClure",
+      "A.K. McClure",
+      "McClure Elementary",
+      "McClure School",
+      "McClure Elementary Community School"
+    ],
+    "address": "600 W Hunting Park Ave, Philadelphia, PA 19140",
+    "neighborhood": "Hunting Park",
+    "grades": "PK-5",
+    "dismissalNote": "the school’s site doesn’t post a bell schedule, so ask the office when the day ends",
+    "phone": "215-400-3870",
+    "website": "https://mcclure.philasd.org/",
+    "lastReviewed": "2026-11-22",
+    "added": "2026-11-22",
+    "notes": [
+      "LEGACY Youth Tennis and Education runs its free Champions on the Rise after-school program at McClure. LEGACY’s own page lists McClure as one of its four school sites, McClure’s page names it among the school’s partners, and the City’s program locator gives 3:00 to 6:00 pm, Monday to Friday, with before care from 7:30 am. It has a listing here.",
+      "McClure’s page of partners also names My Daughter’s Kitchen, Need in Deed, CADEkids, Villanova University mentors, a FAST program for kindergarten families and the school’s safety patrol. They are listed here as the school’s clubs and partners, without days or times, so ask the office which run after school.",
+      "Hunting Park Recreation Area is about a quarter mile west. The City’s Parks & Rec data lists an after-school program there for ages 5 to 12. It doesn’t say it picks up from McClure.",
+      "McClure is a bilingual, dual-language school. Its site doesn’t post a bell schedule or a half-day plan; ask LEGACY what it does on early-dismissal days.",
+      "If you know a program that serves McClure and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "belmont-academy",
+    "name": "Belmont Academy Charter School",
+    "shortName": "Belmont Academy",
+    "aliases": [
+      "Belmont Academy",
+      "Belmont Academy Charter",
+      "BACS"
+    ],
+    "address": "907 N 41st St, Philadelphia, PA 19104",
+    "neighborhood": "West Philadelphia",
+    "grades": "PK-K",
+    "dismissalNote": "the school’s pages don’t post a bell schedule, so ask the office when the day ends",
+    "phone": "215-386-5768",
+    "website": "https://www.belmontcharternetwork.org/bacs/",
+    "calendar": {
+      "source": {
+        "label": "Belmont Charter Network 2026–27 family calendar (Belmont Academy, Inquiry and the high school)",
+        "url": "https://www.belmontcharternetwork.org/wp-content/uploads/2026/05/BCN-26-27-Approved-Family-Calendar-BACS-ICS-BCHS-1.pdf"
+      },
+      "checked": "2026-11-22",
+      "lastDay": "2027-06-11",
+      "days": [
+        {
+          "date": "2026-09-07",
+          "name": "Labor Day"
+        },
+        {
+          "date": "2026-09-21",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2026-10-12",
+          "name": "Indigenous Peoples’ Day"
+        },
+        {
+          "date": "2026-11-11",
+          "name": "Veterans Day"
+        },
+        {
+          "date": "2026-11-16",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2026-11-25",
+          "end": "2026-11-27",
+          "name": "Fall break"
+        },
+        {
+          "date": "2026-12-21",
+          "end": "2027-01-01",
+          "name": "Winter break"
+        },
+        {
+          "date": "2027-01-18",
+          "name": "Martin Luther King Jr. Day"
+        },
+        {
+          "date": "2027-02-01",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2027-02-15",
+          "name": "Presidents’ Day"
+        },
+        {
+          "date": "2027-03-10",
+          "name": "Eid al-Fitr"
+        },
+        {
+          "date": "2027-03-22",
+          "end": "2027-03-26",
+          "name": "Spring break"
+        },
+        {
+          "date": "2027-04-12",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2027-05-31",
+          "name": "Memorial Day"
+        }
+      ]
+    },
+    "lastReviewed": "2026-11-22",
+    "added": "2026-11-22",
+    "notes": [
+      "Belmont Academy is the Belmont Charter Network’s early-learning school: Head Start, pre-kindergarten and kindergarten. Its page says many children stay after school for art, music, science and sports, and that children usually move on to Belmont Charter School for 1st grade.",
+      "The network’s out-of-school-time program runs at Belmont Academy with the school-day staff. Its page lists soccer with Kat Academy, gardening and outdoor classroom time with Greener Partners, arts and crafts, and station activities and open play. Greener Partners’ own page describes after-school garden sessions in Belmont Charter Network schools. Both have listings here; neither posts hours or a price, so ask the school.",
+      "Belmont Academy keeps the network’s calendar, not the District’s. Its days off on this page come from the 2026–27 family calendar: it closes for Eid al-Fitr and for staff days on September 21, November 16, February 1 and April 12, and its winter break starts December 21. The days-off planner and the list of who’s open go by the District’s, so check a camp’s dates against Belmont’s.",
+      "The calendar marks half days on October 9, November 23 and 24 (report card conferences), February 11 and 12, April 15 and 16, May 28, and June 10 and 11 (the last day). Ask whether after school runs on those afternoons.",
+      "If you know a program that serves Belmont Academy and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "bluford",
+    "name": "Guion S. Bluford Elementary School",
+    "shortName": "Bluford",
+    "aliases": [
+      "Guion S. Bluford",
+      "Guion Bluford",
+      "Bluford Elementary",
+      "Bluford School",
+      "Guion S. Bluford Elementary School"
+    ],
+    "address": "5720 Media St, Philadelphia, PA 19131",
+    "neighborhood": "West Philadelphia",
+    "grades": "K-8",
+    "dismissal": "3:09 pm",
+    "dismissalNote": "the school’s bell schedule gives the school day as 8:30 am to 3:09 pm",
+    "phone": "215-400-9170",
+    "website": "https://bluford.philasd.org/",
+    "lastReviewed": "2026-11-22",
+    "added": "2026-11-22",
+    "notes": [
+      "Bluford’s own site says its after-school (OST) provider is Sunrise of Philadelphia, and Sunrise’s own page lists Bluford among its sites, with before care too. It is free; it has a listing here.",
+      "The site also lists basketball, soccer and elementary intramural sports, art and theater, math clubs, a Lego club, the Father’s Day Rallying Committee’s mentoring, arts and drumming, and the Renegades mentor program, and names TGR and Father’s Read365 as partners. They are listed here as the school’s clubs and partners, without days or times, so ask the office.",
+      "Sports need a physical form signed by a doctor, the school’s site says.",
+      "If you know a program that serves Bluford and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "bryant",
+    "name": "William C. Bryant School",
+    "shortName": "Bryant",
+    "aliases": [
+      "William C. Bryant",
+      "W. C. Bryant",
+      "W.C. Bryant",
+      "Bryant Elementary",
+      "Bryant School",
+      "William Cullen Bryant"
+    ],
+    "address": "6001 Cedar Ave, Philadelphia, PA 19143",
+    "neighborhood": "West Philadelphia",
+    "grades": "PK-8",
+    "dismissal": "2:54 pm",
+    "dismissalNote": "the school’s bell schedule gives the school day as 8:15 am to 2:54 pm",
+    "phone": "215-400-7910",
+    "website": "https://bryant.philasd.org/",
+    "lastReviewed": "2026-11-22",
+    "added": "2026-11-22",
+    "notes": [
+      "Sunrise of Philadelphia lists W. C. Bryant Elementary among the sites of its free after-school program, and Bryant’s own site lists the Sunrise Program among its extracurricular activities. It has a listing here. Sunrise says its programs run on every open school day until June 8.",
+      "Bryant’s site also lists band and visual arts, and clubs: flag football, cheerleading, crochet, debate and research, homework help and learning games, Lego design, Lego masters, Life 101 and friendship, math, mental health and wellness, Sanrio, student government and technology. It names the Church of Christian Compassion as a community partner. They are listed here as the school’s clubs and partners, without days or times, so ask the office which meet after dismissal.",
+      "Christy Recreation Center is about half a mile southeast, on 55th St. The City’s Parks & Rec data lists a free after-school program there for ages 6 to 12, with homework help, snacks, the computer lab, the gym and arts and crafts. It doesn’t say it picks up from Bryant.",
+      "Bryant’s day ends at 2:54 pm. The site points to its parent and student handbook for early dismissals.",
+      "If you know a program that serves Bryant and isn’t here, send it in and it goes on this page."
+    ]
   }
 ]
