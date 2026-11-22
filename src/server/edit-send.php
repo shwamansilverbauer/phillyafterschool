@@ -59,10 +59,12 @@ function note($line) {
   $log = dirname((string) $_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-copy-edits.log';
   @file_put_contents($log, date('c') . ' ' . $line . "\n", FILE_APPEND | LOCK_EX);
 }
-function record_email($subject, $body) {
+// $kind is the X-PAS-Kind header the mailbox script files it by: "copy" (a record of a publish, filed out of the inbox)
+// or "copy-email" (the edits to paste in by hand, which stay in the inbox).
+function record_email($subject, $body, $kind = 'copy') {
   global $TO, $SITE;
-  $headers = array('From: ' . $SITE . ' <' . $TO . '>', 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=UTF-8', 'Content-Transfer-Encoding: base64');
-  return pas_postmark($SITE, $TO, $TO, $subject, $body) === 1 || @mail($TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', chunk_split(base64_encode($body)), implode("\r\n", $headers));
+  $headers = array('From: ' . $SITE . ' <' . $TO . '>', 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=UTF-8', 'Content-Transfer-Encoding: base64', 'X-PAS-Kind: ' . $kind);
+  return pas_postmark($SITE, $TO, $TO, $subject, $body, '', '', $kind) === 1 || @mail($TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', chunk_split(base64_encode($body)), implode("\r\n", $headers));
 }
 
 // ----- which request -----
@@ -322,7 +324,7 @@ $body = "Copy edits" . ($name !== '' ? " from $name" : '') . ": $count.\n\n"
   . "-----8<----- copy.json starts on the next line\n"
   . $json . "\n"
   . "-----8<----- copy.json ended on the line above\n";
-$sent = record_email("[$SITE] Copy edits" . ($name !== '' ? " from $name" : '') . " ($n)", $body);
+$sent = record_email("[$SITE] Copy edits" . ($name !== '' ? " from $name" : '') . " ($n)", $body, 'copy-email');
 $log = dirname($_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-copy-edits.log';
 @file_put_contents($log, date('c') . ($sent ? ' (emailed)' : ' (EMAIL FAILED)') . "\n" . $body . "----\n", FILE_APPEND | LOCK_EX);
 if (!$sent) out(false, 'The email did not go out.', 500);

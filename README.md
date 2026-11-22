@@ -20,7 +20,7 @@ agents: the commands, the standing rules and which file to open for a task.
 | [`docs/accounts.md`](docs/accounts.md) | **Accounts, profiles and sharing.** Sign-in, accounts, co-parents, share groups, claiming a listing, follows and favorites, the profile and account pages. |
 | [`docs/kids-playground.md`](docs/kids-playground.md) | **Kids' Playground.** The kids' section: lightbulbs, pins, the map, the showdown, bingo and Plan my week. |
 | [`docs/program-managers.md`](docs/program-managers.md) | **Program managers, premium listings and reviews.** What managers can do, premium listings, the monthly numbers, space, granting a claim by hand, and reviews. |
-| [`docs/emails.md`](docs/emails.md) | **Editing the wording, and emails to parents.** The /edit/ wording and email editor, date emails, push notifications, this week at your school, the owner notes and the morning summary. |
+| [`docs/emails.md`](docs/emails.md) | **Editing the wording, and emails to parents.** The /edit/ wording and email editor, date emails, push notifications, this week at your school, the owner notes, the morning summary, and the mailbox script with the outreach sender. |
 | [`docs/search-and-analytics.md`](docs/search-and-analytics.md) | **Search engines and analytics.** Being found by search engines, analytics, and telling parents and managers apart in it. |
 
 ## Every section, and where it is
@@ -97,6 +97,7 @@ The docs refer to each other by section name ("see \"Site admins\""). This list 
   - [This week at your school](docs/emails.md#this-week-at-your-school)
   - [An email to you for each new account](docs/emails.md#an-email-to-you-for-each-new-account)
   - [The morning summary](docs/emails.md#the-morning-summary)
+  - [The mailbox script](docs/emails.md#the-mailbox-script)
 - [`docs/search-and-analytics.md`](docs/search-and-analytics.md)
   - [Parents and program managers, told apart](docs/search-and-analytics.md#parents-and-program-managers-told-apart)
   - [Being found by search engines](docs/search-and-analytics.md#being-found-by-search-engines)

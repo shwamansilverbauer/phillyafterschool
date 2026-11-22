@@ -68,8 +68,10 @@ in the last two days, that the three forms answer, that the https certificate ha
 two daily jobs (the build, and the date emails) last ran, and last passed, inside 36 hours. It also checks the key
 `/edit/` publishes with: the health answer says whether GitHub still takes the token in `phillyafterschool-github.key`
 and how many days it has left (`edit_key_state()`, asking GitHub at most every six hours; the key is never shown), and
-the check fails two weeks before it runs out, with how to renew it. And it checks the home page still carries the
-security headers below.
+the check fails two weeks before it runs out, with how to renew it. Once `phillyafterschool-mailin.key` is on the host,
+it checks the mailbox script too (the health answer's `mailbox`): it fails when the script has never checked in, when
+its last check-in is more than two hours old, or when replies can't leave from the site's address (see "The mailbox
+script" in `docs/emails.md`). And it checks the home page still carries the security headers below.
 
 **Security headers.** The `.htaccess` the build writes sets, on every response: `Strict-Transport-Security` (HTTPS
 only, for a year, for this host alone: the email service's link domain is a subdomain, so no `includeSubDomains`, and
@@ -103,7 +105,9 @@ phones at once. Both come from the hourly `push_run`.
 ## Sending email
 
 The site's own emails (sign-in codes, invitations, notices to managers and to you, and what the forms send to the
-inbox) go out one of two ways. News and the "a school was added" emails are Klaviyo's and are not part of this.
+inbox) go out one of two ways. News and the "a school was added" emails are Klaviyo's and are not part of this, and
+neither are the replies to mail people wrote and the outreach emails: those leave from the contact@ Google account
+itself, sent by the mailbox script (see "The mailbox script" in `docs/emails.md`).
 
 - **The host's own mail** (PHP `mail()`), which is how it starts. Hostinger stops this at 100 emails in any 24 hours
   and 10 a minute, on every plan, and the messages are not signed for the domain.
@@ -129,6 +133,9 @@ How it behaves (`mailerPhp()` in `build.mjs`, used by `groups-api.php` and by ea
   problem there never locks anyone out. If Postmark says the address itself is switched off (it bounced before, or
   the person marked our mail as spam), the email is not sent another way.
 - Open and click tracking are off for every message.
+- An email to the site's own address carries an `X-PAS-Kind` header naming what kind of notice it is (`pas_mail_kind()`;
+  the list is in "The mailbox script" in `docs/emails.md`), which the mailbox script files it by. Mail to anyone else
+  carries none.
 - `phillyafterschool-mail.json`, next to the public folder, holds the day's counts (by Postmark, by the host,
   failed) and Postmark's last answer. Numbers and a code only: no address, no subject.
 - The hourly check reads the health answer and opens its issue if Postmark is switched on but the key is missing,

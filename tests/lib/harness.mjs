@@ -216,7 +216,7 @@ export async function startSite({ scratch, standin, log = () => {} } = {}) {
   const copy = path.join(dir, 'repo'), pub = path.join(dir, 'public'), dataDir = path.join(dir, 'phillyafterschool-data');
   fs.rmSync(copy, { recursive: true, force: true }); fs.rmSync(pub, { recursive: true, force: true }); fs.rmSync(dataDir, { recursive: true, force: true });
   for (const f of ['phillyafterschool-github.key', 'phillyafterschool-github-check.json']) fs.rmSync(path.join(dir, f), { force: true });   // left by a run that stopped part way
-  for (const f of ['phillyafterschool-suggestions.log', 'phillyafterschool-queue.json', 'phillyafterschool-school-requests.log', 'phillyafterschool-queue-rush.json', 'phillyafterschool-needs-write.json', 'phillyafterschool-needs-sync.json']) fs.rmSync(path.join(dir, f), { force: true });   // the queue starts empty, and the owner's pages' hourly caps with it
+  for (const f of ['phillyafterschool-suggestions.log', 'phillyafterschool-queue.json', 'phillyafterschool-school-requests.log', 'phillyafterschool-queue-rush.json', 'phillyafterschool-needs-write.json', 'phillyafterschool-needs-sync.json', 'phillyafterschool-mailin.key', 'phillyafterschool-contact-times.json']) fs.rmSync(path.join(dir, f), { force: true });   // the queue starts empty, and the owner's pages' hourly caps with it
   fs.mkdirSync(copy, { recursive: true });
   // A copy of what the build reads, so the repository's own dist/ is left alone.
   for (const f of ['build.mjs', 'site.config.json', 'data', 'src', 'email', 'scripts']) fs.cpSync(path.join(ROOT, f), path.join(copy, f), { recursive: true });
@@ -265,6 +265,8 @@ export async function startSite({ scratch, standin, log = () => {} } = {}) {
     },
     // Make a sign-in look as if it was last used, and began, so many days ago.
     ageSession(sid, idleDays, ageDays) { return JSON.parse(execFileSync('php', [path.join(ROOT, 'tests/lib/db.php'), path.join(dataDir, 'groups.sqlite'), 'age', sid, String(idleDays), String(ageDays)], { encoding: 'utf8' })); },
+    // Forget one of the server's own values in its meta table (the morning summary's "done today", say).
+    unmeta(k) { return JSON.parse(execFileSync('php', [path.join(ROOT, 'tests/lib/db.php'), path.join(dataDir, 'groups.sqlite'), 'unmeta', k], { encoding: 'utf8' })); },
     // One SELECT against the test database, as rows.
     sql(q) { return JSON.parse(execFileSync('php', [path.join(ROOT, 'tests/lib/db.php'), path.join(dataDir, 'groups.sqlite'), 'select', q], { encoding: 'utf8' })); },
     async stop() { php.kill('SIGTERM'); await new Promise(r => php.on('exit', r)); fs.closeSync(logFd); },

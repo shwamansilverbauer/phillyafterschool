@@ -2,18 +2,22 @@
 // The Needs-you page (scaling plan, Phase 3): everything waiting for the owner, on one page built for a phone. Run pull
 // requests the gate held (and, while the autopilot isn't on, every open one) with Approve, Decline and Open on GitHub;
 // claims, photos, words and offers and premium sign-ups, with the buttons /edit/claims/ has; items a run held, with
-// /edit/queue/'s; the shadow report while the autopilot is in shadow; ten of the week's autopilot changes to spot-check;
-// and the switch. Generated into edit/needs/index.php by build.mjs, which fills in the marked lines (the config, the
-// sign-in check, the GitHub helpers, the autopilot code) and lays out the page from the parts after /*HERO*/ and
+// /edit/queue/'s; mail from people the hold list kept (Phase 5), opened, with a draft reply to edit and Send; the
+// shadow report while the autopilot is in shadow; ten of the week's autopilot changes to spot-check; and the switch.
+// Generated into edit/needs/index.php by build.mjs, which fills in the marked lines (the config, the sign-in check, the
+// GitHub helpers, the autopilot code, the mailbox's code) and lays out the page from the parts after /*HERO*/ and
 // /*BODY*/; edit this file, not the copy in dist/.
 //
 // Approve, Decline and the switch write to GitHub with the key file /edit/ publishes with, and only a site admin's
-// account can press them (an editor sees the page). The buttons for claims, photos, words, premium and queue items post
-// to those pages' own handlers, which send their emails as before and come back here.
+// account can press them (an editor sees the page). Only an admin's account sees the mail and its buttons: Send puts the
+// reply in mail_out, and the mailbox script sends it from the site's address within ten minutes. The buttons for
+// claims, photos, words, premium and queue items post to those pages' own handlers, which send their emails as before
+// and come back here.
 /*CONFIG*/
 /*AUTH*/
 /*GH*/
 /*AUTOPILOT*/
+/*MAIL*/
 if (!edit_signed_in()) { header('Location: ../', true, 303); exit; }
 $db = edit_db();
 $admin = edit_admin() !== '';
@@ -24,6 +28,7 @@ $today = (new DateTime('now', $NY))->format('Y-m-d');
 $csrf = hash_hmac('sha256', 'needs-form', edit_key());
 $claimsCsrf = hash_hmac('sha256', 'claims-form', edit_key());   // the buttons that post to /edit/claims/
 $queueCsrf = hash_hmac('sha256', 'queue-form', edit_key());     // and to /edit/queue/
+$mailKey = mail_seal_key(mail_host_secret(dirname((string) $_SERVER['DOCUMENT_ROOT'])));   // opens the held mail
 $said = isset($_GET['said']) && is_string($_GET['said']) ? substr($_GET['said'], 0, 400) : '';
 function ne($v) { return htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8'); }
 function nday($t) { $d = new DateTime('@' . (int) $t); $d->setTimezone(new DateTimeZone('America/New_York')); return $d->format('M j'); }
@@ -36,6 +41,7 @@ function nextra($x) {
   if ($x['kind'] === 'pin' && is_array($v)) return 'Name: ' . (isset($v['n']) ? $v['n'] : '') . "\nPicture: " . (isset($v['i']) ? $v['i'] : '');
   return (string) $x['body'];
 }
+$ACCOUNT = array('admin' => 'a site admin’s account', 'manager' => 'a program manager’s account', 'parent' => 'a parent’s account', 'none' => 'no account on the site');
 $KIND = array('words' => 'In their own words', 'offer' => 'Offer or event line', 'pin' => 'Kids’ Playground pin', 'social' => 'Social links', 'posts' => 'Instagram posts');
 $QKIND = array('program' => 'A program that’s missing', 'camp' => 'A camp that’s missing', 'update' => 'An update to a listing', 'proposal' => 'Proposed by the people who run it', 'note' => 'Your note');
 
@@ -46,7 +52,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $pr = isset($_POST['pr']) ? (int) $_POST['pr'] : 0;
   $msg = 'That didn’t go through. Try again.';
   $jump = '';
-  if ($ok && in_array($do, array('approve', 'decline', 'switch'), true) && !$admin) $msg = 'Only a site admin’s account can do that. You can see everything here, and decide on claims, photos and words.';
+  $mid = isset($_POST['mail']) ? (int) $_POST['mail'] : 0;
+  if ($ok && in_array($do, array('mail_send', 'mail_done', 'mail_queue'), true)) {
+    $jump = '#mail';
+    $row = null;
+    if ($db !== null && $mid > 0) { try { $st = $db->prepare("SELECT id, state FROM mail_in WHERE id = ?"); $st->execute(array($mid)); $row = $st->fetch(PDO::FETCH_ASSOC); } catch (Exception $e) { $row = null; } }
+    if (!$admin) $msg = 'Only a site admin’s account can answer mail.';
+    elseif (!$row) $msg = 'That email isn’t here any more.';
+    elseif ($row['state'] !== 'held') $msg = 'That email was already settled.';
+    else {
+      try {
+        if ($do === 'mail_send') {
+          $text = isset($_POST['text']) && is_string($_POST['text']) ? trim(str_replace("\r", '', substr($_POST['text'], 0, 20000))) : '';
+          if ($text === '') $msg = 'Write the reply first: it was empty.';
+          elseif (!mail_reply_add($db, $mailKey, $mid, $text, 'owner')) $msg = 'The reply couldn’t be queued: the message can’t be opened on this server.';
+          else { mail_set_state($db, $mid, 'answered'); mail_settle_item($db, $mid, 'answered', time()); $msg = 'Your reply is on its way. The mailbox script sends it within ten minutes, from the site’s address, in the email’s own thread.'; }
+        } elseif ($do === 'mail_done') { mail_set_state($db, $mid, 'closed'); mail_settle_item($db, $mid, 'held', -5); $msg = 'Done: no reply goes out.'; }
+        else {
+          mail_set_state($db, $mid, 'queued', '');
+          $db->prepare("UPDATE queue_items SET state = 'open', outcome = '', told = 0 WHERE id = ? AND state IN ('held', 'waiting')")->execute(array('m' . $mid));
+          $msg = 'It goes to the research runs with the next write of the queue, within the hour.';
+        }
+      } catch (Exception $e) { $msg = 'That couldn’t be saved.'; }
+    }
+  } elseif ($ok && in_array($do, array('approve', 'decline', 'switch'), true) && !$admin) $msg = 'Only a site admin’s account can do that. You can see everything here, and decide on claims, photos and words.';
   elseif ($ok && !$ready && in_array($do, array('approve', 'decline', 'switch', 'sync'), true)) $msg = 'GitHub can’t be reached from here: the key file is missing on the server.';
   elseif ($ok && in_array($do, array('approve', 'decline', 'switch'), true) && !gh_allowed('needs-write', 30)) $msg = 'That’s a lot of changes in one hour. Wait a little and try again.';
   elseif ($ok && $do === 'approve' && $pr > 0) { list($done, $msg) = ap_approve($ctx, $pr, isset($_POST['head']) && is_string($_POST['head']) ? $_POST['head'] : ''); if (!$done) $jump = '#pr-' . $pr; }
@@ -91,7 +120,7 @@ function pr_reason($p, $mode) {
 ?>
 /*HERO*/
     <h1>Needs you</h1>
-    <p class="lede">Everything waiting for your say, in one place: run pull requests, claims, photos and words from program managers, premium sign-ups, and anything a run held. Newest first, each with the reason it’s here.</p>
+    <p class="lede">Everything waiting for your say, in one place: run pull requests, claims, photos and words from program managers, premium sign-ups, mail people wrote, and anything a run held. Newest first, each with the reason it’s here.</p>
 /*BODY*/
 <div class="prose stats needs" data-needs-page>
 <?php if ($said !== '') { ?><p class="flag"><?php echo ne($said); ?></p><?php } ?>
@@ -169,7 +198,24 @@ function pr_reason($p, $mode) {
     <form method="post" action="../queue/" class="actions"><input type="hidden" name="csrf" value="<?php echo ne($queueCsrf); ?>"><input type="hidden" name="back" value="needs"><button class="btn" type="submit" name="do" value="drop:<?php echo ne($x['id']); ?>">Not for the run</button><a class="btn" href="../queue/">See it in the queue</a><?php if ((int) $x['pr'] > 0) { ?><a class="btn" href="https://github.com/<?php echo ne($REPO); ?>/pull/<?php echo (int) $x['pr']; ?>" rel="noopener" target="_blank">#<?php echo (int) $x['pr']; ?></a><?php } ?></form>
   </div><?php } ?><?php } ?>
 
-  <p class="hint">Reviews still reach you by email, and mail people write to the site stays in its inbox. Both move here when the review form and the mailbox script store them (Phases 6 and 5).</p>
+  <?php if ($held['mail']) { ?><section id="mail"><h2>Mail for you (<?php echo count($held['mail']); ?>)</h2>
+  <?php if (!$admin) { ?><p class="hint"><?php echo count($held['mail']) === 1 ? 'One email from a person waits' : count($held['mail']) . ' emails from people wait'; ?> for a site admin’s account. Mail is shown only to admins.</p><?php } else { ?>
+  <p class="hint">Emails people wrote to the site that the hold list kept for you. Nothing has been sent to them. Send queues your reply: the mailbox script sends it from the site’s address, in the email’s own thread, within ten minutes.</p>
+  <?php foreach ($held['mail'] as $x) { $m = mail_message($mailKey, $x['sealed']); $draft = mail_open($mailKey, $x['draft']); $names = array(); foreach ($x['listings'] === '' ? array() : explode(',', (string) $x['listings']) as $k) $names[] = nlabel($k); ?><div class="panel needs-item" id="mail-<?php echo (int) $x['id']; ?>">
+    <h3><?php echo ne(isset($m['subject']) && $m['subject'] !== '' ? $m['subject'] : '(no subject)'); ?></h3>
+    <p class="hint"><?php if ($m) { ?><?php echo ne(isset($m['from_name']) ? $m['from_name'] : ''); ?> &lt;<?php echo ne(mail_reply_to($m, (string) $x['via'])); ?>&gt;<?php } else { ?>The message can’t be opened on this server.<?php } ?><?php if ($x['via'] === 'form') { ?> · through the contact form<?php } ?> · <?php echo ne(nwhen($x['created'])); ?></p>
+    <p><b><?php echo ne(isset(MAIL_HOLDS[$x['hold']]) ? MAIL_HOLDS[$x['hold']] : 'Held for you.'); ?></b></p>
+    <p class="hint">From <?php echo ne($x['domain']); ?><?php if ($x['via'] === 'mail') { ?> (<?php echo (int) $x['dkim'] ? 'its signature checks out' : 'not signed by that domain'; ?>)<?php } ?><?php if ($names) { ?>, the website of <?php echo ne(implode(', ', $names)); ?><?php } elseif ((int) $x['shared']) { ?>, a domain many organizations share<?php } ?> · <?php echo ne(isset($ACCOUNT[$x['account']]) ? $ACCOUNT[$x['account']] : $x['account']); ?><?php if ($x['outreach'] !== '') { ?> · a reply to our outreach<?php } ?><?php if ((int) $x['attachments']) { ?> · <?php echo (int) $x['attachments']; ?> attachment<?php echo (int) $x['attachments'] === 1 ? '' : 's'; ?> (in the mailbox)<?php } ?></p>
+    <?php if ($m && isset($m['text'])) { ?><details class="needs-gate" open><summary>The message</summary><pre class="edit-ask"><?php echo ne($m['text']); ?></pre></details><?php } ?>
+    <form method="post" action="./" class="needs-reply"><input type="hidden" name="csrf" value="<?php echo ne($csrf); ?>"><input type="hidden" name="mail" value="<?php echo (int) $x['id']; ?>">
+      <label for="reply-<?php echo (int) $x['id']; ?>">Your reply</label>
+      <textarea id="reply-<?php echo (int) $x['id']; ?>" name="text" rows="9"><?php echo ne($draft); ?></textarea>
+      <p class="actions"><button class="btn primary" type="submit" name="do" value="mail_send">Send</button><button class="btn" type="submit" name="do" value="mail_done">Done, no reply</button><?php if ($x['hold'] !== 'instructions') { ?><button class="btn" type="submit" name="do" value="mail_queue">Give it to the runs</button><?php } ?></p>
+    </form>
+  </div><?php } ?><?php } ?>
+  </section><?php } ?>
+
+  <p class="hint">Reviews still reach you by email, and stay in the inbox. They move here when the review form stores them (Phase 6).</p>
 
   <?php if ($mode === 'shadow') { ?><section id="shadow">
   <h2>The shadow report</h2>

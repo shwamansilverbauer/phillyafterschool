@@ -5,6 +5,7 @@
 //   php tests/lib/db.php <groups.sqlite> select <sql>                   -> rows as JSON
 //   php tests/lib/db.php <groups.sqlite> age <sid> <idle days> <age days> -> a sign-in last used, and begun, that long ago
 //   php tests/lib/db.php <groups.sqlite> photo                         -> {"id":..}: a listing photo's record (its file is the test's to write)
+//   php tests/lib/db.php <groups.sqlite> unmeta <key>                  -> forgets one of the server's own values in meta
 $file = $argv[1] ?? '';
 $mode = $argv[2] ?? '';
 if ($file === '' || !is_file($file)) { fwrite(STDERR, "no database at $file\n"); exit(2); }
@@ -38,11 +39,16 @@ if ($mode === 'age') {   // as the server would have left it at that last visit:
   echo json_encode(array('changed' => $st->rowCount()));
   exit;
 }
+if ($mode === 'unmeta') {   // forget one of the server's own values (a test that needs the morning summary again today)
+  $st = $db->prepare('DELETE FROM meta WHERE k = ?'); $st->execute(array($argv[3] ?? ''));
+  echo json_encode(array('changed' => $st->rowCount()));
+  exit;
+}
 if ($mode === 'select') {
   $sql = $argv[3] ?? '';
   if (!preg_match('/^\s*select\b/i', $sql)) { fwrite(STDERR, "select only\n"); exit(2); }
   echo json_encode($db->query($sql)->fetchAll());
   exit;
 }
-fwrite(STDERR, "mode: seed, age or select\n");
+fwrite(STDERR, "mode: seed, age, photo, unmeta or select\n");
 exit(2);

@@ -154,6 +154,16 @@ async function accounts() {
     else if (o.ageDays >= 2) fail('Offsite copy', `the last checked copy off the host is from ${o.day} (${o.ageDays} days ago): ${why[0]}`, why[1]);
     else pass('Offsite copy', `${o.day}, sent to ${cfg.backupRepo} and opened again${o.photosLeft ? `; ${o.photosLeft} photo${o.photosLeft === 1 ? '' : 's'} still to go` : ''}`);
   }
+  // The mailbox script (mail/Code.gs, inside the contact@ Google account) checks in every ten minutes. Looked at only
+  // once its key file is on the host (mailbox.on); two silent hours fail the check.
+  const mb = h.mailbox;
+  if (mb && mb.on) {
+    const where = 'Open script.google.com signed in as the contact@ account, open the Philly After School mailbox project, and look at Triggers (one for "run", every 10 minutes) and Executions (the error, if a run failed). "The mailbox script" in docs/emails.md has the setup.';
+    if (!mb.last) fail('Mailbox script', 'it has never checked in, though its key file is on the host', where);
+    else if (mb.ageMinutes > 120) fail('Mailbox script', `it last checked in ${Math.round(mb.ageMinutes / 60)} hours ago`, 'Mail from people isn’t reaching the site, replies aren’t going out, and the site’s ten-minute jobs are back to GitHub’s hourly schedule. ' + where);
+    else if (mb.alias === false) fail('Mailbox script', 'it can’t send from the site’s address, so replies are waiting', `In the mailbox’s Gmail settings, under Accounts > "Send mail as", add ${cfg.contactEmail} and confirm it.`);
+    else pass('Mailbox script', `checked in ${mb.ageMinutes} minute${mb.ageMinutes === 1 ? '' : 's'} ago${mb.problems ? `; its last run reported ${mb.problems} problem${mb.problems === 1 ? '' : 's'} (the morning summary says which)` : ''}`);
+  }
 }
 
 // ----- the security headers the site's .htaccess sets (the host has to honor them) -----

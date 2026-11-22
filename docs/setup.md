@@ -15,6 +15,7 @@
 | `scripts/send-alerts.mjs` | The daily job behind the date emails. Run by `.github/workflows/alerts.yml`. |
 | `email/` | The date email's template, as it was uploaded to Klaviyo. Kept here for reference; Klaviyo holds the live copy. |
 | `analytics/` | A Google Tag Manager import with GA4 and Microsoft Clarity set up for the site's events. Not published with the site. |
+| `mail/Code.gs` | The mailbox script, pasted into script.google.com inside the contact@ Google account (see "The mailbox script" in `docs/emails.md`). Not published with the site. |
 | `dist/` | The finished site, created by the build. Not stored in `main`; the `live` branch holds it. |
 
 ## Before launch
