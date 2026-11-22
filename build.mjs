@@ -993,6 +993,55 @@ const placesOf = (p, school = null) => {
   const all = school && mine.length ? mine : [...own, ...mine];
   return all.filter((x, i) => all.findIndex(y => y[0] === x[0] && y[1] === x[1]) === i);
 };
+// Neighborhoods someone can type instead of a ZIP code, on the home page's search and at the top of each list that
+// puts the closest first: [slug, name, lat, lng, other names]. Every neighborhood on OpenDataPhilly's map
+// (data/philly-map.json, the same shapes as Kids' Playground's map; its middle, turned back into a latitude and
+// longitude), then the names the listings use that the map doesn't have (Center City, South Philadelphia), each the
+// middle of the map's neighborhoods it covers, or of its own listings. The other names are what people say.
+const NEAR_HOODS = (() => {
+  const file = path.join(ROOT, 'data/philly-map.json');
+  if (!fs.existsSync(file)) return [];
+  const map = readJson('data/philly-map.json'), pj = map.proj || {};
+  const ll = c => [+(pj.lat1 - (c[1] - pj.pad) / pj.k).toFixed(4), +((c[0] - pj.pad) / (pj.cos * pj.k) + pj.lon0).toFixed(4)];
+  const out = new Map();
+  for (const h of map.hoods || []) if (h.c) out.set(h.name, [hoodSlug(h.name), h.name, ...ll(h.c), '']);
+  const mean = pts => pts.length ? [+(pts.reduce((s, p) => s + p[0], 0) / pts.length).toFixed(4), +(pts.reduce((s, p) => s + p[1], 0) / pts.length).toFixed(4)] : null;
+  const middleOf = names => mean(names.map(n => out.get(n)).filter(Boolean).map(r => [r[2], r[3]]));
+  // a name that covers several of the map's neighborhoods
+  const AREAS = {
+    'Center City': ['Rittenhouse', 'Logan Square', 'Center City East', 'Washington Square West'],
+    'South Philadelphia': ['Passyunk Square', 'East Passyunk', 'Point Breeze', 'Newbold', 'Girard Estates', 'Whitman', 'Pennsport', 'Dickinson Narrows', 'Lower Moyamensing', 'West Passyunk'],
+    'West Philadelphia': ['Spruce Hill', 'Cedar Park', 'Walnut Hill', 'Garden Court', 'Mill Creek', 'Haddington', 'Cobbs Creek', 'Kingsessing'],
+    'Southwest Philadelphia': ['Kingsessing', 'Paschall', 'Elmwood', 'Eastwick'],
+    'North Philadelphia': ['North Central', 'Hartranft', 'Fairhill', 'Strawberry Mansion', 'Tioga', 'Nicetown', 'Glenwood', 'Stanton', 'Yorktown', 'Sharswood'],
+    'Northeast Philadelphia': ['Mayfair', 'Rhawnhurst', 'Bustleton', 'Fox Chase', 'Holmesburg', 'Oxford Circle', 'Tacony', 'Lawndale', 'Somerton'],
+    'Germantown': ['Germantown – Morton', 'Germantown – Penn Knox', 'Germantown – Westside', 'West Central Germantown', 'Southwest Germantown', 'East Germantown'],
+    'Mount Airy': ['East Mount Airy', 'West Mount Airy'],
+    'Kensington': ['East Kensington', 'West Kensington', 'Upper Kensington'],
+    'South Kensington': ['Old Kensington'],
+    'West Fairmount Park': ['West Park'],
+  };
+  for (const [n, parts] of Object.entries(AREAS)) { const m = middleOf(parts); if (m && !out.has(n)) out.set(n, [hoodSlug(n), n, ...m, '']); }
+  // what people call them
+  const SAY = {
+    'South Philadelphia': 'south philly', 'West Philadelphia': 'west philly', 'North Philadelphia': 'north philly',
+    'Southwest Philadelphia': 'southwest philly', 'Northeast Philadelphia': 'northeast philly the northeast',
+    'Fishtown – Lower Kensington': 'fishtown', 'Mount Airy': 'mt airy', 'East Mount Airy': 'mt airy', 'West Mount Airy': 'mt airy',
+    'Northern Liberties': 'nolibs', 'Graduate Hospital': 'g-ho gho southwest center city', 'Powelton': 'powelton village',
+    'Center City East': 'center city', 'Rittenhouse': 'center city rittenhouse square', 'Washington Square West': 'gayborhood midtown village',
+    'East Passyunk': 'passyunk', 'Passyunk Square': 'passyunk',
+    'Navy Yard': 'the navy yard', 'University City': 'u city penn drexel',
+  };
+  for (const [n, say] of Object.entries(SAY)) if (out.has(n)) out.get(n)[4] = say;
+  // any other name a listing uses: the middle of that neighborhood's own listings and schools
+  const stray = new Map();
+  for (const s of schools) for (const n of schoolHoods(s)) if (!out.has(n)) stray.set(n, [...(stray.get(n) || []), ...coordsOf(s.address)]);
+  for (const p of programs) for (const n of p.neighborhoods || []) if (!out.has(n)) stray.set(n, [...(stray.get(n) || []), ...placesOf(p)]);
+  for (const c of summerCamps) for (const n of c.neighborhoods || []) if (!out.has(n)) stray.set(n, [...(stray.get(n) || []), ...coordsOf(c.address)]);
+  const said = new Set([...out.values()].flatMap(r => r[4] ? [r[4]] : []).join(' ').split(' '));   // "Fishtown" is already Fishtown – Lower Kensington's other name
+  for (const [n, pts] of stray) { const m = mean(pts); if (m && !said.has(n.toLowerCase())) out.set(n, [hoodSlug(n), n, ...m, '']); }
+  return [...out.values()].sort((a, b) => a[1].localeCompare(b[1]));
+})();
 const milesFrom = (school, p) => { const from = SCHOOL_LL[school.id], to = placesOf(p, school); return from && to.length ? Math.min(...to.map(x => milesApart(from, x))) : null; };
 const milesText = m => m < 0.1 ? 'under a tenth of a mile' : (Math.round(m * 10) / 10 === 1 ? '1 mile' : `${(Math.round(m * 10) / 10).toFixed(1)} miles`);
 const kindsOf = price => price === 'both' ? ['free', 'paid'] : price ? [price] : [];
@@ -1133,9 +1182,9 @@ function focusCard(mode, depth, noun = 'camps') {
     </div>
     ${focusOn(T(`Showing what’s in`), T(`Everywhere`))}
   </div>`;
-  if (mode === 'near') return `<div class="focus" data-focus="near" data-zips="${esc(JSON.stringify(ZIPS))}" hidden>
-    <div class="focus-ask">${head(T(`Start from home`), T(`Type your ZIP code, and the {things} closest to you come first. The rest stay on the list, further down. Your ZIP code stays on this device.`, { things: noun }))}
-      <form class="focus-row" novalidate><label class="vh" for="focus-zip">ZIP code</label><input class="focus-zip" id="focus-zip" inputmode="numeric" autocomplete="postal-code" maxlength="5" placeholder="Your ZIP code"><button type="submit" class="btn primary">${T(`Closest first`)}</button></form>
+  if (mode === 'near') return `<div class="focus" data-focus="near"${placeData()} hidden>
+    <div class="focus-ask">${head(T(`Start from home`), T(`Type your ZIP code or neighborhood, and the {things} closest to you come first. The rest stay on the list, further down. What you type stays on this device.`, { things: noun }))}
+      <form class="focus-row" novalidate><label class="vh" for="focus-zip">ZIP code or neighborhood</label>${placeInput('focus-zip', 'focus-zip')}<button type="submit" class="btn primary">${T(`Closest first`)}</button></form>
       <p class="focus-alt"><button type="button" class="clear focus-me">${T(`Use where I am`)}</button><button type="button" class="clear focus-school" hidden></button></p>
       <p class="hint focus-say" aria-live="polite"></p>
     </div>
@@ -2220,11 +2269,54 @@ ${groups}
   });
 }
 
+// The home page's search: four tabs above one box, one for each part of a family's year. After-School is the school
+// or program finder; the other three ask where you live (a ZIP code or a neighborhood) and open that list with the
+// closest first (Days Off also asks which day off, or all of them). Without scripts the tabs are links to the four
+// lists and only the finder shows. The tab last used on this device is the one that opens (pas-hero-tab), set by the
+// little script under the tabs before the page is drawn, so it doesn't flicker. site.js (heroSearch) does the rest.
+const HERO_ICONS = {
+  after: 'M7 2v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zM5 9.5h14V19H5zm2 2.5v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2z',
+  off: 'M12 3 1.5 20h21zm0 7 2.6 8H9.4z',
+  summer: 'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM11 1h2v4h-2zm0 18h2v4h-2zM1 11h4v2H1zm18 0h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8L7 8.4zm11.4 11.4 1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4 7 15.6l1.4 1.4-2.8 2.8zM15.6 7l2.8-2.8 1.4 1.4L17 8.4z',
+  weekend: 'M12 2 9.5 8.5 2.5 9.3l5.2 4.8L6.2 21 12 17.4l5.8 3.6-1.5-6.9 5.2-4.8-7-.8z',
+};
+// A box for where someone lives: a ZIP code, or a neighborhood picked from what they type (NEAR_HOODS). The home
+// page's search and the question at the top of each closest-first list both use it; site.js (placePicker) wires it.
+const placeData = () => ` data-zips="${esc(JSON.stringify(ZIPS))}" data-hoods="${esc(JSON.stringify(NEAR_HOODS))}"`;
+const placeInput = (id, cls = '') => `<span class="place-in"><input class="place-q${cls ? ' ' + cls : ''}" id="${id}" type="text" role="combobox" aria-expanded="false" aria-controls="${id}-list" aria-autocomplete="list" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="go" placeholder="${esc(copyNow(`ZIP code or neighborhood`))}"><ul class="place-list" id="${id}-list" role="listbox" aria-label="Neighborhoods" hidden></ul></span>`;
+// "Nov 26 to 27 · Thanksgiving break", "Tue, Nov 3 · Election Day": a day off as the Days Off tab's list names it, the
+// date first so a narrow screen cuts the end of the name rather than the date
+const offOption = d => `${d.end && d.end !== d.date ? (d.end.slice(0, 7) === d.date.slice(0, 7) ? `${shortDate(d.date)} to ${+d.end.slice(8, 10)}` : `${shortDate(d.date)} to ${shortDate(d.end)}`) : dayDate(d.date)} · ${dayLabel(d)}`;
+function heroSearch() {
+  const tabs = [
+    { id: 'after', href: link('programs/', 0), name: T(`After-School`) },
+    daysOff && offDays.length ? { id: 'off', href: link(dayCampsPath, 0), name: T(`Days Off`), label: T(`Find day-off camps near you`), go: T(`Find camps`), all: T(`Or browse every day-off camp`) } : null,
+    summerCamps.length ? { id: 'summer', href: link(campsPath, 0), name: T(`Summer Camps`), label: T(`Find summer camps near you`), go: T(`Find camps`), all: T(`Or browse every summer camp`) } : null,
+    weekendPrograms.length ? { id: 'weekend', href: link(weekendPath, 0), name: T(`Weekends`), label: T(`Find weekend classes near you`), go: T(`Find classes`), all: T(`Or browse every weekend class`) } : null,
+  ].filter(Boolean);
+  const tab = (x, i) => `<a class="hs-tab" id="hs-t-${x.id}" href="${x.href}" data-tab="${x.id}" aria-controls="hs-p-${x.id}"${i ? '' : ' aria-current="true"'}><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="${HERO_ICONS[x.id]}"/></svg><span>${x.name}</span></a>`;
+  const daySelect = () => `<div class="hs-field hs-day"><label for="hs-day">${T(`Which day off?`)}</label><select id="hs-day" class="hs-day-pick"><option value="${esc(link(dayCampsPath, 0))}" data-all>${esc(copyNow(`All days off (plan the whole year)`))}</option>${offDays.map((d, i) => `<option value="${esc(link(dayPath(d), 0))}" data-until="${d.until}"${i ? '' : ' selected'}>${esc(offOption(d))}</option>`).join('')}</select></div>`;
+  const panel = x => x.id === 'after'
+    ? `<div class="hs-panel" id="hs-p-after" data-panel="after" role="tabpanel" aria-labelledby="hs-t-after">
+      ${finderBox(0, `Find your school or a program`, true, { hint: false, mine: false })}
+    </div>`
+    : `<form class="hs-panel hs-place" id="hs-p-${x.id}" data-panel="${x.id}" role="tabpanel" aria-labelledby="hs-t-${x.id}" action="${x.href}" novalidate hidden>
+      <div class="hs-fields">${x.id === 'off' ? daySelect() : ''}<div class="hs-field hs-where"><label for="hs-q-${x.id}">${x.label}</label>${placeInput('hs-q-' + x.id)}</div><button type="submit" class="btn primary hs-go">${x.go}</button></div>
+      <p class="hint hs-say" aria-live="polite"></p>
+      <p class="hs-all"><a href="${x.href}">${x.all}</a></p>
+    </form>`;
+  return `<div class="hsearch" id="hs" data-hero-search${tabs.length > 1 ? placeData() : ''}>
+      <div class="hs-tabs" aria-label="${esc(copyNow(`What are you looking for?`))}">${tabs.map(tab).join('')}</div>
+      ${tabs.map(panel).join('\n      ')}
+    </div>
+    <script>(function(){try{var t=localStorage.getItem('pas-hero-tab'),h=document.getElementById('hs'),p=t&&h.querySelector('[data-panel="'+t+'"]'),a=function(s){return [].slice.call(h.querySelectorAll(s))};if(!p)return;a('[data-panel]').forEach(function(x){x.hidden=x!==p});a('.hs-tab').forEach(function(x){if(x.getAttribute('data-tab')===t)x.setAttribute('aria-current','true');else x.removeAttribute('aria-current')})}catch(e){}})()</script>`;
+}
+
 function homePage() {
   const LEDE = `Find the after-school programs that work with your child’s school: what runs in the building, who picks up at dismissal, and what’s close enough to walk to.`;
   const hero = `    <h1>${T(`School’s out. Now what?`)}</h1>
     <p class="lede">${T(LEDE)}</p>
-    ${finderBox(0, `Find your school or a program`, true, { hint: false, mine: false })}`;
+    ${heroSearch()}`;
   const ICON = {
     school: 'M12 2 2 8v2h20V8zM4.5 11.5v6h3v-6zm6 0v6h3v-6zm6 0v6h3v-6zM2 19v3h20v-3z',
     week: 'M7 2v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zM5 9.5h14V19H5zm2 2.5v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2z',
@@ -2241,13 +2333,6 @@ function homePage() {
   };
   const who = k => `<span class="start-who" aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false">${WHO[k]}</svg></span>`;
   const go = (href, label, hint, icon) => `<a class="start-go" href="${href}"><span class="start-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="${ICON[icon]}"/></svg></span><span><b>${label}</b>${hint ? `<small>${hint}</small>` : ''}</span></a>`;
-  // When do you need coverage? One tile for each part of a family's calendar, each to that kind's own list.
-  const when = [
-    [link('programs/', 0), T(`After school`), T(`At the school, picking up at dismissal, or close by.`), '#1763B8', 'M7 2v2H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zM5 9.5h14V19H5zm2 2.5v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2z'],
-    daysOff ? [link(dayCampsPath, 0), T(`Days off`), T(`Camps on the days school is closed.`), '#B88A00', 'M12 3 1.5 20h21zm0 7 2.6 8H9.4z'] : null,
-    weekendPrograms.length ? [link(weekendPath, 0), T(`Weekends`), T(`Saturday and Sunday classes across the city.`), '#6B3FA0', 'M12 2 9.5 8.5 2.5 9.3l5.2 4.8L6.2 21 12 17.4l5.8 3.6-1.5-6.9 5.2-4.8-7-.8z'] : null,
-    summerCamps.length ? [link(campsPath, 0), T(`Summer`), T(`Day camps, with a planner for the summer week by week.`), '#2C8444', 'M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM11 1h2v4h-2zm0 18h2v4h-2zM1 11h4v2H1zm18 0h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8L7 8.4zm11.4 11.4 1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4 7 15.6l1.4 1.4-2.8 2.8zM15.6 7l2.8-2.8 1.4 1.4L17 8.4z'] : null,
-  ].filter(Boolean);
   const body = `${nextOffBar(0)}
 <section class="section" id="start">
   <div class="starts">
@@ -2267,12 +2352,6 @@ function homePage() {
         ${go(link('suggest/', 0), T(`Add a program or camp`), T(`Not listed yet? Send its name and website`), 'plus')}
       </div>
     </div>
-  </div>
-</section>
-<section class="section" id="when">
-  <h2>${T(`When do you need coverage?`)}</h2>
-  <div class="whens">
-    ${when.map(([href, name, text, color, icon]) => `<a class="when-card" href="${href}" style="--tc:${color}"><span class="when-ic" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path fill="currentColor" d="${icon}"/></svg></span><h3>${name}</h3><p>${text}</p></a>`).join('\n    ')}
   </div>
 </section>
 <section class="section" id="browse">

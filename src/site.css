@@ -506,7 +506,7 @@ button.btn{cursor:pointer;font-family:inherit}
 
 /* ---------- school finder: suggestions under the search box ---------- */
 .find{position:relative}
-.finder-list{list-style:none;margin:0;padding:6px;position:absolute;left:0;right:0;top:calc(100% - 2.2rem);z-index:20;background:#FFFFFF;color:#0B2140;border-radius:14px;box-shadow:0 12px 32px rgba(7,21,39,.28);display:flex;flex-direction:column;gap:2px;max-height:min(70vh,520px);overflow:auto}
+.finder-list,.place-list{list-style:none;margin:0;padding:6px;position:absolute;left:0;right:0;top:calc(100% - 2.2rem);z-index:20;background:#FFFFFF;color:#0B2140;border-radius:14px;box-shadow:0 12px 32px rgba(7,21,39,.28);display:flex;flex-direction:column;gap:2px;max-height:min(70vh,520px);overflow:auto}
 .find .hint{color:var(--hero-muted);min-height:2.2rem;margin-top:4px}
 .find .hint a{color:var(--hero-ink)}
 .prose .find .hint{color:var(--muted)}
@@ -620,8 +620,8 @@ button.btn{cursor:pointer;font-family:inherit}
 .explore-acts{display:flex;align-items:center;gap:14px;flex:none}
 .explore-acts .btn{min-height:40px;padding:6px 18px}
 @media (prefers-color-scheme:dark){.xt[aria-pressed="true"]{color:var(--yellow-ink)}}
-.finder-list button{font:inherit;text-align:left;width:100%;border:0;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:10px 12px;border-radius:10px;color:#0B2140}
-.finder-list li[aria-selected="true"] button,.finder-list button:hover{background:#DAEDFE}
+.finder-list button,.place-list button{font:inherit;text-align:left;width:100%;border:0;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:10px 12px;border-radius:10px;color:#0B2140}
+.finder-list li[aria-selected="true"] button,.finder-list button:hover,.place-list li[aria-selected="true"] button,.place-list button:hover{background:#DAEDFE}
 .add-panel{gap:12px;border-color:var(--link);box-shadow:0 6px 18px rgba(7,21,39,.08)}
 .add-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
 .add-head h3{font-size:1.2rem}
@@ -1413,15 +1413,6 @@ html.parent .starts{grid-template-columns:minmax(0,1fr)}
 .start-go span{display:flex;flex-direction:column;gap:2px;min-width:0}
 .start-go b{font-family:var(--display);font-stretch:112%;font-weight:750;font-size:1.08rem}
 .start-go small{font-size:.92rem;color:var(--muted)}
-/* When do you need coverage? Four tiles, one per part of the calendar, each a link to that kind's list */
-.whens{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:6px}
-.when-card{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-top:7px solid var(--tc);border-radius:16px;padding:18px 20px 20px;min-width:0}
-.when-card:hover{border-color:var(--tc)}
-.when-card h3{font-size:1.25rem}
-.when-card p{color:var(--muted);font-size:.95rem}
-.when-ic{display:inline-flex;width:38px;height:38px;border-radius:10px;background:color-mix(in srgb,var(--tc) 14%,var(--surface));color:var(--tc);align-items:center;justify-content:center}
-.when-ic svg{width:24px;height:24px}
-@media (max-width:620px){.whens{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.when-card{padding:14px 14px 16px}.when-card h3{font-size:1.1rem}.when-card p{font-size:.9rem}}
 /* Get reminders: one short ask, signed out only */
 .remind{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 24px;background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:22px 26px}
 .remind-say{display:flex;flex-direction:column;gap:4px;flex:1 1 320px}
@@ -3198,3 +3189,36 @@ dialog.getapp .pas-dialog-in{text-align:left}
 .g-in-group{flex-basis:100%;font-size:.92rem}
 .g-make{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
 .g-make h4{margin:12px 0 6px}
+
+/* ---------- the home page's search: a tab for each part of the year, then its box (heroSearch in build.mjs) ---------- */
+.hsearch{display:flex;flex-direction:column;gap:14px;max-width:760px}
+.hs-tabs{display:flex;flex-wrap:wrap;gap:10px}
+.hero .hs-tab,.hs-tab{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 16px 9px 13px;border:2px solid var(--ink);border-radius:12px;background:rgba(255,255,255,.78);color:var(--ink);text-decoration:none;font-family:var(--display);font-stretch:112%;font-weight:800;font-size:1.02rem;line-height:1.2;box-shadow:0 3px 0 var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.hs-tab svg{width:20px;height:20px;flex:none}
+.hs-tab:hover{background:#FFFFFF}
+.hs-tab[aria-selected="true"],.hs-tab[aria-current="true"]{background:var(--yellow);color:var(--ink)}
+.hs-tab:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+.hs-panel label{font-weight:700}
+.hs-panel .find{max-width:600px}
+.hs-fields{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px}
+.hs-field{display:flex;flex-direction:column;gap:8px;flex:1 1 260px;min-width:0}
+.hs-day{flex:0 1 300px}
+.hs-day select,.place-q{font:inherit;font-size:1.1rem;width:100%;padding:14px 16px;border-radius:12px;border:2px solid var(--hero-field);background:#FFFFFF;color:#0B2140;min-width:0}
+.hs-day select{padding-right:10px;font-size:1rem;height:56px}
+.place-q::placeholder{color:#5B6E88}
+.hsearch .place-q{height:56px}
+.hs-go.btn{flex:none;height:56px;padding:0 24px;border-radius:12px;font-size:1.05rem;background:var(--cta);border-color:var(--cta);color:var(--cta-ink)}
+.hs-go.btn:hover{background:var(--cta-hover);border-color:var(--cta-hover)}
+.hs-say{color:var(--hero-ink);font-weight:700;margin-top:8px}
+.hs-say:empty{display:none}
+.hs-all{margin-top:8px;font-size:.97rem}
+.place-in{position:relative;display:block;width:100%}
+.place-in .place-list{top:calc(100% + 6px)}
+.focus-row .place-in{flex:1 1 200px;max-width:360px}
+.focus-row .place-in input{width:100%;max-width:none}
+@media (max-width:620px){
+  .hs-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .hero .hs-tab,.hs-tab{padding:10px 8px;font-size:.98rem}
+  .hs-day,.hs-field{flex:1 1 100%}
+  .hs-go.btn{flex:1 1 100%}
+}

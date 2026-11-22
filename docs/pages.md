@@ -111,15 +111,11 @@ to the listing's page, and every list opens with the way into its planner (`hero
 
 ## Finding programs: filters, types and the school finder
 
-The home page says each thing once: the hero (headline, one line, the school-or-program search, with the finder's
-"no match: tell us about it" line as the one way to ask for a school, and without the "Your school" shortcut the
-finder shows elsewhere: `data-no-mine`), then two "Start here" boxes, one for parents
+The home page says each thing once: the hero (headline, one line, then the search, below), then two "Start here" boxes, one for parents
 (build a schedule, then create an account signed out or the to-do list signed in, so the box always has two rows)
 and one for program managers (claim a listing, add a program or camp; a parent who is signed in doesn't see it:
 the inline script adds `html.parent` when the device holds `pas-in` and `pas-role` = parent, and the Parents box
-takes the row with its two rows side by side), then "When do you need coverage?", four
-tiles (After school → `/programs/`, Days off → `/day-camps/`, Weekends → `/weekends/`, Summer → `/summer-camps/`),
-then "What's your kid into?" (the type chips), then "Get reminders" (one line and a button to `/alerts/`, signed out
+takes the row with its two rows side by side), then "What's your kid into?" (the type chips), then "Get reminders" (one line and a button to `/alerts/`, signed out
 only), then "the story" (`#story`: a few lines on who made the site and why, with "Read the story" to `/about/` and
 "Help us make it better" to `/suggest/`). The explainers (how programs are sorted, every listing is dated and sourced, who built this) are on the
 About page, which reads like a blog: six rows (`aboutPage()`), each a heading and its words on one side and a
@@ -129,6 +125,32 @@ The first row's picture is the two who made it: their photo (`src/static/about-u
 1000px wide). To change it, replace that file with another 4:3 photo. Each box has a picture of who it is for (a grown-up with a child, a person with a clipboard), drawn in
 `WHO` in `homePage()`.
 
+**The home page search** (`heroSearch()` in `build.mjs`, the `[data-hero-search]` block in `site.js`) is four tabs
+above one box, so the first thing a parent sees is that the site covers the whole year, not only after school:
+After-School, Days Off, Summer Camps, Weekends (a tab is left out while its list is empty). After-School is the
+school-or-program finder (with its "no match: tell us about it" line as the one way to ask for a school, and without
+the "Your school" shortcut the finder shows elsewhere: `data-no-mine`). The other three ask where you live, a ZIP code
+or a neighborhood (below), and open that kind's list (`/summer-camps/`, `/weekends/`) with the closest first, through
+the same question each list starts with. Days Off also asks which day off: the days still ahead, the next one picked
+(it opens that day's page), and "All days off (plan the whole year)" first in the list (it opens `/day-camps/`). Under
+each box, "Or browse every…" opens the list as it is. Sending the box empty opens the list in its own order and
+forgets the place. The tab someone last picked is the one that opens next time (`pas-hero-tab`): a few lines of
+script right under the tabs set it before the page is drawn, so it doesn't flicker. Without scripts the tabs are
+links to the four lists and only the finder shows. The tabs are a proper tab list for screen readers, and the arrow
+keys move between them. On a phone they sit two by two. Analytics gets `pas_hero_tab` (hero_tab) when a tab is picked
+by hand and `pas_hero_search` (hero_tab; place: zip, neighborhood or none; day_off: next, later or all) when the
+search sends someone to a list; never which ZIP code or neighborhood. The words are on `/edit/` like any other
+sentence.
+
+**A ZIP code or a neighborhood.** The box (`placeInput()` in `build.mjs`, `placePicker()` in `site.js`) takes five
+digits as a ZIP code (`data/zips.json`) or offers neighborhoods that match what's typed, up to six, from `NEAR_HOODS`
+in `build.mjs`: every neighborhood on OpenDataPhilly's map (`data/philly-map.json`, the shapes Kids' Playground's map
+uses; the middle of each shape, turned back into a latitude and longitude), plus the wider names the listings use
+that the map doesn't have (Center City, South Philadelphia, Germantown: the middle of the map's neighborhoods each
+covers, listed in `AREAS`), plus what people call them (`SAY`: South Philly, Fishtown, Mt Airy, NoLibs). Any other
+neighborhood a listing names is placed at the middle of its own listings. Distances from a neighborhood are measured
+from its middle. Add a name people use to `SAY`; add a wide area to `AREAS`.
+
 The top of a program's page says which schools it works for as colored labels (`servedPills()`): yellow for pickup, green for on-site, blue for nearby, the same colors as on the cards.
 
 On a program's own page, a row of "The details" longer than about a hundred characters shows its first two lines with a "More" link (`fold()` in `build.mjs`). It is a `<details>` element holding the whole text, so it opens without JavaScript and nothing is left out of the page.
@@ -136,16 +158,19 @@ On a program's own page, a row of "The details" longer than about a hundred char
 **Each list starts with one question** (`focusCard()` in `build.mjs`, the `[data-focus]` block in `site.js`): the
 filter that makes that list the most use to one family, asked in a yellow card above the search box. The after-school
 list (`/programs/`) asks for the child's school, because pickup decides what works. Every other list (day camps, each
-day off's page, weekend classes, summer camps) asks where you live, as a ZIP code (with "Use where I am", and "From
-<your school>" when one is saved), and puts the closest first without hiding anything: any child can go to those, so
+day off's page, weekend classes, summer camps) asks where you live, as a ZIP code or a neighborhood (the same box as
+the home page search; with "Use where I am", and "From <your school>" when one is saved), and puts the closest first without hiding anything: any child can go to those, so
 the rest stay on the list further down. In a list under headings, each heading's places are closest first and the
 heading with the closest place comes first. One ZIP code serves every list. Answered, the card shrinks to one line
-("Showing what works for Meredith", "Closest first, from ZIP code 19147") with Change and a way back to the whole list
+("Showing what works for Meredith", "Closest first, from ZIP code 19147", "Closest first, from Fishtown – Lower
+Kensington") with Change and a way back to the whole list
 (Every school, Back to A to Z), which brings the question back. The answer drives the filters that were already there
 (the School row, "Nearest first"), so the chips, the count and the address all agree with it. It is kept on the
 device: the school is the same "my school" a school's page saves (`keepSchool()`, which also keeps it in the profile
-for someone signed in who keeps their school there); the ZIP code (`pas-my-zip`) is looked up in `data/zips.json`, the middle of each ZIP code area in and around Philadelphia from the Census Bureau's
-2024 Gazetteer file, and never leaves the browser. A neighborhood question (`focusCard('hood')`: pick a neighborhood, which narrows the list to
+for someone signed in who keeps their school there); the place is `pas-my-near` (`zip:19147` or `hood:<slug>`, the
+newest answer, from the home page or any list), and a ZIP code also goes in `pas-my-zip`, where it was kept before
+neighborhoods. A ZIP code is looked up in `data/zips.json`, the middle of each ZIP code area in and around Philadelphia from the Census Bureau's
+2024 Gazetteer file. Neither leaves the browser. A neighborhood question (`focusCard('hood')`: pick a neighborhood, which narrows the list to
 it, kept in `pas-my-hoods` with the profile's neighborhood joining it through `adoptHood()` in `groups.js`) is still
 built and wired for a list that wants one; no list uses it now. The week builder asks for the school the same way, above its
 search (`#board-focus`): programs that work for it come first in the search, and browsing starts there. Analytics
