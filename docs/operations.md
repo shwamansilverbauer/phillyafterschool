@@ -20,7 +20,9 @@ host): accounts, share groups, claims, saved weeks and summers. Two things cover
   and listing photos not sent before, as `photos/<id>.jpg.enc` (six a run, the rest the next hour). Every past day
   stays in the repository's history. It goes through the key file /edit/ publishes with
   (`phillyafterschool-github.key`), which must have the backup repository in its access list (Contents: Read and
-  write), and the repository must have a first commit ("Add a README file" when making it).
+  write), and the repository must have a first commit ("Add a README file" when making it). The same key also
+  writes the research runs' private queue to the ops repository (`opsRepo`), which needs the same access; see "The
+  private queue" in `docs/listings.md`.
 - **The restore drill, every day.** Right after sending, the server fetches the copy back from GitHub, opens it with
   the key, checks it is byte for byte the copy it sent, writes it out and opens it as a database (integrity check, the
   same row count in every table). Only then does the day count as backed up. The health answer says how that went

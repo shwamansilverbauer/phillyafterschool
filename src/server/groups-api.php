@@ -205,6 +205,7 @@ function db(): PDO {
     $db->exec('CREATE INDEX IF NOT EXISTS push_subs_user ON push_subs (user_id)');
     $db->exec('CREATE TABLE IF NOT EXISTS push_sent (user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, k TEXT NOT NULL, day TEXT NOT NULL, PRIMARY KEY (user_id, k))');
     $db->exec('CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v TEXT NOT NULL)');
+    queue_schema($db);   // the private queue's two tables (see "the private queue" below)
     $db->exec("CREATE TABLE IF NOT EXISTS extras (id INTEGER PRIMARY KEY, claim_id INTEGER NOT NULL REFERENCES claims(id) ON DELETE CASCADE, listing TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL, until TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'new', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0)");
     $db->exec('CREATE INDEX IF NOT EXISTS extras_listing ON extras (listing, kind, status)');
     $db->exec('CREATE TABLE IF NOT EXISTS hits_school (listing TEXT NOT NULL, school TEXT NOT NULL, month TEXT NOT NULL, n INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (listing, school, month))');
@@ -1875,14 +1876,25 @@ function mgr_run(string $today, array $opts = array()): array {
 // (straight away with Google, after the name step with an emailed code). A program manager's goes out with their
 // first claim, so it can name the listing. An account that stops before either is picked up by signup_catchup().
 // The email holds the adult's email address and name, and a listing's name. Nothing about a child is in it.
-function signup_note(int $uid, string $kind, string $listing = '', string $more = '', string $flag = ''): void {
+// With "ownerNotes": { "parentSignup": "digest" } in site.config.json, a parent's account sends nothing here: the
+// morning's signup_digest() counts them instead. A manager's keeps its own email (each one is a lead).
+function owner_note_mode(string $k): string {
+  global $CFG;
+  if (isset($GLOBALS['PAS_OWNER_NOTES']) && is_string($GLOBALS['PAS_OWNER_NOTES'])) return $GLOBALS['PAS_OWNER_NOTES'];   // the tests only
+  $m = isset($CFG['ownerNotes'][$k]) ? (string) $CFG['ownerNotes'][$k] : 'each';
+  return $m === 'digest' ? 'digest' : 'each';
+}
+// Gives whether an email went.
+function signup_note(int $uid, string $kind, string $listing = '', string $more = '', string $flag = ''): bool {
   $u = row('SELECT email, first, last FROM users WHERE id = ?', array($uid));
-  if (!$u) return;
+  if (!$u) return false;
+  if ($kind === 'parent' && owner_note_mode('parentSignup') === 'digest') { q('UPDATE users SET told = 1 WHERE id = ?', array($uid)); return false; }
   $name = trim($u['first'] . ' ' . $u['last']);
   $text = 'Email: ' . $u['email'] . "\nName: " . ($name !== '' ? $name : 'not added yet');
   if ($kind === 'manager') $text .= "\nListing: " . ($listing !== '' ? $listing : 'none claimed yet');
   q('UPDATE users SET told = ? WHERE id = ?', array($kind === 'manager' ? 2 : 1, $uid));
   tell_owner(($kind === 'manager' ? 'New Program Manager Signup' : 'New Parent Account Signup') . ($name !== '' ? ': ' . $name : '') . ($flag !== '' ? ' (' . $flag . ')' : ''), $text . ($more !== '' ? "\n\n" . $more : ''), $kind === 'manager' ? 'claims' : 'stats');
+  return true;
 }
 // An account has just been given a name. A parent's email goes now; one made on the managers' page waits for its claim.
 function signup_named(int $uid): void {
@@ -1891,10 +1903,226 @@ function signup_named(int $uid): void {
   signup_note($uid, 'parent');
 }
 // Accounts nobody has been told about an hour after they were made: no name yet, or a manager with no claim yet.
+// Gives how many notes were emailed (a parent's account in digest mode is marked and counted the next morning).
 function signup_catchup(int $age = 3600): int {
   $n = 0;
-  foreach (q('SELECT id, origin FROM users WHERE told = 0 AND created < ? ORDER BY id LIMIT 20', array(now() - $age)) as $r) { signup_note((int) $r['id'], $r['origin'] === 'managers' ? 'manager' : 'parent'); $n++; }
+  foreach (q('SELECT id, origin FROM users WHERE told = 0 AND created < ? ORDER BY id LIMIT 20', array(now() - $age))->fetchAll() as $r) { if (signup_note((int) $r['id'], $r['origin'] === 'managers' ? 'manager' : 'parent')) $n++; }
   return $n;
+}
+// The sign-up digest: once a day, on the first hourly run after 7 in the morning, one email to the site's own address
+// with how many parent accounts were made the day before (and in the last seven days). Counts only. None on a day with
+// no new parent account. $today is a New York date; the tests choose it.
+function signup_digest(string $today, int $hour, bool $force = false): array {
+  if (owner_note_mode('parentSignup') !== 'digest') return array('state' => 'off');
+  if (!$force && $hour < 7) return array('state' => 'waiting');
+  if (!$force && meta_get('digest_day') === $today) return array('state' => 'done');
+  meta_set('digest_day', $today);
+  $tz = new DateTimeZone('America/New_York');
+  $end = (new DateTime($today . ' 00:00:00', $tz))->getTimestamp();
+  $yday = new DateTime($today . ' 00:00:00', $tz); $yday->modify('-1 day');
+  $start = $yday->getTimestamp(); $week = (new DateTime($today . ' 00:00:00', $tz))->modify('-7 days')->getTimestamp();
+  $count = function (int $from) use ($end): int { return (int) val("SELECT COUNT(*) FROM users WHERE origin != 'managers' AND created >= ? AND created < ?", array($from, $end)); };
+  $n = $count($start);
+  if (!$n) return array('state' => 'none');
+  $w = $count($week);
+  $text = $n . ' new parent account' . ($n === 1 ? '' : 's') . ' on ' . $yday->format('l, F j') . ', and ' . $w . ' in the last seven days.'
+    . "\n\nProgram manager sign-ups still come one email at a time. The numbers page has the rest, day by day.";
+  tell_owner('New parent accounts yesterday: ' . $n, $text, 'stats');
+  return array('state' => 'sent', 'n' => $n);
+}
+
+// ---------- the private queue (scaling plan, Phase 2) ----------
+// What came in through the site (suggestions, managers' proposed changes, the owner's notes, the schools families asked
+// for) goes to the research runs as queue/open.json in the private ops repository, written by the hourly push_run
+// whenever it changes. Each run answers in outcomes/<run>.json there: for each item it worked, an outcome from a fixed
+// list (and for some, a reason from a fixed list), the listing and the pull request. push_run reads each new outcome
+// file once, settles those items, and emails each sender one message in the site's own words (editable at
+// /edit/emails/). The run picks the outcome; nothing a run wrote is ever emailed to anyone. "It's on the site" waits
+// until the item's pull request is merged and has had time to publish. The shared half (gathering the items, writing
+// the file) is pasted in here from src/server/queue.php.
+/*QUEUE*/
+const QUEUE_OUTCOMES = array('published', 'held', 'declined', 'duplicate', 'needs-info', 'no-change', 'failed');
+const QUEUE_REASONS = array('need-page', 'need-website', 'need-school', 'not-a-program', 'outside', 'no-own-site', 'closed');
+const QUEUE_TELL_A_RUN = 30;      // answers sent in one run at most; the rest go an hour later
+const QUEUE_FILES_A_RUN = 10;     // outcome files read in one run at most
+const QUEUE_PULLS_A_RUN = 8;      // pull requests looked up in one run at most
+const QUEUE_PUBLISH_WAIT = 1200;  // seconds after a merge before "it's on the site" goes out: the publish takes a few minutes
+function ops_repo(): string { global $CFG; $r = isset($CFG['opsRepo']) ? (string) $CFG['opsRepo'] : ''; return preg_match('~^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$~', $r) ? $r : ''; }
+function queue_ctx(): array {
+  global $CFG;
+  $names = array(); foreach (listings() as $k => $l) $names[$k] = isset($l['n']) ? (string) $l['n'] : (string) $k;
+  return array('root' => dirname((string) $_SERVER['DOCUMENT_ROOT']), 'db' => db(), 'names' => $names,
+    'city' => isset($CFG['citySchools']) && is_array($CFG['citySchools']) ? $CFG['citySchools'] : array(),
+    'secret' => secret(), 'gh' => 'offsite_gh', 'ops' => ops_repo(), 'site' => (string) $CFG['siteUrl']);
+}
+// The hourly work: read the runs' answers, see which worked items have gone live, answer their senders, then write the
+// queue if it changed. At most once in 50 minutes, whoever asks (the tests can ask for it now).
+function queue_run(bool $force = false): array {
+  if (ops_repo() === '') return array('state' => 'off');
+  if (!$force && (int) meta_get('queue_clock') > now() - 50 * 60) return array('state' => 'waiting');
+  meta_set('queue_clock', (string) now());
+  if (offsite_token() === '' || !function_exists('curl_init')) { meta_set('queue_why', 'no key'); return array('state' => 'failed', 'why' => 'no key'); }
+  @set_time_limit(120);
+  $ctx = queue_ctx();
+  $read = queue_outcomes($ctx);   // first, so what a run settled leaves the queue in this same write
+  $merged = queue_merges();
+  $told = queue_tell();
+  $w = queue_write($ctx);
+  return $w + array('outcomes' => $read, 'merged' => $merged, 'told' => $told);
+}
+// New or changed files in outcomes/, each read once (a file whose contents change is read again; an item already
+// answered is never answered twice).
+function queue_outcomes(array $ctx): array {
+  $res = array('files' => 0, 'items' => 0, 'skipped' => 0);
+  list($code, $list) = offsite_gh('GET', '/repos/' . $ctx['ops'] . '/contents/outcomes', null);
+  if ($code === 404) return $res;   // no run has answered yet
+  if ($code !== 200 || !is_array($list)) return $res + array('why' => 'github ' . $code);
+  $known = array(); foreach (q('SELECT file, sha FROM queue_runs') as $r) $known[$r['file']] = $r['sha'];
+  $n = 0;
+  foreach ($list as $f) {
+    $name = is_array($f) && isset($f['name']) ? (string) $f['name'] : ''; $sha = is_array($f) && isset($f['sha']) ? (string) $f['sha'] : '';
+    if (!is_array($f) || !isset($f['type']) || $f['type'] !== 'file' || !preg_match('/^[A-Za-z0-9._-]{1,120}\.json$/', $name)) continue;
+    if (isset($known[$name]) && $known[$name] === $sha) continue;
+    if ($n++ >= QUEUE_FILES_A_RUN) break;   // the rest next hour
+    list($c, $r) = offsite_gh('GET', '/repos/' . $ctx['ops'] . '/contents/outcomes/' . rawurlencode($name), null);
+    if ($c !== 200 || !is_array($r) || !isset($r['content'])) continue;   // tried again next hour
+    $doc = json_decode((string) base64_decode(str_replace("\n", '', (string) $r['content'])), true);
+    $applied = 0; $tokens = 0;
+    if (is_array($doc)) {
+      list($applied, $skipped) = queue_apply($doc);
+      $res['items'] += $applied; $res['skipped'] += $skipped;
+      $tokens = isset($doc['tokens']) && is_int($doc['tokens']) && $doc['tokens'] > 0 ? min($doc['tokens'], 1000000000) : 0;
+    }
+    q('INSERT INTO queue_runs (file, sha, read, items, tokens) VALUES (?, ?, ?, ?, ?) ON CONFLICT(file) DO UPDATE SET sha = excluded.sha, read = excluded.read, items = excluded.items, tokens = excluded.tokens', array($name, $sha, now(), $applied, $tokens));
+    if ($tokens && !isset($known[$name])) { try { q('INSERT INTO tally (k, day, n) VALUES (?, ?, ?) ON CONFLICT(k, day) DO UPDATE SET n = n + excluded.n', array('run_tokens', today_ny(), $tokens)); } catch (Exception $e) { /* counting never gets in the way */ } }
+    $res['files']++;
+  }
+  return $res;
+}
+// One outcome file. Only these are read from it: the run's name, a pull request number, the tokens it used, and for
+// each item its id, outcome, listing, pull request and reason, each checked against a fixed form. Anything else in
+// the file, words included, is ignored. Gives array(items settled, items skipped).
+function queue_apply(array $doc): array {
+  $applied = 0; $skipped = 0;
+  $run = isset($doc['run']) && is_string($doc['run']) && preg_match('/^[A-Za-z0-9._-]{1,80}$/', $doc['run']) ? $doc['run'] : '';
+  $prAll = isset($doc['pr']) && is_int($doc['pr']) && $doc['pr'] > 0 ? $doc['pr'] : 0;
+  $items = isset($doc['items']) && is_array($doc['items']) ? array_slice($doc['items'], 0, 300) : array();
+  foreach ($items as $x) {
+    $id = is_array($x) && isset($x['item']) && is_string($x['item']) ? $x['item'] : '';
+    $out = is_array($x) && isset($x['outcome']) && is_string($x['outcome']) ? $x['outcome'] : '';
+    if (!preg_match(QUEUE_ID, $id) || !in_array($out, QUEUE_OUTCOMES, true)) { $skipped++; continue; }
+    $was = row('SELECT state, told FROM queue_items WHERE id = ?', array($id));
+    if (!$was || (int) $was['told'] > 0 || in_array($was['state'], array('closed', 'dropped'), true)) { $skipped++; continue; }   // unknown, already answered, or settled
+    $listing = isset($x['listing']) && is_string($x['listing']) && preg_match('/^[pc]:[a-z0-9-]{1,80}$/', $x['listing']) ? $x['listing'] : '';
+    $pr = isset($x['pr']) && is_int($x['pr']) && $x['pr'] > 0 ? $x['pr'] : $prAll;
+    $reason = isset($x['reason']) && is_string($x['reason']) && in_array($x['reason'], QUEUE_REASONS, true) ? $x['reason'] : '';
+    // failed: back in the queue for the next run. published or held: waits for its pull request to be merged (or for
+    // the owner, with none). The rest are settled now and answered.
+    $state = $out === 'failed' ? 'open' : (($out === 'published' || $out === 'held') ? ($pr ? 'waiting' : 'held') : 'closed');
+    q("UPDATE queue_items SET state = ?, outcome = ?, reason = ?, run = ?, pr = ?, decided = ?, listing = CASE WHEN ? != '' THEN ? ELSE listing END WHERE id = ?", array($state, $out, $reason, $run, $pr, now(), $listing, $listing, $id));
+    if ($state === 'closed') queue_settle_proposal($id, $out);
+    $applied++;
+  }
+  return array($applied, $skipped);
+}
+// A manager's proposed change that a run settled is settled on /edit/claims/ too, so it isn't worked twice.
+function queue_settle_proposal(string $id, string $outcome): void {
+  if ($id === '' || $id[0] !== 'e') return;
+  $to = $outcome === 'declined' ? 'declined' : (in_array($outcome, array('published', 'duplicate', 'no-change'), true) ? 'done' : '');
+  if ($to !== '') q("UPDATE edits SET status = ?, decided = ? WHERE id = ? AND status = 'new'", array($to, now(), (int) substr($id, 1)));
+}
+// Worked items whose pull request has been merged (and had time to publish) are published; a pull request closed
+// without a merge leaves its items held for the owner.
+function queue_merges(): array {
+  global $CFG;
+  $res = array('pulls' => 0, 'published' => 0, 'held' => 0);
+  $repo = isset($CFG['repo']) ? (string) $CFG['repo'] : '';
+  if ($repo === '') return $res;
+  foreach (q("SELECT pr, MIN(decided) AS d FROM queue_items WHERE state = 'waiting' AND pr > 0 GROUP BY pr ORDER BY d LIMIT " . QUEUE_PULLS_A_RUN)->fetchAll() as $p) {
+    $pr = (int) $p['pr'];
+    list($c, $r) = offsite_gh('GET', '/repos/' . $repo . '/pulls/' . $pr, null);
+    $res['pulls']++;
+    if ($c !== 200 || !is_array($r)) continue;
+    $at = isset($r['merged_at']) && is_string($r['merged_at']) ? strtotime($r['merged_at']) : false;
+    if (!empty($r['merged']) && $at !== false && $at < now() - QUEUE_PUBLISH_WAIT) {
+      foreach (q("SELECT id FROM queue_items WHERE state = 'waiting' AND pr = ?", array($pr))->fetchAll() as $x) {
+        q("UPDATE queue_items SET state = 'closed', outcome = 'published', decided = ? WHERE id = ?", array(now(), $x['id']));
+        queue_settle_proposal((string) $x['id'], 'published');
+        $res['published']++;
+      }
+    } elseif (isset($r['state']) && $r['state'] === 'closed' && empty($r['merged'])) {
+      $res['held'] += q("UPDATE queue_items SET state = 'held', reason = 'pr-closed', decided = ? WHERE state = 'waiting' AND pr = ?", array(now(), $pr))->rowCount();
+    }
+  }
+  return $res;
+}
+// One email to each sender whose item is settled, sent once. A send that fails is tried again on the next two runs.
+function queue_tell(): array {
+  global $CFG;
+  $res = array('sent' => 0, 'failed' => 0, 'off' => 0);
+  $off = isset($CFG['queueReplies']) && $CFG['queueReplies'] === false;
+  foreach (q("SELECT * FROM queue_items WHERE state = 'closed' AND told = 0 AND email != '' AND outcome IN ('published', 'declined', 'duplicate', 'needs-info', 'no-change') ORDER BY decided LIMIT " . QUEUE_TELL_A_RUN)->fetchAll() as $x) {
+    if ($off) { q('UPDATE queue_items SET told = -2 WHERE id = ?', array($x['id'])); $res['off']++; continue; }
+    if (queue_reply($x)) { q('UPDATE queue_items SET told = ? WHERE id = ?', array(now(), $x['id'])); $res['sent']++; bump('queue_reply'); }
+    else { q('UPDATE queue_items SET tries = tries + 1, told = CASE WHEN tries + 1 >= 3 THEN -1 ELSE 0 END WHERE id = ?', array($x['id'])); $res['failed']++; }
+  }
+  return $res;
+}
+// The answer to one sender, in the site's own words. Only the outcome, the reason, the listing and the name the sender
+// typed (sent back to them alone) shape it.
+function queue_reply(array $x): bool {
+  global $CFG;
+  $l = listings();
+  $key = (string) $x['listing'];
+  $known = $key !== '' && isset($l[$key]);
+  $v = array('site' => $CFG['siteName']);
+  /*EMAIL The last line of every answer to a suggestion or a proposed change*/
+  $why = t(__T("You get this because you sent something to {site}. It’s the only email about it."), $v);
+  $what = $known ? listing_plain($key) : queue_one((string) $x['what'], 80);
+  $v['what'] = $what !== '' ? $what : t(__T("what you sent"), $v);
+  $listingUrl = preg_match('/^[pc]:[a-z0-9-]{1,80}$/', $key) ? listing_url($key) : $CFG['siteUrl'] . '/';
+  // "Send it again" opens the form the way the site's own buttons do: on the listing for an update, as a camp for a camp.
+  $again = $x['kind'] === 'proposal' ? $CFG['siteUrl'] . '/managers/' : $CFG['siteUrl'] . '/suggest/' . ($x['kind'] === 'update' && $known ? '?kind=correction&fix=' . rawurlencode($key) : ($x['kind'] === 'camp' ? '?kind=camp' : ''));
+  $out = $x['outcome'] === 'no-change' ? 'duplicate' : (string) $x['outcome'];
+  $lines = array(); $button = ''; $url = '';
+  if ($out === 'published') {
+    /*EMAIL It’s on the site (to whoever sent a suggestion or a proposed change)*/
+    $subject = t(__T("It’s on {site}: {what}"), $v);
+    $head = t(__T("It’s on the site"), $v);
+    $lines[] = t(__T("Thanks for sending {what}. We checked it against the program’s own website, and it’s on {site} now."), $v);
+    $lines[] = t(__T("Save your school on the site to hear about new programs and days off there, or follow the listing to get its sign-up dates."), $v);
+    $button = t(__T("See the listing"), $v); $url = $listingUrl;
+  } elseif ($out === 'duplicate') {
+    /*EMAIL It’s already listed (to whoever sent a suggestion or a proposed change)*/
+    $subject = t(__T("Already on {site}: {what}"), $v);
+    $head = t(__T("It’s already listed"), $v);
+    $lines[] = t(__T("Thanks for sending {what}. It’s already on {site}, as the program’s own website has it."), $v);
+    $button = t(__T("See the listing"), $v); $url = $listingUrl;
+  } elseif ($out === 'needs-info') {
+    /*EMAIL We couldn’t confirm it yet (to whoever sent a suggestion or a proposed change)*/
+    $subject = t(__T("About what you sent to {site}: {what}"), $v);
+    $head = t(__T("We couldn’t confirm this yet"), $v);
+    $lines[] = t(__T("Thanks for sending {what}. We couldn’t confirm it on the program’s own website yet, so it isn’t on {site}."), $v);
+    if ($x['reason'] === 'need-website') $lines[] = t(__T("What would help: the address of the program’s own website."), $v);
+    elseif ($x['reason'] === 'need-school') $lines[] = t(__T("What would help: which school the program serves or picks up from, as its own website says."), $v);
+    else $lines[] = t(__T("What would help: a link to the page on the program’s own website that shows it."), $v);
+    $lines[] = t(__T("Reply to this email with it, or send it again."), $v);
+    $button = t(__T("Send it again"), $v); $url = $again;
+  } else {
+    /*EMAIL We can’t list this one (to whoever sent a suggestion or a proposed change)*/
+    $subject = t(__T("About what you sent to {site}: {what}"), $v);
+    $head = t(__T("We can’t list this one"), $v);
+    $lines[] = t(__T("Thanks for sending {what}. We can’t put it on {site}."), $v);
+    if ($x['reason'] === 'not-a-program') $lines[] = t(__T("We list programs for children in kindergarten to 8th grade, and this isn’t one."), $v);
+    elseif ($x['reason'] === 'outside') $lines[] = t(__T("We list programs that serve Philadelphia schools and families, and this one is outside the city."), $v);
+    elseif ($x['reason'] === 'no-own-site') $lines[] = t(__T("We list a program only when its own website shows what we publish, and we couldn’t find that."), $v);
+    elseif ($x['reason'] === 'closed') $lines[] = t(__T("The program’s own website says it isn’t running."), $v);
+    else $lines[] = t(__T("It doesn’t meet the rules for a listing on {site}."), $v);
+    $lines[] = t(__T("If that looks wrong, reply to this email and tell us where the program’s own website shows it."), $v);
+  }
+  $lines = array_values(array_filter($lines, function ($s) { return $s !== ''; }));
+  $text = ($head !== '' ? $head . "\n\n" : '') . implode("\n\n", $lines) . ($button !== '' ? "\n\n" . $button . ': ' . $url : '') . "\n\n" . $why;
+  return send_mail((string) $x['email'], $subject !== '' ? $subject : (string) $CFG['siteName'], $text, email_html($head, paras($lines), $button, $url, $why));
 }
 // Signs this browser in as the account with this address, making the account if it is new.
 function sign_in(string $email, string $via, string $next, string $first = '', string $last = ''): void {
@@ -2588,12 +2816,18 @@ switch ($method . ' ' . $action) {
     // New-account notes for the owner don't wait for the morning: every run sends those due (each account once), so
     // they arrive an hour or so after the account, not all together the next morning the job happens to run in.
     $told = 0;
+    if ($test && in_array(str($in, 'owner_notes', 10), array('each', 'digest'), true)) $GLOBALS['PAS_OWNER_NOTES'] = str($in, 'owner_notes', 10);
     if (!$dry) {
       $told = too_many('catchup:' . who(), 30, 3600) ? 0 : signup_catchup($test && isset($in['told_age']) ? (int) $in['told_age'] : 3600);
       note('catchup:' . who());
     }
-    // The copy off the host: once a day, tried at most hourly whoever asks (offsite_run keeps its own clock).
-    $off = $dry ? array() : array('offsite' => offsite_run($test && !empty($in['offsite_force'])));
+    // The private queue (written when it changes, the runs' answers read, senders told) and the morning's sign-up
+    // digest, both on every run with their own clocks; then the copy off the host: once a day, tried at most hourly
+    // whoever asks (offsite_run keeps its own clock). The queue goes first, so a slow copy can't starve it.
+    $digestDay = $test && preg_match('/^\d{4}-\d{2}-\d{2}$/', str($in, 'digest_today', 10)) ? str($in, 'digest_today', 10) : today_ny();
+    $off = $dry ? array() : array('queue' => queue_run($test && !empty($in['queue_force'])),
+      'digest' => signup_digest($digestDay, (int) (new DateTime('now', new DateTimeZone('America/New_York')))->format('G'), $test && !empty($in['digest_force'])),
+      'offsite' => offsite_run($test && !empty($in['offsite_force'])));
     if (!$dry && !$open) out(array('ok' => true, 'ran' => false, 'why' => 'outside the morning', 'told' => $told) + $off);
     if (!$dry) {
       if (!($test && !empty($in['any'])) && (int) meta_get('push_ran') > now() - 240) out(array('ok' => true, 'ran' => false, 'why' => 'just ran', 'told' => $told) + $off);

@@ -123,7 +123,9 @@ These are the only parts of the site that store anything about a child on the se
   who). A manager can propose changes to a listing they hold; nothing changes on the site. Each claim and each
   proposed change is emailed to the contact address and listed on `/edit/claims/` (behind the edit sign-in), where
   the owner approves or declines a waiting claim, takes a claim away, and marks a proposed change published or
-  declined; the manager is emailed each time. To apply a change, edit the listing data as usual (or paste it to
+  declined; the manager is emailed each time. A proposed change also goes to the research runs through the private
+  queue (see "The private queue" in `docs/listings.md`); when a run settles it, it is marked there and the manager
+  gets that answer instead. To apply a change, edit the listing data as usual (or paste it to
   Claude), then mark it published. One account can hold 12 claims and one listing 5 claimants.
   `/managers/` opens on a search of every listing, which works signed out; picking one asks for a sign-in at that
   listing's address. The home page's "Program managers" box links there, `?q=` prefills the search, and a

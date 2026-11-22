@@ -208,8 +208,8 @@ parent can ask for the school with one tap (it uses their free account, so each 
 request is emailed to `contactEmail` with the asker's email address and everyone waiting for that school so far,
 and logged in `phillyafterschool-school-requests.log` above `public_html` (date, id, name, email), so the owner
 can write to those families by hand when the school goes up; the queue page lists them per school as mailto
-links. The addresses stay in that log, the owner's inbox and the queue page: the batches the queue sends to the
-run carry counts only. Refresh `data/all-schools.json` when the
+links. The addresses stay in that log, the owner's inbox and the queue page: the private queue the research runs
+read carries counts only (`schoolsAsked` in `queue/open.json`, see "The private queue" in `docs/listings.md`). Refresh `data/all-schools.json` when the
 City updates its list (about once a year).
 
 ## Neighborhood pages
@@ -278,7 +278,9 @@ editable sentences, so an edit to one shows on both.
 
 `/suggest/` posts to `suggest/send.php`, which the build generates. It emails each suggestion to
 `contactEmail` and also appends it to `phillyafterschool-suggestions.log` in the folder above
-`public_html`, so nothing is lost if an email goes missing. It needs a host that runs PHP.
+`public_html`, so nothing is lost if an email goes missing. It needs a host that runs PHP. The hourly job reads that
+log into the private queue for the research runs, and the sender is emailed once when their suggestion is settled
+(see "The private queue" in `docs/listings.md`).
 A hidden field traps most spam bots.
 
 The form sends four kinds of thing: a program that's missing, a camp that's missing (`?kind=camp`, with a
