@@ -1911,9 +1911,11 @@ function signup_catchup(int $age = 3600): int {
 }
 // The sign-up digest: once a day, on the first hourly run after 7 in the morning, one email to the site's own address
 // with how many parent accounts were made the day before (and in the last seven days). Counts only. None on a day with
-// no new parent account. $today is a New York date; the tests choose it.
+// no new parent account. $today is a New York date; the tests choose it. With the morning summary on (owner_summary), the summary
+// carries these counts and the digest sends nothing.
 function signup_digest(string $today, int $hour, bool $force = false): array {
   if (owner_note_mode('parentSignup') !== 'digest') return array('state' => 'off');
+  if (summary_on()) return array('state' => 'in the summary');   // the morning summary counts them (owner_summary)
   if (!$force && $hour < 7) return array('state' => 'waiting');
   if (!$force && meta_get('digest_day') === $today) return array('state' => 'done');
   meta_set('digest_day', $today);
@@ -2124,6 +2126,194 @@ function queue_reply(array $x): bool {
   $text = ($head !== '' ? $head . "\n\n" : '') . implode("\n\n", $lines) . ($button !== '' ? "\n\n" . $button . ': ' . $url : '') . "\n\n" . $why;
   return send_mail((string) $x['email'], $subject !== '' ? $subject : (string) $CFG['siteName'], $text, email_html($head, paras($lines), $button, $url, $why));
 }
+// ---------- the morning summary, and the pushes that can't wait (scaling plan, Phase 3) ----------
+// One email (and one notification on the site admins' own devices) each morning, on the first push_run at or after
+// 7:30: what was published yesterday, what is waiting on the Needs-you page, new accounts, the schools families asked
+// for, the health of the runs and the site, and what it all cost this week. It takes over the sign-up digest's counts,
+// so the owner gets one email, not two. "ownerNotes": { "summary": "on" } in site.config.json turns it on. A failed
+// publish is pushed to the same devices at once, from the hourly look at GitHub. The shared code that reads the runs'
+// pull requests (src/server/autopilot.php) is pasted in here.
+/*AUTOPILOT*/
+function ap_ctx(): array {
+  global $CFG;
+  $a = isset($CFG['autopilot']) && is_array($CFG['autopilot']) ? $CFG['autopilot'] : array();
+  $list = function ($k) use ($a) { return isset($a[$k]) && is_array($a[$k]) ? array_values(array_filter($a[$k], 'is_string')) : array(); };
+  return array('db' => db(), 'gh' => 'offsite_gh', 'repo' => isset($CFG['repo']) ? (string) $CFG['repo'] : '', 'branches' => $list('branches'), 'authors' => $list('authors'), 'allow' => $list('allow'),
+    'evidenceDir' => isset($a['evidenceDir']) && is_string($a['evidenceDir']) ? $a['evidenceDir'] : 'evidence/', 'site' => (string) $CFG['siteUrl']);
+}
+function ap_github_ready(): bool { global $CFG; return offsite_token() !== '' && function_exists('curl_init') && !empty($CFG['repo']); }
+function summary_on(): bool {
+  global $CFG;
+  if (isset($GLOBALS['PAS_SUMMARY']) && is_string($GLOBALS['PAS_SUMMARY'])) return $GLOBALS['PAS_SUMMARY'] === 'on';   // the tests only
+  return isset($CFG['ownerNotes']['summary']) && $CFG['ownerNotes']['summary'] === 'on';
+}
+// One notification on each device of each site admin's account (an address in "admins" with notifications turned on).
+// It opens a page on this site, nowhere else. Gives how many devices took it.
+function owner_push(string $title, string $body, string $url, string $tag): int {
+  global $CFG;
+  $admins = isset($CFG['admins']) && is_array($CFG['admins']) ? array_values(array_filter($CFG['admins'], 'is_string')) : array();
+  if (!$admins || !vapid()) return 0;
+  $n = 0;
+  try {
+    foreach (q('SELECT id FROM users WHERE email IN (' . implode(',', array_fill(0, count($admins), '?')) . ')', $admins)->fetchAll() as $u)
+      $n += push_to_user((int) $u['id'], array('title' => mb_substr($title, 0, 90, 'UTF-8'), 'body' => mb_substr($body, 0, 300, 'UTF-8'), 'url' => $url, 'tag' => $tag), 12 * 3600);
+  } catch (Exception $e) { return $n; }
+  return $n;
+}
+// The last finished publish (publish.yml on main), looked at on the hourly run, at most every nine minutes. A failed
+// one is pushed to the owner once; the Needs-you page and the summary say how the last one went.
+function publish_watch(bool $force = false): array {
+  global $CFG;
+  if (!ap_github_ready()) return array('state' => 'off');
+  if (!$force && (int) meta_get('publish_looked') > now() - 9 * 60) return array('state' => 'waiting');
+  meta_set('publish_looked', (string) now());
+  list($c, $r) = offsite_gh('GET', '/repos/' . $CFG['repo'] . '/actions/workflows/publish.yml/runs?branch=main&per_page=5', null);
+  if ($c !== 200 || !is_array($r) || !isset($r['workflow_runs']) || !is_array($r['workflow_runs'])) return array('state' => 'failed', 'why' => 'github ' . $c);
+  foreach ($r['workflow_runs'] as $run) {
+    if (!is_array($run) || (isset($run['status']) ? (string) $run['status'] : '') !== 'completed') continue;
+    $id = isset($run['id']) ? (string) $run['id'] : '';
+    $con = isset($run['conclusion']) ? (string) $run['conclusion'] : '';
+    $sha = isset($run['head_sha']) ? substr((string) $run['head_sha'], 0, 7) : '';
+    $url = isset($run['html_url']) && is_string($run['html_url']) && strpos($run['html_url'], 'https://github.com/') === 0 ? $run['html_url'] : '';
+    meta_set('publish_last', (string) json_encode(array('id' => $id, 'conclusion' => $con, 'at' => isset($run['updated_at']) ? (string) $run['updated_at'] : '', 'url' => $url, 'sha' => $sha)));
+    if ($con === 'failure' && $id !== '' && meta_get('publish_told') !== $id) {
+      meta_set('publish_told', $id);
+      $n = owner_push('The site didn’t publish', 'The build or a test stopped the publish' . ($sha !== '' ? ' of ' . $sha : '') . '. The live site is unchanged. The Needs-you page links to why.', $CFG['siteUrl'] . '/edit/needs/', 'publish-failed');
+      return array('state' => 'told', 'pushed' => $n);
+    }
+    return array('state' => $con === 'success' ? 'ok' : ($con !== '' ? $con : 'unknown'));
+  }
+  return array('state' => 'none');
+}
+function sum_plural(int $n, string $one, string $many = ''): string { return $n . ' ' . ($n === 1 ? $one : ($many !== '' ? $many : $one . 's')); }
+function sum_when(int $t): string { if ($t <= 0) return 'never'; $d = new DateTime('@' . $t); $d->setTimezone(new DateTimeZone('America/New_York')); return $d->format('D M j, g:i a'); }
+// The morning summary. $today is a New York date and $clock its time ("07:30"); the tests choose both, and force it.
+function owner_summary(string $today, string $clock, bool $force = false): array {
+  global $CFG;
+  if (!summary_on()) return array('state' => 'off');
+  if (!$force && $clock < '07:30') return array('state' => 'waiting');
+  if (!$force && meta_get('summary_day') === $today) return array('state' => 'done');
+  if (empty($CFG['from'])) return array('state' => 'off');
+  meta_set('summary_day', $today);
+  @set_time_limit(120);
+  $tz = new DateTimeZone('America/New_York');
+  $end = (new DateTime($today . ' 00:00:00', $tz))->getTimestamp();
+  $yday = (new DateTime($today . ' 00:00:00', $tz))->modify('-1 day');
+  $start = $yday->getTimestamp(); $ydayIso = $yday->format('Y-m-d');
+  $week = (new DateTime($today . ' 00:00:00', $tz))->modify('-7 days'); $weekStart = $week->getTimestamp(); $weekIso = $week->format('Y-m-d');
+  $site = (string) $CFG['siteUrl']; $repo = isset($CFG['repo']) ? (string) $CFG['repo'] : '';
+  $ctx = ap_ctx(); $db = db();
+  $gh = ap_github_ready();
+  $sync = $gh ? ap_sync($ctx, true) : array('state' => 'off');
+  $mode = $gh ? ap_mode($ctx, true)['mode'] : '';
+  $v = array('site' => $CFG['siteName'], 'day' => $yday->format('l, F j'));
+  $num = function (string $sql, array $args = array()): int { try { return (int) val($sql, $args); } catch (Exception $e) { return 0; } };
+  $rows = function (string $sql, array $args = array()): array { try { return q($sql, $args)->fetchAll(); } catch (Exception $e) { return array(); } };
+  $sections = array();   // each: array(heading, lines), a line being array(text, link or '')
+  /*EMAIL The morning summary (to the site's own address, about 7:30 each morning)*/
+
+  // Published yesterday.
+  $lines = array();
+  $KINDS = array('update' => array('update'), 'new-listing' => array('new listing'), 'new-school' => array('new school page'), 'link' => array('link'), 'date' => array('date'), 'note' => array('note'), 'told' => array('word from a program', 'words from programs'), 'review' => array('review'), 'news' => array('What’s new item', 'What’s new items'));
+  $published = 0;
+  foreach ($rows("SELECT * FROM ap_prs WHERE state = 'merged' AND merged >= ? AND merged < ? ORDER BY merged", array($start, $end)) as $p) {
+    $published++;
+    $what = array();
+    foreach ($rows('SELECT kind, COUNT(*) AS n FROM ap_changes WHERE pr = ? GROUP BY kind ORDER BY n DESC', array((int) $p['pr'])) as $k) { $w = isset($KINDS[$k['kind']]) ? $KINDS[$k['kind']] : array('change'); $what[] = sum_plural((int) $k['n'], $w[0], isset($w[1]) ? $w[1] : ''); }
+    if (!$what && (int) $p['changes'] > 0) $what[] = sum_plural((int) $p['changes'], 'change');
+    $vv = $v + array('pr' => (int) $p['pr'], 'title' => (string) $p['title'], 'what' => $what ? implode(', ', $what) : t(__T("no data changes"), $v));
+    $lines[] = array($p['merged_by'] === AP_BOT ? t(__T("#{pr} {title}, merged by the autopilot: {what}."), $vv) : t(__T("#{pr} {title}, merged by hand: {what}."), $vv), $repo !== '' ? 'https://github.com/' . $repo . '/pull/' . (int) $p['pr'] : '');
+  }
+  $answers = $num("SELECT COALESCE(SUM(n), 0) FROM tally WHERE k = 'queue_reply' AND day = ?", array($ydayIso));
+  if ($answers) $lines[] = array(t(__T("{n} answers emailed to people who sent something in."), $v + array('n' => $answers)), '');
+  $content = $num("SELECT COUNT(*) FROM photos WHERE status = 'ok' AND decided >= ? AND decided < ?", array($start, $end)) + $num("SELECT COUNT(*) FROM extras WHERE status = 'ok' AND decided >= ? AND decided < ?", array($start, $end));
+  if ($content) $lines[] = array(t(__T("{n} photos, words or offer lines from program managers went on their listings."), $v + array('n' => $content)), '');
+  foreach ($rows('SELECT pr, undo_pr FROM ap_prs WHERE undone >= ? AND undone < ?', array($start, $end)) as $u) $lines[] = array(t(__T("#{pr} was undone, by #{undo}."), $v + array('pr' => (int) $u['pr'], 'undo' => (int) $u['undo_pr'])), '');
+  if (!$lines) $lines[] = array(t(__T("Nothing was published yesterday."), $v), '');
+  $sections[] = array(t(__T("Published yesterday"), $v), $lines);
+
+  // Waiting for you.
+  $prs = ap_waiting($db, $mode); $held = needs_held($db);
+  $waiting = needs_count($held, $prs);
+  $parts = array();
+  foreach (array(array(count($prs), 'run pull request'), array(count($held['claims']), 'claim'), array(count($held['photos']), 'photo'), array(count($held['extras']), 'manager’s words or offer', 'managers’ words or offers'), array(count($held['premium']), 'premium sign-up'), array(count($held['queue']), 'item a run held', 'items a run held')) as $x) if ($x[0]) $parts[] = sum_plural($x[0], $x[1], isset($x[2]) ? $x[2] : '');
+  $lines = array();
+  $lines[] = array($waiting ? t(__T("{n} things wait for your say: {list}."), $v + array('n' => $waiting, 'list' => implode(', ', $parts))) : t(__T("Nothing is waiting for you."), $v), $site . '/edit/needs/');
+  if ($mode !== '') $lines[] = array(t(__T("The autopilot is {mode}."), $v + array('mode' => $mode)), '');
+  elseif ($gh) $lines[] = array(t(__T("The autopilot’s switch couldn’t be read from GitHub."), $v), '');
+  $sections[] = array(t(__T("Waiting for you"), $v), $lines);
+
+  // New accounts.
+  $isMgr = "(u.origin = 'managers' OR EXISTS (SELECT 1 FROM claims c WHERE c.user_id = u.id AND c.status != 'declined'))";
+  $all = $num('SELECT COUNT(*) FROM users u WHERE u.created >= ? AND u.created < ?', array($start, $end));
+  $mgrs = $num('SELECT COUNT(*) FROM users u WHERE u.created >= ? AND u.created < ? AND ' . $isMgr, array($start, $end));
+  $weekParents = $num('SELECT COUNT(*) FROM users u WHERE u.created >= ? AND u.created < ? AND NOT ' . $isMgr, array($weekStart, $end));
+  $lines = array(array(t(__T("{parents} parents and {managers} program managers made accounts yesterday, and {week} parents in the last seven days."), $v + array('parents' => $all - $mgrs, 'managers' => $mgrs, 'week' => $weekParents)), $site . '/edit/stats/'));
+  $claimed = array(); $names = listings();
+  foreach ($rows("SELECT DISTINCT listing FROM claims WHERE created >= ? AND created < ? AND status IN ('ok', 'pending')", array($start, $end)) as $c) $claimed[] = isset($names[$c['listing']]['n']) ? (string) $names[$c['listing']]['n'] : (string) $c['listing'];
+  if ($claimed) $lines[] = array(t(__T("Listings claimed: {list}."), $v + array('list' => implode(', ', $claimed))), $site . '/edit/claims/');
+  $sections[] = array(t(__T("New accounts"), $v), $lines);
+
+  // Schools asked for.
+  $lines = array();
+  try { $qc = queue_ctx(); $asks = queue_asks($qc, queue_suggestions($qc['root'])[1]); } catch (Exception $e) { $asks = array(); }
+  foreach (array_slice($asks, 0, 5) as $a) $lines[] = array(t(__T("{school}: {n}"), $v + array('school' => (string) $a['school'], 'n' => (int) $a['n'])), '');
+  if (!$lines) $lines[] = array(t(__T("No family has asked for a school yet."), $v), '');
+  $sections[] = array(t(__T("Schools asked for"), $v), $lines);
+
+  // Health.
+  $lines = array();
+  $RUNS = array('queue-' => 'The queue run', 'new-schools-' => 'Five schools a day', 'weekly-' => 'The weekly run', 'monthly-check-' => 'The monthly check');
+  foreach ($ctx['branches'] as $b) {
+    $last = $rows('SELECT pr, created FROM ap_prs WHERE substr(branch, 1, ?) = ? ORDER BY created DESC LIMIT 1', array(strlen((string) $b), (string) $b));
+    $name = isset($RUNS[$b]) ? $RUNS[$b] : $b;
+    $lines[] = array($last ? t(__T("{run}: last pull request #{pr}, {when}."), $v + array('run' => $name, 'pr' => (int) $last[0]['pr'], 'when' => sum_when((int) $last[0]['created']))) : t(__T("{run}: no pull request seen yet."), $v + array('run' => $name)), '');
+  }
+  $answered = $num('SELECT COALESCE(MAX(read), 0) FROM queue_runs');
+  $lines[] = array(t(__T("The last answer from a run to the queue: {when}."), $v + array('when' => sum_when($answered))), '');
+  $beat = (int) meta_get('mail_beat');
+  $lines[] = array($beat > 0 ? t(__T("The mailbox script last checked in {when}."), $v + array('when' => sum_when($beat))) : t(__T("The mailbox script isn’t set up yet."), $v), '');
+  if ($gh) {
+    list($c, $issues) = offsite_gh('GET', '/repos/' . $repo . '/issues?state=open&per_page=30', null);
+    $failing = null;
+    if ($c === 200 && is_array($issues)) foreach ($issues as $i) if (is_array($i) && isset($i['title']) && strpos((string) $i['title'], 'Site check:') === 0) $failing = $i;
+    $lines[] = $c !== 200 ? array(t(__T("The hourly site check couldn’t be read from GitHub."), $v), '') : ($failing ? array(t(__T("The hourly site check is failing: issue #{n} says what."), $v + array('n' => (int) $failing['number'])), 'https://github.com/' . $repo . '/issues/' . (int) $failing['number']) : array(t(__T("The hourly site check is passing."), $v), ''));
+  }
+  $pub = json_decode(meta_get('publish_last'), true);
+  if (is_array($pub) && isset($pub['conclusion'])) $lines[] = array($pub['conclusion'] === 'success' ? t(__T("The last publish went through, {when}."), $v + array('when' => sum_when(ap_time($pub['at'])))) : t(__T("The last publish failed, {when}: the live site didn’t change."), $v + array('when' => sum_when(ap_time($pub['at'])))), $pub['conclusion'] === 'success' ? '' : (string) $pub['url']);
+  if ($sync['state'] === 'failed') $lines[] = array(t(__T("GitHub couldn’t be read for this summary ({why}), so the pull requests above may be out of date."), $v + array('why' => isset($sync['why']) ? (string) $sync['why'] : '')), '');
+  $off = offsite_state();
+  if ($off['on']) $lines[] = array($off['ok'] ? t(__T("The copy of the accounts database off the host: {day}, checked."), $v + array('day' => (string) $off['day'])) : t(__T("The copy of the accounts database off the host is failing ({why})."), $v + array('why' => (string) $off['why'])), '');
+  $sections[] = array(t(__T("Health"), $v), $lines);
+
+  // Cost this week.
+  $files = $num('SELECT COUNT(*) FROM queue_runs WHERE read >= ?', array($weekStart));
+  $opened = $num('SELECT COUNT(*) FROM ap_prs WHERE created >= ?', array($weekStart));
+  $tokens = $num("SELECT COALESCE(SUM(n), 0) FROM tally WHERE k = 'run_tokens' AND day >= ? AND day < ?", array($weekIso, $today));
+  $mails = pas_mail_week();
+  $lines = array(array(t(__T("{prs} run pull requests and {files} answers to the queue, {tokens} model tokens the runs reported, {emails} emails sent through Postmark."), $v + array('prs' => $opened, 'files' => $files, 'tokens' => number_format($tokens), 'emails' => $mails < 0 ? '?' : number_format($mails))), ''),
+    array(t(__T("Klaviyo’s profile count can’t be read from the site: it’s on Klaviyo’s billing page."), $v), ''));
+  $sections[] = array(t(__T("Cost this week"), $v), $lines);
+
+  $subject = t(__T("{site} this morning: {n} waiting for you"), $v + array('n' => $waiting));
+  $head = t(__T("Good morning"), $v);
+  $button = t(__T("Open the Needs-you page"), $v);
+  $why = t(__T("You get this once a day because you run {site}."), $v);
+  $text = $head . "\n\n"; $html = '';
+  $e = function ($s) { return htmlspecialchars((string) $s, ENT_QUOTES, 'UTF-8'); };
+  foreach ($sections as $sec) {
+    $lines = array_values(array_filter($sec[1], function ($l) { return $l[0] !== ''; }));
+    if ($sec[0] === '' || !$lines) continue;
+    $text .= $sec[0] . "\n"; $html .= '<p style="margin:18px 0 6px;font-weight:bold">' . $e($sec[0]) . '</p><ul style="margin:0;padding-left:20px">';
+    foreach ($lines as $l) { $text .= '- ' . $l[0] . ($l[1] !== '' ? ' ' . $l[1] : '') . "\n"; $html .= '<li style="margin:0 0 6px">' . ($l[1] !== '' ? '<a href="' . $e($l[1]) . '" style="color:#0B2140">' . $e($l[0]) . '</a>' : $e($l[0])) . '</li>'; }
+    $text .= "\n"; $html .= '</ul>';
+  }
+  $text .= $button . ': ' . $site . '/edit/needs/' . "\n\n" . $why;
+  $sent = send_mail((string) $CFG['from'], $subject !== '' ? $subject : (string) $CFG['siteName'], $text, email_html($head, $html, $button, $site . '/edit/needs/', $why));
+  $pushed = owner_push($CFG['siteName'] . ': ' . ($waiting ? sum_plural($waiting, 'thing') . ' waiting' : 'nothing waiting'), 'Yesterday: ' . sum_plural($published, 'pull request') . ' published, ' . sum_plural($all, 'new account') . '. Tap for the Needs-you page.', $site . '/edit/needs/', 'summary');
+  return array('state' => $sent ? 'sent' : 'failed', 'waiting' => $waiting, 'published' => $published, 'pushed' => $pushed, 'sync' => $sync['state']);
+}
+
 // Signs this browser in as the account with this address, making the account if it is new.
 function sign_in(string $email, string $via, string $next, string $first = '', string $last = ''): void {
   $user = row('SELECT id, email, name, first, last, listed, school, grades, ages, origin, hood, phone, phone_ok FROM users WHERE email = ?', array($email));
@@ -2825,8 +3015,14 @@ switch ($method . ' ' . $action) {
     // digest, both on every run with their own clocks; then the copy off the host: once a day, tried at most hourly
     // whoever asks (offsite_run keeps its own clock). The queue goes first, so a slow copy can't starve it.
     $digestDay = $test && preg_match('/^\d{4}-\d{2}-\d{2}$/', str($in, 'digest_today', 10)) ? str($in, 'digest_today', 10) : today_ny();
+    // The morning summary (once a day, from 7:30) and the look at the last publish (a failed one is pushed to the owner
+    // at once) come after the digest. The tests ask for them by name, so other tests' calls never send one.
+    if ($test && in_array(str($in, 'summary_mode', 10), array('on', 'off'), true)) $GLOBALS['PAS_SUMMARY'] = str($in, 'summary_mode', 10);
+    $nyNow = new DateTime('now', new DateTimeZone('America/New_York'));
     $off = $dry ? array() : array('queue' => queue_run($test && !empty($in['queue_force'])),
-      'digest' => signup_digest($digestDay, (int) (new DateTime('now', new DateTimeZone('America/New_York')))->format('G'), $test && !empty($in['digest_force'])),
+      'digest' => signup_digest($digestDay, (int) $nyNow->format('G'), $test && !empty($in['digest_force'])),
+      'summary' => $test && empty($in['summary_go']) ? array('state' => 'test') : owner_summary($test && preg_match('/^\d{4}-\d{2}-\d{2}$/', str($in, 'summary_today', 10)) ? str($in, 'summary_today', 10) : today_ny(), $test && preg_match('/^\d{2}:\d{2}$/', str($in, 'summary_clock', 5)) ? str($in, 'summary_clock', 5) : $nyNow->format('H:i')),
+      'publish' => $test && empty($in['watch_go']) ? array('state' => 'test') : publish_watch($test),
       'offsite' => offsite_run($test && !empty($in['offsite_force'])));
     if (!$dry && !$open) out(array('ok' => true, 'ran' => false, 'why' => 'outside the morning', 'told' => $told) + $off);
     if (!$dry) {

@@ -296,7 +296,7 @@ confirm, or anything on the hold list below, waits for Josh.
 **Where it stands.** `data/autopilot.json` on `main` holds the switch: `off` (the gate does nothing), `shadow` (it
 comments on each run's pull request and merges nothing; Josh merges by hand) or `on` (a run's pull request with nothing
 held and the tests passed merges itself and the site publishes). It starts in `shadow`. A run's pull request can never
-change the switch: the file isn't on the gate's allowlist, so touching it holds the pull request.
+change the switch: the file isn't on the gate's allowlist, so touching it holds the pull request. The owner turns it from the Needs-you page (below).
 
 ### The evidence file
 
@@ -436,3 +436,49 @@ Phase 1 ends with the switch at `shadow`, and Josh keeps merging by hand for fiv
   reads the listing's own stored pages (its sources, pickup lists and links) and looks for the shortest stretch, 300
   characters at most, that holds every new number, or for the words a value added. It reports the share it could
   verify. The build and tests aren't repeated, since the code has moved on.
+
+### The Needs-you page, the log, Undo and the switch
+
+Everything waiting for the owner is on one page built for a phone, `/edit/needs/`, behind the same sign-in as `/edit/`
+(`src/server/edit-needs.php`, with the shared code in `src/server/autopilot.php`). It replaces reading the inbox for
+these. Approve, Decline, Undo and the switch write to GitHub with the key file `/edit/` publishes with
+(`phillyafterschool-github.key`), whose token needs **Contents** and **Pull requests**, read and write, on this
+repository; only a site admin's account sees those buttons (an editor sees the page and can decide claims, photos and
+words as on `/edit/claims/`). Without the key file the page says so and shows what the accounts database holds.
+
+- **Run pull requests.** Open ones the gate held (the label `needs-josh`), and, while the switch is `shadow` or `off`,
+  every open one, so they can be merged from a phone. Each shows the gate's reason in a sentence and its comment.
+  Only a comment by the workflow's own account (`github-actions[bot]`) with the gate's mark counts: anyone can comment
+  on a public repository, and a look-alike is ignored. **Approve** squash-merges the exact commit shown (refused if
+  the pull request moved since), with the key rather than a workflow's token, so GitHub starts `publish.yml` by
+  itself. It refuses a pull request that changes `data/autopilot.json`, or anything but the allowlisted data and its
+  evidence file: those are read and merged on GitHub. **Decline** closes it unmerged; its queue items then show as
+  held. **Open on GitHub** is the pull request.
+- **Held items from the accounts database:** claims waiting for a yes, photos, words, offers, pins and links, premium
+  sign-ups not yet premium, and queue items a run held. Their buttons post to `/edit/claims/` and `/edit/queue/`, which
+  send their emails as before and come back to this page (`back=needs`).
+- **Reviews and mail** still arrive by email; they move here with Phases 6 and 5.
+- **The shadow report,** while the switch is `shadow`: the same sums as `node scripts/gate.mjs --report`, from the
+  gate's comments, and whether the test for switching on is passed.
+- **The spot-check:** ten of the changes the autopilot merged in the last seven days, picked at random and the same
+  ten all week (a hash of the week and the change), each with **Looks right** (noted in `ap_changes.looked`) and
+  **Undo…**.
+- **The switch:** the mode, with a button for each of the other two. A button makes one commit to
+  `data/autopilot.json` on main (its `about` line kept, `[skip ci]` in the message, since nothing on the site changes).
+  Switching on before the shadow test is passed needs a box ticked. The gate reads the file from main and holds any
+  run's pull request that touches it.
+- **A failed publish** shows at the top, with the link to the run on GitHub.
+
+**The log,** `/edit/autopilot/` (`src/server/edit-autopilot.php`): every run pull request merged, newest first, by the
+autopilot or by hand, with what it changed from its evidence file at the merge (the listing, the value before and
+after, the quote and the page) and **Undo…**, which asks once more. Undo has GitHub make the revert itself (the GraphQL
+`revertPullRequest`, the same as the Revert button on a pull request) and merges that with the key, so the site
+republishes in a few minutes. A revert that clashes with a later change is refused by GitHub and nothing changes: use
+the Revert button on GitHub, which shows the clash. An entry says when an email about the change may already have
+gone out, because an email can't be recalled: senders told "it's on the site" (from `queue_items`), and, for dates,
+notes and new schools, a morning send at 8 since the merge.
+
+**Where it's kept.** The pages look at GitHub at most every five minutes ("Look again" asks now): the runs' pull
+requests changed since the last look, the gate's comment on each, who merged it, and each merged one's evidence file,
+into `ap_prs` and `ap_changes` in the accounts database. Only provider quotes are in them, as in the evidence files.
+The morning summary (`docs/emails.md`, "The morning summary") reads the same tables.

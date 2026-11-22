@@ -4512,7 +4512,8 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     } catch (Exception $e) { /* a database from before premium: nothing to do */ }
   }
-  header('Location: ./?said=' . rawurlencode($msg), true, 303);
+  // A button pressed on the Needs-you page (edit/needs/) goes back there with the message.
+  header('Location: ' . (isset($_POST['back']) && $_POST['back'] === 'needs' ? '../needs/' : './') . '?said=' . rawurlencode($msg), true, 303);
   exit;
 }
 if ($have) {
@@ -4574,19 +4575,21 @@ function groupPage() {
 // The server side: one file, copied from src/server with the few settings it needs.
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
-  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, repo: /^[\w.-]+\/[\w.-]+$/.test(cfg.repo || '') ? cfg.repo : '', backupRepo: /^[\w.-]+\/[\w.-]+$/.test(cfg.backupRepo || '') ? cfg.backupRepo : '', opsRepo: OPS_REPO, ownerNotes: OWNER_NOTES, queueReplies: cfg.queueReplies !== false, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])), acts: KIDS_ACTS.map(a => a.id), citySchools: Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`])) });
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, repo: /^[\w.-]+\/[\w.-]+$/.test(cfg.repo || '') ? cfg.repo : '', backupRepo: /^[\w.-]+\/[\w.-]+$/.test(cfg.backupRepo || '') ? cfg.backupRepo : '', opsRepo: OPS_REPO, ownerNotes: OWNER_NOTES, autopilot: AP_CONF, queueReplies: cfg.queueReplies !== false, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])), acts: KIDS_ACTS.map(a => a.id), citySchools: Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`])) });
   const src = phpCopy(fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8'));
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   if (!src.includes('/*MAILER*/')) throw new Error('src/server/groups-api.php has lost its /*MAILER*/ marker');
   if (!src.includes('/*QUEUE*/')) throw new Error('src/server/groups-api.php has lost its /*QUEUE*/ marker');
-  return src.replace('/*MAILER*/', () => mailerPhp()).replace('/*QUEUE*/', () => queuePhp()).replace(`'/*CONFIG*/'`, () => `'` + conf.replace(/\\/g, '\\\\').replace(/'/g, `\\'`) + `'`);
+  if (!src.includes('/*AUTOPILOT*/')) throw new Error('src/server/groups-api.php has lost its /*AUTOPILOT*/ marker');
+  return src.replace('/*MAILER*/', () => mailerPhp()).replace('/*QUEUE*/', () => queuePhp()).replace('/*AUTOPILOT*/', () => autopilotPhp()).replace(`'/*CONFIG*/'`, () => `'` + conf.replace(/\\/g, '\\\\').replace(/'/g, `\\'`) + `'`);
 }
 // The private queue's shared code (src/server/queue.php), pasted into the API and the queue page at their /*QUEUE*/
 // marker. The ops repository is where the queue lives (opsRepo in site.config.json); with none, the queue is off.
 const queuePhp = () => fs.readFileSync(path.join(ROOT, 'src/server/queue.php'), 'utf8');
 const OPS_REPO = /^[\w.-]+\/[\w.-]+$/.test(cfg.opsRepo || '') ? cfg.opsRepo : '';
-// Which notes to the site's own address go one at a time ("each", the default) and which go once a day ("digest").
-const OWNER_NOTES = { parentSignup: cfg.ownerNotes && cfg.ownerNotes.parentSignup === 'digest' ? 'digest' : 'each' };
+// Which notes to the site's own address go one at a time ("each", the default) and which go once a day ("digest"); and
+// whether the morning summary goes out ("summary": "on"), which then carries the sign-up digest's counts too.
+const OWNER_NOTES = { parentSignup: cfg.ownerNotes && cfg.ownerNotes.parentSignup === 'digest' ? 'digest' : 'each', summary: cfg.ownerNotes && cfg.ownerNotes.summary === 'on' ? 'on' : 'off' };
 // The wording of the emails the server sends is written in src/server/groups-api.php as __T("…"), with {words} filled
 // in at send time by its t() helper. The build turns each into a PHP string with any edit from data/copy.json applied
 // (an emptied sentence becomes ''), and registers it like a page sentence, so it can be edited at /edit/emails/.
@@ -5052,14 +5055,25 @@ function pas_mail_note($how, $result) {
   $file = dirname((string) $_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-mail.json';
   $d = json_decode((string) @file_get_contents($file), true);
   $day = gmdate('Y-m-d');
+  $week = (is_array($d) && isset($d['week']) && is_array($d['week'])) ? $d['week'] : array();
   if (!is_array($d) || !isset($d['day']) || $d['day'] !== $day) $d = array('day' => $day, 'postmark' => 0, 'host' => 0, 'failed' => 0, 'last' => (is_array($d) && isset($d['last']) && is_string($d['last'])) ? $d['last'] : '');
   if ($result === 'ok') $d[$how] = (int) (isset($d[$how]) ? $d[$how] : 0) + 1; else $d['failed'] = (int) (isset($d['failed']) ? $d['failed'] : 0) + 1;
   if ($how === 'postmark') $d['last'] = $result;
+  // Sent through Postmark, day by day for the last eight days (the morning summary's cost line).
+  if ($how === 'postmark' && $result === 'ok') $week[$day] = (int) (isset($week[$day]) ? $week[$day] : 0) + 1;
+  ksort($week); $d['week'] = array_slice($week, -8, 8, true);
   @file_put_contents($file, json_encode($d), LOCK_EX);
 }
 function pas_mail_state() {
   $d = json_decode((string) @file_get_contents(dirname((string) $_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-mail.json'), true);
   return array('via' => pas_mail_via(), 'last' => (is_array($d) && isset($d['last']) && is_string($d['last'])) ? $d['last'] : '');
+}
+// Emails sent through Postmark in the last seven days (UTC days, today included).
+function pas_mail_week() {
+  $d = json_decode((string) @file_get_contents(dirname((string) $_SERVER['DOCUMENT_ROOT']) . '/phillyafterschool-mail.json'), true);
+  $n = 0; $from = gmdate('Y-m-d', time() - 6 * 86400);
+  if (is_array($d) && isset($d['week']) && is_array($d['week'])) foreach ($d['week'] as $k => $v) if ((string) $k >= $from) $n += (int) $v;
+  return $n;
 }
 // Gives 1: sent. 0: the service won't send to this address (it bounced before, or the person marked our mail as spam),
 // so don't try another way. -1: not sent here, use the host's mail.
@@ -5094,6 +5108,7 @@ const MAILER_OFF = `// ----- sending mail: the host's own mail (Postmark is not 
 function pas_mail_via() { return 'host'; }
 function pas_mail_note($how, $result) { }
 function pas_mail_state() { return array('via' => 'host', 'last' => ''); }
+function pas_mail_week() { return -1; }
 function pas_postmark($fromName, $from, $to, $subject, $text, $html = '', $replyTo = '') { return -1; }
 `;
 const mailerPhp = () => (POSTMARK ? MAILER_ON : MAILER_OFF);
@@ -5372,7 +5387,7 @@ ${page}`;
 // The site's own emails, each rendered once with sample values so their sentences can be edited like a page's.
 // Sentences come from __T("…") in src/server/groups-api.php (see phpCopy); {words} show the sample here and are
 // filled in for real when an email is sent.
-const EMAIL_SAMPLE = { site: cfg.siteName, code: '123 456', minutes: '20', name: 'Sam Rivera', from: 'Sam Rivera (sam@example.com)', first: 'Sam', email: 'you@example.com', contact: cfg.contactEmail || 'contact@example.com', times: '120 times', before: '96', address: 'you@example.com', newAddress: 'new@example.com', group: 'Tuesday crew', listing: 'Maple Street Arts Club', program: 'Maple Street Arts Club', count: '3', n: '3', question: 'Is the Thursday clinic still 3:30 to 5:30?', days: '7', numbers: 'Opened 120 times, 14 clicks to your sign-up page, on 9 plans.', todo: 'Mark whether there’s space.', more: '1', school: 'Nebinger', programs: '3 programs are', what: 'Maple Street Arts Club' };
+const EMAIL_SAMPLE = { site: cfg.siteName, code: '123 456', minutes: '20', name: 'Sam Rivera', from: 'Sam Rivera (sam@example.com)', first: 'Sam', email: 'you@example.com', contact: cfg.contactEmail || 'contact@example.com', times: '120 times', before: '96', address: 'you@example.com', newAddress: 'new@example.com', group: 'Tuesday crew', listing: 'Maple Street Arts Club', program: 'Maple Street Arts Club', count: '3', n: '3', question: 'Is the Thursday clinic still 3:30 to 5:30?', days: '7', numbers: 'Opened 120 times, 14 clicks to your sign-up page, on 9 plans.', todo: 'Mark whether there’s space.', more: '1', school: 'Nebinger', programs: '3 programs are', what: 'Maple Street Arts Club', pr: '41', title: 'Weekly queue, 30 Nov', undo: '44', list: '2 run pull requests, 1 claim', mode: 'shadow', parents: '4', managers: '1', week: '19', run: 'Five schools a day', when: 'Mon Nov 30, 6:12 am', day: 'Monday, November 30', why: 'github 502', prs: '9', files: '12', tokens: '1,840,000', emails: '212' };
 function editEmailsPage() {
   const hero = `    <h1>The site’s emails</h1>
     <p class="lede">Every email the site sends itself, with made-up names and numbers in place of the real ones. Turn on editing at <a href="../">the edit page</a>, then click a sentence here and type; words in curly braces are filled in when an email goes out.</p>`;
@@ -5405,7 +5420,7 @@ function editPage() {
     <p id="edit-state-text">Turn it on and a bar appears at the bottom of every page.</p>
     <div class="actions"><button type="button" class="btn primary big needs-js" id="edit-start">Start editing</button><button type="button" class="btn needs-js" id="edit-stop" hidden>Stop editing</button></div>
     <noscript><p>Editing needs JavaScript turned on.</p></noscript>
-  </div>${GATED ? `\n  <?php if (edit_admin() !== '') { ?><p class="hint" id="edit-admin">You’re here through your account, <?php echo htmlspecialchars(edit_admin(), ENT_QUOTES, 'UTF-8'); ?>, which is a site admin. <a href="../account/#sign-out">Sign out of your account</a> to close these pages. Anyone who can read that address’s inbox can sign in as you, so keep 2-step verification on for it.</p><?php } elseif (edit_editor() !== null) { ?><p class="hint" id="edit-editor">You’re here through your account, <?php echo htmlspecialchars(edit_editor()['email'], ENT_QUOTES, 'UTF-8'); ?>, which is on the editors list as <?php echo htmlspecialchars(edit_editor()['name'], ENT_QUOTES, 'UTF-8'); ?>. <a href="../account/#sign-out">Sign out of your account</a> to close these pages.</p><?php } else { ?><p class="hint">You’re signed in on this device for 30 days. <a href="?out=1">Sign out</a></p><?php } ?>` : ''}${GATED && GROUPS ? '\n  <p><a class="btn" href="stats/">Site numbers: accounts, shared weeks and groups</a> <a class="btn" href="claims/">Claims and proposed changes</a></p>' : ''}
+  </div>${GATED ? `\n  <?php if (edit_admin() !== '') { ?><p class="hint" id="edit-admin">You’re here through your account, <?php echo htmlspecialchars(edit_admin(), ENT_QUOTES, 'UTF-8'); ?>, which is a site admin. <a href="../account/#sign-out">Sign out of your account</a> to close these pages. Anyone who can read that address’s inbox can sign in as you, so keep 2-step verification on for it.</p><?php } elseif (edit_editor() !== null) { ?><p class="hint" id="edit-editor">You’re here through your account, <?php echo htmlspecialchars(edit_editor()['email'], ENT_QUOTES, 'UTF-8'); ?>, which is on the editors list as <?php echo htmlspecialchars(edit_editor()['name'], ENT_QUOTES, 'UTF-8'); ?>. <a href="../account/#sign-out">Sign out of your account</a> to close these pages.</p><?php } else { ?><p class="hint">You’re signed in on this device for 30 days. <a href="?out=1">Sign out</a></p><?php } ?>` : ''}${GATED && GROUPS ? '\n  <p><a class="btn primary" href="needs/">Needs you: everything waiting for your say</a> <a class="btn" href="autopilot/">What the autopilot merged</a></p>\n  <p><a class="btn" href="stats/">Site numbers: accounts, shared weeks and groups</a> <a class="btn" href="claims/">Claims and proposed changes</a></p>' : ''}
   <h2>How it works</h2>
   <ol>
     <li>Click any text with a dotted outline and type. Text you’ve changed turns yellow. To take a sentence off the page, click it and choose “Remove this sentence” in the bar.</li>
@@ -5542,6 +5557,33 @@ $CITY = json_decode('${city}', true);`;
   const page = layout({ title: 'The research runs’ queue', description: 'What is waiting for the research runs.', pathName: 'edit/queue/', depth: 2, current: null, hero, body, noindex: true, quiet: true });
   return logic + '\n' + page;
 }
+
+// ---------- the autopilot as the owner sees it (scaling plan, Phase 3): the Needs-you page and the log ----------
+// Each page is one file in src/server: its PHP, then /*HERO*/ and the page's headline, then /*BODY*/ and the page. The
+// shared code (src/server/autopilot.php) goes in at /*AUTOPILOT*/, and the same code is pasted into the accounts API
+// for the morning summary. The branches, authors and allowlist are the gate's own (scripts/gate.config.json).
+const GATE_CFG = readJson('scripts/gate.config.json');
+const AP_CONF = { branches: GATE_CFG.branches, authors: GATE_CFG.authors, allow: GATE_CFG.allow, evidenceDir: GATE_CFG.evidenceDir };
+const autopilotPhp = () => fs.readFileSync(path.join(ROOT, 'src/server/autopilot.php'), 'utf8');
+function editAutopilotPage(file, { title, description, pathName }) {
+  const src = fs.readFileSync(path.join(ROOT, file), 'utf8');
+  for (const m of ['/*CONFIG*/', '/*AUTH*/', '/*GH*/', '/*AUTOPILOT*/', '\n/*HERO*/\n', '\n/*BODY*/\n']) if (!src.includes(m)) throw new Error(file + ' has lost its ' + m.trim() + ' marker');
+  const [logic, rest] = src.split('\n/*HERO*/\n');
+  const [hero, body] = rest.split('\n/*BODY*/\n');
+  const php = v => JSON.stringify(v).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  // What a listing key is called on these pages: programs and camps, schools, and a school's dates.
+  const labels = { ...Object.fromEntries(Object.entries(claimListings()).map(([k, v]) => [k, v.n])), ...Object.fromEntries(schools.flatMap(s => [['s:' + s.id, s.shortName], ['d:' + s.id, s.shortName + ' dates']])) };
+  const config = `$TO = ${JSON.stringify(cfg.contactEmail)};
+$SITE = ${JSON.stringify(cfg.siteName)};
+$SITE_URL = ${JSON.stringify(cfg.siteUrl)};
+$REPO = ${JSON.stringify(/^[\w.-]+\/[\w.-]+$/.test(cfg.repo || '') ? cfg.repo : '')};
+$AP = json_decode('${php(AP_CONF)}', true);
+$LABELS = json_decode('${php(labels)}', true);`;
+  const page = layout({ title, description, pathName, depth: 2, current: null, hero, body, noindex: true, quiet: true });
+  return logic.replace('/*CONFIG*/', () => config).replace('/*AUTH*/', () => editAuthPhp()).replace('/*GH*/', () => ghPhp()).replace('/*AUTOPILOT*/', () => autopilotPhp()) + '\n' + page;
+}
+const editNeedsPhp = () => editAutopilotPage('src/server/edit-needs.php', { title: 'Needs you', description: 'Everything waiting for the owner’s say.', pathName: 'edit/needs/' });
+const editAutopilotPhp = () => editAutopilotPage('src/server/edit-autopilot.php', { title: 'What the autopilot merged', description: 'Every merge the autopilot made, with Undo.', pathName: 'edit/autopilot/' });
 
 // ---------- summer camps: one page, built from data/camps.json ----------
 // Each camp carries the summer its details describe ("season"). Until a camp posts next summer, last summer's weeks,
@@ -6904,6 +6946,8 @@ if (GATED) write('edit/index.php', editIndexPhp()); else write('edit/index.html'
 if (GATED && GROUPS) write('edit/stats/index.php', editStatsPhp());
 if (GATED && GROUPS) write('edit/claims/index.php', editClaimsPhp());
 if (GATED) write('edit/queue/index.php', editQueuePhp());
+if (GATED && GROUPS) write('edit/needs/index.php', editNeedsPhp());
+if (GATED && GROUPS) write('edit/autopilot/index.php', editAutopilotPhp());
 const notFound = notFoundPage();   // always rendered, so its copy is known to the editor
 write('assets/site.css', fs.readFileSync(path.join(ROOT, 'src/site.css')));
 // The typefaces, served from this site (the @font-face rules are at the top of site.css), with their licenses.

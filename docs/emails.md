@@ -268,7 +268,8 @@ Each new account sends one email to the site's contact address (`tell_owner()` a
 `src/server/groups-api.php`), except a parent's in digest mode:
 
 - **The sign-up digest** (`"ownerNotes": { "parentSignup": "digest" }` in `site.config.json`, which is set): a
-  parent's new account sends nothing at once. Instead, on the first hourly run after 7 in the morning
+  parent's new account sends nothing at once. With the morning summary on (below, and it is), the summary carries the
+  counts and the digest sends nothing. With it off, on the first hourly run after 7 in the morning
   (`signup_digest()`, from `push_run`), one email, "New parent accounts yesterday: N", says how many parent accounts
   were made the day before and in the last seven days. Counts only, no addresses; none on a day with no new parent
   account. `/edit/stats/` keeps the numbers day by day. Take the setting out (or set `"each"`) for an email per
@@ -287,3 +288,32 @@ Each new account sends one email to the site's contact address (`tell_owner()` a
 `users.told` records which email went (0 none, 1 parent, 2 manager), so each is sent once. Accounts that existed
 before this was added were marked as told. The emails hold nothing about a child, and the privacy page says they
 are sent.
+
+## The morning summary
+
+One email to the site's contact address and one notification on the site admins' own devices, each morning, from
+the first `push_run` at or after 7:30 (`owner_summary()` in `src/server/groups-api.php`). Until the mailbox script
+(Phase 5) calls `push_run` every ten minutes, that is the hourly workflow's 7:55 run. `"ownerNotes": { "summary": "on" }`
+in `site.config.json` turns it on (it is); `"off"` stops it, and the sign-up digest above comes back. It is editable at
+`/edit/emails/` as "The morning summary". What it says, counts and links only, never a parent's address:
+
+- **Published yesterday:** each run pull request merged, by the autopilot or by hand, with what it changed by kind
+  (from its evidence file), the answers emailed to senders, managers' photos and words published, and anything undone.
+- **Waiting for you:** how many things the Needs-you page holds, by kind, with its link, and the autopilot's mode.
+- **New accounts:** parents and program managers yesterday, parents in the last seven days, and the listings claimed.
+- **Schools asked for:** the top five, as the private queue counts them.
+- **Health:** each run's last pull request, the last answer to the queue, the mailbox script's last check-in (once
+  Phase 5 is in), the hourly site check (an open "Site check:" issue means failing), the last publish, and the copy of
+  the database off the host.
+- **Cost this week:** run pull requests, answers to the queue, the model tokens the runs reported in their outcome
+  files, and the emails sent through Postmark (the mailer counts them day by day in `phillyafterschool-mail.json`).
+  Klaviyo's profile count isn't readable from the site, which holds no Klaviyo key, so the summary says to look there.
+
+The notification says how many things wait and opens `/edit/needs/`. Notifications go to every device on which an
+account at an address in `admins` turned them on (the account page, "Emails and notifications", "Turn on
+notifications on this device"), signed in as that address.
+
+**A failed publish is pushed at once.** `push_run` also looks at the last finished `publish.yml` run on main (at most
+every nine minutes, `publish_watch()`); a failed one sends one notification, "The site didn't publish", which opens
+the Needs-you page, where the link to the run is. Each failure is told once. A legal or safety email, a sponsor
+inquiry (Phase 5) and a closure alert (Phase 8) will use the same notification (`owner_push()`).

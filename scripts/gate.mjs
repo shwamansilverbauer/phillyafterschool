@@ -320,7 +320,8 @@ export async function judge({ before, after, changed, evidenceText, branch, test
   // 1. Paths: only allowlisted files and the run's one evidence file.
   for (const f of changed) {
     if (CFG.allow.includes(f) || f === evPath) continue;
-    if (f.startsWith(CFG.evidenceDir)) whole.push(`It changes ${f}. A run writes one evidence file, ${evPath}, and no other.`);
+    if (f === 'data/autopilot.json') whole.push('It changes data/autopilot.json, the autopilot’s own switch. Only the owner turns it, from the Needs-you page; a run never may.');
+    else if (f.startsWith(CFG.evidenceDir)) whole.push(`It changes ${f}. A run writes one evidence file, ${evPath}, and no other.`);
     else whole.push(`It changes ${f}, which is not a data file the autopilot may change.`);
   }
   for (const f of CFG.allow) if (after[f] === undefined && changed.includes(f)) whole.push(`${f} is not valid JSON.`);

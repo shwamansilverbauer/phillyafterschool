@@ -98,9 +98,12 @@ test('the gate holds: a quote that isn’t on the page, a number missing from th
   eq(v.verdict, 'held'); includes(reasons(v), 'No evidence for cost');
 });
 
-test('the gate holds: a file off the allowlist, a removed listing, a changed id, and an evidence file in the wrong shape', async () => {
+test('the gate holds: a file off the allowlist (the autopilot’s switch among them), a removed listing, a changed id, and an evidence file in the wrong shape', async () => {
   let v = await judgeChange(p => ({ ...p, hours: '3:00 to 6:30 pm' }), [field('hours', '3:00 to 6:00 pm', '3:00 to 6:30 pm', 'After School runs from dismissal until 6:30 pm, Monday to Friday.')], { changed: ['data/programs.json', 'build.mjs'] });
   eq(v.verdict, 'held'); includes(v.whole.join(' '), 'It changes build.mjs');
+  // The autopilot's own switch: a run's pull request that touches it is held, whatever else it holds.
+  v = await judgeChange(p => ({ ...p, hours: '3:00 to 6:30 pm' }), [field('hours', '3:00 to 6:00 pm', '3:00 to 6:30 pm', 'After School runs from dismissal until 6:30 pm, Monday to Friday.')], { changed: ['data/programs.json', 'data/autopilot.json'] });
+  eq(v.verdict, 'held'); includes(v.whole.join(' '), 'data/autopilot.json, the autopilot’s own switch');
   v = await judgeChange(() => null, [], {});
   eq(v.verdict, 'held'); includes(reasons(v), 'It removes Sunny Club');
   v = await judgeChange(p => ({ ...p, id: 'sunny-club-2' }), [], {});

@@ -44,16 +44,17 @@ jobs:
           elif [ "${{ github.event_name }}" = "workflow_dispatch" ] || { [ "$((10#$now))" -ge 750 ] && [ "$((10#$now))" -lt 1150 ]; }; then echo "go=yes" >> "$GITHUB_OUTPUT"; else echo "Outside 7:50 to 11:50, so there are no emails to work out."; fi
 
       # Every other hour of the day: the site's own hourly work, which needs nothing from here but the call. It sends the
-      # owner's notes about new accounts (and once a morning the sign-up digest), writes the private queue for the
-      # research runs to the ops repository when it has changed and reads their answers, and once a day sends the
-      # encrypted copy of the database off the host (to the private backup repository) with its restore drill. In the
-      # morning send-alerts.mjs makes this same call itself.
+      # owner's notes about new accounts (and once a morning, from 7:30, the morning summary), writes the private queue
+      # for the research runs to the ops repository when it has changed and reads their answers, looks at the last
+      # publish (a failed one is pushed to the owner's phone), and once a day sends the encrypted copy of the database
+      # off the host (to the private backup repository) with its restore drill. In the morning send-alerts.mjs makes
+      # this same call itself.
       # Only counts and a state come back (never who); a refused or slow answer just waits for the next hour.
       - name: The site's hourly jobs
         if: steps.clock.outputs.go != 'yes'
         run: |
           curl -sS -m 150 -X POST -H 'X-PAS: 1' -H 'content-type: application/json' -H 'accept: application/json' -d '{}' \
-            'https://phillyafterschool.org/groups/api.php?action=push_run' | jq -c '{told, why, queue: (.queue | if . then {state, items, why, told} else null end), digest: .digest.state, offsite}' || echo "The site didn't answer this time; the next hour asks again."
+            'https://phillyafterschool.org/groups/api.php?action=push_run' | jq -c '{told, why, queue: (.queue | if . then {state, items, why, told} else null end), digest: .digest.state, summary: .summary.state, publish: .publish.state, offsite}' || echo "The site didn't answer this time; the next hour asks again."
 
       # The whole history, not just the latest commit: the build reads it to see when each date was posted.
       - uses: actions/checkout@v4

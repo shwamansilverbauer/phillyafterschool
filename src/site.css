@@ -1360,6 +1360,11 @@ ol.steps{margin:10px 0 0;padding-left:1.3em;display:flex;flex-direction:column;g
 .claim-body{white-space:pre-line}
 #claim-find{font:inherit;width:100%;max-width:520px;padding:11px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
 pre.edit-ask{white-space:pre-wrap;font:inherit;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:8px 0}
+/* The Needs-you page and the autopilot log (edit/needs/, edit/autopilot/): quotes from a provider's page, and the switch's box */
+.needs blockquote{margin:6px 0 4px;padding:2px 0 2px 12px;border-left:3px solid var(--line);color:var(--body)}
+.needs .needs-anyway{display:flex;gap:8px;align-items:center;flex-basis:100%;font-size:.95rem}
+.needs .ap-changes{padding-left:18px}.needs .ap-changes li{margin:0 0 10px}
+.needs .needs-gate summary{cursor:pointer;font-weight:600}
 
 /* ---------- for directors: the home page panel, benefits, photos; and the contact page ---------- */
 ul.benefits{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px 22px}

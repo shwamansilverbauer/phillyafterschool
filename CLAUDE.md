@@ -55,6 +55,7 @@ without `phillyafterschool-private.json`, which only the Actions runs have.
 | `src/server/groups-api.php` | The accounts API (built into `groups/api.php`): sign-in, plans, sharing, follows, claims, premium, push, backups |
 | `src/server/edit-queue.php`, `edit-send.php`, `gh.php` | `/edit/` publishing and the queue's page, through the GitHub key on the host |
 | `src/server/queue.php` | The private queue's shared code (pasted into the API and the queue page): gathers the items, writes `queue/open.json` to the ops repository |
+| `src/server/autopilot.php`, `edit-needs.php`, `edit-autopilot.php` | The Needs-you page (`/edit/needs/`), the autopilot log with Undo (`/edit/autopilot/`), the switch, and what the morning summary reads (pasted into the API) |
 | `tests/` | The tests (`tests/README.md` says how to write one) |
 | `scripts/gate.mjs`, `scripts/gate.config.json` | The autopilot gate and its thresholds and templates |
 | `.github/workflows/` | `publish.yml` (build, test, publish to `live`), `test.yml` (every pull request), `autopilot.yml` (the gate on run pull requests), `alerts.yml`, `monitor.yml`, `precheck.yml` |
@@ -71,6 +72,8 @@ without `phillyafterschool-private.json`, which only the Actions runs have.
 | The monthly check, the weekly run | [`docs/listings.md`](docs/listings.md): "Keeping it current" and "Two scheduled runs" |
 | The private queue, outcome files, the answers to senders | [`docs/listings.md`](docs/listings.md): "The private queue" |
 | Evidence files, the autopilot gate, what waits for Josh | [`docs/listings.md`](docs/listings.md): "The autopilot gate" |
+| The Needs-you page, Approve, Undo, the switch | [`docs/listings.md`](docs/listings.md): "The Needs-you page, the log, Undo and the switch" |
+| The morning summary, pushes to the owner's phone | [`docs/emails.md`](docs/emails.md): "The morning summary" |
 | A school's own clubs | [`docs/listings.md`](docs/listings.md): "A school's clubs, listed one by one" |
 | Summer camps, weekend classes | [`docs/camps-and-weekends.md`](docs/camps-and-weekends.md) |
 | School, program and neighborhood pages, filters, the map, the menu | [`docs/pages.md`](docs/pages.md) |
