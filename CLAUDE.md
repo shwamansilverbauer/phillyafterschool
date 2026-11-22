@@ -28,6 +28,8 @@ accounts, plans, claims and the edit pages. This repository is **public**.
 | `node scripts/geocode.mjs` | Puts new addresses in `data/geo.json` (the build notes any missing) |
 | `node scripts/linkcheck.mjs` | Dead and moved links in the data |
 | `node scripts/precheck.mjs` | The free pre-read before the monthly check |
+| `node scripts/gate.mjs --local` | The autopilot gate on your branch before a run opens its pull request: what would publish, what is held. `--draft` adds evidence records to fill in |
+| `node scripts/gate.mjs --report` | The shadow report: the gate's verdicts beside what Josh did (`--replay 10` checks pull requests already decided) |
 
 The tests need `node`, `php` with pdo_sqlite, openssl and curl, and Playwright for the browser tests (`PLAYWRIGHT_DIR`
 if it isn't installed globally). Without Playwright the browser tests are skipped. The private-words test skips
@@ -44,6 +46,8 @@ without `phillyafterschool-private.json`, which only the Actions runs have.
 | `data/reading.json` | Pages that need a browser or a person to read |
 | `data/geo.json` | Places for the map and distances, written by `scripts/geocode.mjs` |
 | `data/copy.json` | Wording edits made on `/edit/`. Never edit by hand |
+| `data/autopilot.json` | The autopilot switch: `off`, `shadow` or `on`. Only Josh changes it; a run's pull request that touches it is held |
+| `evidence/<branch>.json` | A run's evidence: for each changed value, the provider's page and a quote from it. Provider quotes only |
 | `data/reviews.json`, `data/news.json`, `data/school-dates.json`, `data/days-off.json` | Reviews, What's new, dates for a school, the District's days off |
 | `site.config.json` | Site settings. Keys and secrets never go here |
 | `build.mjs` | The whole build: validation, every page, the data files the pages read |
@@ -51,7 +55,8 @@ without `phillyafterschool-private.json`, which only the Actions runs have.
 | `src/server/groups-api.php` | The accounts API (built into `groups/api.php`): sign-in, plans, sharing, follows, claims, premium, push, backups |
 | `src/server/edit-queue.php`, `edit-send.php`, `gh.php` | `/edit/` publishing and the queue, through the GitHub key on the host |
 | `tests/` | The tests (`tests/README.md` says how to write one) |
-| `.github/workflows/` | `publish.yml` (build, test, publish to `live`), `test.yml` (every pull request), `alerts.yml`, `monitor.yml`, `precheck.yml` |
+| `scripts/gate.mjs`, `scripts/gate.config.json` | The autopilot gate and its thresholds and templates |
+| `.github/workflows/` | `publish.yml` (build, test, publish to `live`), `test.yml` (every pull request), `autopilot.yml` (the gate on run pull requests), `alerts.yml`, `monitor.yml`, `precheck.yml` |
 
 **How a change goes live.** A merge to `main` runs `publish.yml`: build, tests, then the finished files go to the
 `live` branch, which the host deploys. A failed build or test stops it and the live site stays as it was.
@@ -63,6 +68,7 @@ without `phillyafterschool-private.json`, which only the Actions runs have.
 | Add a school | [`docs/listings.md`](docs/listings.md): "Add a school" and "Five schools a day" |
 | Edit or add a listing | [`docs/listings.md`](docs/listings.md): "Edit a listing" (every field) |
 | The monthly check, the weekly run, the queue | [`docs/listings.md`](docs/listings.md): "Keeping it current" and "Two scheduled runs" |
+| Evidence files, the autopilot gate, what waits for Josh | [`docs/listings.md`](docs/listings.md): "The autopilot gate" |
 | A school's own clubs | [`docs/listings.md`](docs/listings.md): "A school's clubs, listed one by one" |
 | Summer camps, weekend classes | [`docs/camps-and-weekends.md`](docs/camps-and-weekends.md) |
 | School, program and neighborhood pages, filters, the map, the menu | [`docs/pages.md`](docs/pages.md) |

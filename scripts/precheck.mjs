@@ -31,6 +31,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { robots as robotsFor, disallowed, UA_BASE } from './robots.mjs';
+import { htmlText as htmlTextOf, lines as linesOf } from './page-text.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIR = process.argv[2] || path.join(ROOT, '.precheck');
@@ -62,30 +63,9 @@ for (const c of (check.camps && check.camps.list) || []) if (c.url) add(c.url, c
 for (const w of check.weekend || []) if (w.url) add(w.url, w.how || 'fetch', 'weekend classes of ' + w.program, w.checked);
 for (const p of pages.values()) p.confirmed = p.dates.length ? p.dates.sort()[0] : '';
 
-// ----- a page's visible text, as lines -----
-const ENT = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', ndash: '–', mdash: '—', rsquo: '’', lsquo: '‘', rdquo: '”', ldquo: '“', hellip: '…', bull: '•', middot: '·', copy: '©', reg: '®', trade: '™' };
-const decode = s => s.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, e) => e[0] === '#' ? String.fromCodePoint(e[1].toLowerCase() === 'x' ? parseInt(e.slice(2), 16) : +e.slice(1)) : ENT[e.toLowerCase()] ?? m);
-function htmlText(html) {
-  const s = html.replace(/<!--[\s\S]*?-->/g, ' ')
-    .replace(/<(script|style|noscript|svg|template|iframe|head|select)\b[\s\S]*?<\/\1>/gi, ' ')
-    .replace(/<li\b[^>]*>/gi, '\n• ')
-    .replace(/<(br|hr)\b[^>]*>|<\/(p|div|li|h[1-6]|tr|td|th|section|article|header|footer|nav|dt|dd|table|ul|ol|blockquote|figcaption|label|button|a)>/gi, '\n')
-    .replace(/<[^>]+>/g, ' ');
-  return lines(decode(s));
-}
-// One line per line of text, spaces tidied, the same line kept once, and the lines that change on their own every year
-// or every day (copyright notices) left out, so they don't count as a change.
-function lines(text) {
-  const seen = new Set(), out = [];
-  for (const raw of text.split('\n')) {
-    const l = raw.replace(/\s+/g, ' ').trim();
-    if (!l || l.length < 2 || seen.has(l)) continue;
-    if (/^(©|\(c\)|copyright\b)/i.test(l) && l.length < 160) continue;
-    seen.add(l); out.push(l);
-    if (out.length >= MAX_LINES) break;
-  }
-  let n = 0; return out.filter(l => (n += l.length) <= MAX_CHARS);
-}
+// ----- a page's visible text, as lines (scripts/page-text.mjs, shared with the autopilot gate) -----
+const htmlText = html => htmlTextOf(html, { maxLines: MAX_LINES, maxChars: MAX_CHARS });
+const lines = text => linesOf(text, { maxLines: MAX_LINES, maxChars: MAX_CHARS });
 const hash = ls => crypto.createHash('sha256').update(ls.join('\n')).digest('hex').slice(0, 16);
 
 async function fetchPage(url) {

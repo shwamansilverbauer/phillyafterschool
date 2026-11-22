@@ -1,0 +1,186 @@
+# The autopilot gate (scripts/gate.mjs; docs/listings.md, "The autopilot gate"). For each research run's pull request
+# (branches queue-, new-schools-, weekly-, monthly-check-, from the runs' own account), it re-reads every changed
+# value's quote on the provider's own page, builds and tests main's code with the pull request's data, and comments in
+# plain words: what would publish, what is held, and why. data/autopilot.json on main decides what happens next:
+#   "off"     nothing
+#   "shadow"  the comment only; Josh merges by hand
+#   "on"      with nothing held and the tests passed, it squash-merges the exact commit it checked and starts the publish
+# Any other pull request is left alone, as before.
+#
+# Why it is built this way:
+# - pull_request_target runs this file as it is on main, so a pull request can't rewrite its own gate. Its token can
+#   write, so nothing from the pull request is ever run with it: the script fetches GitHub's test merge as git objects
+#   and copies only the allowlisted data files out of it, next to main's code.
+# - The build and the tests, which do read the pull request's data, run in a job of their own with a read-only token.
+# - A merge made with this workflow's token starts no other workflow (only workflow_dispatch and repository_dispatch
+#   do), so the gate starts publish.yml itself after merging.
+# - It depends on no status check (a pull request could add a workflow that imitates one). It merges only the commit
+#   it has just checked, and only if main hasn't moved since; if it has, it starts itself again.
+# By hand (Actions > Autopilot gate > Run workflow): check one pull request again, replay decided ones, or write the
+# shadow report.
+name: Autopilot gate
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Check this pull request again (its number)
+        required: false
+      replay:
+        description: Or replay the decided run pull requests from this number on (10 to start)
+        required: false
+      report:
+        description: Or write the shadow report (type yes)
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: autopilot-${{ github.event.pull_request.number || inputs.pr || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  # Main's code with the pull request's data: build and test. Read-only.
+  test:
+    if: >-
+      (github.event_name == 'workflow_dispatch' && inputs.pr != '') ||
+      (github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name == github.repository &&
+       (startsWith(github.head_ref, 'queue-') || startsWith(github.head_ref, 'new-schools-') || startsWith(github.head_ref, 'weekly-') || startsWith(github.head_ref, 'monthly-check-')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      skip: ${{ steps.stage.outputs.skip }}
+      head: ${{ steps.stage.outputs.head }}
+      result: ${{ steps.tests.outputs.result }}
+    env:
+      PR: ${{ github.event.pull_request.number || inputs.pr }}
+    steps:
+      - name: Main, never the pull request
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: The pull request's data, and nothing else
+        id: stage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/gate.mjs --pr "$PR" --stage "$RUNNER_TEMP/gate"
+      - name: Playwright for the browser tests
+        if: steps.stage.outputs.skip == 'false'
+        id: pw
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.63.0
+          echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+      - if: steps.stage.outputs.skip == 'false'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
+      - if: steps.stage.outputs.skip == 'false'
+        run: npx playwright install --with-deps chromium
+      - name: Build and test
+        if: steps.stage.outputs.skip == 'false'
+        id: tests
+        working-directory: ${{ runner.temp }}/gate
+        env:
+          PLAYWRIGHT_DIR: ${{ github.workspace }}/node_modules/playwright
+        run: |
+          if node build.mjs && node tests/run.mjs; then echo "result=passed" >> "$GITHUB_OUTPUT"; else echo "result=failed" >> "$GITHUB_OUTPUT"; fi
+
+  # The checks, the comment, the label, and (only when autopilot is on) the merge.
+  judge:
+    needs: test
+    if: needs.test.outputs.skip == 'false'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write        # the merge, only when data/autopilot.json says "on"
+      pull-requests: write   # the comment
+      issues: write          # the needs-josh label
+      actions: write         # starting publish.yml, or this gate again
+    env:
+      PR: ${{ github.event.pull_request.number || inputs.pr }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Main, never the pull request
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Playwright, for the pages that need a browser
+        id: pw
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.63.0
+          echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
+      - run: npx playwright install --with-deps chromium
+      - name: The pull request's data again
+        id: stage
+        run: node scripts/gate.mjs --pr "$PR" --stage "$RUNNER_TEMP/gate"
+      - name: Judge and comment
+        if: steps.stage.outputs.skip == 'false'
+        env:
+          TESTS: ${{ needs.test.outputs.result || 'failed' }}
+          TESTED: ${{ needs.test.outputs.head }}
+        run: node scripts/gate.mjs --pr "$PR" --judge "$RUNNER_TEMP/gate" --tests "$TESTS" --tested-head "$TESTED" --post
+
+  # By hand: the replay of decided pull requests, or the shadow report. Read-only.
+  report:
+    if: github.event_name == 'workflow_dispatch' && (inputs.replay != '' || inputs.report != '')
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: read
+      pull-requests: read
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPLAY: ${{ inputs.replay }}
+      REPORT: ${{ inputs.report }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Playwright, for the pages that need a browser
+        id: pw
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.63.0
+          echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
+      - run: npx playwright install --with-deps chromium
+      - name: Replay
+        if: env.REPLAY != ''
+        run: node scripts/gate.mjs --replay "$REPLAY" --out "$RUNNER_TEMP/replay.json"
+      - name: Shadow report
+        if: env.REPORT != ''
+        run: |
+          if [ -f "$RUNNER_TEMP/replay.json" ]; then node scripts/gate.mjs --report --with-replay "$RUNNER_TEMP/replay.json"; else node scripts/gate.mjs --report; fi
+      - name: Keep the replay's details for a month
+        if: env.REPLAY != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: replay
+          path: ${{ runner.temp }}/replay.*
+          retention-days: 30

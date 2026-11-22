@@ -13,7 +13,7 @@ agents: the commands, the standing rules and which file to open for a task.
 | [`docs/setup.md`](docs/setup.md) | **Setup, building and publishing.** What is in the repository, the settings file, the build, and how a change reaches the live site. |
 | [`docs/tests.md`](docs/tests.md) | **Tests.** Running the tests, and building the site for a fixed day. |
 | [`docs/operations.md`](docs/operations.md) | **Backups, monitoring and sending email.** The accounts database backups, the restore drill, monitoring, and how the site sends email. |
-| [`docs/listings.md`](docs/listings.md) | **Schools and listings: adding, editing, keeping current.** Adding a school, editing a listing, the scheduled research runs and the monthly check. |
+| [`docs/listings.md`](docs/listings.md) | **Schools and listings: adding, editing, keeping current.** Adding a school, editing a listing, the scheduled research runs, the monthly check and the autopilot gate. |
 | [`docs/pages.md`](docs/pages.md) | **The public pages.** Program, school and neighborhood pages, finding programs, the menu, the map and the small pages. |
 | [`docs/camps-and-weekends.md`](docs/camps-and-weekends.md) | **Summer camps and weekend classes.** The summer camp pages and plan, and the weekend classes list. |
 | [`docs/planners.md`](docs/planners.md) | **The planners.** Build your week, the days-off and summer plans, the calendar, rosters, and why planners need an account. |
@@ -46,6 +46,7 @@ The docs refer to each other by section name ("see \"Site admins\""). This list 
   - [Add a school](docs/listings.md#add-a-school)
   - [A school's clubs, listed one by one](docs/listings.md#a-schools-clubs-listed-one-by-one)
   - [Keeping it current](docs/listings.md#keeping-it-current)
+  - [The autopilot gate](docs/listings.md#the-autopilot-gate)
 - [`docs/pages.md`](docs/pages.md)
   - [Schools that aren't covered yet](docs/pages.md#schools-that-arent-covered-yet)
   - [Terms of use](docs/pages.md#terms-of-use)

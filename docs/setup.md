@@ -57,6 +57,10 @@ To look at the site without a server: `PREVIEW=1 node build.mjs`, then open `pre
 
 If the data has a problem, or a test fails, step 2 stops and the live site stays as it was. The "Actions" tab on GitHub shows what went wrong.
 
+A research run's pull request also gets a comment from the autopilot gate (`.github/workflows/autopilot.yml`; see
+"The autopilot gate"). While `data/autopilot.json` says `shadow`, the gate only comments and Josh merges by hand; once it
+says `on`, a run's pull request with nothing held merges itself and the gate starts step 2.
+
 To put the site on a different host, run `node build.mjs` and upload the contents of `dist/`.
 
 ## Rebuilt every night

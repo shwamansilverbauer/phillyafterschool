@@ -1,0 +1,80 @@
+{
+  "about": "Settings for the autopilot gate (scripts/gate.mjs, docs/listings.md \"The autopilot gate\"). These are starting values: loosen a rule that keeps holding changes Josh approves, tighten one when a merged change has to be undone. Sender and spam thresholds are not here: the repository is public, so they live in a private file on the host (Phase 2).",
+
+  "branches": ["queue-", "new-schools-", "weekly-", "monthly-check-"],
+  "authors": ["shwamansilverbauer"],
+  "allow": ["data/programs.json", "data/schools.json", "data/camps.json", "data/geo.json", "data/reading.json", "data/news.json", "data/school-dates.json", "data/reviews.json"],
+  "evidenceDir": "evidence/",
+
+  "bookkeeping": ["lastVerified", "checked", "read", "looked", "lastReviewed", "added", "seen", "check"],
+
+  "limits": {
+    "queue-": { "listings": 15 },
+    "weekly-": { "listings": 15 },
+    "new-schools-": { "schools": 6 },
+    "monthly-check-": { "values": 40 }
+  },
+
+  "quoteMax": 300,
+  "priceMove": 0.4,
+  "closingMoveMinutes": 60,
+  "dates": { "monthsAhead": 12, "noYearDays": 120 },
+  "newListing": { "domainYears": 2, "rdap": "https://rdap.org/domain/" },
+  "schools": { "minPrograms": 2 },
+
+  "cityHosts": ["phila.gov", "phl.carto.com", "opendataphilly.org"],
+  "districtHosts": ["philasd.org"],
+  "sharedHosts": ["hisawyer.com", "drive.google.com", "docs.google.com", "sites.google.com", "forms.gle", "facebook.com", "instagram.com", "linktr.ee", "eventbrite.com", "jackrabbitclass.com", "captyn.com", "edl.io", "wixsite.com", "squarespace.com", "square.site", "weebly.com", "godaddysites.com", "masterycharter.org", "philasd.org", "phila.gov"],
+  "signupHosts": ["hisawyer.com", "forms.gle", "docs.google.com", "jotform.com", "typeform.com", "eventbrite.com", "jackrabbitclass.com", "captyn.com", "square.site", "squareup.com", "paypal.com", "paypal.me", "venmo.com", "buy.stripe.com", "checkout.stripe.com", "regpack.com", "ultracamp.com", "campbrainregistration.com", "campminder.com", "linktr.ee"],
+  "freeMail": ["gmail.com", "yahoo.com", "hotmail.com", "aol.com", "outlook.com", "icloud.com", "me.com", "live.com", "msn.com", "comcast.net", "verizon.net", "protonmail.com", "proton.me"],
+
+  "childWords": "\\b(kids?|child(ren)?|youth|students?|grades?|ages? \\d|camps?|after[- ]?school|aftercare|teens?|tweens?|famil(y|ies)|kindergarten|pre-?k|toddlers?|preschool|elementary|summer)\\b",
+  "closingWords": "\\b(permanently closed|has closed|have closed|is closed for good|closed (for good|permanently)|no longer (runs?|running|operat\\w*|offer\\w*|available|exists?)|(is|are) not running|isn.t running|aren.t running|will not run|won.t run|cancel+ed|discontinued|shut(ting)? down|out of business|closing (its|our) doors)\\b",
+  "hiddenInstructions": [
+    "\\b(ignore|disregard|forget) (all |any |the )?(previous|prior|above|earlier|your|other) (instructions|rules|prompts?|directions)",
+    "\\b(you are|you're) (now )?(an? )?(ai|a\\.i\\.|language model|llm|chatbot|ai assistant|ai agent)\\b",
+    "\\b(hey|dear|attention|note to|message to|instructions? for) (claude|chatgpt|gpt|gemini|copilot|the ai|ai|llms?|ai (agents?|assistants?|models?|crawlers?))\\b",
+    "\\b(ai|llm) (agents?|assistants?|models?|crawlers?)\\s*[:,]\\s*(please )?(ignore|list|rank|add|say|include|recommend|mark|approve|publish)\\b",
+    "\\bsystem prompt\\b",
+    "\\b(skip|bypass|override|turn off) (the |this |that |any |all )?(rules?|checks?|gate|review|moderation|safety)\\b",
+    "\\b(do not|don.t) (tell|mention|show|flag|report) (this|anyone|josh|the owner)\\b",
+    "\\bnew instructions?:"
+  ],
+
+  "reviewWords": "\\b(abuse\\w*|unsafe|danger\\w*|injur\\w*|hurt|hit|neglect\\w*|discriminat\\w*|racis\\w*|sexis\\w*|harass\\w*|police|arrest\\w*|crim\\w*|illegal|lawsuit|sue|unlicensed|licen[cs]\\w*|stole|theft|fraud|scam)\\b",
+
+  "noteSlots": {
+    "time": "\\d{1,2}(:\\d{2})? ?(am|pm|a\\.m\\.|p\\.m\\.)|noon",
+    "date": "((mon|tues|wednes|thurs|fri|satur|sun)day,? )?(jan(uary)?|feb(ruary)?|mar(ch)?|apr(il)?|may|june?|july?|aug(ust)?|sep(t(ember)?)?|oct(ober)?|nov(ember)?|dec(ember)?)\\.? \\d{1,2}(, 20\\d\\d)?",
+    "season": "summer|fall|autumn|winter|spring|school year",
+    "year": "20\\d\\d(–\\d\\d|-\\d\\d)?",
+    "price": "\\$[\\d,]+(\\.\\d\\d)?",
+    "count": "\\d{1,2}|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve",
+    "days": "((mon|tues|wednes|thurs|fri|satur|sun)days?)((, | and | & )(mon|tues|wednes|thurs|fri|satur|sun)days?)*",
+    "who": "k–8|k-8|elementary|middle school|upper school|lower school|grades? \\w+(–|-| to )\\w+",
+    "reason": "conferences|report card conferences|parent conferences|parent-teacher conferences|state testing|testing|professional development|staff development|staff appreciation|teacher appreciation|records day|weather|a holiday|holiday|graduation|field day|clerical day",
+    "class": "@names"
+  },
+  "noteTemplates": {
+    "school-dates": [
+      "(early dismissal|early release|dismissal|half day: dismissal)( at {time})?(: {reason})?",
+      "b schedule: {who} dismissal at {time}",
+      "last day of school(: (early dismissal|early release|dismissal) at {time})?",
+      "no school(: {reason})?"
+    ],
+    "updates": [
+      "{season} {year} is posted\\.",
+      "{season} {year} is posted: {count} weeks from {date}, {price} a week\\.",
+      "{season} {year} sign-ups open {date}\\.",
+      "sign-ups for {season} {year} open {date}\\.",
+      "registration for {season} {year} opens {date}\\.",
+      "{season} {year} sign-ups are open\\.",
+      "{season} {year} prices are posted: {price} a week\\.",
+      "{days} (is|are) full for the {season} session\\.",
+      "{class} is full( for {season}( {year})?)?\\.",
+      "spots have opened in {class}\\.",
+      "new for {season} {year}: {class}\\.",
+      "pickup now runs until {time}\\."
+    ]
+  }
+}

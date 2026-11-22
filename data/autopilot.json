@@ -1,0 +1,4 @@
+{
+  "about": "The autopilot switch, read by .github/workflows/autopilot.yml from main. \"off\": the gate does nothing. \"shadow\": the gate comments on each run's pull request and merges nothing; Josh merges by hand. \"on\": a run's pull request with nothing held merges itself and the site publishes. A run's pull request can never change this file. See docs/listings.md, \"The autopilot gate\".",
+  "mode": "shadow"
+}
