@@ -200,7 +200,7 @@ test('the gate’s replay finds the shortest stretch of a page that holds every 
 });
 
 // ---------- the workflow's own commands, against a git repository of the real site and a stand-in GitHub ----------
-test('the gate in the workflow: shadow mode comments and labels and merges nothing; on, it merges the commit it checked and starts the publish; the replay and the report', async () => {
+test('the gate in the workflow: shadow mode comments and labels and merges nothing; on, it labels a clean, tested pull request ready for the hourly merge and merges nothing itself; the replay and the report', async () => {
   await standin();
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'pas-gate-'));
   const work = path.join(tmp, 'work'), bare = path.join(tmp, 'origin.git'), stage = path.join(tmp, 'stage'), mainco = path.join(tmp, 'main');
@@ -246,19 +246,26 @@ test('the gate in the workflow: shadow mode comments and labels and merges nothi
     eq(posted.length, 1); includes(posted[0].body.body, 'Shadow mode'); includes(posted[0].body.body, '<!-- pas-gate ');
     ok(!gh.calls.some(c => c.method === 'PUT'), 'shadow mode merges nothing');
 
-    // On: the same pull request merges, at the commit checked, and the publish starts.
+    // On: the gate merges nothing itself (Phase 4). It labels the pull request ready, with the commit it checked and the
+    // tests' result in its comment, for the hourly merge (scripts/merger.mjs, tests/cases/08-autopilot-merge.mjs).
     fs.writeFileSync(path.join(mainco, 'data/autopilot.json'), JSON.stringify({ mode: 'on' }));
     await gateCli(mainco, '--pr', '1', '--stage', stage);
     j = await gateCli(mainco, '--pr', '1', '--judge', stage, '--tests', 'passed', '--post', '--no-build');
-    const merge = gh.calls.find(c => c.method === 'PUT' && /\/pulls\/1\/merge$/.test(c.path));
-    ok(merge, 'it merged: ' + j.stdout.slice(-300)); eq(merge.body.sha, head, 'the exact commit it checked'); eq(merge.body.merge_method, 'squash');
-    ok(gh.calls.some(c => c.method === 'POST' && /actions\/workflows\/publish\.yml\/dispatches$/.test(c.path)), 'and started the publish');
+    ok(!gh.calls.some(c => c.method === 'PUT'), 'the gate merges nothing itself');
+    ok(!gh.calls.some(c => /publish\.yml\/dispatches$/.test(c.path)), 'and starts no publish');
+    const ready = gh.calls.find(c => c.method === 'POST' && /\/issues\/1\/labels$/.test(c.path));
+    ok(ready && ready.body.labels.includes('autopilot-ready'), 'it is labeled ready for the hourly merge: ' + j.stdout.slice(-300));
+    const patched = gh.calls.filter(c => c.method === 'PATCH' && /\/issues\/comments\/\d+$/.test(c.path)).at(-1);
+    const onMeta = JSON.parse(/<!-- pas-gate (\{.*?\}) -->/.exec(patched.body.body)[1]);
+    eq(onMeta.head, head, 'the comment names the commit it checked'); eq(onMeta.tests, 'passed'); eq(onMeta.mode, 'on'); eq(onMeta.verdict, 'publish');
+    includes(patched.body.body, 'merges itself at the next hourly merge');
     eq(gh.calls.filter(c => c.method === 'POST' && /\/issues\/1\/comments$/.test(c.path)).length, 1, 'the comment is replaced, not repeated');
-    // A failed test holds it: no second merge.
+    // A failed test holds it: needs-josh, and the ready label comes off.
     gh.calls.length = 0;
     await gateCli(mainco, '--pr', '1', '--judge', stage, '--tests', 'failed', '--post', '--no-build');
     ok(!gh.calls.some(c => c.method === 'PUT'), 'a failed test merges nothing');
-    ok(gh.calls.some(c => c.method === 'POST' && /\/labels$/.test(c.path)), 'and labels it needs-josh');
+    ok(gh.calls.some(c => c.method === 'POST' && /\/labels$/.test(c.path) && c.body.labels.includes('needs-josh')), 'and labels it needs-josh');
+    ok(gh.calls.some(c => c.method === 'DELETE' && /\/labels\/autopilot-ready$/.test(c.path)), 'and takes the ready label off');
     fs.writeFileSync(path.join(mainco, 'data/autopilot.json'), JSON.stringify({ mode: 'shadow' }));
 
     // The replay: the same change as a merged pull request with no evidence file is verified from the listing's stored pages.

@@ -186,7 +186,7 @@ test('/edit/queue/ is a view: no ticking or Send, “Not for the run” takes an
   includes(decodeURIComponent(rush.headers.get('location') || ''), 'Written:');
   eq(github.ops.commits.length, before + 1); includes(github.ops.commits.at(-1).message, '(rush)');
   const reminder = await mail.waitFor('contact@phillyafterschool.org', /Rush:/);
-  includes(reminder.TextBody, 'Run now');
+  includes(reminder.TextBody, 'Run now'); includes(reminder.TextBody, 'Philly After School queue run', 'the queue run works the queue now (Phase 4), not the weekly run');
   const q = openFile(github);
   ok(!q.items.some(x => x.id === drop), 'the dropped item is off the queue');
   ok(q.items.some(x => x.program === `Keep Me Club ${t}`), 'the other stays');

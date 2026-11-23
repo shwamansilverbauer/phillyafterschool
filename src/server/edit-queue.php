@@ -92,8 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       } else {
         $n = (int) $w['items'];
         record_email('[' . $SITE . '] Rush: ' . $n . ' item' . ($n === 1 ? '' : 's') . ' in the queue',
-          "The queue is written. Press Run now on the scheduled task “Philly After School weekly run” in your Claude app, and it opens a pull request within the hour.\n\n" . $SITE_URL . '/edit/queue/');
-        $msg = 'Written: ' . $n . ' item' . ($n === 1 ? '' : 's') . ' in the private queue (commit ' . $w['commit'] . '). Now press Run now on “Philly After School weekly run” in the Claude app; a reminder is in your inbox.';
+          "The queue is written. Press Run now on the scheduled task “Philly After School queue run” in your Claude app, and it opens a pull request within the hour.\n\n" . $SITE_URL . '/edit/queue/');
+        $msg = 'Written: ' . $n . ' item' . ($n === 1 ? '' : 's') . ' in the private queue (commit ' . $w['commit'] . '). Now press Run now on “Philly After School queue run” in the Claude app; a reminder is in your inbox.';
       }
     }
   }

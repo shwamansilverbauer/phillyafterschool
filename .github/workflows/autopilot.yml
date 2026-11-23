@@ -4,8 +4,14 @@
 # plain words: what would publish, what is held, and why. data/autopilot.json on main decides what happens next:
 #   "off"     nothing
 #   "shadow"  the comment only; Josh merges by hand
-#   "on"      with nothing held and the tests passed, it squash-merges the exact commit it checked and starts the publish
+#   "on"      with nothing held and the tests passed, it labels the pull request autopilot-ready, and the hourly merge
+#             below takes it
 # Any other pull request is left alone, as before.
+#
+# The hourly merge (scripts/merger.mjs, scaling plan Phase 4): every ready pull request, laid on main together, built
+# and tested once with main's code, then each squash-merged at the commit the gate checked, and one publish started.
+# Every merge starts a full build and test, so batching them keeps that to once an hour. If the batch fails its build or
+# tests, nothing is merged and the batch is held for Josh.
 #
 # Why it is built this way:
 # - pull_request_target runs this file as it is on main, so a pull request can't rewrite its own gate. Its token can
@@ -13,21 +19,27 @@
 #   and copies only the allowlisted data files out of it, next to main's code.
 # - The build and the tests, which do read the pull request's data, run in a job of their own with a read-only token.
 # - A merge made with this workflow's token starts no other workflow (only workflow_dispatch and repository_dispatch
-#   do), so the gate starts publish.yml itself after merging.
-# - It depends on no status check (a pull request could add a workflow that imitates one). It merges only the commit
-#   it has just checked, and only if main hasn't moved since; if it has, it starts itself again.
-# By hand (Actions > Autopilot gate > Run workflow): check one pull request again, replay decided ones, or write the
-# shadow report.
+#   do), so the hourly merge starts publish.yml itself after merging.
+# - It depends on no status check (a pull request could add a workflow that imitates one). The merge takes only the
+#   commit the gate's own comment names, only after that commit was built and tested on the main it merges into, and
+#   only if main hasn't moved meanwhile (if it has, the next hour tries again).
+# By hand (Actions > Autopilot gate > Run workflow): check one pull request again, merge what is ready now, replay
+# decided ones, or write the shadow report.
 name: Autopilot gate
 
 on:
   pull_request_target:
     types: [opened, synchronize, reopened]
     branches: [main]
+  schedule:
+    - cron: '17 * * * *'   # the hourly merge; GitHub's scheduler often runs late, which only delays it
   workflow_dispatch:
     inputs:
       pr:
         description: Check this pull request again (its number)
+        required: false
+      merge:
+        description: Or merge what is ready now, without waiting for the hour (type yes)
         required: false
       replay:
         description: Or replay the decided run pull requests from this number on (10 to start)
@@ -39,9 +51,11 @@ on:
 permissions:
   contents: read
 
+# One check per pull request at a time (a newer push cancels the older check); the hourly merges one after another,
+# never cancelled part way.
 concurrency:
-  group: autopilot-${{ github.event.pull_request.number || inputs.pr || github.run_id }}
-  cancel-in-progress: true
+  group: autopilot-${{ github.event.pull_request.number || inputs.pr || ((github.event_name == 'schedule' || inputs.merge != '') && 'hourly-merge') || github.run_id }}
+  cancel-in-progress: ${{ github.event_name != 'schedule' && inputs.merge == '' }}
 
 jobs:
   # Main's code with the pull request's data: build and test. Read-only.
@@ -97,17 +111,16 @@ jobs:
         run: |
           if node build.mjs && node tests/run.mjs; then echo "result=passed" >> "$GITHUB_OUTPUT"; else echo "result=failed" >> "$GITHUB_OUTPUT"; fi
 
-  # The checks, the comment, the label, and (only when autopilot is on) the merge.
+  # The checks, the comment and the labels (needs-josh, or autopilot-ready for the hourly merge). It merges nothing.
   judge:
     needs: test
     if: needs.test.outputs.skip == 'false'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
-      contents: write        # the merge, only when data/autopilot.json says "on"
+      contents: read
       pull-requests: write   # the comment
-      issues: write          # the needs-josh label
-      actions: write         # starting publish.yml, or this gate again
+      issues: write          # the labels
     env:
       PR: ${{ github.event.pull_request.number || inputs.pr }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -139,6 +152,82 @@ jobs:
           TESTS: ${{ needs.test.outputs.result || 'failed' }}
           TESTED: ${{ needs.test.outputs.head }}
         run: node scripts/gate.mjs --pr "$PR" --judge "$RUNNER_TEMP/gate" --tests "$TESTS" --tested-head "$TESTED" --post
+
+  # The hourly merge, first half: what is ready, laid on main together, built and tested with main's code. Read-only.
+  batch:
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.merge != '')
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      mode: ${{ steps.stage.outputs.mode }}
+      skip: ${{ steps.stage.outputs.skip }}
+      batch: ${{ steps.stage.outputs.batch }}
+      result: ${{ steps.tests.outputs.result }}
+    steps:
+      - name: Main, never a pull request
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: The ready pull requests' data, together, and nothing else
+        id: stage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/merger.mjs --stage "$RUNNER_TEMP/batch"
+      - name: Playwright for the browser tests
+        if: steps.stage.outputs.skip == 'false'
+        id: pw
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.63.0
+          echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+      - if: steps.stage.outputs.skip == 'false'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
+      - if: steps.stage.outputs.skip == 'false'
+        run: npx playwright install --with-deps chromium
+      - name: Build and test the batch
+        if: steps.stage.outputs.skip == 'false'
+        id: tests
+        working-directory: ${{ runner.temp }}/batch
+        env:
+          PLAYWRIGHT_DIR: ${{ github.workspace }}/node_modules/playwright
+        run: |
+          if node build.mjs && node tests/run.mjs; then echo "result=passed" >> "$GITHUB_OUTPUT"; else echo "result=failed" >> "$GITHUB_OUTPUT"; fi
+
+  # The hourly merge, second half: merge the batch and start one publish (or hold it, if it failed), then tidy the labels.
+  merge:
+    needs: batch
+    if: needs.batch.outputs.mode == 'on'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write        # the merges
+      pull-requests: write   # the comments
+      issues: write          # the labels
+      actions: write         # starting publish.yml, or the gate again
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      BATCH: ${{ needs.batch.outputs.batch }}
+      TESTS: ${{ needs.batch.outputs.result || 'skipped' }}
+    steps:
+      - name: Main, never a pull request
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Merge, publish once, tidy
+        run: node scripts/merger.mjs --merge --tests "$TESTS"
 
   # By hand: the replay of decided pull requests, or the shadow report. Read-only.
   report:

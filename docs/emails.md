@@ -310,7 +310,8 @@ in `site.config.json` turns it on (it is); `"off"` stops it, and the sign-up dig
   (sent, replies, opt-outs, bounces), or that it is paused.
 - **New accounts:** parents and program managers yesterday, parents in the last seven days, and the listings claimed.
 - **Schools asked for:** the top five, as the private queue counts them.
-- **Health:** each run's last pull request, the last answer to the queue, the mailbox script's last check-in (and,
+- **Health:** each run's last pull request, the last answer to the queue, any run that couldn't finish since
+  yesterday morning and the step it stopped at (from its outcome file's `"failed"`), the mailbox script's last check-in (and,
   when it says so, that it can't send from the site's address or what went wrong in its last run), the hourly site
   check (an open "Site check:" issue means failing), the last publish, and the copy of the database off the host.
 - **Cost this week:** run pull requests, answers to the queue, the model tokens the runs reported in their outcome
