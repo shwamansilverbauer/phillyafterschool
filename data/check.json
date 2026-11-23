@@ -1,8 +1,8 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. docs/listings.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 378,
-    "pagesNeedingABrowser": 65,
+    "pages": 383,
+    "pagesNeedingABrowser": 67,
     "pagesNeedingAPerson": 18,
     "links": 367,
     "pickupLinks": 132,
@@ -3859,6 +3859,24 @@
       "lists": []
     },
     {
+      "url": "https://brooklynrobotfoundry.com/philadelphia/btd_location/glenside-office/",
+      "how": "browser",
+      "why": "A plain fetch gets a Cloudflare “Just a moment…” page; in a browser the Philadelphia after-school page shows its schedule of school sites, including Delaplaine McDaniel.",
+      "programs": [
+        "brooklyn-robot-foundry-fundays"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://brooklynrobotfoundry.com/philadelphia/product/foundry-fundays/",
+      "how": "browser",
+      "why": "A plain fetch gets a Cloudflare “Just a moment…” page; in a browser the Philadelphia after-school page shows its schedule of school sites, including Delaplaine McDaniel.",
+      "programs": [
+        "brooklyn-robot-foundry-fundays"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://brooklynrobotfoundry.com/philadelphia/product/philadelphia-after-school-robotics-stem-enrichment-kids/",
       "how": "browser",
       "why": "A plain fetch gets a Cloudflare “Just a moment…” page; in a browser the Philadelphia after-school page shows its schedule of school sites, including Delaplaine McDaniel.",
@@ -5285,6 +5303,22 @@
       "lists": []
     },
     {
+      "url": "https://www.codeninjas.com/pa-south-philadelphia",
+      "how": "fetch",
+      "programs": [
+        "code-ninjas-south-philly"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.codeninjas.com/pa-south-philadelphia/after-school",
+      "how": "fetch",
+      "programs": [
+        "code-ninjas-south-philly"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.cognitoforms.com/BoysGirlsClubsOfPhiladelphia/BoysGirlsClubsOfPhiladelphiaEDEYRegistrationFormGreenberg",
       "how": "fetch",
       "programs": [
@@ -5618,6 +5652,14 @@
       "how": "fetch",
       "programs": [
         "music-theatre-philly"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.naturalcreativity.org/offerings",
+      "how": "fetch",
+      "programs": [
+        "brooklyn-robot-foundry-fundays"
       ],
       "lists": []
     },
@@ -6855,7 +6897,7 @@
         "schools.*.address"
       ],
       "says": "Old Pine Community Center and The Neighborhub are the same building after a rebrand, at 401 Lombard St; Fall II starts November 2, 2026, registration is open, and families can join whenever there is space, with the fee pro-rated.",
-      "daysAgo": 34,
+      "daysAgo": 35,
       "stale": false
     },
     {
@@ -6870,7 +6912,7 @@
         "daysNote"
       ],
       "says": "After-school care is $250 a month for full time, 4 or more days a week, or $175 a month for part time, 3 days a week, with a snack included.",
-      "daysAgo": 18,
+      "daysAgo": 19,
       "stale": false
     },
     {
@@ -6891,7 +6933,7 @@
         "schools.meredith"
       ],
       "says": "Homework Club is Everland’s Monday aftercare, run with Prep Academy Tutors, for 2nd to 4th graders at Meredith only: staff pick up from Meredith and walk the group to Everland, children do homework in small groups with certified teachers and then have organized downtime, parents pick up from Everland between 5:45 and 6:00 pm, 1:1 tutoring during the club is $65 per 40-minute session, and the 2027 semester is 17 Mondays from January 4 to June 7, ending with a showcase.",
-      "daysAgo": 13,
+      "daysAgo": 14,
       "stale": false
     },
     {
@@ -6906,7 +6948,7 @@
         "rate"
       ],
       "says": "The base cost of Homework Club for the 2027 semester is $1,190, which works out to $70 per 3-hour session over its 17 Mondays.",
-      "daysAgo": 13,
+      "daysAgo": 14,
       "stale": false
     },
     {
@@ -6928,7 +6970,7 @@
         "schools.childs"
       ],
       "says": "Makom is aftercare and a day camp, at 2401 Washington Ave, Unit C1. Aftercare runs 4 to 6 pm, five days a week, with days that differ by age group; K–5 starts at $280 a month for Fridays only and grades 6 and 7 at $746 a month for 3 days, with tuition assistance. Day camps are for ages 4 and up. It does not pick up at Nebinger or Coppin (it needs at least four children from a school to pick up there); at Independence Charter it picks up for early dismissal on Wednesdays, and at Childs it has a special early Friday pickup for pre-K children. It also picks up at The Philadelphia School, and runs summer camp.",
-      "daysAgo": 11,
+      "daysAgo": 12,
       "stale": false
     },
     {
@@ -6945,7 +6987,7 @@
         "note"
       ],
       "says": "Enrollment is open. Dandelion After School runs 3 to 6 pm and costs $165 a month for each weekday enrolled, and tuition includes certain day-off camps. It is a self-directed space with cooking, group games, park trips, arts and crafts, messy science and building projects, and each child decides how to spend their afternoon.",
-      "daysAgo": 10,
+      "daysAgo": 11,
       "stale": false
     }
   ],
@@ -6953,11 +6995,11 @@
   "camps": {
     "season": 2026,
     "summary": {
-      "camps": 52,
+      "camps": 53,
       "showingNextSummer": 12,
       "needingABrowser": 25,
       "needingAPerson": 1,
-      "notReadYet": 8
+      "notReadYet": 9
     },
     "list": [
       {
@@ -7373,6 +7415,17 @@
         "signup": "No dates or prices are posted for summer 2027 yet. Apply or schedule a tour on the site."
       },
       {
+        "camp": "natural-creativity-camp",
+        "name": "Creativity Camp at Natural Creativity",
+        "season": 2026,
+        "checked": "2026-11-22",
+        "url": "https://www.naturalcreativity.org/summercamp",
+        "how": "fetch",
+        "look": "The weeks, ages and hours are in the page’s description at the top, with the line saying when the next summer’s details go live. The address is in the footer.",
+        "notes": "The camp sent its 2027 weeks and weekly price through the site’s form in November 2026, before its page posted them. Add them once the page does (February 2027), or sooner if Josh confirms them with the camp.",
+        "signup": "Natural Creativity says its 2027 camp details go live in February 2027. The weeks shown are its 2026 ones."
+      },
+      {
         "camp": "camp-schuylkill",
         "name": "Camp Schuylkill at the Schuylkill Center",
         "season": 2027,
@@ -7540,6 +7593,11 @@
         "name": "CORA Early Years at Huntingdon Mills",
         "url": "https://www.coraservices.org/services/early-childhood/early-years-huntingdon-mills/",
         "why": "The page answered HTTP 403 with a “confirm you are human” check to a headless browser on 2026-11-01, so it cannot be read automatically and needs Josh."
+      },
+      {
+        "name": "Code Ninjas South Philadelphia camps",
+        "url": "https://www.codeninjas.com/pa-south-philadelphia",
+        "why": "Dropped on 2026-10-07 as “location coming soon”, but the center is open at 777 S Broad St (2026-11-22) and its page offers camps. The summer 2027 weeks and price still need reading."
       }
     ],
     "dropped": [
@@ -7556,11 +7614,6 @@
       {
         "name": "Snapology of Philadelphia",
         "why": "No location inside the city was found on its site.",
-        "seen": "2026-10-07"
-      },
-      {
-        "name": "Code Ninjas South Philadelphia",
-        "why": "Its page said “location coming soon”.",
         "seen": "2026-10-07"
       },
       {
