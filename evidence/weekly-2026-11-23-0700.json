@@ -1,0 +1,332 @@
+{
+  "run": "weekly-2026-11-23-0700",
+  "items": [
+    {
+      "item": "link:pyn-conwell",
+      "kind": "link",
+      "listing": "p:pyn-conwell",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "website",
+          "old": "https://www.pyninc.org/afterschool",
+          "new": "https://www.pyninc.org/aimafterschool",
+          "source": "https://www.pyninc.org/aimafterschool",
+          "quote": "PYN's AIM Afterschool gives middle school students a safe supervised space for youth to learn, connect, and explore what the future could look like.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://www.pyninc.org/afterschool].label",
+          "old": "PYN after school",
+          "new": null,
+          "source": "https://www.pyninc.org/aimafterschool",
+          "quote": "PYN's AIM Afterschool gives middle school students a safe supervised space for youth to learn, connect, and explore what the future could look like.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://www.pyninc.org/afterschool].url",
+          "old": "https://www.pyninc.org/afterschool",
+          "new": null,
+          "source": "https://www.pyninc.org/aimafterschool",
+          "quote": "PYN's AIM Afterschool gives middle school students a safe supervised space for youth to learn, connect, and explore what the future could look like.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://www.pyninc.org/aimafterschool].label",
+          "old": null,
+          "new": "PYN after school",
+          "source": "https://www.pyninc.org/aimafterschool",
+          "quote": "PYN's AIM Afterschool gives middle school students a safe supervised space for youth to learn, connect, and explore what the future could look like.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://www.pyninc.org/aimafterschool].url",
+          "old": null,
+          "new": "https://www.pyninc.org/aimafterschool",
+          "source": "https://www.pyninc.org/aimafterschool",
+          "quote": "PYN's AIM Afterschool gives middle school students a safe supervised space for youth to learn, connect, and explore what the future could look like.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.conwell.sources[https://www.pyninc.org/afterschool].label",
+          "old": "PYN after school",
+          "new": null,
+          "source": "https://www.pyninc.org/aimafterschool",
+          "quote": "PYN's AIM Afterschool gives middle school students a safe supervised space for youth to learn, connect, and explore what the future could look like.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.conwell.sources[https://www.pyninc.org/afterschool].url",
+          "old": "https://www.pyninc.org/afterschool",
+          "new": null,
+          "source": "https://www.pyninc.org/aimafterschool",
+          "quote": "PYN's AIM Afterschool gives middle school students a safe supervised space for youth to learn, connect, and explore what the future could look like.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.conwell.sources[https://www.pyninc.org/aimafterschool].label",
+          "old": null,
+          "new": "PYN after school",
+          "source": "https://www.pyninc.org/aimafterschool",
+          "quote": "PYN's AIM Afterschool gives middle school students a safe supervised space for youth to learn, connect, and explore what the future could look like.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.conwell.sources[https://www.pyninc.org/aimafterschool].url",
+          "old": null,
+          "new": "https://www.pyninc.org/aimafterschool",
+          "source": "https://www.pyninc.org/aimafterschool",
+          "quote": "PYN's AIM Afterschool gives middle school students a safe supervised space for youth to learn, connect, and explore what the future could look like.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "link:aspira-acap-esperanza",
+      "kind": "link",
+      "listing": "p:aspira-acap-esperanza",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "website",
+          "old": "https://www.aspirapa.org/apps/pages/index.jsp?uREC_ID=1415541&type=d&pREC_ID=2768785",
+          "new": "https://www.aspirapa.org/apps/pages/acap-e",
+          "source": "https://www.aspirapa.org/apps/pages/acap-e",
+          "quote": "ACAP-E provides a safe, supportive, and engaging environment where students grow, learn, and succeed beyond the classroom!",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://www.aspirapa.org/apps/pages/index.jsp?uREC_ID=1415541&type=d&pREC_ID=2768785].label",
+          "old": "ASPIRA: ACAP-Esperanza",
+          "new": null,
+          "source": "https://www.aspirapa.org/apps/pages/acap-e",
+          "quote": "ACAP-E provides a safe, supportive, and engaging environment where students grow, learn, and succeed beyond the classroom!",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://www.aspirapa.org/apps/pages/index.jsp?uREC_ID=1415541&type=d&pREC_ID=2768785].url",
+          "old": "https://www.aspirapa.org/apps/pages/index.jsp?uREC_ID=1415541&type=d&pREC_ID=2768785",
+          "new": null,
+          "source": "https://www.aspirapa.org/apps/pages/acap-e",
+          "quote": "ACAP-E provides a safe, supportive, and engaging environment where students grow, learn, and succeed beyond the classroom!",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://www.aspirapa.org/apps/pages/acap-e].label",
+          "old": null,
+          "new": "ASPIRA: ACAP-Esperanza",
+          "source": "https://www.aspirapa.org/apps/pages/acap-e",
+          "quote": "ACAP-E provides a safe, supportive, and engaging environment where students grow, learn, and succeed beyond the classroom!",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://www.aspirapa.org/apps/pages/acap-e].url",
+          "old": null,
+          "new": "https://www.aspirapa.org/apps/pages/acap-e",
+          "source": "https://www.aspirapa.org/apps/pages/acap-e",
+          "quote": "ACAP-E provides a safe, supportive, and engaging environment where students grow, learn, and succeed beyond the classroom!",
+          "read": "2026-11-23",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "link:gla-southwest-clubs",
+      "kind": "link",
+      "listing": "p:gla-southwest-clubs",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "website",
+          "old": "https://glacharter.org/southwest",
+          "new": "https://glacharter.org/gla-sw",
+          "source": "https://glacharter.org/gla-sw",
+          "quote": "Apply for your scholar to attend GLA Southwest through ApplyPhilly Charter.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "link:gla-southwest",
+      "kind": "link",
+      "listing": "s:gla-southwest",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "website",
+          "old": "https://glacharter.org/southwest",
+          "new": "https://glacharter.org/gla-sw",
+          "source": "https://glacharter.org/gla-sw",
+          "quote": "Apply for your scholar to attend GLA Southwest through ApplyPhilly Charter.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "link:flipout-camp",
+      "kind": "update",
+      "listing": "c:flipout-camp",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "website",
+          "old": "https://www.flipoutproductions.com/summercamp",
+          "new": "https://www.flipoutproductions.com/summer-camp",
+          "source": "https://www.flipoutproductions.com/summer-camp",
+          "quote": "Gymnastics Summer Camp When school's out, Flip Out!",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "signup",
+          "old": "Sign-ups for 2026 opened January 1.",
+          "new": "Sign-ups open January 1, 2027. $25 off for registering before March 1, and 10% off for siblings.",
+          "source": "https://www.flipoutproductions.com/summer-camp",
+          "quote": "Registration opens January 1st, 2027",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "signup",
+          "old": "Sign-ups for 2026 opened January 1.",
+          "new": "Sign-ups open January 1, 2027. $25 off for registering before March 1, and 10% off for siblings.",
+          "source": "https://www.flipoutproductions.com/summer-camp",
+          "quote": "Save $25 when you register before March 1st! Registering for siblings? Take advantage of our 10% off sibling discount.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://www.flipoutproductions.com/summercamp].label",
+          "old": "FlipOut Productions",
+          "new": null,
+          "source": "https://www.flipoutproductions.com/summer-camp",
+          "quote": "Gymnastics Summer Camp When school's out, Flip Out!",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://www.flipoutproductions.com/summercamp].url",
+          "old": "https://www.flipoutproductions.com/summercamp",
+          "new": null,
+          "source": "https://www.flipoutproductions.com/summer-camp",
+          "quote": "Gymnastics Summer Camp When school's out, Flip Out!",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://www.flipoutproductions.com/summer-camp].label",
+          "old": null,
+          "new": "FlipOut Productions",
+          "source": "https://www.flipoutproductions.com/summer-camp",
+          "quote": "Gymnastics Summer Camp When school's out, Flip Out!",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://www.flipoutproductions.com/summer-camp].url",
+          "old": null,
+          "new": "https://www.flipoutproductions.com/summer-camp",
+          "source": "https://www.flipoutproductions.com/summer-camp",
+          "quote": "Gymnastics Summer Camp When school's out, Flip Out!",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "check.url",
+          "old": "https://www.flipoutproductions.com/summercamp",
+          "new": "https://www.flipoutproductions.com/summer-camp",
+          "source": "https://www.flipoutproductions.com/summer-camp",
+          "quote": "Gymnastics Summer Camp When school's out, Flip Out!",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "dates[2027-01-01].date",
+          "old": null,
+          "new": "2027-01-01",
+          "source": "https://www.flipoutproductions.com/summer-camp",
+          "quote": "Registration opens January 1st, 2027",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "dates[2027-01-01].label",
+          "old": null,
+          "new": "Summer camp registration opens",
+          "source": "https://www.flipoutproductions.com/summer-camp",
+          "quote": "Registration opens January 1st, 2027",
+          "read": "2026-11-23",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "news:2026-11-22",
+      "kind": "news",
+      "listing": "n:2026-11-22|The home page search covers the whole year",
+      "outcome": "held",
+      "fields": [
+        {
+          "path": "date",
+          "old": null,
+          "new": "2026-11-22",
+          "source": "https://phillyafterschool.org/",
+          "quote": "",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "title",
+          "old": null,
+          "new": "The home page search covers the whole year",
+          "source": "https://phillyafterschool.org/",
+          "quote": "",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "text",
+          "old": null,
+          "new": "The search on the home page now has four tabs: After-School, Days Off, Summer Camps and Weekends. After-School is the school and program finder as before. The other three take your ZIP code or neighborhood and open that list with what is closest to you first; Days Off also asks which day off you need. The tab you used last opens next time, and where you live stays on your device.",
+          "source": "https://phillyafterschool.org/",
+          "quote": "",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "href",
+          "old": null,
+          "new": "#hs",
+          "source": "https://phillyafterschool.org/",
+          "quote": "",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "link",
+          "old": null,
+          "new": "Try the search",
+          "source": "https://phillyafterschool.org/",
+          "quote": "",
+          "read": "2026-11-23",
+          "how": "fetch"
+        }
+      ]
+    }
+  ]
+}

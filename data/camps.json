@@ -692,22 +692,28 @@
     "Kensington"
    ],
    "phone": "215-350-6575",
-   "website": "https://www.flipoutproductions.com/summercamp",
-   "signup": "Sign-ups for 2026 opened January 1.",
+   "website": "https://www.flipoutproductions.com/summer-camp",
+   "signup": "Sign-ups open January 1, 2027. $25 off for registering before March 1, and 10% off for siblings.",
    "note": "Dates and prices weren’t readable when we checked, so ask the gym.",
    "program": "flipout-productions",
    "sources": [
     {
      "label": "FlipOut Productions",
-     "url": "https://www.flipoutproductions.com/summercamp"
+     "url": "https://www.flipoutproductions.com/summer-camp"
     }
    ],
    "checked": "2026-11-01",
    "check": {
-    "url": "https://www.flipoutproductions.com/summercamp",
+    "url": "https://www.flipoutproductions.com/summer-camp",
     "how": "browser",
     "look": "The Summer Camp page shows age groups and activities. Weeks and prices are probably inside an embedded registration widget."
-   }
+   },
+   "dates": [
+    {
+     "date": "2027-01-01",
+     "label": "Summer camp registration opens"
+    }
+   ]
   },
   {
    "id": "philadelphia-ballet-camps",
