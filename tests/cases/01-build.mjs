@@ -153,3 +153,12 @@ test('private words (from phillyafterschool-private.json) appear nowhere in the 
   }
   eq(hits.length, 0, 'private words found (numbered, not quoted):\n' + hits.join('\n'));
 });
+
+test('a chain’s shared website waits for the owner: a claim at codeninjas.com or brooklynrobotfoundry.com is manual, a program’s own site still matches', async ({ site }) => {
+  ok(site.exists('groups/api.php'), 'the accounts API is built');
+  const api = site.read('groups/api.php');
+  const mode = key => { const m = new RegExp(`"${key}":\\{[^}]*"m":"(manual|match)"`).exec(api); return m && m[1]; };
+  eq(mode('p:code-ninjas-south-philly'), 'manual', 'Code Ninjas (franchise site) waits for the owner');
+  eq(mode('p:brooklyn-robot-foundry-fundays'), 'manual', 'Brooklyn Robot Foundry (franchise site) waits for the owner');
+  eq(mode('p:makom-community'), 'match', 'a program on its own site still claims at once');
+});

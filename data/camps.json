@@ -2214,6 +2214,41 @@
     "look": "“Camp Days for the 2026-2027 school year” is a dated list; Summer Break Camp is the last line. The $90 day price and the $100 late price are in the text above it.",
     "notes": "The site lists two addresses (2401 Washington Ave and 1311 S Juniper St) without saying which holds camp; Makom’s manager told us camp is at 2401 Washington Ave."
    }
+  },
+  {
+   "id": "natural-creativity-camp",
+   "name": "Creativity Camp at Natural Creativity",
+   "what": "Natural Creativity’s summer day camp, booked by the week, at its center in East Falls.",
+   "types": [
+    "daycamp"
+   ],
+   "ages": "Ages 4–12",
+   "ageMin": 4,
+   "ageMax": 12,
+   "season": 2026,
+   "weeks": "June 15 to August 14, 2026",
+   "hours": "9 am to 3 pm; the camp calls its hours flexible",
+   "address": "3820 The Oak Rd",
+   "neighborhoods": [
+    "East Falls"
+   ],
+   "phone": "267-217-3492",
+   "website": "https://www.naturalcreativity.org/summercamp",
+   "signup": "Natural Creativity says its 2027 camp details go live in February 2027. The weeks shown are its 2026 ones.",
+   "note": "The camp page doesn’t give a price or say whether there is before or after care. Camp is inside Memorial Church of the Good Shepherd.",
+   "sources": [
+    {
+     "label": "Natural Creativity summer camp",
+     "url": "https://www.naturalcreativity.org/summercamp"
+    }
+   ],
+   "checked": "2026-11-22",
+   "check": {
+    "url": "https://www.naturalcreativity.org/summercamp",
+    "how": "fetch",
+    "look": "The weeks, ages and hours are in the page’s description at the top, with the line saying when the next summer’s details go live. The address is in the footer.",
+    "notes": "The camp sent its 2027 weeks and weekly price through the site’s form in November 2026, before its page posted them. Add them once the page does (February 2027), or sooner if Josh confirms them with the camp."
+   }
   }
  ],
  "todo": [
@@ -2256,6 +2291,11 @@
    "name": "CORA Early Years at Huntingdon Mills",
    "url": "https://www.coraservices.org/services/early-childhood/early-years-huntingdon-mills/",
    "why": "The page answered HTTP 403 with a “confirm you are human” check to a headless browser on 2026-11-01, so it cannot be read automatically and needs Josh."
+  },
+  {
+   "name": "Code Ninjas South Philadelphia camps",
+   "url": "https://www.codeninjas.com/pa-south-philadelphia",
+   "why": "Dropped on 2026-10-07 as “location coming soon”, but the center is open at 777 S Broad St (2026-11-22) and its page offers camps. The summer 2027 weeks and price still need reading."
   }
  ],
  "dropped": [
@@ -2272,11 +2312,6 @@
   {
    "name": "Snapology of Philadelphia",
    "why": "No location inside the city was found on its site.",
-   "seen": "2026-10-07"
-  },
-  {
-   "name": "Code Ninjas South Philadelphia",
-   "why": "Its page said “location coming soon”.",
    "seen": "2026-10-07"
   },
   {
