@@ -3370,5 +3370,235 @@
       "Bryant’s day ends at 2:54 pm. The site points to its parent and student handbook for early dismissals.",
       "If you know a program that serves Bryant and isn’t here, send it in and it goes on this page."
     ]
+  },
+  {
+    "id": "add-b-anderson",
+    "name": "Add B. Anderson School",
+    "shortName": "Add B. Anderson",
+    "aliases": [
+      "Add B. Anderson",
+      "Add B Anderson",
+      "Add Anderson",
+      "Anderson Community School",
+      "Add B. Anderson Community School",
+      "Add B. Anderson Elementary"
+    ],
+    "address": "1034 S 60th St, Philadelphia, PA 19143",
+    "neighborhood": "West Philadelphia",
+    "grades": "PK-8",
+    "dismissal": "3:09 pm",
+    "dismissalNote": "the school’s bell schedule gives the school day as 8:30 am to 3:09 pm",
+    "phone": "215-400-7890",
+    "website": "https://anderson.philasd.org/",
+    "lastReviewed": "2026-11-23",
+    "added": "2026-11-23",
+    "notes": [
+      "Episcopal Community Services (ECS) runs a free after-school program inside Anderson, 3:15 to 6:00 pm on school days, with before care from 7:30 am. The City’s program locator lists it, and ECS’s own page names Anderson among its sites. It has a listing here.",
+      "Anderson’s own site lists its clubs (robotics, Students Run Philly Style, drama club and student government; students sign up with their teachers in the fall) and its community partners: Asociación Puertorriqueños en Marcha, West Chester University, TGR, Christian Compassion, WHYY, Howard University Alternative Spring Break and Alpha Phi Alpha. They are listed here as the school’s clubs and partners, without days or times, so ask the office which meet after dismissal.",
+      "Christy Recreation Center is about half a mile east, on 55th St. The City’s Parks & Rec data lists a free after-school program there for ages 6 to 12, with homework help, snacks, the computer lab, the gym and arts and crafts. It doesn’t say it picks up from Anderson.",
+      "Anderson’s day ends at 3:09 pm. The site points to its parent and student handbook for early dismissals, and keeps its own calendar of school events on ClassDojo.",
+      "If you know a program that serves Add B. Anderson and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "rhodes",
+    "name": "E. Washington Rhodes School",
+    "shortName": "Rhodes",
+    "aliases": [
+      "E.W. Rhodes",
+      "E. W. Rhodes",
+      "EW Rhodes",
+      "E. Washington Rhodes",
+      "Rhodes Elementary",
+      "Rhodes School"
+    ],
+    "address": "2900 W Clearfield St, Philadelphia, PA 19132",
+    "neighborhood": "North Philadelphia",
+    "grades": "K-8",
+    "dismissal": "3:24 pm",
+    "dismissalNote": "the school’s bell schedule gives the school day as 8:45 am to 3:24 pm",
+    "phone": "215-400-7060",
+    "website": "https://rhodes.philasd.org/",
+    "lastReviewed": "2026-11-23",
+    "added": "2026-11-23",
+    "notes": [
+      "The Greater Philadelphia YMCA runs its free, City-funded after-school program at Rhodes, for kindergarten to 8th grade. The YMCA’s own page lists E.W. Rhodes School, and Rhodes’s site names the YMCA among its community partners. It has a listing here.",
+      "Rhodes’s site also lists cheerleading, a dance club and dance team, a yearbook club and middle-years boys’ basketball, and names Uplift Educate as a partner. They are listed here as the school’s clubs and teams, without days or times, so ask the office which meet after dismissal.",
+      "Shuler Playground is about a fifth of a mile southeast, on 27th St. The City’s Parks & Rec data lists a free after-school program there for ages 6 to 12 and after-school computer help for ages 10 to 14. It doesn’t say it picks up from Rhodes.",
+      "Rhodes’s day ends at 3:24 pm. The site points to its parent and student handbook for early dismissals.",
+      "If you know a program that serves Rhodes and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "duckrey",
+    "name": "Tanner G. Duckrey School",
+    "shortName": "Duckrey",
+    "aliases": [
+      "Tanner Duckrey",
+      "Tanner G. Duckrey",
+      "Dr. Tanner G. Duckrey",
+      "Duckrey School",
+      "Duckrey Elementary"
+    ],
+    "address": "1501 W Diamond St, Philadelphia, PA 19121",
+    "neighborhood": "North Philadelphia",
+    "grades": "K-8",
+    "dismissal": "2:54 pm",
+    "dismissalNote": "the school’s attendance and dismissal page says doors open at 8:15 am and all students must be picked up by 2:54 pm; the page was last changed on August 1, 2022, so check with the office",
+    "phone": "215-400-7350",
+    "website": "https://duckrey.philasd.org/",
+    "lastReviewed": "2026-11-23",
+    "added": "2026-11-23",
+    "notes": [
+      "The Greater Philadelphia YMCA runs its free, City-funded after-school program at Duckrey, for kindergarten to 8th grade. The YMCA’s own page lists Tanner Duckrey School, and the City’s locator lists the YMCA’s free winter break program there, December 23 to December 30, 2026. It has a listing here.",
+      "Duckrey’s parents page lists basketball, volleyball and track for 6th to 8th grade, the EducationWorks After School Program (kindergarten to 8th grade) and the Stepping Stones After School Program (3rd to 8th grade). That page was last changed on July 27, 2022, so they are listed here as the school’s word, and it’s worth asking the office which still run.",
+      "Winchester Playground is about a quarter mile north, on 15th St. The City’s locator lists its free after-school program for kindergarten to 8th grade, 3:00 to 6:00 pm on weekdays, with no transportation. Amos and Penrose playgrounds are also within half a mile and have after-school programs in the City’s Parks & Rec data.",
+      "Duckrey’s site says students staying for after-school activities must go straight to their assigned place at dismissal.",
+      "If you know a program that serves Duckrey and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "potter-thomas",
+    "name": "Potter-Thomas School",
+    "shortName": "Potter-Thomas",
+    "aliases": [
+      "Potter Thomas",
+      "Potter-Thomas Elementary",
+      "Potter Thomas School",
+      "Potter-Thomas Community School"
+    ],
+    "address": "3001 N 6th St, Philadelphia, PA 19133",
+    "neighborhood": "North Philadelphia",
+    "grades": "K-8",
+    "dismissalNote": "the school’s site doesn’t post a bell schedule, so ask the office when the day ends",
+    "phone": "215-400-7120",
+    "website": "https://potterthomas.philasd.org/",
+    "lastReviewed": "2026-11-23",
+    "added": "2026-11-23",
+    "notes": [
+      "The Greater Philadelphia YMCA runs its free, City-funded after-school program at Potter-Thomas, for kindergarten to 8th grade, according to the YMCA’s own page. It has a listing here.",
+      "Potter-Thomas’s site has pages for a computer science club (coding and digital media with PSTV) and for Big Brothers Big Sisters, the Boys & Girls Club and Girls Inc. They are listed here as the school’s clubs and partners. The pages were last changed on December 31, 2022 and January 1, 2023, and don’t say what meets after dismissal, so ask the office.",
+      "Nelson Recreation Center, a little over half a mile south, also has an after-school program in the City’s Parks & Rec data. It isn’t linked here.",
+      "The school posts its calendar as a picture on its home page.",
+      "If you know a program that serves Potter-Thomas and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "mastery-mann",
+    "name": "Mastery Charter School: Mann Elementary",
+    "shortName": "Mastery Mann",
+    "aliases": [
+      "Mastery Mann",
+      "Mann Elementary",
+      "Mastery Mann Elementary",
+      "Mastery Charter School at Mann",
+      "Mastery Charter Mann"
+    ],
+    "address": "5376 W Berks St, Philadelphia, PA 19131",
+    "neighborhood": "West Philadelphia",
+    "grades": "K-6",
+    "dismissal": "3:15 pm",
+    "dismissalNote": "the school’s page gives the school day as 8:15 am to 3:15 pm",
+    "phone": "215-581-5616",
+    "website": "https://masterycharter.org/elementary-schools/mann",
+    "calendar": {
+      "source": {
+        "label": "Mastery Schools 2026–2027 calendar (Philadelphia)",
+        "url": "https://masterycharter.org/app/uploads/2026/09/MCS.2026-2027.Calendar.pdf"
+      },
+      "checked": "2026-11-23",
+      "lastDay": "2027-06-11",
+      "days": [
+        {
+          "date": "2026-09-07",
+          "name": "Labor Day"
+        },
+        {
+          "date": "2026-09-21",
+          "name": "Yom Kippur"
+        },
+        {
+          "date": "2026-10-12",
+          "name": "Indigenous Peoples’ Day"
+        },
+        {
+          "date": "2026-10-23",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2026-11-03",
+          "name": "Election Day"
+        },
+        {
+          "date": "2026-11-11",
+          "name": "Veterans Day"
+        },
+        {
+          "date": "2026-11-25",
+          "end": "2026-11-27",
+          "name": "Thanksgiving break"
+        },
+        {
+          "date": "2026-12-11",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2026-12-24",
+          "end": "2027-01-01",
+          "name": "Winter break"
+        },
+        {
+          "date": "2027-01-18",
+          "name": "Martin Luther King Jr. Day"
+        },
+        {
+          "date": "2027-01-22",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2027-02-15",
+          "name": "Presidents’ Day"
+        },
+        {
+          "date": "2027-02-26",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2027-03-10",
+          "name": "Eid al-Fitr"
+        },
+        {
+          "date": "2027-03-22",
+          "end": "2027-03-26",
+          "name": "Spring break"
+        },
+        {
+          "date": "2027-04-09",
+          "name": "Professional development day"
+        },
+        {
+          "date": "2027-05-17",
+          "name": "Eid al-Adha"
+        },
+        {
+          "date": "2027-05-18",
+          "name": "Primary Election Day"
+        },
+        {
+          "date": "2027-05-31",
+          "name": "Memorial Day"
+        }
+      ]
+    },
+    "lastReviewed": "2026-11-23",
+    "added": "2026-11-23",
+    "notes": [
+      "Mastery Mann’s own page says before care and aftercare at the school are run by Mastermindz: before care 7:00 to 8:00 am, aftercare from dismissal to 6:00 pm, Monday to Friday, with enrollment and a monthly fee. It has a listing here; the page doesn’t give the fee, so ask the main office.",
+      "The page also lists the school’s clubs and activities: academic enrichment, art, Aspiring Divas, basketball, book, dance, flag football, math and step clubs, National Honor Society, school musicals and student leadership. They have a listing here.",
+      "Mastery Mann follows the Mastery Schools calendar, not the District’s. Its days off on this page come from Mastery’s 2026–2027 Philadelphia calendar: it closes for Yom Kippur, Eid al-Fitr and Eid al-Adha, and its spring break is March 22 to March 26. The days-off planner and the list of who’s open go by the District’s, so check a camp’s dates against Mastery’s.",
+      "Mastery’s calendar marks early dismissals on December 23, February 9, May 7 and June 11 (the last day). Ask Mastermindz whether it covers those afternoons.",
+      "The school is in Wynnefield and takes students who live in its attendance zone in 19131; the page has the map. Students can go on to Mastery’s Shoemaker Campus after 6th grade.",
+      "If you know a program that serves Mastery Mann and isn’t here, send it in and it goes on this page."
+    ]
   }
 ]

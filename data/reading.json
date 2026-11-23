@@ -262,5 +262,11 @@
     "how": "browser",
     "why": "A Finalsite site built with JavaScript; its aftercare page showed no text even in a browser on 2026-11-22.",
     "seen": "2026-11-22"
+  },
+  {
+    "match": "potterthomas.philasd.org/wp-content/uploads",
+    "how": "person",
+    "why": "Potter-Thomas posts its school calendar as screenshots, so the dates have to be read from the image.",
+    "seen": "2026-11-23"
   }
 ]
