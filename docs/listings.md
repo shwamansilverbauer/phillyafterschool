@@ -79,8 +79,11 @@ Fields worth knowing:
 
 ### Five schools a day
 
-A scheduled task ("Philly After School: five new schools a day", every morning) adds five schools a day by these same
-steps and proposes them as one pull request for Josh to merge. It never pushes to `main` or `live`.
+A scheduled task ("Philly After School: five new schools a day", every night) adds five schools a day by these same
+steps and proposes them as one pull request, which the autopilot gate checks (see "The autopilot gate"): with the
+switch on, a clean one is merged at the next hourly merge, and what the gate holds (a What's new entry always) goes to
+a second pull request for Josh. It never pushes to `main` or `live`. Its prompt is in
+[`docs/runs/five-schools.md`](runs/five-schools.md).
 
 - **Which schools.** `node scripts/next-schools.mjs [n]` lists the schools without a page that teach some of K to
   5th grade, in order: first `data/school-queue.json` (Josh's own order: add `{ "id": <its id in
@@ -90,9 +93,10 @@ steps and proposes them as one pull request for Josh to merge. It never pushes t
   that has a page, so coverage grows outward. A school the run can't do well (no site to read, a charter whose
   calendar it can't read, fewer than two programs that run there or pick up there) is skipped and named in the pull
   request, and the next one is taken.
-- **One pull request at a time.** If yesterday's is still open, the run brings it up to date with `main` and adds
-  the day's five to it, so merging never conflicts. Every school in the open pull request carries today's date as
-  `added`.
+- **One pull request at a time.** If yesterday's is still open and not held, the run brings it up to date with
+  `main` and adds the day's five to it, so merging never conflicts. If it is held (`needs-josh`), the run brings it up
+  to date, leaves it for Josh and starts the day's own branch. Every school in the open pull request carries today's
+  date as `added`.
 - **Merge within two days.** `added` is what emails the parents waiting for a school, on that morning or one of
   the two after it (the email job's catch-up), so a pull request merged later still publishes the pages but those
   emails are missed.
@@ -203,22 +207,52 @@ How a check uses it:
 Review the report and merge the changes you agree with. Busy times: March to May (next year's registration opens)
 and late August (rec centers post their listings).
 
-### Two scheduled runs
+### The scheduled runs
 
-Two scheduled tasks in the owner's Claude app do the research. Neither one pushes to `main` or to `live`, and neither
-touches `data/reviews.json`, `data/copy.json`, `data/news.json`, `data/school-dates.json`, `data/all-schools.json`,
-`data/card-qr.json`, `scripts/`, `email/`, `.github/`, `src/`, `build.mjs` or the settings that run the emails,
-accounts and terms. Each ends in a pull request for the owner to merge, with an evidence file the autopilot gate checks
-(see "The autopilot gate"; while it is in shadow mode the gate only comments).
+Four scheduled tasks in the owner's Claude app do the research (scaling plan, Phase 4). None of them pushes to `main` or
+to `live`, and none merges: each ends in a pull request with an evidence file, which the autopilot gate checks (see
+"The autopilot gate"). With the switch `on`, a clean one is merged at the next hourly merge and the site publishes;
+anything the gate holds waits for Josh on the Needs-you page. Each run checks itself first (`node scripts/gate.mjs
+--local`) and moves what the gate would hold into a second pull request, `<branch>-held`, so one held listing never
+holds up the rest (`--split`, see "What the gate checks"). Each writes `outcomes/<run>.json` to the private ops
+repository when it finishes, with `"failed"` and the step it stopped at when it couldn't (see "The private queue").
 
+Each task's full prompt, its schedule, its model and the connectors it keeps are in `docs/runs/`. The Claude app holds
+the live copy: a change to a prompt is made in the file by pull request, then pasted into the task.
+
+| Task | When | What it does | Connectors it keeps | Prompt |
+|---|---|---|---|---|
+| The queue run | 5:41 am and 12:41 pm | Works `queue/open.json`: suggestions, proposed changes, notes and mail. Ends within a minute when the queue is empty | GitHub (Claude Code Remote) | [`queue-run.md`](runs/queue-run.md) |
+| Five schools a day | 3:23 am | Adds five schools, in the order parents asked | GitHub, Google Sheets | [`five-schools.md`](runs/five-schools.md) |
+| The weekly run | Mondays, 6:59 am | The link sweep and the What's new drafts | GitHub | [`weekly-run.md`](runs/weekly-run.md) |
+| The monthly check | The 1st, 8:53 am, after the free pre-read | Re-reads every listing, weekend block and summer camp, and the district calendar, starting from the pre-read | GitHub | [`monthly-check.md`](runs/monthly-check.md) |
+
+Each task needs both repositories, `shwamansilverbauer/phillyafterschool` and `shwamansilverbauer/phillyafterschool-ops`,
+in its settings in the Claude app: the queue and the outcome files live in the ops repository, and a run can't add a
+repository its task doesn't list. A run reads strangers' text (suggestions, emails, web pages), so it holds nothing
+it could be talked into misusing: GitHub only, and Google Sheets for the schools run's claim-outreach sheet, which it
+only appends to and never emails from.
+
+- **The queue run** works the private queue (see "The private queue" below). `node scripts/queue-work.mjs <ops clone>`
+  lists the items not yet answered in any outcome file (an item answered `failed` counts as not answered), oldest
+  first, at most 15 (the gate's limit for a queue run; the rest wait for the next run), and prints "Nothing to do."
+  when there are none, which ends the run. It checks each item against the provider's own site under the monthly
+  check's rules, answers emails with the site's fixed replies, and opens a pull request named
+  `queue-<date>-<time>` (Philadelphia time). "Run now" on the task runs it any day; Rush on `/edit/queue/` reminds
+  the owner to. While the switch is `shadow`, it also tries a smaller model on its first pass (sorting the items) and
+  reports in its pull request how often the two agreed, for the owner to decide whether the smaller model can take it.
+- **Five schools a day** (above).
+- **The weekly run** sweeps the links (below) and drafts What's new entries from what shipped. Its queue work moved
+  to the queue run.
 - **The monthly check** (the first of the month) re-reads every listing, weekend block and summer camp against the
-  provider's own site, using the worklist above, and the district calendar.
-- **The weekly run** works the private queue instead (see "The private queue" below): what came in through the
-  site that needs a program's website read and judged. It reads `queue/open.json` from the private ops repository,
-  checks each item against the provider's own site under the monthly check's rules, runs `node
-  scripts/linkcheck.mjs` for dead and moved links, opens a pull request named `weekly-<date>-<time>`, and answers each item
-  it worked in `outcomes/<run>.json` there. "Run now" on the task in the Claude app runs it any day. The monthly
-  check leaves queued items to the weekly run.
+  provider's own site, using the worklist above, and the district calendar. It usually changes more values than one
+  autopilot merge may carry (40, `limits` in `scripts/gate.config.json`), so its pull request is held as a whole for
+  Josh until that limit is raised.
+
+**Cost.** The running budget assumed in the scaling plan holds only if the queue run is cheap when idle (it reads two
+small folders and stops) and no run reads the big files whole (`CLAUDE.md` and the prompts point each run at the
+sections it needs). If usage climbs, the first cut is the queue run's 12:41 pass. The tokens each run reports in its
+outcome file add up in the morning summary's cost line.
 
 `scripts/linkcheck.mjs` sweeps every outside address in the data files (programs, camps, schools, the district
 calendar): status code and final address only, six at a time, honoring `robots.txt` (a page closed to `*`,
@@ -259,8 +293,12 @@ reaches the public repository. (Until November 2026 the owner ticked items on `/
   hash of the address): the same person always has the same token, so a run can see three items from one sender,
   and only the host can match it to an address, through the `queue_items` table in the accounts database.
 - **Answers come back.** Each run writes `outcomes/<run>.json` to the ops repository:
-  `{ "run": "weekly-2026-11-30", "pr": 23, "tokens": 180000, "items": [{ "item": "s1a2b3c4d5", "outcome":
-  "published", "listing": "p:example", "pr": 23 }] }`. `outcome` is one of `published`, `held`, `declined`,
+  `{ "run": "queue-2026-11-30-0541", "pr": 23, "tokens": 180000, "items": [{ "item": "s1a2b3c4d5", "outcome":
+  "published", "listing": "p:example", "pr": 23 }] }`. The runs that don't work the queue write one too, with no
+  items, for their tokens and so that a failure shows. A run that couldn't finish adds `"failed"`: the step it stopped
+  at, one of `setup`, `queue`, `build`, `tests`, `gate`, `push`, `pull-request`, `outcomes`, `time` or `other`
+  (`QUEUE_RUN_FAILS`); the morning summary names the run and the step in the site's own words, and anything else the
+  file says is ignored. `outcome` is one of `published`, `held`, `declined`,
   `duplicate`, `needs-info`, `no-change` or `failed`; `reason`, for `needs-info` and `declined`, one of `need-page`,
   `need-website`, `need-school`, `not-a-program`, `outside`, `no-own-site` or `closed`; `pr` on an item overrides
   the file's; `tokens` is how many model tokens the run used, if it knows. An email (`m…`) can also be `answered`,
@@ -293,13 +331,13 @@ reaches the public repository. (Until November 2026 the owner ticked items on `/
   (with the addresses of the families who asked from an account, for writing to them when the school goes up; those
   stay on the page), and when the queue was last written. "Not for the run" takes an item off for good (its sender
   isn't emailed). A note added there is an item like the others. **Rush** writes the queue at once and emails the
-  owner a reminder to press "Run now" on the weekly run.
+  owner a reminder to press "Run now" on the queue run.
 - **Which schools next.** `node scripts/next-schools.mjs --asks <queue/open.json>` puts the schools families asked
   for right after `data/school-queue.json`, most asked first (see "Five schools a day").
 
 ## The autopilot gate
 
-The research runs (five schools a day, the weekly run, the monthly check, and later the queue run) end in a pull
+The research runs (the queue run, five schools a day, the weekly run and the monthly check) end in a pull
 request. The gate decides whether one can publish without Josh reading it. It keeps the site's one publishing rule,
 that only a provider's own page or word is published, and replaces Josh's review with a check a script can repeat: every
 changed value must come with a quote, and the gate re-reads that quote on the page it came from. Anything it can't
@@ -307,7 +345,7 @@ confirm, or anything on the hold list below, waits for Josh.
 
 **Where it stands.** `data/autopilot.json` on `main` holds the switch: `off` (the gate does nothing), `shadow` (it
 comments on each run's pull request and merges nothing; Josh merges by hand) or `on` (a run's pull request with nothing
-held and the tests passed merges itself and the site publishes). It starts in `shadow`. A run's pull request can never
+held and the tests passed is merged at the next hourly merge, and the site publishes). It starts in `shadow`. A run's pull request can never
 change the switch: the file isn't on the gate's allowlist, so touching it holds the pull request. The owner turns it from the Needs-you page (below).
 
 ### The evidence file
@@ -389,16 +427,45 @@ from the pull request is run. Then `scripts/gate.mjs`:
    token. A note from the build that the change caused, or a failed test, holds it.
 
 It then posts one comment in plain words (what would publish, what is held, and why; replaced, never repeated, when the
-pull request changes) and adds the label `needs-josh` when anything is held. In `on`, with nothing held and the tests
-passed, it squash-merges the exact commit it checked, only if `main` hasn't moved meanwhile (if it has, it starts
-itself again), and then starts `publish.yml` itself, because a merge made with the workflow's own token starts no
-other workflow.
+pull request changes) and adds the label `needs-josh` when anything is held. Its comment carries the commit it checked
+and whether the tests passed. In `on`, with nothing held and the tests passed, it adds the label `autopilot-ready` (and
+takes it off when that stops being true). It merges nothing itself: the hourly merge does (below).
 
 **One held item mustn't block forty good ones.** A run checks itself before opening its pull request:
 `node scripts/gate.mjs --local` compares the working tree with `main` and prints, listing by listing, what would
-publish and what is held and why (exit code 1 when anything is held). The run moves held listings into a second pull
-request and keeps the first one clean. If the gate still holds something in the clean one, it holds the whole pull
-request and names the listing to split out.
+publish and what is held and why (exit code 1 when anything is held). `--split <dir>` then moves the held listings out:
+the working tree keeps only what would publish, and `<dir>` gets main's data with only the held listings' records (the
+same keys the gate uses: `p:`, `s:`, `c:`, `d:`, `n:`, `r:`, `geo:`, `reading:`) and their evidence, as
+`evidence/<branch>-held.json`. Each file is written back in its own layout (two-space or one-space JSON); a file
+laid out any other way (`data/school-dates.json`), or a pull request held as a whole, is left for the run to split by
+hand. The run opens the clean pull request from its branch and a second one, `<branch>-held`, from `main` with `<dir>`
+laid over it; the gate holds that one for Josh. If the gate still holds something in the clean one, it holds the whole
+pull request and names the listing to split out.
+
+### Publishing in batches
+
+Every merge to `main` starts a full build and test, so the autopilot merges once an hour, not once per pull request
+(`scripts/merger.mjs`, run by `.github/workflows/autopilot.yml` on the hour's schedule, at about 17 minutes past; or by
+hand: Actions > Autopilot gate > Run workflow, with "merge" set to `yes`). Only with the switch `on`:
+
+1. **What is ready** (a read-only job): every open pull request labeled `autopilot-ready` and not `needs-josh`, oldest
+   first, ten at most, whose gate comment, by the workflow's own account, names the commit it is at now and says its
+   tests passed. GitHub's test merge of each with today's `main` is laid on `main` in turn, in a scratch worktree; one
+   that clashes with another in the batch waits for the next hour, on top of them. Each test merge must change only the
+   gate's allowlisted data and the run's evidence file, or it is held. `main`'s code and the combined data are then
+   built and tested together, once. Nothing from a pull request is run.
+2. **The merge** (a job with a write token): if the build and tests passed and `main` hasn't moved since, each pull
+   request in the batch is squash-merged at the commit the gate checked (one that moved, or lost its label, is left
+   for the next hour), and `publish.yml` is started once. If they failed, nothing is merged: each pull request in the
+   batch is labeled `needs-josh`, and the gate's comment says it was held at the hourly merge and why, so it shows on
+   the Needs-you page.
+3. **Tidying:** a pull request whose head moved since the gate looked loses `autopilot-ready` (the gate looks again
+   when it changes); one that no longer merges into `main` cleanly goes back to the gate, which holds it for the next
+   run to bring up to date; and up to five open run pull requests last judged while the switch was `shadow` or `off`
+   are sent to the gate again, so the ones opened before the switch was turned on can be ready by the next hour.
+
+The judge job no longer needs write access to the repository's contents; only the merge job has it. With the switch
+at `shadow` or `off` the hourly merge does nothing. Tests: `tests/cases/08-autopilot-merge.mjs`.
 
 ### What waits for Josh
 
@@ -428,7 +495,8 @@ arrive with those phases.
 | Reviews | Always, until Phase 6 supplies the account checks; the comment also says when a review holds a link, contact details or what may be an accusation |
 | `data/reading.json`, `data/geo.json` | A page's reading is loosened or removed; a map place already there moves, or a new one isn't in Philadelphia |
 | Mail from people | Text that addresses an AI or asks to skip a rule, legal words (lawyer, subpoena, takedown), a safety complaint, a request for someone's data, a refund or payment dispute, a school district or City address, the press, or a sponsor or partner inquiry (the last, legal and safety also push to Josh's phone at once). Checked by the host when the email comes in, before any run sees it (`mail_hold_reason()` in `src/server/mail.php`) |
-| The sender, manager words, photos, claims, payments | *Later* (Phases 4 and 6) |
+| The sender | More than three items from one sender in a day, an item that runs down another program, or an update to one program sent from another program's email domain: the queue run answers these `held` (its prompt, `docs/runs/queue-run.md`), so they wait for Josh with no pull request |
+| Manager words, photos, claims, payments | *Later* (Phases 6 and 7) |
 
 **Where the numbers live.** The data thresholds and the templates are starting values in `scripts/gate.config.json`.
 Sender and spam thresholds will live in a private file on the host, because the repository is public.

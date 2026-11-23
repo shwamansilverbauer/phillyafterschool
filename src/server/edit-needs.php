@@ -115,7 +115,7 @@ function pr_reason($p, $mode) {
   $stale = $p['gate_head'] !== '' && $p['gate_head'] !== $p['head'] ? ' (It checked an earlier commit; it checks again when the pull request changes.)' : '';
   if ($p['gate'] === 'held') return 'The gate held it: ' . (int) $p['held_n'] . ' held, ' . (int) $p['publish'] . ' listing' . ((int) $p['publish'] === 1 ? '' : 's') . ' would publish. Its comment says why.' . $stale;
   if ($p['gate'] === 'nothing') return 'The gate found no data changes to check.' . $stale;
-  return 'The gate would publish all of it (' . (int) $p['changes'] . ' change' . ((int) $p['changes'] === 1 ? '' : 's') . '). ' . ($mode === 'on' ? 'It is merging it.' : 'While the autopilot isn’t on, it waits for your merge.') . $stale;
+  return 'The gate would publish all of it (' . (int) $p['changes'] . ' change' . ((int) $p['changes'] === 1 ? '' : 's') . '). ' . ($mode === 'on' ? 'The hourly merge takes it, built and tested together with any other run that’s ready.' : 'While the autopilot isn’t on, it waits for your merge.') . $stale;
 }
 ?>
 /*HERO*/

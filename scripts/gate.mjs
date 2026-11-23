@@ -6,13 +6,19 @@
 //       would publish and what is held, by listing, so held listings can go to a second pull request. Exit code 1
 //       when anything is held. --draft adds a record to the evidence file for every changed value that has none,
 //       with the path, old and new values filled in and the source and quote left for the run to fill.
+//   node scripts/gate.mjs --local --split <dir>
+//       The same, then splits the work in two when listings are held: the working tree keeps only what would publish,
+//       and <dir> gets the held listings' versions of the data files (on main's data) and their evidence, as
+//       evidence/<branch>-held.json, for a second pull request on the branch <branch>-held. Each file keeps its layout;
+//       a file whose layout can't be kept, or a pull request held as a whole, is left for the run to split by hand.
 //   node scripts/gate.mjs --pr <n> --stage <dir>
 //   node scripts/gate.mjs --pr <n> --judge <dir> --tests passed|failed|skipped [--post]
 //       In .github/workflows/autopilot.yml: --stage copies main's code and the pull request's allowlisted data
 //       into <dir> (nothing else from the pull request is copied, and nothing from it is run); the workflow builds
 //       and tests there; --judge runs the checks, writes <dir>/verdict.json and <dir>/comment.md, and with --post
 //       comments on the pull request, labels it needs-josh when something is held, and, only when
-//       data/autopilot.json on main says "on", squash-merges the exact commit it checked and starts the publish.
+//       data/autopilot.json on main says "on" and nothing is held, labels it autopilot-ready. It merges nothing itself:
+//       scripts/merger.mjs, once an hour, builds and tests everything ready together and merges it (Phase 4).
 //   node scripts/gate.mjs --replay <from> [--out <file>] [--only 10,12]
 //       The checks on pull requests that were already decided (merged or closed), from number <from> on. Ones with
 //       no evidence file get evidence built from each listing's stored sources and pickup lists where the page
@@ -39,6 +45,7 @@ const REPO = process.env.GATE_REPO || process.env.GITHUB_REPOSITORY || 'shwamans
 const TOKEN = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
 const TODAY = process.env.GATE_TODAY || new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(new Date());
 const MARK = 'pas-gate';
+const READY = 'autopilot-ready';   // the label the hourly merger looks for (scripts/merger.mjs)
 // Tests only: every outside page, robots.txt and the registry are asked of this stand-in instead, with the real host
 // in an x-test-host header (tests/cases/06-gate.mjs).
 const TEST_ORIGIN = (process.env.GATE_TEST_ORIGIN || '').replace(/\/$/, '');
@@ -668,15 +675,15 @@ function finish({ whole, notes, items, tests, branch, nothing = false, buildChec
 
 // ---------------------------------------------------------------- words for people
 function describe(c) { return c.path === '' ? (c.old === undefined ? 'new' : c.new === undefined ? 'removed' : 'changed') : `${c.path}: ${short(c.old)} → ${short(c.new)}`; }
-export function comment(v, { mode, head, pr } = {}) {
+export function comment(v, { mode, head, base, pr } = {}) {
   const pub = v.items.filter(i => !i.held.length), held = v.items.filter(i => i.held.length);
-  const meta = { verdict: v.verdict, mode, head, branch: v.branch, today: v.today, changes: v.counts.changes, listings: v.counts.listings, held: held.length + (v.whole.length ? 1 : 0), publish: pub.length, whole: v.whole.length };
+  const meta = { verdict: v.verdict, mode, head, base, tests: v.tests, branch: v.branch, today: v.today, changes: v.counts.changes, listings: v.counts.listings, held: held.length + (v.whole.length ? 1 : 0), publish: pub.length, whole: v.whole.length };
   const out = [`<!-- ${MARK} ${JSON.stringify(meta)} -->`];
   const head1 = v.verdict === 'nothing' ? 'No data changes to check.'
     : v.verdict === 'publish' ? `Everything checks out: ${plural(pub.length, 'listing')} (${plural(v.counts.changes, 'change')}) would publish.`
       : `${plural(pub.length, 'listing')} would publish, ${held.length ? plural(held.length, 'listing') + ' held' : 'nothing held by listing'}${v.whole.length ? ', and the pull request as a whole is held' : ''}.`;
   out.push(`### Autopilot gate: ${head1}`);
-  out.push(mode === 'on' ? (v.verdict === 'publish' ? '_Autopilot is on: this merges itself and the site publishes._' : '_Autopilot is on, but something is held, so this waits for Josh._')
+  out.push(mode === 'on' ? (v.verdict === 'publish' ? (v.tests === 'passed' ? '_Autopilot is on: this merges itself at the next hourly merge, built and tested together with any other run that is ready, and the site publishes once._' : '_Autopilot is on, but the tests didn’t run on this commit, so it isn’t merged. It is checked again when the pull request changes, or by hand (Actions > Autopilot gate)._') : '_Autopilot is on, but something is held, so this waits for Josh._')
     : mode === 'shadow' ? '_Shadow mode: the gate only says what it would do. Nothing is merged; Josh merges by hand as before._' : '');
   if (v.whole.length) { out.push('', '**Held as a whole, and why**'); for (const w of v.whole) out.push(`- ${w}`); }
   if (held.length) {
@@ -756,7 +763,7 @@ async function prJudge(n, dir, tests, post, buildCheck = true, testedHead = '') 
   if (state.conflict) v = finish({ whole: ['It conflicts with main, so it can’t be checked or merged as it stands. The next run brings it up to date.'], notes: [], items: new Map(), tests, branch: state.branch });
   else v = await judge({ before: filesAt(state.base), after: Object.fromEntries(CFG.allow.map(f => [f, fs.existsSync(path.join(dir, f)) ? parse(fs.readFileSync(path.join(dir, f), 'utf8')) : null])), changed: state.changed, evidenceText: gitShow(state.merge, CFG.evidenceDir + state.branch + '.json'), branch: state.branch, tests, buildCheck, mainReading: parse(gitShow(state.base, 'data/reading.json')) });
   if (browser) await browser.close().catch(() => {});
-  const body = comment(v, { mode: state.mode, head: state.head, pr: n });
+  const body = comment(v, { mode: state.mode, head: state.head, base: state.base, pr: n });
   fs.writeFileSync(path.join(dir, 'verdict.json'), JSON.stringify({ ...v, head: state.head, base: state.base, mode: state.mode }, null, 1));
   fs.writeFileSync(path.join(dir, 'comment.md'), body);
   if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, body);
@@ -768,19 +775,12 @@ async function prJudge(n, dir, tests, post, buildCheck = true, testedHead = '') 
   if (mine) await ghOk('PATCH', `/repos/${REPO}/issues/comments/${mine.id}`, { body }); else await ghOk('POST', `/repos/${REPO}/issues/${n}/comments`, { body });
   if (v.verdict === 'held') await ghOk('POST', `/repos/${REPO}/issues/${n}/labels`, { labels: ['needs-josh'] });
   else { const r = await gh('DELETE', `/repos/${REPO}/issues/${n}/labels/needs-josh`); if (!r.ok && r.status !== 404) throw new Error('could not take the label off: ' + r.status); }
-  // The merge: only in "on", only with nothing held and the tests passed, only the commit checked, only if main hasn't moved.
-  if (state.mode === 'on' && v.verdict === 'publish' && tests === 'passed') {
-    const pr = await ghOk('GET', `/repos/${REPO}/pulls/${n}`);
-    const main = await ghOk('GET', `/repos/${REPO}/git/ref/heads/main`);
-    if (pr.head.sha !== state.head || main.object.sha !== state.base) {
-      console.log('The pull request or main moved while it was being checked: checking again.');
-      await ghOk('POST', `/repos/${REPO}/actions/workflows/autopilot.yml/dispatches`, { ref: 'main', inputs: { pr: String(n) } });
-      return v;
-    }
-    await ghOk('PUT', `/repos/${REPO}/pulls/${n}/merge`, { merge_method: 'squash', sha: state.head, commit_title: `${pr.title} (#${n})`, commit_message: 'Merged by the autopilot gate: every change matched a quote re-read on the provider’s own page.' });
-    await ghOk('POST', `/repos/${REPO}/actions/workflows/publish.yml/dispatches`, { ref: 'main' });
-    console.log(`Merged #${n} at ${state.head.slice(0, 7)} and started the publish.`);
-  }
+  // Ready to merge: only in "on", only with nothing held and the tests passed. The merge itself is the hourly merger's
+  // (scripts/merger.mjs): it builds and tests every ready pull request together on the main of that hour and merges
+  // the exact commits this comment names, then starts one publish. A label is all this step changes.
+  const ready = state.mode === 'on' && v.verdict === 'publish' && tests === 'passed';
+  if (ready) { await ghOk('POST', `/repos/${REPO}/issues/${n}/labels`, { labels: [READY] }); console.log(`#${n} at ${state.head.slice(0, 7)} is ready: the hourly merge takes it.`); }
+  else { const r = await gh('DELETE', `/repos/${REPO}/issues/${n}/labels/${READY}`); if (!r.ok && r.status !== 404) throw new Error('could not take the ready label off: ' + r.status); }
   return v;
 }
 
@@ -796,7 +796,74 @@ async function local() {
   if (browser) await browser.close().catch(() => {});
   if (flag('draft')) draft(v, evFile, before, after);
   if (flag('json')) console.log(JSON.stringify(v, null, 1)); else printLocal(v);
+  if (opt('split')) split(v, path.resolve(opt('split')), mb, branch, evFile);
   process.exit(v.verdict === 'held' ? 1 : 0);
+}
+
+// --split: the held listings out of the working tree and into <dir>, so the run opens two pull requests, one clean.
+// Records are swapped whole, by the keys the gate uses (recordsOf), and each file is written back in its own layout
+// (two-space or one-space JSON). Nothing is changed when the split can't be made cleanly.
+function split(v, dir, mb, branch, evFile) {
+  const held = new Set(v.items.filter(i => i.held.length).map(i => i.key));
+  if (v.whole.length) { console.log(`\nNot split: the pull request is held as a whole (${v.whole[0]}). Fix that first, or open it for Josh as it is.`); return; }
+  if (!held.size) { console.log('\nNothing to split: nothing is held.'); return; }
+  const layout = t => { const j = parse(t); if (j === undefined || j === null) return null; for (const n of [2, 1]) if (t === JSON.stringify(j, null, n) + '\n') return n; return null; };
+  const plan = [];
+  for (const f of CFG.allow) {
+    const beforeText = gitShow(mb, f), afterText = fs.existsSync(path.join(ROOT, f)) ? fs.readFileSync(path.join(ROOT, f), 'utf8') : null;
+    if (beforeText === afterText) continue;
+    const B = parse(beforeText), A = parse(afterText);
+    const keysHere = new Set([...recordsOf(f, B).keys(), ...recordsOf(f, A).keys()].filter(k => held.has(k)));
+    if (!keysHere.size) continue;
+    const nA = afterText === null ? null : layout(afterText), nB = beforeText === null ? 2 : layout(beforeText);
+    if (A === null || A === undefined || !nA || !nB) { console.log(`\nNot split: ${f} isn't laid out the way the gate writes JSON, so its held records must be moved by hand: ${[...keysHere].join(', ')}.`); return; }
+    plan.push({ f, B: B ?? (Array.isArray(A) ? [] : {}), A, keys: keysHere, nA, nB });
+  }
+  const swap = (from, to, keys, f) => {   // "to" with the records named by keys taken from "from" (or taken out)
+    const out = JSON.parse(JSON.stringify(to));
+    const fromRecs = recordsOf(f, from), coll = { 'p': null, 's': null, 'n': null, 'r': null, 'reading': null, 'c': 'camps', 'd': 'schools', 'geo': 'places' }[FILEKEY[f]];
+    const rest = path.basename(f, '.json') + ':*';
+    const list = coll === null ? out : out[coll];
+    if (Array.isArray(list)) {
+      const toKeys = [...recordsOf(f, out).keys()].filter(k => k !== rest);
+      const fromKeys = [...fromRecs.keys()].filter(k => k !== rest);
+      const res = [];   // [key, record], in "to"'s order
+      toKeys.forEach((k, i) => { if (!keys.has(k)) res.push([k, list[i]]); else if (fromRecs.has(k)) res.push([k, fromRecs.get(k)]); });
+      fromKeys.forEach((k, i) => {   // a held record "to" doesn't have goes in after its nearest neighbour from "from"
+        if (!keys.has(k) || res.some(e => e[0] === k)) return;
+        let at = 0;
+        for (let j = i - 1; j >= 0; j--) { const x = res.findIndex(e => e[0] === fromKeys[j]); if (x >= 0) { at = x + 1; break; } }
+        res.splice(at, 0, [k, fromRecs.get(k)]);
+      });
+      if (coll === null) return res.map(e => e[1]);
+      out[coll] = res.map(e => e[1]);
+    } else if (isObj(list)) {
+      for (const k of keys) { if (k === rest) continue; const id = k.slice(k.indexOf(':') + 1); if (fromRecs.has(k)) list[id] = fromRecs.get(k); else delete list[id]; }
+    }
+    if (keys.has(rest) && isObj(out)) {   // the file's own top-level fields, in their order
+      const fr = fromRecs.get(rest) || {}, o2 = {};
+      for (const k of Object.keys(out)) { if (k === coll) o2[k] = out[k]; else if (k in fr) o2[k] = fr[k]; }
+      for (const k of Object.keys(fr)) if (!(k in o2)) o2[k] = fr[k];
+      return o2;
+    }
+    return out;
+  };
+  fs.mkdirSync(dir, { recursive: true });
+  for (const { f, B, A, keys, nA, nB } of plan) {
+    const clean = swap(B, A, keys, f), heldOnes = swap(A, B, keys, f);
+    fs.writeFileSync(path.join(ROOT, f), JSON.stringify(clean, null, nA) + '\n');
+    fs.mkdirSync(path.dirname(path.join(dir, f)), { recursive: true });
+    fs.writeFileSync(path.join(dir, f), JSON.stringify(heldOnes, null, nB) + '\n');
+  }
+  const ev = parse(fs.existsSync(evFile) ? fs.readFileSync(evFile, 'utf8') : null);
+  if (isObj(ev) && Array.isArray(ev.items)) {
+    const mine = it => it && held.has(it.listing);
+    fs.mkdirSync(path.join(dir, CFG.evidenceDir), { recursive: true });
+    fs.writeFileSync(path.join(dir, CFG.evidenceDir, `${branch}-held.json`), JSON.stringify({ ...ev, run: `${ev.run || branch}-held`, items: ev.items.filter(mine) }, null, 2) + '\n');
+    fs.writeFileSync(evFile, JSON.stringify({ ...ev, items: ev.items.filter(it => !mine(it)) }, null, 2) + '\n');
+  }
+  console.log(`\nSplit: ${plural(held.size, 'held listing')} (${[...held].join(', ')}) moved to ${dir}. The working tree now has only what would publish: run the gate again, then commit it.`);
+  console.log(`For the second pull request: git switch -c ${branch}-held ${mb.slice(0, 12)}, copy ${dir}/. over the repository, commit, push, and open it for Josh.`);
 }
 // --draft: a record for every changed value that has none yet, for the run to fill in (source, quote, how).
 function draft(v, evFile, before, after) {
@@ -946,7 +1013,7 @@ async function report() {
 }
 
 export const _reset = () => { pages.clear(); ages.clear(); };
-export { windowWith, onTemplate, readEvidence };
+export { windowWith, onTemplate, readEvidence, gh, ghOk, eligible, CFG, MARK, READY, REPO, TODAY };
 
 // ---------------------------------------------------------------- start
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

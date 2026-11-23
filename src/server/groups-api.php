@@ -1956,6 +1956,9 @@ function signup_digest(string $today, int $hour, bool $force = false): array {
 /*QUEUE*/
 const QUEUE_OUTCOMES = array('published', 'held', 'declined', 'duplicate', 'needs-info', 'no-change', 'failed', 'answered', 'spam');
 const QUEUE_REASONS = array('need-page', 'need-website', 'need-school', 'not-a-program', 'outside', 'no-own-site', 'closed');
+// A run that couldn't finish (scaling plan, Phase 4) says so in its outcome file with "failed": one of these words, the
+// step it stopped at. The morning summary names it in the site's own words; the run's own message is in the Claude app.
+const QUEUE_RUN_FAILS = array('setup', 'queue', 'build', 'tests', 'gate', 'push', 'pull-request', 'outcomes', 'time', 'other');
 // For an email from a person (an "m…" item, scaling plan Phase 5): "answered" with one of these fixed answers, or
 // "published" with "thanks-updated" (the program's own word, recorded as a told entry). "spam" settles it with no reply.
 const QUEUE_REPLIES = array('thanks-updated', 'how-to-claim', 'delete-account', 'stop-emails', 'add-school');
@@ -2003,13 +2006,16 @@ function queue_outcomes(array $ctx): array {
     list($c, $r) = offsite_gh('GET', '/repos/' . $ctx['ops'] . '/contents/outcomes/' . rawurlencode($name), null);
     if ($c !== 200 || !is_array($r) || !isset($r['content'])) continue;   // tried again next hour
     $doc = json_decode((string) base64_decode(str_replace("\n", '', (string) $r['content'])), true);
-    $applied = 0; $tokens = 0;
+    $applied = 0; $tokens = 0; $runName = ''; $failed = '';
     if (is_array($doc)) {
       list($applied, $skipped) = queue_apply($doc);
       $res['items'] += $applied; $res['skipped'] += $skipped;
       $tokens = isset($doc['tokens']) && is_int($doc['tokens']) && $doc['tokens'] > 0 ? min($doc['tokens'], 1000000000) : 0;
+      $runName = isset($doc['run']) && is_string($doc['run']) && preg_match('/^[A-Za-z0-9._-]{1,80}$/', $doc['run']) ? $doc['run'] : '';
+      $failed = isset($doc['failed']) && is_string($doc['failed']) && in_array($doc['failed'], QUEUE_RUN_FAILS, true) ? $doc['failed'] : '';
+      if ($failed !== '') $res['failed'] = (isset($res['failed']) ? $res['failed'] : 0) + 1;
     }
-    q('INSERT INTO queue_runs (file, sha, read, items, tokens) VALUES (?, ?, ?, ?, ?) ON CONFLICT(file) DO UPDATE SET sha = excluded.sha, read = excluded.read, items = excluded.items, tokens = excluded.tokens', array($name, $sha, now(), $applied, $tokens));
+    q('INSERT INTO queue_runs (file, sha, read, items, tokens, run, failed) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT(file) DO UPDATE SET sha = excluded.sha, read = excluded.read, items = excluded.items, tokens = excluded.tokens, run = excluded.run, failed = excluded.failed', array($name, $sha, now(), $applied, $tokens, $runName, $failed));
     if ($tokens && !isset($known[$name])) { try { q('INSERT INTO tally (k, day, n) VALUES (?, ?, ?) ON CONFLICT(k, day) DO UPDATE SET n = n + excluded.n', array('run_tokens', today_ny(), $tokens)); } catch (Exception $e) { /* counting never gets in the way */ } }
     $res['files']++;
   }
@@ -2575,6 +2581,12 @@ function owner_summary(string $today, string $clock, bool $force = false): array
   }
   $answered = $num('SELECT COALESCE(MAX(read), 0) FROM queue_runs');
   $lines[] = array(t(__T("The last answer from a run to the queue: {when}."), $v + array('when' => sum_when($answered))), '');
+  // Runs that couldn't finish (Phase 4): each says so in its outcome file, with the step it stopped at.
+  $STEPS = array('setup' => t(__T("setting up (attaching or cloning a repository)"), $v), 'queue' => t(__T("reading the queue"), $v), 'build' => t(__T("the build"), $v), 'tests' => t(__T("the tests"), $v), 'gate' => t(__T("its own run of the gate"), $v), 'push' => t(__T("pushing its branch"), $v), 'pull-request' => t(__T("opening its pull request"), $v), 'outcomes' => t(__T("writing its answers to the queue"), $v), 'time' => t(__T("running out of time"), $v), 'other' => t(__T("a step it couldn’t name"), $v));
+  foreach ($rows("SELECT file, run, failed, read FROM queue_runs WHERE failed != '' AND read >= ? ORDER BY read DESC LIMIT 5", array($start)) as $f) {
+    $runName = (string) $f['run'] !== '' ? (string) $f['run'] : preg_replace('/\.json$/', '', (string) $f['file']);
+    $lines[] = array(t(__T("{run} didn’t finish: it stopped at {step} ({when}). Its message in the Claude app says what failed; anything it didn’t answer stays in the queue for the next run."), $v + array('run' => $runName, 'step' => isset($STEPS[$f['failed']]) ? $STEPS[$f['failed']] : (string) $f['failed'], 'when' => sum_when((int) $f['read']))), '');
+  }
   $beat = (int) meta_get('mail_beat');
   $lines[] = array($beat > 0 ? t(__T("The mailbox script last checked in {when}."), $v + array('when' => sum_when($beat))) : t(__T("The mailbox script isn’t set up yet."), $v), '');
   if (is_array($info) && array_key_exists('alias', $info) && $info['alias'] === false) $lines[] = array(t(__T("Replies can’t leave from the site’s address: add it under “Send mail as” in the mailbox’s Gmail settings."), $v), '');

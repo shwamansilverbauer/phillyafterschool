@@ -13,7 +13,8 @@ agents: the commands, the standing rules and which file to open for a task.
 | [`docs/setup.md`](docs/setup.md) | **Setup, building and publishing.** What is in the repository, the settings file, the build, and how a change reaches the live site. |
 | [`docs/tests.md`](docs/tests.md) | **Tests.** Running the tests, and building the site for a fixed day. |
 | [`docs/operations.md`](docs/operations.md) | **Backups, monitoring and sending email.** The accounts database backups, the restore drill, monitoring, and how the site sends email. |
-| [`docs/listings.md`](docs/listings.md) | **Schools and listings: adding, editing, keeping current.** Adding a school, editing a listing, the scheduled research runs, the monthly check, the autopilot gate and the Needs-you page. |
+| [`docs/listings.md`](docs/listings.md) | **Schools and listings: adding, editing, keeping current.** Adding a school, editing a listing, the scheduled research runs, the monthly check, the autopilot gate, the hourly merge and the Needs-you page. |
+| [`docs/runs/`](docs/runs/) | **The scheduled runs' prompts.** The queue run, five schools a day, the weekly run and the monthly check: each task's prompt, schedule, model and connectors, to paste into the Claude app. |
 | [`docs/pages.md`](docs/pages.md) | **The public pages.** Program, school and neighborhood pages, finding programs, the menu, the map and the small pages. |
 | [`docs/camps-and-weekends.md`](docs/camps-and-weekends.md) | **Summer camps and weekend classes.** The summer camp pages and plan, and the weekend classes list. |
 | [`docs/planners.md`](docs/planners.md) | **The planners.** Build your week, the days-off and summer plans, the calendar, rosters, and why planners need an account. |

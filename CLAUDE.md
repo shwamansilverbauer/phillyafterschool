@@ -28,7 +28,8 @@ accounts, plans, claims and the edit pages. This repository is **public**.
 | `node scripts/geocode.mjs` | Puts new addresses in `data/geo.json` (the build notes any missing) |
 | `node scripts/linkcheck.mjs` | Dead and moved links in the data |
 | `node scripts/precheck.mjs` | The free pre-read before the monthly check |
-| `node scripts/gate.mjs --local` | The autopilot gate on your branch before a run opens its pull request: what would publish, what is held. `--draft` adds evidence records to fill in |
+| `node scripts/gate.mjs --local` | The autopilot gate on your branch before a run opens its pull request: what would publish, what is held. `--draft` adds evidence records to fill in; `--split <dir>` moves the held listings to `<dir>` for a second pull request |
+| `node scripts/queue-work.mjs <ops clone>` | The queue run's worklist: items not yet answered, oldest first, 15 at most, or "Nothing to do." |
 | `node scripts/gate.mjs --report` | The shadow report: the gate's verdicts beside what Josh did (`--replay 10` checks pull requests already decided) |
 
 The tests need `node`, `php` with pdo_sqlite, openssl and curl, and Playwright for the browser tests (`PLAYWRIGHT_DIR`
@@ -60,7 +61,10 @@ without `phillyafterschool-private.json`, which only the Actions runs have.
 | `mail/Code.gs` | The mailbox script, pasted into script.google.com inside the contact@ Google account: files the inbox, posts mail people wrote to the site, sends the replies and the outreach. Runs every 10 minutes |
 | `tests/` | The tests (`tests/README.md` says how to write one) |
 | `scripts/gate.mjs`, `scripts/gate.config.json` | The autopilot gate and its thresholds and templates |
-| `.github/workflows/` | `publish.yml` (build, test, publish to `live`), `test.yml` (every pull request), `autopilot.yml` (the gate on run pull requests), `alerts.yml`, `monitor.yml`, `precheck.yml` |
+| `scripts/merger.mjs` | The hourly merge: everything the gate labeled `autopilot-ready`, built and tested together, merged, one publish (run by `autopilot.yml` only) |
+| `scripts/queue-work.mjs` | What the queue run has left to work, from a clone of the ops repository |
+| `docs/runs/` | The four scheduled tasks' prompts, schedules, models and connectors. The Claude app holds the live copy; change the file by pull request, then paste |
+| `.github/workflows/` | `publish.yml` (build, test, publish to `live`), `test.yml` (every pull request), `autopilot.yml` (the gate on run pull requests, and the hourly merge), `alerts.yml`, `monitor.yml`, `precheck.yml` |
 
 **How a change goes live.** A merge to `main` runs `publish.yml`: build, tests, then the finished files go to the
 `live` branch, which the host deploys. A failed build or test stops it and the live site stays as it was.
@@ -71,9 +75,9 @@ without `phillyafterschool-private.json`, which only the Actions runs have.
 |---|---|
 | Add a school | [`docs/listings.md`](docs/listings.md): "Add a school" and "Five schools a day" |
 | Edit or add a listing | [`docs/listings.md`](docs/listings.md): "Edit a listing" (every field) |
-| The monthly check, the weekly run | [`docs/listings.md`](docs/listings.md): "Keeping it current" and "Two scheduled runs" |
+| The scheduled runs (queue run, five schools, weekly, monthly) and their prompts | [`docs/listings.md`](docs/listings.md): "Keeping it current" and "The scheduled runs"; the prompts are in [`docs/runs/`](docs/runs/) |
 | The private queue, outcome files, the answers to senders | [`docs/listings.md`](docs/listings.md): "The private queue" |
-| Evidence files, the autopilot gate, what waits for Josh | [`docs/listings.md`](docs/listings.md): "The autopilot gate" |
+| Evidence files, the autopilot gate, what waits for Josh, the hourly merge | [`docs/listings.md`](docs/listings.md): "The autopilot gate" and "Publishing in batches" |
 | The Needs-you page, Approve, Undo, the switch | [`docs/listings.md`](docs/listings.md): "The Needs-you page, the log, Undo and the switch" |
 | The morning summary, pushes to the owner's phone | [`docs/emails.md`](docs/emails.md): "The morning summary" |
 | The mailbox script, mail from people, replies, the outreach sender, `X-PAS-Kind` | [`docs/emails.md`](docs/emails.md): "The mailbox script" |
