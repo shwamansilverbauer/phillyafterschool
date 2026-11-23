@@ -5328,6 +5328,267 @@
           "how": "fetch"
         }
       ]
+    },
+    {
+      "item": "school:kelley",
+      "kind": "update",
+      "listing": "p:kelley-clubs",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "what",
+          "old": "Art Club, WHYY Media Club, Girls Inc., a fitness club and other activities Kelley lists on its own site",
+          "new": "Art Club, WHYY Media Club, Girls Inc., Students Run Philly Style, a fitness club and other activities Kelley lists on its own site",
+          "source": "https://kelley.philasd.org/",
+          "quote": "Students Run Philly Style • Father’s Day Rally Committee Rites of Passage Male Mentoring Program",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "keywords",
+          "old": [
+            "clubs",
+            "art",
+            "media",
+            "WHYY",
+            "Girls Inc.",
+            "girls",
+            "mentoring",
+            "tutoring",
+            "fitness",
+            "choir",
+            "band",
+            "Kelley"
+          ],
+          "new": [
+            "clubs",
+            "art",
+            "media",
+            "WHYY",
+            "Girls Inc.",
+            "girls",
+            "mentoring",
+            "tutoring",
+            "fitness",
+            "choir",
+            "band",
+            "Kelley",
+            "running",
+            "Students Run Philly Style"
+          ],
+          "source": "https://kelley.philasd.org/",
+          "quote": "Students Run Philly Style • Father’s Day Rally Committee Rites of Passage Male Mentoring Program",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Students Run Philly Style].name",
+          "old": null,
+          "new": "Students Run Philly Style",
+          "source": "https://kelley.philasd.org/",
+          "quote": "Students Run Philly Style • Father’s Day Rally Committee Rites of Passage Male Mentoring Program",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Students Run Philly Style].what",
+          "old": null,
+          "new": "A running and mentoring program; Kelley’s site lists it without days or grades",
+          "source": "https://kelley.philasd.org/",
+          "quote": "Students Run Philly Style • Father’s Day Rally Committee Rites of Passage Male Mentoring Program",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Students Run Philly Style].tags",
+          "old": null,
+          "new": [
+            "movement"
+          ],
+          "source": "https://kelley.philasd.org/",
+          "quote": "Students Run Philly Style • Father’s Day Rally Committee Rites of Passage Male Mentoring Program",
+          "read": "2026-11-23",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:mastery-prep",
+      "kind": "update",
+      "listing": "p:mastery-prep-clubs",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "what",
+          "old": "Teams and clubs Mastery Prep lists on its own page: basketball, dance, homework club, drumline and art club",
+          "new": "Teams and clubs Mastery Prep lists on its own page: basketball, dance, homework club, drumline and art club, and the Boys & Girls Club it names for after-school care",
+          "source": "https://masterycharter.org/elementary-schools/mastery-prep",
+          "quote": "Boys & Girls Club – Offers after-school care only.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "keywords",
+          "old": [
+            "clubs",
+            "basketball",
+            "dance",
+            "drumline",
+            "art",
+            "homework",
+            "Mastery Prep"
+          ],
+          "new": [
+            "clubs",
+            "basketball",
+            "dance",
+            "drumline",
+            "art",
+            "homework",
+            "Mastery Prep",
+            "Boys & Girls Club"
+          ],
+          "source": "https://masterycharter.org/elementary-schools/mastery-prep",
+          "quote": "Boys & Girls Club – Offers after-school care only.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Boys & Girls Club (after-school care)].name",
+          "old": null,
+          "new": "Boys & Girls Club (after-school care)",
+          "source": "https://masterycharter.org/elementary-schools/mastery-prep",
+          "quote": "Boys & Girls Club – Offers after-school care only.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Boys & Girls Club (after-school care)].what",
+          "old": null,
+          "new": "The school’s page names a Boys & Girls Club for after-school care only, without saying which club, where it meets or how children get there",
+          "source": "https://masterycharter.org/elementary-schools/mastery-prep",
+          "quote": "Boys & Girls Club – Offers after-school care only.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Boys & Girls Club (after-school care)].tags",
+          "old": null,
+          "new": [
+            "aftercare"
+          ],
+          "source": "https://masterycharter.org/elementary-schools/mastery-prep",
+          "quote": "Boys & Girls Club – Offers after-school care only.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Boys & Girls Club (after-school care)].roster",
+          "old": null,
+          "new": false,
+          "source": "https://masterycharter.org/elementary-schools/mastery-prep",
+          "quote": "Boys & Girls Club – Offers after-school care only.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:kelley",
+      "kind": "update",
+      "listing": "s:kelley",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "alsoListed.title",
+          "old": "Also named by Kelley",
+          "new": null,
+          "source": "https://kelley.philasd.org/",
+          "quote": "Students Run Philly Style • Father’s Day Rally Committee Rites of Passage Male Mentoring Program",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.intro",
+          "old": "Kelley’s own site names this too, and we haven’t confirmed it on the program’s own site.",
+          "new": null,
+          "source": "https://kelley.philasd.org/",
+          "quote": "Students Run Philly Style • Father’s Day Rally Committee Rites of Passage Male Mentoring Program",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.items",
+          "old": [
+            "Students Run Philly Style, a running and mentoring program whose own site describes teams for grades 6 to 12. studentsrunphilly.org"
+          ],
+          "new": null,
+          "source": "https://kelley.philasd.org/",
+          "quote": "Students Run Philly Style • Father’s Day Rally Committee Rites of Passage Male Mentoring Program",
+          "read": "2026-11-23",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:mastery-prep",
+      "kind": "update",
+      "listing": "s:mastery-prep",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "notes",
+          "old": [
+            "Mastery Prep’s own page names two after-school care options: Change 4 A Dollar, which offers before- and after-school care, from dismissal to 6:00 pm, Monday to Friday, open to all students, and a Boys & Girls Club, which offers after-school care only. It says sign-up details come to families through ParentSquare. Change 4 A Dollar has a listing here; the page doesn’t say which Boys & Girls Club, so it is under “Also named on Mastery Prep’s page” for you to ask about.",
+            "The page also lists the school’s own clubs and teams: boys’ and girls’ basketball, dance, homework club, drumline and art club. They have a listing here.",
+            "Mastery Prep follows the Mastery Schools calendar, not the District’s. Its days off on this page come from Mastery’s 2026–27 Philadelphia calendar: it closes for Yom Kippur, Eid al-Fitr and Eid al-Adha, and its spring break is March 22 to 26. The days-off planner and the list of who’s open go by the District’s, so check a camp’s dates against Mastery’s.",
+            "Mastery’s calendar marks early dismissals on December 23, February 9, May 7 and June 11 (the last day). Ask Change 4 A Dollar whether it covers those afternoons.",
+            "The School District’s list gives Mastery Prep as kindergarten to 3rd grade; Mastery’s own page says kindergarten to 6th grade, which is what this page uses.",
+            "If you know a program that serves Mastery Prep and isn’t here, send it in and it goes on this page."
+          ],
+          "new": [
+            "Mastery Prep’s own page names two after-school care options: Change 4 A Dollar, which offers before- and after-school care, from dismissal to 6:00 pm, Monday to Friday, open to all students, and a Boys & Girls Club, which offers after-school care only. It says sign-up details come to families through ParentSquare. Change 4 A Dollar has a listing here; the page doesn’t say which Boys & Girls Club, so it is listed with the school’s clubs; ask the school which club it means and how children get there.",
+            "The page also lists the school’s own clubs and teams: boys’ and girls’ basketball, dance, homework club, drumline and art club. They have a listing here.",
+            "Mastery Prep follows the Mastery Schools calendar, not the District’s. Its days off on this page come from Mastery’s 2026–27 Philadelphia calendar: it closes for Yom Kippur, Eid al-Fitr and Eid al-Adha, and its spring break is March 22 to 26. The days-off planner and the list of who’s open go by the District’s, so check a camp’s dates against Mastery’s.",
+            "Mastery’s calendar marks early dismissals on December 23, February 9, May 7 and June 11 (the last day). Ask Change 4 A Dollar whether it covers those afternoons.",
+            "The School District’s list gives Mastery Prep as kindergarten to 3rd grade; Mastery’s own page says kindergarten to 6th grade, which is what this page uses.",
+            "If you know a program that serves Mastery Prep and isn’t here, send it in and it goes on this page."
+          ],
+          "source": "https://masterycharter.org/elementary-schools/mastery-prep",
+          "quote": "Change 4 A Dollar – Provides before- and after-school care. After-school care is available from dismissal until 6:00 PM, Monday through Friday. All students are eligible to enroll. Boys & Girls Club – Offers after-school care only.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.title",
+          "old": "Also named on Mastery Prep’s page",
+          "new": null,
+          "source": "https://masterycharter.org/elementary-schools/mastery-prep",
+          "quote": "Boys & Girls Club – Offers after-school care only.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.intro",
+          "old": "The school’s page names this aftercare option without saying where it meets.",
+          "new": null,
+          "source": "https://masterycharter.org/elementary-schools/mastery-prep",
+          "quote": "Boys & Girls Club – Offers after-school care only.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.items",
+          "old": [
+            "A Boys & Girls Club (after-school care only). The page doesn’t say which club. The Boys & Girls Clubs of Philadelphia’s Victorino club, 4000 Clarissa St, is a block or two away, but the City’s listing there is for its teen program, so ask the school which club it means and how children get there."
+          ],
+          "new": null,
+          "source": "https://masterycharter.org/elementary-schools/mastery-prep",
+          "quote": "Boys & Girls Club – Offers after-school care only.",
+          "read": "2026-11-23",
+          "how": "fetch"
+        }
+      ]
     }
   ]
 }

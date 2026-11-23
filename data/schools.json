@@ -1457,14 +1457,7 @@
       "The school’s site also lists clubs and activities (Art Club, WHYY Media Club, Girls Inc., a male mentoring program, tutoring and a fitness club) without days, times or grades. Ask the office which are running this year.",
       "Kelley’s site points to its Parent & Student Handbook for early dismissals. Ask the YMCA what happens on half days before counting on one.",
       "If you know a program that serves Kelley and isn’t here, send it in and it goes on this page."
-    ],
-    "alsoListed": {
-      "title": "Also named by Kelley",
-      "intro": "Kelley’s own site names this too, and we haven’t confirmed it on the program’s own site.",
-      "items": [
-        "Students Run Philly Style, a running and mentoring program whose own site describes teams for grades 6 to 12. studentsrunphilly.org"
-      ]
-    }
+    ]
   },
   {
     "id": "penn-alexander",
@@ -2016,20 +2009,13 @@
     "lastReviewed": "2026-11-18",
     "added": "2026-11-21",
     "notes": [
-      "Mastery Prep’s own page names two after-school care options: Change 4 A Dollar, which offers before- and after-school care, from dismissal to 6:00 pm, Monday to Friday, open to all students, and a Boys & Girls Club, which offers after-school care only. It says sign-up details come to families through ParentSquare. Change 4 A Dollar has a listing here; the page doesn’t say which Boys & Girls Club, so it is under “Also named on Mastery Prep’s page” for you to ask about.",
+      "Mastery Prep’s own page names two after-school care options: Change 4 A Dollar, which offers before- and after-school care, from dismissal to 6:00 pm, Monday to Friday, open to all students, and a Boys & Girls Club, which offers after-school care only. It says sign-up details come to families through ParentSquare. Change 4 A Dollar has a listing here; the page doesn’t say which Boys & Girls Club, so it is listed with the school’s clubs; ask the school which club it means and how children get there.",
       "The page also lists the school’s own clubs and teams: boys’ and girls’ basketball, dance, homework club, drumline and art club. They have a listing here.",
       "Mastery Prep follows the Mastery Schools calendar, not the District’s. Its days off on this page come from Mastery’s 2026–27 Philadelphia calendar: it closes for Yom Kippur, Eid al-Fitr and Eid al-Adha, and its spring break is March 22 to 26. The days-off planner and the list of who’s open go by the District’s, so check a camp’s dates against Mastery’s.",
       "Mastery’s calendar marks early dismissals on December 23, February 9, May 7 and June 11 (the last day). Ask Change 4 A Dollar whether it covers those afternoons.",
       "The School District’s list gives Mastery Prep as kindergarten to 3rd grade; Mastery’s own page says kindergarten to 6th grade, which is what this page uses.",
       "If you know a program that serves Mastery Prep and isn’t here, send it in and it goes on this page."
-    ],
-    "alsoListed": {
-      "title": "Also named on Mastery Prep’s page",
-      "intro": "The school’s page names this aftercare option without saying where it meets.",
-      "items": [
-        "A Boys & Girls Club (after-school care only). The page doesn’t say which club. The Boys & Girls Clubs of Philadelphia’s Victorino club, 4000 Clarissa St, is a block or two away, but the City’s listing there is for its teen program, so ask the school which club it means and how children get there."
-      ]
-    }
+    ]
   },
   {
     "id": "gamp",

@@ -15652,7 +15652,7 @@
   {
     "id": "kelley-clubs",
     "name": "School clubs and teams",
-    "what": "Art Club, WHYY Media Club, Girls Inc., a fitness club and other activities Kelley lists on its own site",
+    "what": "Art Club, WHYY Media Club, Girls Inc., Students Run Philly Style, a fitness club and other activities Kelley lists on its own site",
     "types": [
       "clubs",
       "art",
@@ -15671,7 +15671,9 @@
       "fitness",
       "choir",
       "band",
-      "Kelley"
+      "Kelley",
+      "running",
+      "Students Run Philly Style"
     ],
     "address": "",
     "grades": null,
@@ -15692,11 +15694,11 @@
         "url": "https://kelley.philasd.org/"
       }
     ],
-    "lastVerified": "2026-11-16",
+    "lastVerified": "2026-11-23",
     "schools": {
       "kelley": {
         "relation": "onsite",
-        "checked": "2026-11-16"
+        "checked": "2026-11-23"
       }
     },
     "clubs": [
@@ -15736,6 +15738,13 @@
       },
       {
         "name": "Fitness Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Students Run Philly Style",
+        "what": "A running and mentoring program; Kelley’s site lists it without days or grades",
         "tags": [
           "movement"
         ]
@@ -17919,7 +17928,7 @@
   {
     "id": "mastery-prep-clubs",
     "name": "School clubs and teams",
-    "what": "Teams and clubs Mastery Prep lists on its own page: basketball, dance, homework club, drumline and art club",
+    "what": "Teams and clubs Mastery Prep lists on its own page: basketball, dance, homework club, drumline and art club, and the Boys & Girls Club it names for after-school care",
     "types": [
       "clubs"
     ],
@@ -17930,7 +17939,8 @@
       "drumline",
       "art",
       "homework",
-      "Mastery Prep"
+      "Mastery Prep",
+      "Boys & Girls Club"
     ],
     "address": "",
     "grades": null,
@@ -17951,11 +17961,11 @@
         "url": "https://masterycharter.org/elementary-schools/mastery-prep"
       }
     ],
-    "lastVerified": "2026-11-18",
+    "lastVerified": "2026-11-23",
     "schools": {
       "mastery-prep": {
         "relation": "onsite",
-        "checked": "2026-11-18"
+        "checked": "2026-11-23"
       }
     },
     "clubs": [
@@ -17988,6 +17998,14 @@
         "tags": [
           "art"
         ]
+      },
+      {
+        "name": "Boys & Girls Club (after-school care)",
+        "what": "The school’s page names a Boys & Girls Club for after-school care only, without saying which club, where it meets or how children get there",
+        "tags": [
+          "aftercare"
+        ],
+        "roster": false
       }
     ]
   },
