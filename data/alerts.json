@@ -308,6 +308,26 @@
     {
       "id": "bryant",
       "name": "Bryant"
+    },
+    {
+      "id": "add-b-anderson",
+      "name": "Add B. Anderson"
+    },
+    {
+      "id": "rhodes",
+      "name": "Rhodes"
+    },
+    {
+      "id": "duckrey",
+      "name": "Duckrey"
+    },
+    {
+      "id": "potter-thomas",
+      "name": "Potter-Thomas"
+    },
+    {
+      "id": "mastery-mann",
+      "name": "Mastery Mann"
     }
   ],
   "programs": [
@@ -2031,6 +2051,90 @@
       "parts": [
         "after"
       ]
+    },
+    {
+      "id": "ecs-add-b-anderson",
+      "name": "Episcopal Community Services: After School at Add B. Anderson",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "add-b-anderson-clubs",
+      "name": "School clubs and partners at Add B. Anderson",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "ymca-rhodes",
+      "name": "YMCA Out of School Time at Rhodes",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "rhodes-clubs",
+      "name": "School clubs and teams at Rhodes",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "shuler-playground",
+      "name": "Shuler Playground",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "ymca-duckrey",
+      "name": "YMCA Out of School Time at Duckrey",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "duckrey-clubs",
+      "name": "School teams and after-school programs at Duckrey",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "winchester-playground",
+      "name": "Winchester Playground",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "ymca-potter-thomas",
+      "name": "YMCA Out of School Time at Potter-Thomas",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "potter-thomas-clubs",
+      "name": "School clubs and partners at Potter-Thomas",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "mastermindz-mastery-mann",
+      "name": "Mastermindz Aftercare at Mastery Mann",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "mastery-mann-clubs",
+      "name": "School clubs and teams at Mastery Mann",
+      "parts": [
+        "after"
+      ]
     }
   ],
   "camps": [
@@ -2849,6 +2953,91 @@
       "button": "See the page"
     },
     {
+      "id": "added-add-b-anderson",
+      "kind": "added",
+      "date": "2026-11-23",
+      "sendOn": "2026-11-23",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "add-b-anderson-school"
+      ],
+      "when": "New",
+      "title": "Add B. Anderson now has a page",
+      "text": "You asked to be told. 3 programs are listed for Add B. Anderson so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/add-b-anderson/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-duckrey",
+      "kind": "added",
+      "date": "2026-11-23",
+      "sendOn": "2026-11-23",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "tanner-g-duckrey-school"
+      ],
+      "when": "New",
+      "title": "Duckrey now has a page",
+      "text": "You asked to be told. 3 programs are listed for Duckrey so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/duckrey/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-mastery-mann",
+      "kind": "added",
+      "date": "2026-11-23",
+      "sendOn": "2026-11-23",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "mastery-charter-school-at-mann"
+      ],
+      "when": "New",
+      "title": "Mastery Mann now has a page",
+      "text": "You asked to be told. 2 programs are listed for Mastery Mann so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/mastery-mann/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-potter-thomas",
+      "kind": "added",
+      "date": "2026-11-23",
+      "sendOn": "2026-11-23",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "potter-thomas-school"
+      ],
+      "when": "New",
+      "title": "Potter-Thomas now has a page",
+      "text": "You asked to be told. 2 programs are listed for Potter-Thomas so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/potter-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-rhodes",
+      "kind": "added",
+      "date": "2026-11-23",
+      "sendOn": "2026-11-23",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "e-washington-rhodes-school"
+      ],
+      "when": "New",
+      "title": "Rhodes now has a page",
+      "text": "You asked to be told. 3 programs are listed for Rhodes so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/rhodes/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
       "id": "reg-the-philadelphia-school-2026-11-23",
       "schools": [],
       "programs": [
@@ -3092,7 +3281,8 @@
         "mastery-wister",
         "northwood",
         "mastery-clymer",
-        "belmont-academy"
+        "belmont-academy",
+        "mastery-mann"
       ],
       "when": "Wednesday, November 25",
       "title": "No school: Staff professional development",
@@ -3236,6 +3426,21 @@
       "button": "See Mastery Harrity’s week"
     },
     {
+      "id": "off-mastery-mann-2026-11-25",
+      "kind": "dayoff",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-15",
+      "schools": [
+        "mastery-mann"
+      ],
+      "programs": [],
+      "when": "Wednesday, November 25 to Friday, November 27",
+      "title": "No school at Mastery Mann: Thanksgiving break",
+      "text": "From Mastery Mann’s own calendar. 7 listed programs have posted a camp: Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, MoveMakers Philly, NLArts, Philly Art Center, Queen Village and The NeighborHub.",
+      "url": "https://phillyafterschool.org/mastery-mann/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Mann’s week"
+    },
+    {
       "id": "off-mastery-prep-2026-11-25",
       "kind": "dayoff",
       "date": "2026-11-25",
@@ -3320,7 +3525,8 @@
         "mastery-wister",
         "northwood",
         "mastery-clymer",
-        "belmont-academy"
+        "belmont-academy",
+        "mastery-mann"
       ],
       "when": "Thursday, November 26 to Friday, November 27",
       "title": "No school: Thanksgiving recess",
@@ -3485,6 +3691,38 @@
       "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
       "url": "https://phillyafterschool.org/adaire/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Adaire’s week"
+    },
+    {
+      "id": "week-add-b-anderson-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "add-b-anderson"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Add B. Anderson",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/add-b-anderson/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Add B. Anderson’s week"
     },
     {
       "id": "week-anne-frank-2026-11-23",
@@ -4065,6 +4303,38 @@
       "first": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students; Wednesday: no school, Staff professional development",
       "url": "https://phillyafterschool.org/coppin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Coppin’s week"
+    },
+    {
+      "id": "week-duckrey-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "duckrey"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Duckrey",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/duckrey/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Duckrey’s week"
     },
     {
       "id": "week-dunbar-2026-11-23",
@@ -5063,6 +5333,38 @@
       "button": "See Mastery Harrity’s week"
     },
     {
+      "id": "week-mastery-mann-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mastery-mann"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Mastery Mann",
+      "text": "Wednesday: No school: Thanksgiving break. Thursday: No school: Thanksgiving break. Friday: No school: Thanksgiving break.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving break"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving break"
+        }
+      ],
+      "first": "Wednesday: no school, Thanksgiving break; Thursday: no school, Thanksgiving break",
+      "url": "https://phillyafterschool.org/mastery-mann/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Mann’s week"
+    },
+    {
       "id": "week-mastery-prep-2026-11-23",
       "kind": "week",
       "date": "2026-11-27",
@@ -5587,6 +5889,38 @@
       "button": "See Penn Alexander’s week"
     },
     {
+      "id": "week-potter-thomas-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "potter-thomas"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Potter-Thomas",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/potter-thomas/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Potter-Thomas’s week"
+    },
+    {
       "id": "week-rhoads-2026-11-23",
       "kind": "week",
       "date": "2026-11-27",
@@ -5617,6 +5951,38 @@
       "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
       "url": "https://phillyafterschool.org/rhoads/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Rhoads’s week"
+    },
+    {
+      "id": "week-rhodes-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "rhodes"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Rhodes",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/rhodes/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Rhodes’s week"
     },
     {
       "id": "week-richmond-2026-11-23",
@@ -6783,6 +7149,21 @@
       "button": "See Mastery Harrity’s week"
     },
     {
+      "id": "off-mastery-mann-2026-12-11",
+      "kind": "dayoff",
+      "date": "2026-12-11",
+      "sendOn": "2026-11-29",
+      "schools": [
+        "mastery-mann"
+      ],
+      "programs": [],
+      "when": "Friday, December 11",
+      "title": "No school at Mastery Mann: Professional development day",
+      "text": "From Mastery Mann’s own calendar. One listed program has posted a camp: ZAZZ.",
+      "url": "https://phillyafterschool.org/mastery-mann/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Mann’s week"
+    },
+    {
       "id": "off-mastery-prep-2026-12-11",
       "kind": "dayoff",
       "date": "2026-12-11",
@@ -6954,6 +7335,30 @@
       "first": "Friday: no school, Professional development day",
       "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "week-mastery-mann-2026-12-07",
+      "kind": "week",
+      "date": "2026-12-11",
+      "sendOn": "2026-12-06",
+      "expires": "2026-12-09",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "mastery-mann"
+      ],
+      "when": "Week of December 7",
+      "title": "This week at Mastery Mann",
+      "text": "Friday: No school: Professional development day.",
+      "lines": [
+        {
+          "when": "Friday",
+          "what": "No school: Professional development day"
+        }
+      ],
+      "first": "Friday: no school, Professional development day",
+      "url": "https://phillyafterschool.org/mastery-mann/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Mann’s week"
     },
     {
       "id": "week-mastery-prep-2026-12-07",
@@ -7668,7 +8073,8 @@
         "mastery-wister",
         "northwood",
         "mastery-clymer",
-        "belmont-academy"
+        "belmont-academy",
+        "mastery-mann"
       ],
       "when": "Wednesday, December 23 to Friday, January 1",
       "title": "No school: Winter recess",
@@ -7765,6 +8171,21 @@
       "text": "From Mastery Harrity’s own calendar. 12 listed programs have posted a camp: Arden Drama School, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Hudson Table, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
       "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-mann-2026-12-24",
+      "kind": "dayoff",
+      "date": "2026-12-24",
+      "sendOn": "2026-12-13",
+      "schools": [
+        "mastery-mann"
+      ],
+      "programs": [],
+      "when": "Thursday, December 24 to Friday, January 1",
+      "title": "No school at Mastery Mann: Winter break",
+      "text": "From Mastery Mann’s own calendar. 12 listed programs have posted a camp: Arden Drama School, Camp TPS at The Philadelphia School, Community Council ACE Program at Locke, Elite Sports Factory, GPCA After School at Steel, Hudson Table, Movement Callowhill, NLArts, Philadelphia Youth Basketball, Philly Art Center, Queen Village, Philly KiDZ Initiative at Anne Frank and The NeighborHub.",
+      "url": "https://phillyafterschool.org/mastery-mann/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Mann’s week"
     },
     {
       "id": "off-mastery-prep-2026-12-24",
@@ -7923,6 +8344,55 @@
       "expires": "2026-12-30",
       "when": "Tomorrow, Thursday, December 31",
       "text": "Last day for 20% off all camps with code EARLYBIRD27 (register before January 1)."
+    },
+    {
+      "id": "campreg-flipout-camp-2027-01-01",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "flipout-camp"
+      ],
+      "title": "FlipOut Productions",
+      "url": "https://phillyafterschool.org/programs/flipout-productions/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "register",
+      "date": "2027-01-01",
+      "sendOn": "2026-12-27",
+      "when": "Friday, January 1",
+      "text": "Summer camp registration opens."
+    },
+    {
+      "id": "campreg-flipout-camp-2027-01-01-day",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "flipout-camp"
+      ],
+      "title": "FlipOut Productions",
+      "url": "https://phillyafterschool.org/programs/flipout-productions/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "today",
+      "date": "2027-01-01",
+      "sendOn": "2027-01-01",
+      "when": "Today, Friday, January 1",
+      "text": "Summer camp registration opens."
+    },
+    {
+      "id": "campreg-flipout-camp-2027-01-01-eve",
+      "schools": [],
+      "programs": [],
+      "camps": [
+        "flipout-camp"
+      ],
+      "title": "FlipOut Productions",
+      "url": "https://phillyafterschool.org/programs/flipout-productions/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#summer",
+      "button": "See the camp",
+      "kind": "soon",
+      "date": "2027-01-01",
+      "sendOn": "2026-12-31",
+      "expires": "2026-12-31",
+      "when": "Tomorrow, Friday, January 1",
+      "text": "Summer camp registration opens."
     },
     {
       "id": "off-byers-2027-01-04",
@@ -8241,7 +8711,8 @@
         "mastery-wister",
         "northwood",
         "mastery-clymer",
-        "belmont-academy"
+        "belmont-academy",
+        "mastery-mann"
       ],
       "when": "Friday, January 15",
       "title": "No school: Staff professional development",
@@ -8391,7 +8862,8 @@
         "mastery-wister",
         "northwood",
         "mastery-clymer",
-        "belmont-academy"
+        "belmont-academy",
+        "mastery-mann"
       ],
       "when": "Monday, January 18",
       "title": "No school: Dr. Martin Luther King Jr. Day",
@@ -8550,6 +9022,21 @@
       "button": "See Mastery Harrity’s week"
     },
     {
+      "id": "off-mastery-mann-2027-01-18",
+      "kind": "dayoff",
+      "date": "2027-01-18",
+      "sendOn": "2027-01-03",
+      "schools": [
+        "mastery-mann"
+      ],
+      "programs": [],
+      "when": "Monday, January 18",
+      "title": "No school at Mastery Mann: Martin Luther King Jr. Day",
+      "text": "From Mastery Mann’s own calendar. 7 listed programs have posted a camp: Arden Drama School, Butcher’s Sew Shop Junior, Elite Sports Factory, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-mann/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Mann’s week"
+    },
+    {
       "id": "off-mastery-prep-2027-01-18",
       "kind": "dayoff",
       "date": "2027-01-18",
@@ -8702,6 +9189,21 @@
       "text": "From Mastery Harrity’s own calendar. No listed program has posted a camp for it yet.",
       "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-mann-2027-01-22",
+      "kind": "dayoff",
+      "date": "2027-01-22",
+      "sendOn": "2027-01-10",
+      "schools": [
+        "mastery-mann"
+      ],
+      "programs": [],
+      "when": "Friday, January 22",
+      "title": "No school at Mastery Mann: Professional development day",
+      "text": "From Mastery Mann’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-mann/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Mann’s week"
     },
     {
       "id": "off-mastery-prep-2027-01-22",
@@ -8939,7 +9441,8 @@
         "mastery-wister",
         "northwood",
         "mastery-clymer",
-        "belmont-academy"
+        "belmont-academy",
+        "mastery-mann"
       ],
       "when": "Friday, January 29",
       "title": "No school: Report card conferences",
@@ -9249,7 +9752,8 @@
         "mastery-wister",
         "northwood",
         "mastery-clymer",
-        "belmont-academy"
+        "belmont-academy",
+        "mastery-mann"
       ],
       "when": "Friday, February 12",
       "title": "No school: Staff professional development",
@@ -9497,7 +10001,8 @@
         "mastery-wister",
         "northwood",
         "mastery-clymer",
-        "belmont-academy"
+        "belmont-academy",
+        "mastery-mann"
       ],
       "when": "Monday, February 15",
       "title": "No school: Presidents’ Day",
@@ -9656,6 +10161,21 @@
       "button": "See Mastery Harrity’s week"
     },
     {
+      "id": "off-mastery-mann-2027-02-15",
+      "kind": "dayoff",
+      "date": "2027-02-15",
+      "sendOn": "2027-01-31",
+      "schools": [
+        "mastery-mann"
+      ],
+      "programs": [],
+      "when": "Monday, February 15",
+      "title": "No school at Mastery Mann: Presidents’ Day",
+      "text": "From Mastery Mann’s own calendar. 11 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Philadelphia Youth Basketball, Philly Art Center, Queen Village, PlayArts day camps, The Schuylkill Center for Environmental Education and Walnut Street Theatre School.",
+      "url": "https://phillyafterschool.org/mastery-mann/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Mann’s week"
+    },
+    {
       "id": "off-mastery-prep-2027-02-15",
       "kind": "dayoff",
       "date": "2027-02-15",
@@ -9795,6 +10315,21 @@
       "text": "From Mastery Harrity’s own calendar. No listed program has posted a camp for it yet.",
       "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-mann-2027-02-26",
+      "kind": "dayoff",
+      "date": "2027-02-26",
+      "sendOn": "2027-02-14",
+      "schools": [
+        "mastery-mann"
+      ],
+      "programs": [],
+      "when": "Friday, February 26",
+      "title": "No school at Mastery Mann: Professional development day",
+      "text": "From Mastery Mann’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-mann/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Mann’s week"
     },
     {
       "id": "off-mastery-prep-2027-02-26",
@@ -10117,7 +10652,8 @@
         "mastery-wister",
         "northwood",
         "mastery-clymer",
-        "belmont-academy"
+        "belmont-academy",
+        "mastery-mann"
       ],
       "when": "Wednesday, March 10",
       "title": "No school: Eid al-Fitr",
@@ -10229,6 +10765,21 @@
       "text": "From Mastery Harrity’s own calendar. 10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-mann-2027-03-10",
+      "kind": "dayoff",
+      "date": "2027-03-10",
+      "sendOn": "2027-02-28",
+      "schools": [
+        "mastery-mann"
+      ],
+      "programs": [],
+      "when": "Wednesday, March 10",
+      "title": "No school at Mastery Mann: Eid al-Fitr",
+      "text": "From Mastery Mann’s own calendar. 10 listed programs have posted a camp: Arden Drama School, Awbury Arboretum, Butcher’s Sew Shop Junior, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-mann/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Mann’s week"
     },
     {
       "id": "off-mastery-prep-2027-03-10",
@@ -10607,7 +11158,8 @@
         "mastery-wister",
         "northwood",
         "mastery-clymer",
-        "belmont-academy"
+        "belmont-academy",
+        "mastery-mann"
       ],
       "when": "Monday, March 22 to Friday, March 26",
       "title": "No school: Spring recess and Good Friday",
@@ -10749,6 +11301,21 @@
       "text": "From Mastery Harrity’s own calendar. 11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-mann-2027-03-22",
+      "kind": "dayoff",
+      "date": "2027-03-22",
+      "sendOn": "2027-03-07",
+      "schools": [
+        "mastery-mann"
+      ],
+      "programs": [],
+      "when": "Monday, March 22 to Friday, March 26",
+      "title": "No school at Mastery Mann: Spring break",
+      "text": "From Mastery Mann’s own calendar. 11 listed programs have posted a camp: Butcher’s Sew Shop Junior, Camp TPS at The Philadelphia School, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Movement Callowhill, Philadelphia Youth Basketball, Philly Art Center, Queen Village, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-mann/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Mann’s week"
     },
     {
       "id": "off-mastery-prep-2027-03-22",
@@ -10967,7 +11534,8 @@
         "mastery-wister",
         "northwood",
         "mastery-clymer",
-        "belmont-academy"
+        "belmont-academy",
+        "mastery-mann"
       ],
       "when": "Monday, March 29",
       "title": "No school: Staff professional development",
@@ -11079,6 +11647,21 @@
       "text": "From Mastery Harrity’s own calendar. No listed program has posted a camp for it yet.",
       "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-mann-2027-04-09",
+      "kind": "dayoff",
+      "date": "2027-04-09",
+      "sendOn": "2027-03-28",
+      "schools": [
+        "mastery-mann"
+      ],
+      "programs": [],
+      "when": "Friday, April 9",
+      "title": "No school at Mastery Mann: Professional development day",
+      "text": "From Mastery Mann’s own calendar. No listed program has posted a camp for it yet.",
+      "url": "https://phillyafterschool.org/mastery-mann/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Mann’s week"
     },
     {
       "id": "off-mastery-prep-2027-04-09",
@@ -11314,7 +11897,8 @@
         "mastery-wister",
         "northwood",
         "mastery-clymer",
-        "belmont-academy"
+        "belmont-academy",
+        "mastery-mann"
       ],
       "when": "Friday, April 16",
       "title": "No school: Report card conferences",
@@ -11630,7 +12214,8 @@
         "mastery-wister",
         "northwood",
         "mastery-clymer",
-        "belmont-academy"
+        "belmont-academy",
+        "mastery-mann"
       ],
       "when": "Monday, May 17",
       "title": "No school: Eid al-Adha",
@@ -11697,6 +12282,21 @@
       "text": "From Mastery Harrity’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-mann-2027-05-17",
+      "kind": "dayoff",
+      "date": "2027-05-17",
+      "sendOn": "2027-05-02",
+      "schools": [
+        "mastery-mann"
+      ],
+      "programs": [],
+      "when": "Monday, May 17",
+      "title": "No school at Mastery Mann: Eid al-Adha",
+      "text": "From Mastery Mann’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-mann/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Mann’s week"
     },
     {
       "id": "off-mastery-prep-2027-05-17",
@@ -11936,7 +12536,8 @@
         "mastery-wister",
         "northwood",
         "mastery-clymer",
-        "belmont-academy"
+        "belmont-academy",
+        "mastery-mann"
       ],
       "when": "Tuesday, May 18",
       "title": "No school: Election Day",
@@ -11988,6 +12589,21 @@
       "text": "From Mastery Harrity’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
       "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-mann-2027-05-18",
+      "kind": "dayoff",
+      "date": "2027-05-18",
+      "sendOn": "2027-05-02",
+      "schools": [
+        "mastery-mann"
+      ],
+      "programs": [],
+      "when": "Tuesday, May 18",
+      "title": "No school at Mastery Mann: Primary Election Day",
+      "text": "From Mastery Mann’s own calendar. 10 listed programs have posted a camp: Awbury Arboretum, Butcher’s Sew Shop Junior, Elite Sports Factory, Fleisher Art Memorial, Kids on 12th, Makom Community, Philly Art Center, Queen Village, PlayArts day camps, The NeighborHub and The Schuylkill Center for Environmental Education.",
+      "url": "https://phillyafterschool.org/mastery-mann/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Mann’s week"
     },
     {
       "id": "off-mastery-prep-2027-05-18",
@@ -12089,7 +12705,8 @@
         "mastery-wister",
         "northwood",
         "mastery-clymer",
-        "belmont-academy"
+        "belmont-academy",
+        "mastery-mann"
       ],
       "when": "Monday, May 31",
       "title": "No school: Memorial Day",
@@ -12231,6 +12848,21 @@
       "text": "From Mastery Harrity’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
       "url": "https://phillyafterschool.org/mastery-harrity/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Mastery Harrity’s week"
+    },
+    {
+      "id": "off-mastery-mann-2027-05-31",
+      "kind": "dayoff",
+      "date": "2027-05-31",
+      "sendOn": "2027-05-16",
+      "schools": [
+        "mastery-mann"
+      ],
+      "programs": [],
+      "when": "Monday, May 31",
+      "title": "No school at Mastery Mann: Memorial Day",
+      "text": "From Mastery Mann’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
+      "url": "https://phillyafterschool.org/mastery-mann/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Mastery Mann’s week"
     },
     {
       "id": "off-mastery-prep-2027-05-31",

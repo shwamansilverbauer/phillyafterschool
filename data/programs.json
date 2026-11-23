@@ -16003,7 +16003,7 @@
   {
     "id": "kelley-clubs",
     "name": "School clubs and teams",
-    "what": "Art Club, WHYY Media Club, Girls Inc., a fitness club and other activities Kelley lists on its own site",
+    "what": "Art Club, WHYY Media Club, Girls Inc., Students Run Philly Style, a fitness club and other activities Kelley lists on its own site",
     "types": [
       "clubs",
       "art",
@@ -16023,7 +16023,9 @@
       "fitness",
       "choir",
       "band",
-      "Kelley"
+      "Kelley",
+      "running",
+      "Students Run Philly Style"
     ],
     "address": "",
     "grades": null,
@@ -16044,11 +16046,11 @@
         "url": "https://kelley.philasd.org/"
       }
     ],
-    "lastVerified": "2026-11-16",
+    "lastVerified": "2026-11-23",
     "schools": {
       "kelley": {
         "relation": "onsite",
-        "checked": "2026-11-16"
+        "checked": "2026-11-23"
       }
     },
     "clubs": [
@@ -16091,6 +16093,13 @@
         "tags": [
           "movement"
         ]
+      },
+      {
+        "name": "Students Run Philly Style",
+        "what": "A running and mentoring program; Kelley’s site lists it without days or grades",
+        "tags": [
+          "movement"
+        ]
       }
     ],
     "offers": [
@@ -16099,7 +16108,8 @@
       "Girls Inc.",
       "Rites of Passage Male Mentoring Program",
       "Grandmom’s Tutoring",
-      "Fitness Club"
+      "Fitness Club",
+      "Students Run Philly Style"
     ]
   },
   {
@@ -16990,7 +17000,7 @@
     "price": "free",
     "phone": "267-502-3800",
     "email": "afterschool@pyninc.org",
-    "website": "https://www.pyninc.org/afterschool",
+    "website": "https://www.pyninc.org/aimafterschool",
     "register": {
       "how": "online",
       "url": "https://ct.caseworthy.net/portal/default.aspx?CustomerID=PYN",
@@ -17001,7 +17011,7 @@
     "sources": [
       {
         "label": "PYN after school",
-        "url": "https://www.pyninc.org/afterschool"
+        "url": "https://www.pyninc.org/aimafterschool"
       },
       {
         "label": "Conwell: after-school program flyer, 2025–26",
@@ -17016,7 +17026,7 @@
         "sources": [
           {
             "label": "PYN after school",
-            "url": "https://www.pyninc.org/afterschool"
+            "url": "https://www.pyninc.org/aimafterschool"
           },
           {
             "label": "Conwell: after-school program flyer, 2025–26",
@@ -18522,13 +18532,14 @@
   {
     "id": "mastery-prep-clubs",
     "name": "School clubs and teams",
-    "what": "Teams and clubs Mastery Prep lists on its own page: basketball, dance, homework club, drumline and art club",
+    "what": "Teams and clubs Mastery Prep lists on its own page: basketball, dance, homework club, drumline and art club, and the Boys & Girls Club it names for after-school care",
     "types": [
       "clubs",
       "movement",
       "academics",
       "music",
-      "art"
+      "art",
+      "aftercare"
     ],
     "keywords": [
       "clubs",
@@ -18537,7 +18548,8 @@
       "drumline",
       "art",
       "homework",
-      "Mastery Prep"
+      "Mastery Prep",
+      "Boys & Girls Club"
     ],
     "address": "",
     "grades": null,
@@ -18558,11 +18570,11 @@
         "url": "https://masterycharter.org/elementary-schools/mastery-prep"
       }
     ],
-    "lastVerified": "2026-11-18",
+    "lastVerified": "2026-11-23",
     "schools": {
       "mastery-prep": {
         "relation": "onsite",
-        "checked": "2026-11-18"
+        "checked": "2026-11-23"
       }
     },
     "clubs": [
@@ -18595,6 +18607,14 @@
         "tags": [
           "art"
         ]
+      },
+      {
+        "name": "Boys & Girls Club (after-school care)",
+        "what": "The school’s page names a Boys & Girls Club for after-school care only, without saying which club, where it meets or how children get there",
+        "tags": [
+          "aftercare"
+        ],
+        "roster": false
       }
     ],
     "offers": [
@@ -18836,7 +18856,7 @@
     "price": "free",
     "phone": "215-455-1300",
     "email": "",
-    "website": "https://www.aspirapa.org/apps/pages/index.jsp?uREC_ID=1415541&type=d&pREC_ID=2768785",
+    "website": "https://www.aspirapa.org/apps/pages/acap-e",
     "register": {
       "how": "contact",
       "note": "The City’s listing says registration is required, from October 5, 2026 to June 4, 2027. ASPIRA’s own page says more information is coming soon; call ASPIRA or ask Esperanza’s office."
@@ -18849,7 +18869,7 @@
       },
       {
         "label": "ASPIRA: ACAP-Esperanza",
-        "url": "https://www.aspirapa.org/apps/pages/index.jsp?uREC_ID=1415541&type=d&pREC_ID=2768785"
+        "url": "https://www.aspirapa.org/apps/pages/acap-e"
       }
     ],
     "lastVerified": "2026-11-18",
@@ -19561,7 +19581,7 @@
     "cost": "A small activity fee, according to the handbook, with scholarships for families who meet the hardship requirement",
     "phone": "215-471-2978",
     "email": "",
-    "website": "https://glacharter.org/southwest",
+    "website": "https://glacharter.org/gla-sw",
     "register": {
       "how": "school",
       "note": "Ask the school office."
@@ -19938,6 +19958,12 @@
         "distance": "about half a mile southeast, on 55th St",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
         "checked": "2026-11-22"
+      },
+      "add-b-anderson": {
+        "relation": "nearby",
+        "distance": "about half a mile east, on 55th St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-23"
       }
     }
   },
@@ -22757,6 +22783,1053 @@
       "Technology Club",
       "Band",
       "Visual Arts"
+    ]
+  },
+  {
+    "id": "ecs-add-b-anderson",
+    "name": "Episcopal Community Services: After School at Add B. Anderson",
+    "what": "A free after-school program inside Add B. Anderson, with before care, STEM and robotics, arts, sports and a meal",
+    "types": [
+      "aftercare",
+      "stem"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "before care",
+      "free",
+      "STEM",
+      "robotics",
+      "dance",
+      "music",
+      "arts and crafts",
+      "ECS",
+      "Episcopal Community Services",
+      "OST",
+      "Add B. Anderson",
+      "Anderson",
+      "Cobbs Creek",
+      "West Philadelphia"
+    ],
+    "address": "1034 S 60th St",
+    "grades": "K-8",
+    "gradeNote": "Kindergarten to 8th grade, in groups by grade, according to the City’s listing",
+    "hours": "3:15–6:00 pm, Monday to Friday, September 1, 2026 to June 9, 2027, according to the City’s listing. Before care runs 7:30–8:30 am. Anderson’s school day ends at 3:09 pm.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-456-0448",
+    "email": "info@ecsphilly.org",
+    "website": "https://www.ecsphilly.org/programs/out-of-school-time/",
+    "register": {
+      "how": "contact",
+      "note": "The City’s listing says registration is required and gave a window of August 20 to September 30, 2026 for the after-school program; the sign-up form on ECS’s site is still last year’s. Call to ask whether there is room. The phone number is the program’s own in the City’s listing; ECS’s number there is 215-456-3160."
+    },
+    "note": "ECS’s own page lists Anderson, 1034 S 60th St, among its after-school sites and says the program is for kindergarten to 8th grade. The City’s listing says meals and healthy snacks are provided and there is no transportation, and lists a free ECS winter break program at Anderson from December 23 to December 30, 2026, 8:30 am to 6:00 pm, with registration from November 1 to December 17. Anderson’s own site doesn’t name ECS.",
+    "sources": [
+      {
+        "label": "City program locator: ECS after school at Add B. Anderson",
+        "url": "https://www.phila.gov/ost/program-locator/?address=1034+S+60th+St&resource=ost_99"
+      },
+      {
+        "label": "Episcopal Community Services: Out of School Time",
+        "url": "https://www.ecsphilly.org/programs/out-of-school-time/"
+      }
+    ],
+    "lastVerified": "2026-11-23",
+    "schools": {
+      "add-b-anderson": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists ECS’s after-school program at Anderson’s address, and ECS’s own page lists Anderson among its sites.",
+        "sources": [
+          {
+            "label": "City program locator: ECS after school at Add B. Anderson",
+            "url": "https://www.phila.gov/ost/program-locator/?address=1034+S+60th+St&resource=ost_99"
+          },
+          {
+            "label": "Episcopal Community Services: Out of School Time",
+            "url": "https://www.ecsphilly.org/programs/out-of-school-time/"
+          }
+        ],
+        "checked": "2026-11-23"
+      }
+    }
+  },
+  {
+    "id": "add-b-anderson-clubs",
+    "name": "School clubs and partners",
+    "what": "Clubs and partners Add B. Anderson names on its own site: robotics, Students Run Philly Style, drama club and student government",
+    "types": [
+      "clubs",
+      "stem",
+      "movement",
+      "theater"
+    ],
+    "keywords": [
+      "clubs",
+      "robotics",
+      "running",
+      "Students Run Philly Style",
+      "drama",
+      "theater",
+      "student government",
+      "APM",
+      "WHYY",
+      "Add B. Anderson",
+      "Anderson"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-7890",
+    "email": "",
+    "website": "https://anderson.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-7890)."
+    },
+    "note": "Anderson’s own site lists these under extracurricular clubs and activities and community partnerships, without days, times or grades, and says students sign up with their teachers in the fall. It doesn’t say which meet after dismissal, so ask the office.",
+    "sources": [
+      {
+        "label": "Add B. Anderson: programs, clubs and sports",
+        "url": "https://anderson.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-23",
+    "schools": {
+      "add-b-anderson": {
+        "relation": "onsite",
+        "checked": "2026-11-23"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Robotics",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Students Run Philly Style",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Drama Club",
+        "tags": [
+          "theater"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Asociación Puertorriqueños en Marcha (APM)",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [
+          "clubs"
+        ],
+        "roster": false
+      },
+      {
+        "name": "West Chester University",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [
+          "clubs"
+        ],
+        "roster": false
+      },
+      {
+        "name": "TGR",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [
+          "clubs"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Christian Compassion",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [
+          "clubs"
+        ],
+        "roster": false
+      },
+      {
+        "name": "WHYY",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [
+          "clubs"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Howard University Alternative Spring Break",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [
+          "clubs"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Alpha Phi Alpha Fraternity",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [
+          "clubs"
+        ],
+        "roster": false
+      }
+    ],
+    "offers": [
+      "Robotics",
+      "Students Run Philly Style",
+      "Drama Club",
+      "Student Government"
+    ]
+  },
+  {
+    "id": "ymca-rhodes",
+    "name": "YMCA Out of School Time at Rhodes",
+    "what": "Free after care inside Rhodes from the Greater Philadelphia YMCA: homework help, STEM, art, fitness and social-emotional learning",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "STEM",
+      "art",
+      "YMCA",
+      "Y",
+      "OST",
+      "Rhodes",
+      "E.W. Rhodes",
+      "Allegheny West",
+      "North Philadelphia"
+    ],
+    "address": "2900 W Clearfield St",
+    "grades": "K-8",
+    "gradeNote": "The YMCA lists E.W. Rhodes School for kindergarten to 8th grade",
+    "hours": "From the end of the school day to 5:30 pm, according to the YMCA’s page. Rhodes’s school day ends at 3:24 pm.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Free. The YMCA says the program is offered at no charge at the schools it lists.",
+    "price": "free",
+    "phone": "215-608-5823",
+    "email": "",
+    "website": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
+    "register": {
+      "how": "online",
+      "url": "https://gpy.tfaforms.net/134",
+      "label": "Apply",
+      "note": "The YMCA’s page links this application. Applying doesn’t guarantee a place: the YMCA confirms enrollment afterwards."
+    },
+    "note": "The YMCA’s page lists E.W. Rhodes School among the District schools where it runs its free, City-funded after-school program, and Rhodes’s own site names the YMCA among its community partners. The City’s program data also has the YMCA at Rhodes this school year, with a later closing time than the YMCA’s page, but the City’s locator page doesn’t show that entry, so ask the YMCA how late children can stay.",
+    "sources": [
+      {
+        "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+        "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+      },
+      {
+        "label": "E.W. Rhodes: community partnerships and clubs",
+        "url": "https://rhodes.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-23",
+    "schools": {
+      "rhodes": {
+        "relation": "onsite",
+        "note": "The Greater Philadelphia YMCA’s own page lists E.W. Rhodes School as one of its funded after-school sites, for kindergarten to 8th grade, and Rhodes’s own site names the YMCA as a community partner.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+          },
+          {
+            "label": "E.W. Rhodes: community partnerships and clubs",
+            "url": "https://rhodes.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-23"
+      }
+    }
+  },
+  {
+    "id": "rhodes-clubs",
+    "name": "School clubs and teams",
+    "what": "Clubs, teams and partners E.W. Rhodes names on its own site: cheerleading, dance, yearbook and middle-years basketball",
+    "types": [
+      "clubs",
+      "movement",
+      "art"
+    ],
+    "keywords": [
+      "clubs",
+      "cheerleading",
+      "dance",
+      "dance team",
+      "yearbook",
+      "basketball",
+      "Uplift",
+      "Rhodes"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-7060",
+    "email": "",
+    "website": "https://rhodes.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-7060)."
+    },
+    "note": "Rhodes’s own site lists these under extracurricular programs, clubs and sports, without days, times or grades. Basketball is for 6th to 8th grade. Ask the office which meet after dismissal.",
+    "sources": [
+      {
+        "label": "E.W. Rhodes: community partnerships and clubs",
+        "url": "https://rhodes.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-23",
+    "schools": {
+      "rhodes": {
+        "relation": "onsite",
+        "checked": "2026-11-23"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Middle Years Boys Basketball",
+        "tags": [
+          "movement"
+        ],
+        "grades": "6-8"
+      },
+      {
+        "name": "Cheerleading",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Dance Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Dance Team",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Yearbook Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Uplift Educate",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [
+          "clubs"
+        ],
+        "roster": false
+      }
+    ],
+    "offers": [
+      "Middle Years Boys Basketball",
+      "Cheerleading",
+      "Dance Club",
+      "Dance Team",
+      "Yearbook Club"
+    ]
+  },
+  {
+    "id": "shuler-playground",
+    "name": "Shuler Playground",
+    "what": "City playground after-school program for ages 6 to 12, and after-school computer help for ages 10 to 14",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "playground",
+      "city",
+      "after school",
+      "aftercare",
+      "computer help",
+      "homework",
+      "free",
+      "Shuler",
+      "Allegheny West",
+      "North Philadelphia"
+    ],
+    "address": "3000 N 27th St",
+    "neighborhoods": [
+      "North Philadelphia"
+    ],
+    "grades": null,
+    "gradeNote": "Ages 6–12 (computer help: ages 10–14)",
+    "hours": "Not published in the City’s listing",
+    "cost": "Free in the City’s listing, which was entered in 2023.",
+    "price": "free",
+    "phone": "215-685-9750",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "Call or stop by the playground. There is no online sign-up."
+    },
+    "note": "The City’s Parks & Rec data lists Shuler’s After School Program for ages 6 to 12, free, entered in 2023 and marked as seeking registrants, and free after-school computer help for ages 10 to 14, entered in 2025. Neither says which days or hours, so call to confirm what runs this year.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-23",
+    "schools": {
+      "rhodes": {
+        "relation": "nearby",
+        "distance": "about a fifth of a mile southeast, on 27th St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the playground.",
+        "checked": "2026-11-23"
+      }
+    }
+  },
+  {
+    "id": "ymca-duckrey",
+    "name": "YMCA Out of School Time at Duckrey",
+    "what": "Free after care inside Duckrey from the Greater Philadelphia YMCA: homework help, STEM, art, fitness and social-emotional learning",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "STEM",
+      "art",
+      "YMCA",
+      "Y",
+      "OST",
+      "Duckrey",
+      "before care",
+      "Tanner Duckrey",
+      "Temple",
+      "North Philadelphia"
+    ],
+    "address": "1501 W Diamond St",
+    "grades": "K-8",
+    "gradeNote": "The YMCA lists Tanner Duckrey School for kindergarten to 8th grade",
+    "hours": "From the end of the school day to 5:30 pm, according to the YMCA’s page. Duckrey’s site says students must be picked up by 2:54 pm.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Free. The YMCA says the program is offered at no charge at the schools it lists.",
+    "price": "free",
+    "phone": "215-608-5823",
+    "email": "",
+    "website": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
+    "register": {
+      "how": "online",
+      "url": "https://gpy.tfaforms.net/134",
+      "label": "Apply",
+      "note": "The YMCA’s page links this application. Applying doesn’t guarantee a place: the YMCA confirms enrollment afterwards."
+    },
+    "note": "The YMCA’s page lists Tanner Duckrey School among the District schools where it runs its free, City-funded after-school program. The City’s locator lists its free winter break program at Duckrey, December 23 to December 30, 2026, 8:30 am to 5:30 pm, with registration from November 11 to December 16. The City’s program data also has a before-school and an after-school entry for the YMCA at Duckrey that the locator page doesn’t show, so ask the YMCA how late children can stay and whether there is a morning program.",
+    "sources": [
+      {
+        "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+        "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+      },
+      {
+        "label": "City program locator: YMCA winter break at Duckrey",
+        "url": "https://www.phila.gov/ost/program-locator/?address=1501+W+Diamond+St&resource=ost_121"
+      }
+    ],
+    "lastVerified": "2026-11-23",
+    "schools": {
+      "duckrey": {
+        "relation": "onsite",
+        "note": "The Greater Philadelphia YMCA’s own page lists Tanner Duckrey School as one of its funded after-school sites, for kindergarten to 8th grade, and the City’s locator lists its winter break program at Duckrey.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+          },
+          {
+            "label": "City program locator: YMCA winter break at Duckrey",
+            "url": "https://www.phila.gov/ost/program-locator/?address=1501+W+Diamond+St&resource=ost_121"
+          }
+        ],
+        "checked": "2026-11-23"
+      }
+    }
+  },
+  {
+    "id": "duckrey-clubs",
+    "name": "School teams and after-school programs",
+    "what": "Teams and after-school programs Duckrey names on its own site: basketball, volleyball and track for 6th to 8th grade, the EducationWorks After School Program and the Stepping Stones After School Program",
+    "types": [
+      "clubs",
+      "movement",
+      "aftercare"
+    ],
+    "keywords": [
+      "clubs",
+      "basketball",
+      "volleyball",
+      "track",
+      "after school",
+      "EducationWorks",
+      "Stepping Stones",
+      "Duckrey"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-7350",
+    "email": "",
+    "website": "https://duckrey.philasd.org/parents/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-7350)."
+    },
+    "note": "Duckrey’s parents page lists these as its extracurricular activities, with grades but no days, times or prices. The page was last changed on July 27, 2022, so ask the office which still run. EducationWorks’ own site showed only an error page, and we couldn’t tell which Stepping Stones runs the second program.",
+    "sources": [
+      {
+        "label": "Duckrey: extracurricular activities",
+        "url": "https://duckrey.philasd.org/parents/"
+      }
+    ],
+    "lastVerified": "2026-11-23",
+    "schools": {
+      "duckrey": {
+        "relation": "onsite",
+        "checked": "2026-11-23"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Basketball (boys and girls)",
+        "tags": [
+          "movement"
+        ],
+        "grades": "6-8"
+      },
+      {
+        "name": "Volleyball (boys and girls)",
+        "tags": [
+          "movement"
+        ],
+        "grades": "6-8"
+      },
+      {
+        "name": "Track (boys and girls)",
+        "tags": [
+          "movement"
+        ],
+        "grades": "6-8"
+      },
+      {
+        "name": "EducationWorks After School Program",
+        "tags": [
+          "aftercare"
+        ],
+        "grades": "K-8",
+        "what": "Named by the school as an after-school program for kindergarten to 8th grade; no details posted"
+      },
+      {
+        "name": "Stepping Stones After School Program",
+        "tags": [
+          "aftercare"
+        ],
+        "grades": "3-8",
+        "what": "Named by the school as an after-school program for 3rd to 8th grade; no details posted"
+      }
+    ],
+    "offers": [
+      "Basketball (boys and girls)",
+      "Volleyball (boys and girls)",
+      "Track (boys and girls)",
+      "EducationWorks After School Program",
+      "Stepping Stones After School Program"
+    ]
+  },
+  {
+    "id": "winchester-playground",
+    "name": "Winchester Playground",
+    "what": "City playground after-school program for kindergarten to 8th grade: homework help, recreation, health and wellness, teamwork",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "playground",
+      "city",
+      "after school",
+      "aftercare",
+      "homework",
+      "arts and crafts",
+      "free",
+      "Winchester",
+      "North Philadelphia",
+      "Temple"
+    ],
+    "address": "2326 N 15th St",
+    "neighborhoods": [
+      "North Philadelphia"
+    ],
+    "grades": "K-8",
+    "gradeNote": "Kindergarten to 8th grade, according to the City’s listing",
+    "hours": "3:00–6:00 pm, Monday to Friday, September 8, 2026 to May 28, 2027, according to the City’s listing.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-685-0253",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "phone",
+      "note": "The City’s listing says registration is required. Call or stop by the playground."
+    },
+    "note": "The City’s program locator lists the Winchester After School Program 2026–2027: free, healthy snacks, no transportation. Winchester also runs free evening arts and crafts, video game and card game nights for 3rd to 8th graders. The phone number is the playground’s in the City’s Parks & Rec data.",
+    "sources": [
+      {
+        "label": "City program locator: Winchester After School Program",
+        "url": "https://www.phila.gov/ost/program-locator/?address=1501+W+Diamond+St&resource=ost_222"
+      },
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      }
+    ],
+    "lastVerified": "2026-11-23",
+    "schools": {
+      "duckrey": {
+        "relation": "nearby",
+        "distance": "about a quarter mile north, on 15th St",
+        "note": "The City’s listing says there is no transportation, so plan on walking over or ask the playground.",
+        "checked": "2026-11-23"
+      }
+    }
+  },
+  {
+    "id": "ymca-potter-thomas",
+    "name": "YMCA Out of School Time at Potter-Thomas",
+    "what": "Free after care inside Potter-Thomas from the Greater Philadelphia YMCA: homework help, STEM, art, fitness and social-emotional learning",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "STEM",
+      "art",
+      "YMCA",
+      "Y",
+      "OST",
+      "Potter-Thomas",
+      "Fairhill",
+      "North Philadelphia"
+    ],
+    "address": "3001 N 6th St",
+    "grades": "K-8",
+    "gradeNote": "The YMCA lists Potter-Thomas School for kindergarten to 8th grade",
+    "hours": "From the end of the school day to 5:30 pm, according to the YMCA’s page. Potter-Thomas doesn’t post its bell schedule.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Free. The YMCA says the program is offered at no charge at the schools it lists.",
+    "price": "free",
+    "phone": "215-608-5823",
+    "email": "",
+    "website": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
+    "register": {
+      "how": "online",
+      "url": "https://gpy.tfaforms.net/134",
+      "label": "Apply",
+      "note": "The YMCA’s page links this application. Applying doesn’t guarantee a place: the YMCA confirms enrollment afterwards."
+    },
+    "note": "The YMCA’s page lists Potter-Thomas School among the District schools where it runs its free, City-funded after-school program. The City’s program data also has the YMCA at Potter-Thomas this school year, with a later closing time than the YMCA’s page, but the City’s locator page doesn’t show that entry, so ask the YMCA how late children can stay. Potter-Thomas’s own site doesn’t name the YMCA.",
+    "sources": [
+      {
+        "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+        "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+      }
+    ],
+    "lastVerified": "2026-11-23",
+    "schools": {
+      "potter-thomas": {
+        "relation": "onsite",
+        "note": "The Greater Philadelphia YMCA’s own page lists Potter-Thomas School as one of its funded after-school sites, for kindergarten to 8th grade.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+          }
+        ],
+        "checked": "2026-11-23"
+      }
+    }
+  },
+  {
+    "id": "potter-thomas-clubs",
+    "name": "School clubs and partners",
+    "what": "The computer science club and the partners Potter-Thomas names on its own site: Big Brothers Big Sisters, the Boys & Girls Club and Girls Inc.",
+    "types": [
+      "clubs",
+      "stem"
+    ],
+    "keywords": [
+      "clubs",
+      "computer science",
+      "coding",
+      "Scratch",
+      "digital media",
+      "podcast",
+      "PSTV",
+      "mentoring",
+      "Big Brothers Big Sisters",
+      "Boys and Girls Club",
+      "Girls Inc",
+      "Potter-Thomas"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-7120",
+    "email": "",
+    "website": "https://potterthomas.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-7120)."
+    },
+    "note": "Potter-Thomas’s site has a page for each of these, last changed between December 31, 2022 and January 1, 2023. Only the computer club’s page says what it does; the others name the organization and link its website. Ask the office which run this year and whether any meet after dismissal.",
+    "sources": [
+      {
+        "label": "Potter-Thomas School",
+        "url": "https://potterthomas.philasd.org/"
+      },
+      {
+        "label": "Potter-Thomas: Computer Science Club",
+        "url": "https://potterthomas.philasd.org/computer-science-club/"
+      },
+      {
+        "label": "Potter-Thomas: Boys and Girls Club",
+        "url": "https://potterthomas.philasd.org/boys-and-girls-club-2/"
+      },
+      {
+        "label": "Potter-Thomas: Big Brothers and Big Sisters",
+        "url": "https://potterthomas.philasd.org/boys-and-girls-club/"
+      },
+      {
+        "label": "Potter-Thomas: Girls Inc.",
+        "url": "https://potterthomas.philasd.org/girls-inc/"
+      }
+    ],
+    "lastVerified": "2026-11-23",
+    "schools": {
+      "potter-thomas": {
+        "relation": "onsite",
+        "checked": "2026-11-23"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Computer Science Club",
+        "tags": [
+          "stem"
+        ],
+        "what": "Coding with Scratch, digital media tools from PSTV, and internet safety, according to the school’s page"
+      },
+      {
+        "name": "Big Brothers Big Sisters",
+        "what": "The school has a page for it; it doesn’t say what runs at the school",
+        "tags": [
+          "clubs"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Boys and Girls Club",
+        "what": "The school has a page for it that links the Boys & Girls Clubs of Philadelphia; it doesn’t say what runs at the school",
+        "tags": [
+          "clubs"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Girls Inc.",
+        "what": "The school has a page for it that links Girls Inc.; it doesn’t say what runs at the school",
+        "tags": [
+          "clubs"
+        ],
+        "roster": false
+      }
+    ],
+    "offers": [
+      "Computer Science Club"
+    ]
+  },
+  {
+    "id": "mastermindz-mastery-mann",
+    "name": "Mastermindz Aftercare at Mastery Mann",
+    "what": "Before care and aftercare inside Mastery’s Mann Elementary, from dismissal to 6:00 pm",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after care",
+      "before care",
+      "childcare",
+      "Mastermindz",
+      "Mastery Mann",
+      "Mann Elementary",
+      "Mann",
+      "Wynnefield",
+      "West Philadelphia"
+    ],
+    "address": "5376 W Berks St",
+    "grades": "K-6",
+    "gradeNote": "For Mastery Mann students",
+    "hours": "Aftercare from dismissal (3:15 pm) to 6:00 pm, Monday to Friday; before care 7:00–8:00 am",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "A monthly fee; the school’s page doesn’t give the amount.",
+    "price": "paid",
+    "phone": "215-581-5616",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/mann",
+    "register": {
+      "how": "phone",
+      "note": "The school’s page says the programs require enrollment and to contact the main office."
+    },
+    "note": "Everything here comes from Mastery Mann’s own page; we couldn’t find a website for Mastermindz. The phone number is the school’s main office. Ask about the monthly fee and what happens on Mastery’s early-dismissal days.",
+    "sources": [
+      {
+        "label": "Mastery Mann Elementary",
+        "url": "https://masterycharter.org/elementary-schools/mann"
+      }
+    ],
+    "lastVerified": "2026-11-23",
+    "schools": {
+      "mastery-mann": {
+        "relation": "onsite",
+        "note": "Mastery Mann’s own page says its before care and aftercare are run by Mastermindz, aftercare from dismissal to 6:00 pm, Monday to Friday.",
+        "sources": [
+          {
+            "label": "Mastery Mann Elementary",
+            "url": "https://masterycharter.org/elementary-schools/mann"
+          }
+        ],
+        "checked": "2026-11-23"
+      }
+    }
+  },
+  {
+    "id": "mastery-mann-clubs",
+    "name": "School clubs and teams",
+    "what": "Clubs and activities Mastery Mann lists on its own page: art, book, dance, math and step clubs, basketball, flag football, school musicals and more",
+    "types": [
+      "clubs",
+      "academics",
+      "art",
+      "movement",
+      "stem",
+      "theater",
+      "music"
+    ],
+    "keywords": [
+      "clubs",
+      "art",
+      "book club",
+      "dance",
+      "step",
+      "math",
+      "basketball",
+      "flag football",
+      "musical",
+      "theater",
+      "Mastery Mann"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-581-5616",
+    "email": "",
+    "website": "https://masterycharter.org/elementary-schools/mann",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-581-5616)."
+    },
+    "note": "Mastery Mann’s own page lists these extracurricular and athletic programs with no days, times or grades, so ask the school which are running and for whom.",
+    "sources": [
+      {
+        "label": "Mastery Mann Elementary",
+        "url": "https://masterycharter.org/elementary-schools/mann"
+      }
+    ],
+    "lastVerified": "2026-11-23",
+    "schools": {
+      "mastery-mann": {
+        "relation": "onsite",
+        "checked": "2026-11-23"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Academic Enrichment",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Art Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Aspiring Divas Club",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Basketball Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Book Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Dance Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Flag Football Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Math Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "National Honor Society",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "School Musicals",
+        "tags": [
+          "theater",
+          "music"
+        ]
+      },
+      {
+        "name": "Step Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Student Leadership",
+        "tags": [
+          "clubs"
+        ]
+      }
+    ],
+    "offers": [
+      "Academic Enrichment",
+      "Art Club",
+      "Aspiring Divas Club",
+      "Basketball Club",
+      "Book Club",
+      "Dance Club",
+      "Flag Football Club",
+      "Math Club",
+      "School Musicals",
+      "Step Club",
+      "Student Leadership"
     ]
   }
 ]

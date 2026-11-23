@@ -1,0 +1,25 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Philly After School//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:camp-flipout-camp-2027-01-01@phillyafterschool.org
+DTSTAMP:20261123T120000Z
+DTSTART;VALUE=DATE:20270101
+DTEND;VALUE=DATE:20270102
+SUMMARY:FlipOut Productions: Summer camp registration opens
+DESCRIPTION:https://www.flipoutproductions.com/summer-camp?u
+ tm_source=phillyafterschool.org&utm_medium=referral&utm_camp
+ aign=directory&utm_content=calendar\n\nFrom Philly After Sch
+ ool: https://phillyafterschool.org/
+URL:https://www.flipoutproductions.com/summer-camp
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:FlipOut Productions: Summer camp registration op
+ ens
+TRIGGER:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

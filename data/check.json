@@ -1,10 +1,10 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. docs/listings.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 383,
-    "pagesNeedingABrowser": 67,
+    "pages": 395,
+    "pagesNeedingABrowser": 70,
     "pagesNeedingAPerson": 18,
-    "links": 367,
+    "links": 380,
     "pickupLinks": 132,
     "pickupOnAStoredList": 112,
     "pickupFromAThirdPartyList": 0,
@@ -2434,12 +2434,6 @@
       "checked": "2026-11-16"
     },
     {
-      "program": "kelley-clubs",
-      "school": "kelley",
-      "relation": "onsite",
-      "checked": "2026-11-16"
-    },
-    {
       "program": "mander-playground",
       "school": "blaine",
       "relation": "nearby",
@@ -2629,12 +2623,6 @@
     {
       "program": "girls-on-the-run",
       "school": "gamp",
-      "relation": "onsite",
-      "checked": "2026-11-18"
-    },
-    {
-      "program": "mastery-prep-clubs",
-      "school": "mastery-prep",
       "relation": "onsite",
       "checked": "2026-11-18"
     },
@@ -2976,6 +2964,96 @@
       "school": "catharine",
       "relation": "onsite",
       "checked": "2026-11-22"
+    },
+    {
+      "program": "add-b-anderson-clubs",
+      "school": "add-b-anderson",
+      "relation": "onsite",
+      "checked": "2026-11-23"
+    },
+    {
+      "program": "christy-rec",
+      "school": "add-b-anderson",
+      "relation": "nearby",
+      "checked": "2026-11-23"
+    },
+    {
+      "program": "duckrey-clubs",
+      "school": "duckrey",
+      "relation": "onsite",
+      "checked": "2026-11-23"
+    },
+    {
+      "program": "ecs-add-b-anderson",
+      "school": "add-b-anderson",
+      "relation": "onsite",
+      "checked": "2026-11-23"
+    },
+    {
+      "program": "kelley-clubs",
+      "school": "kelley",
+      "relation": "onsite",
+      "checked": "2026-11-23"
+    },
+    {
+      "program": "mastermindz-mastery-mann",
+      "school": "mastery-mann",
+      "relation": "onsite",
+      "checked": "2026-11-23"
+    },
+    {
+      "program": "mastery-mann-clubs",
+      "school": "mastery-mann",
+      "relation": "onsite",
+      "checked": "2026-11-23"
+    },
+    {
+      "program": "mastery-prep-clubs",
+      "school": "mastery-prep",
+      "relation": "onsite",
+      "checked": "2026-11-23"
+    },
+    {
+      "program": "potter-thomas-clubs",
+      "school": "potter-thomas",
+      "relation": "onsite",
+      "checked": "2026-11-23"
+    },
+    {
+      "program": "rhodes-clubs",
+      "school": "rhodes",
+      "relation": "onsite",
+      "checked": "2026-11-23"
+    },
+    {
+      "program": "shuler-playground",
+      "school": "rhodes",
+      "relation": "nearby",
+      "checked": "2026-11-23"
+    },
+    {
+      "program": "winchester-playground",
+      "school": "duckrey",
+      "relation": "nearby",
+      "checked": "2026-11-23"
+    },
+    {
+      "program": "ymca-duckrey",
+      "school": "duckrey",
+      "relation": "onsite",
+      "checked": "2026-11-23"
+    },
+    {
+      "program": "ymca-potter-thomas",
+      "school": "potter-thomas",
+      "relation": "onsite",
+      "checked": "2026-11-23"
+    },
+    {
+      "program": "ymca-rhodes",
+      "school": "rhodes",
+      "relation": "onsite",
+      "checked": "2026-11-23"
     }
   ],
   "pages": [
@@ -3015,7 +3093,9 @@
         "christy-rec",
         "miles-mack-playground",
         "ziehler-playground",
-        "mccreesh-playground"
+        "mccreesh-playground",
+        "shuler-playground",
+        "winchester-playground"
       ],
       "lists": []
     },
@@ -3059,6 +3139,22 @@
       "lists": []
     },
     {
+      "url": "https://gpy.tfaforms.net/134",
+      "how": "fetch",
+      "programs": [
+        "ymca-juniata-park",
+        "ymca-dunbar",
+        "ymca-kelley",
+        "ymca-gideon",
+        "ymca-blaine",
+        "ymca-hopkinson",
+        "ymca-rhodes",
+        "ymca-duckrey",
+        "ymca-potter-thomas"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://greenfield.philasd.org/",
       "how": "fetch",
       "programs": [
@@ -3090,6 +3186,22 @@
       "lists": []
     },
     {
+      "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
+      "how": "browser",
+      "why": "The page shows only six of its funded after-school schools until “Show all locations” is pressed, so read it in a browser and open the full list.",
+      "programs": [
+        "ymca-dunbar",
+        "ymca-kelley",
+        "ymca-gideon",
+        "ymca-blaine",
+        "ymca-hopkinson",
+        "ymca-rhodes",
+        "ymca-duckrey",
+        "ymca-potter-thomas"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.sunriseofphila.org/school-year",
       "how": "fetch",
       "programs": [
@@ -3101,19 +3213,6 @@
         "sunrise-mcmichael",
         "sunrise-bluford",
         "sunrise-bryant"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://gpy.tfaforms.net/134",
-      "how": "fetch",
-      "programs": [
-        "ymca-juniata-park",
-        "ymca-dunbar",
-        "ymca-kelley",
-        "ymca-gideon",
-        "ymca-blaine",
-        "ymca-hopkinson"
       ],
       "lists": []
     },
@@ -3163,19 +3262,6 @@
         "girls-on-the-run",
         "nebinger-arts-partners",
         "zhang-sah"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
-      "how": "browser",
-      "why": "The page shows only six of its funded after-school schools until “Show all locations” is pressed, so read it in a browser and open the full list.",
-      "programs": [
-        "ymca-dunbar",
-        "ymca-kelley",
-        "ymca-gideon",
-        "ymca-blaine",
-        "ymca-hopkinson"
       ],
       "lists": []
     },
@@ -3517,6 +3603,15 @@
       "lists": []
     },
     {
+      "url": "https://masterycharter.org/elementary-schools/mann",
+      "how": "fetch",
+      "programs": [
+        "mastermindz-mastery-mann",
+        "mastery-mann-clubs"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://masterycharter.org/elementary-schools/mastery-prep",
       "how": "fetch",
       "programs": [
@@ -3607,6 +3702,15 @@
       "lists": []
     },
     {
+      "url": "https://rhodes.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "ymca-rhodes",
+        "rhodes-clubs"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://schools.procareconnect.com/form/7417c5d3-b696-426e-913c-b9f0144431bb",
       "how": "fetch",
       "programs": [
@@ -3689,6 +3793,16 @@
       "lists": []
     },
     {
+      "url": "https://www.ecsphilly.org/programs/out-of-school-time/",
+      "how": "browser",
+      "why": "A plain fetch got a Cloudflare “Attention Required” challenge on 2026-11-17; a browser showed the page.",
+      "programs": [
+        "ecs-mya",
+        "ecs-add-b-anderson"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.phila.gov/ost/program-locator/",
       "how": "browser",
       "why": "A JavaScript app: a plain fetch returns no listings.",
@@ -3757,6 +3871,14 @@
       "how": "fetch",
       "programs": [
         "adaire-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://anderson.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "add-b-anderson-clubs"
       ],
       "lists": []
     },
@@ -4091,6 +4213,14 @@
       "lists": []
     },
     {
+      "url": "https://duckrey.philasd.org/parents/",
+      "how": "fetch",
+      "programs": [
+        "duckrey-clubs"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://elitesportsfactory.com/childcare",
       "how": "fetch",
       "programs": [
@@ -4235,7 +4365,7 @@
       "lists": []
     },
     {
-      "url": "https://glacharter.org/s/GLASW-Family-Scholar-Handbook-2026.pdf",
+      "url": "https://glacharter.org/gla-sw",
       "how": "browser",
       "why": "A Squarespace site that builds its pages with JavaScript; a plain fetch of a campus page gets little text, and the handbooks are PDFs linked from Important Links.",
       "programs": [
@@ -4244,7 +4374,7 @@
       "lists": []
     },
     {
-      "url": "https://glacharter.org/southwest",
+      "url": "https://glacharter.org/s/GLASW-Family-Scholar-Handbook-2026.pdf",
       "how": "browser",
       "why": "A Squarespace site that builds its pages with JavaScript; a plain fetch of a campus page gets little text, and the handbooks are PDFs linked from Important Links.",
       "programs": [
@@ -4938,6 +5068,46 @@
       "lists": []
     },
     {
+      "url": "https://potterthomas.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "potter-thomas-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://potterthomas.philasd.org/boys-and-girls-club-2/",
+      "how": "fetch",
+      "programs": [
+        "potter-thomas-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://potterthomas.philasd.org/boys-and-girls-club/",
+      "how": "fetch",
+      "programs": [
+        "potter-thomas-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://potterthomas.philasd.org/computer-science-club/",
+      "how": "fetch",
+      "programs": [
+        "potter-thomas-clubs"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://potterthomas.philasd.org/girls-inc/",
+      "how": "fetch",
+      "programs": [
+        "potter-thomas-clubs"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://rebelartsmovement.com/",
       "how": "fetch",
       "programs": [
@@ -5154,7 +5324,7 @@
       "lists": []
     },
     {
-      "url": "https://www.aspirapa.org/apps/pages/index.jsp?uREC_ID=1415541&type=d&pREC_ID=2768785",
+      "url": "https://www.aspirapa.org/apps/pages/acap-e",
       "how": "fetch",
       "programs": [
         "aspira-acap-esperanza"
@@ -5379,15 +5549,6 @@
       "how": "fetch",
       "programs": [
         "community-academy-clubs"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://www.ecsphilly.org/programs/out-of-school-time/",
-      "how": "browser",
-      "why": "A plain fetch got a Cloudflare “Attention Required” challenge on 2026-11-17; a browser showed the page.",
-      "programs": [
-        "ecs-mya"
       ],
       "lists": []
     },
@@ -5768,11 +5929,38 @@
       "lists": []
     },
     {
+      "url": "https://www.phila.gov/ost/program-locator/?address=1034+S+60th+St&resource=ost_99",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "ecs-add-b-anderson"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.phila.gov/ost/program-locator/?address=127+W+Oxford+St&resource=ost_170",
       "how": "browser",
       "why": "A JavaScript app: a plain fetch returns no listings.",
       "programs": [
         "xiente-moffet"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=1501+W+Diamond+St&resource=ost_121",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "ymca-duckrey"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=1501+W+Diamond+St&resource=ost_222",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "winchester-playground"
       ],
       "lists": []
     },
@@ -6335,7 +6523,7 @@
       "lists": []
     },
     {
-      "url": "https://www.pyninc.org/afterschool",
+      "url": "https://www.pyninc.org/aimafterschool",
       "how": "fetch",
       "programs": [
         "pyn-conwell"
@@ -7131,10 +7319,10 @@
         "name": "FlipOut Productions",
         "season": 2026,
         "checked": "2026-11-01",
-        "url": "https://www.flipoutproductions.com/summercamp",
+        "url": "https://www.flipoutproductions.com/summer-camp",
         "how": "browser",
         "look": "The Summer Camp page shows age groups and activities. Weeks and prices are probably inside an embedded registration widget.",
-        "signup": "Sign-ups for 2026 opened January 1."
+        "signup": "Sign-ups open January 1, 2027. $25 off for registering before March 1, and 10% off for siblings."
       },
       {
         "camp": "lavner-tech-camp-upenn",
