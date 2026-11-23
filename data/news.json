@@ -1,6 +1,13 @@
 [
   {
     "date": "2026-11-22",
+    "title": "The home page search covers the whole year",
+    "text": "The search on the home page now has four tabs: After-School, Days Off, Summer Camps and Weekends. After-School is the school and program finder as before. The other three take your ZIP code or neighborhood and open that list with what is closest to you first; Days Off also asks which day off you need. The tab you used last opens next time, and where you live stays on your device.",
+    "href": "#hs",
+    "link": "Try the search"
+  },
+  {
+    "date": "2026-11-22",
     "title": "Five more schools: Catharine, McClure, Belmont Academy, Bluford and Bryant",
     "text": "Each has its own page with what runs there, what picks up from it and what’s a short walk away. New to the site are Zhang Sah’s karate inside Catharine, with McCreesh Playground next door; LEGACY’s free Champions on the Rise inside McClure; the Belmont Charter Network’s own after-school program at Belmont Academy, with Greener Partners’ gardening; and Sunrise’s free after-school programs at Bluford and Bryant. That makes 76 schools in all.",
     "href": "catharine/",

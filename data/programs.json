@@ -16553,7 +16553,7 @@
     "price": "free",
     "phone": "267-502-3800",
     "email": "afterschool@pyninc.org",
-    "website": "https://www.pyninc.org/afterschool",
+    "website": "https://www.pyninc.org/aimafterschool",
     "register": {
       "how": "online",
       "url": "https://ct.caseworthy.net/portal/default.aspx?CustomerID=PYN",
@@ -16564,7 +16564,7 @@
     "sources": [
       {
         "label": "PYN after school",
-        "url": "https://www.pyninc.org/afterschool"
+        "url": "https://www.pyninc.org/aimafterschool"
       },
       {
         "label": "Conwell: after-school program flyer, 2025–26",
@@ -16579,7 +16579,7 @@
         "sources": [
           {
             "label": "PYN after school",
-            "url": "https://www.pyninc.org/afterschool"
+            "url": "https://www.pyninc.org/aimafterschool"
           },
           {
             "label": "Conwell: after-school program flyer, 2025–26",
@@ -18180,7 +18180,7 @@
     "price": "free",
     "phone": "215-455-1300",
     "email": "",
-    "website": "https://www.aspirapa.org/apps/pages/index.jsp?uREC_ID=1415541&type=d&pREC_ID=2768785",
+    "website": "https://www.aspirapa.org/apps/pages/acap-e",
     "register": {
       "how": "contact",
       "note": "The City’s listing says registration is required, from October 5, 2026 to June 4, 2027. ASPIRA’s own page says more information is coming soon; call ASPIRA or ask Esperanza’s office."
@@ -18193,7 +18193,7 @@
       },
       {
         "label": "ASPIRA: ACAP-Esperanza",
-        "url": "https://www.aspirapa.org/apps/pages/index.jsp?uREC_ID=1415541&type=d&pREC_ID=2768785"
+        "url": "https://www.aspirapa.org/apps/pages/acap-e"
       }
     ],
     "lastVerified": "2026-11-18",
@@ -18785,7 +18785,7 @@
     "cost": "A small activity fee, according to the handbook, with scholarships for families who meet the hardship requirement",
     "phone": "215-471-2978",
     "email": "",
-    "website": "https://glacharter.org/southwest",
+    "website": "https://glacharter.org/gla-sw",
     "register": {
       "how": "school",
       "note": "Ask the school office."
