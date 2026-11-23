@@ -19,7 +19,7 @@
 #   and copies only the allowlisted data files out of it, next to main's code.
 # - The build and the tests, which do read the pull request's data, run in a job of their own with a read-only token.
 # - A merge made with this workflow's token starts no other workflow (only workflow_dispatch and repository_dispatch
-#   do), so the gate starts publish.yml itself after merging.
+#   do), so the hourly merge starts publish.yml itself after merging.
 # - It depends on no status check (a pull request could add a workflow that imitates one). The merge takes only the
 #   commit the gate's own comment names, only after that commit was built and tested on the main it merges into, and
 #   only if main hasn't moved meanwhile (if it has, the next hour tries again).
