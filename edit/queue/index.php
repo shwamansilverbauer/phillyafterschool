@@ -287,7 +287,8 @@ function queue_recent(string $iso, int $days = QUEUE_KEEP_DAYS): bool { $t = str
 // closed (settled), dropped (the owner took it off). told: when the sender was emailed; 0 not yet; -1 gave up after
 // three failed sends; -2 not sent because replies are off; -3 never sent, because the item came in before the private
 // queue began (queue_since), when the owner answered by hand; -4 settled as spam, with no reply; -5 an email the owner
-// settled from the Needs-you page. queue_runs: the outcome files already read.
+// settled from the Needs-you page. queue_runs: the outcome files already read, with the run's name and, when the run
+// couldn't finish, the step it stopped at (one word from a fixed list; the morning summary says it in its own words).
 function queue_schema(PDO $db): void {
   $db->exec("CREATE TABLE IF NOT EXISTS queue_items (id TEXT PRIMARY KEY, kind TEXT NOT NULL, email TEXT NOT NULL DEFAULT '', listing TEXT NOT NULL DEFAULT '', what TEXT NOT NULL DEFAULT '', seen INTEGER NOT NULL, state TEXT NOT NULL DEFAULT 'open', outcome TEXT NOT NULL DEFAULT '', reason TEXT NOT NULL DEFAULT '', run TEXT NOT NULL DEFAULT '', pr INTEGER NOT NULL DEFAULT 0, decided INTEGER NOT NULL DEFAULT 0, told INTEGER NOT NULL DEFAULT 0, tries INTEGER NOT NULL DEFAULT 0)");
   $db->exec("CREATE INDEX IF NOT EXISTS queue_items_state ON queue_items (state, told)");
@@ -295,6 +296,10 @@ function queue_schema(PDO $db): void {
   $cols = array(); foreach ($db->query('PRAGMA table_info(queue_items)')->fetchAll(PDO::FETCH_ASSOC) as $c) $cols[] = $c['name'];
   if (!in_array('reply', $cols, true)) $db->exec("ALTER TABLE queue_items ADD COLUMN reply TEXT NOT NULL DEFAULT ''");
   $db->exec("CREATE TABLE IF NOT EXISTS queue_runs (file TEXT PRIMARY KEY, sha TEXT NOT NULL, read INTEGER NOT NULL, items INTEGER NOT NULL DEFAULT 0, tokens INTEGER NOT NULL DEFAULT 0)");
+  // Added with Phase 4: the run's name, and the step a run that couldn't finish stopped at.
+  $cols = array(); foreach ($db->query('PRAGMA table_info(queue_runs)')->fetchAll(PDO::FETCH_ASSOC) as $c) $cols[] = $c['name'];
+  if (!in_array('run', $cols, true)) $db->exec("ALTER TABLE queue_runs ADD COLUMN run TEXT NOT NULL DEFAULT ''");
+  if (!in_array('failed', $cols, true)) $db->exec("ALTER TABLE queue_runs ADD COLUMN failed TEXT NOT NULL DEFAULT ''");
   $db->exec('CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v TEXT NOT NULL)');
 }
 function queue_meta(PDO $db, string $k): string {
@@ -741,8 +746,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       } else {
         $n = (int) $w['items'];
         record_email('[' . $SITE . '] Rush: ' . $n . ' item' . ($n === 1 ? '' : 's') . ' in the queue',
-          "The queue is written. Press Run now on the scheduled task “Philly After School weekly run” in your Claude app, and it opens a pull request within the hour.\n\n" . $SITE_URL . '/edit/queue/');
-        $msg = 'Written: ' . $n . ' item' . ($n === 1 ? '' : 's') . ' in the private queue (commit ' . $w['commit'] . '). Now press Run now on “Philly After School weekly run” in the Claude app; a reminder is in your inbox.';
+          "The queue is written. Press Run now on the scheduled task “Philly After School queue run” in your Claude app, and it opens a pull request within the hour.\n\n" . $SITE_URL . '/edit/queue/');
+        $msg = 'Written: ' . $n . ' item' . ($n === 1 ? '' : 's') . ' in the private queue (commit ' . $w['commit'] . '). Now press Run now on “Philly After School queue run” in the Claude app; a reminder is in your inbox.';
       }
     }
   }
