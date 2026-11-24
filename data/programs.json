@@ -4366,6 +4366,18 @@
           }
         ],
         "checked": "2026-11-10"
+      },
+      "as-jenks": {
+        "relation": "pickup",
+        "distance": "about two-thirds of a mile southwest of Bok",
+        "note": "Beehive’s 2026–27 list for Bok names “Jenks”, Monday to Friday, for pre-K to 3rd grade. Every other school on that list is in South Philadelphia, so this is read as A.S. Jenks; ask Beehive to confirm.",
+        "sources": [
+          {
+            "label": "Beehive After Care",
+            "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs"
+          }
+        ],
+        "checked": "2026-11-24"
       }
     },
     "pickupLists": [
@@ -22812,6 +22824,788 @@
       },
       {
         "name": "Student Leadership",
+        "tags": [
+          "clubs"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "north-light-kidzone",
+    "name": "North Light KidZone",
+    "what": "Before and after care at North Light Community Center for kindergarten to 8th grade, with transportation from some schools",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "before care",
+      "KidZone",
+      "North Light",
+      "community center",
+      "transportation",
+      "homework",
+      "Manayunk",
+      "Dobson"
+    ],
+    "address": "175 Green Ln",
+    "neighborhoods": [
+      "Manayunk"
+    ],
+    "grades": "K-8",
+    "gradeNote": "Kindergarten to 8th grade",
+    "hours": "After care 2:00 to 6:00 pm; before care 7:00 to 9:00 am, offered to Dobson students. Full-day care when the School District is closed to students, except holidays, for an extra fee.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "After care $570 a month; before care $245 a month; both $750 a month, according to North Light’s page.",
+    "price": "paid",
+    "rate": {
+      "per": "month",
+      "flat": 570,
+      "extra": "Full-week after care. Before care and partial weeks are priced separately."
+    },
+    "phone": "215-483-4800",
+    "email": "",
+    "website": "https://www.northlightcommunitycenter.org/kidzone/",
+    "register": {
+      "how": "online",
+      "url": "https://docs.google.com/forms/d/e/1FAIpQLSdRqYrSjNH_fN1lxLXu8SWer0ZgPzrX01GGbXdhbDZ0kjm13Q/viewform",
+      "label": "Register",
+      "note": "North Light’s page links this form. KidZone runs September 8, 2026 to June 9, 2027."
+    },
+    "note": "North Light’s page says transportation is provided for select schools and before care is offered to Dobson students. Its sign-up form lists the schools it transports from. Ask KidZone about pickup from your school.",
+    "sources": [
+      {
+        "label": "North Light Community Center: KidZone",
+        "url": "https://www.northlightcommunitycenter.org/kidzone/"
+      }
+    ],
+    "lastVerified": "2026-11-24",
+    "schools": {
+      "dobson": {
+        "relation": "pickup",
+        "note": "North Light’s own page says before care is offered to James Dobson School students, and its sign-up form lists Dobson among the schools it provides transportation to and from.",
+        "sources": [
+          {
+            "label": "North Light Community Center: KidZone",
+            "url": "https://www.northlightcommunitycenter.org/kidzone/"
+          }
+        ],
+        "checked": "2026-11-24"
+      }
+    }
+  },
+  {
+    "id": "dobson-clubs",
+    "name": "School clubs and teams",
+    "what": "Clubs and teams James Dobson School names on its own site: after-school enrichment, LEGO robotics, gardening, Reading Olympics and sports",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "after school",
+      "LEGO",
+      "robotics",
+      "gardening",
+      "Reading Olympics",
+      "volleyball",
+      "softball",
+      "intramurals",
+      "Dobson"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-3570",
+    "email": "",
+    "website": "https://dobson.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-3570)."
+    },
+    "note": "Dobson’s own site lists these under extracurricular programs, clubs and activities, without days, times or grades. It also names the Rendell Center, Mural Arts and the Schuylkill Center as community partners. Ask the office which meet after dismissal.",
+    "sources": [
+      {
+        "label": "James Dobson School",
+        "url": "https://dobson.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-24",
+    "schools": {
+      "dobson": {
+        "relation": "onsite",
+        "checked": "2026-11-24"
+      }
+    },
+    "clubs": [
+      {
+        "name": "After-School Enrichment",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "LEGO Robotics Team",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Gardening Club",
+        "tags": [
+          "nature"
+        ]
+      },
+      {
+        "name": "Reading Olympics",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Cultural Arts Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Student Leadership",
+        "what": "Listed as “Dive Into Action”",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Girls Volleyball",
+        "what": "Winter",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Girls Softball",
+        "what": "Spring",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Elementary Intramurals",
+        "grades": "K-5",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Middle Grades Conference",
+        "grades": "6-8",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Rendell Center",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [
+          "clubs"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Mural Arts",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [
+          "art"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Schuylkill Center",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [
+          "nature"
+        ],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "roxy-after-school",
+    "name": "Roxy After-School Program",
+    "what": "Low-cost after care at Roxborough Church for kindergarten to 5th grade, with pickup from Shawmont and Green Woods Charter",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "pickup",
+      "homework",
+      "snack",
+      "church",
+      "Roxy",
+      "Roxborough Church",
+      "Roxborough",
+      "Shawmont",
+      "Green Woods"
+    ],
+    "address": "8230 Ridge Ave",
+    "neighborhoods": [
+      "Roxborough"
+    ],
+    "grades": "K-5",
+    "gradeNote": "Kindergarten to 5th grade",
+    "hours": "Not published; ask the program",
+    "cost": "$300 a month full time; $150 a month part time (less than three days a week), according to the church’s page.",
+    "price": "paid",
+    "rate": {
+      "per": "month",
+      "flat": 300,
+      "extra": "Full time. Part time, under three days a week, is $150 a month."
+    },
+    "phone": "215-483-2762",
+    "email": "education@roxboroughchurch.org",
+    "website": "https://www.roxboroughchurch.org/roxyafterschool",
+    "register": {
+      "how": "online",
+      "url": "https://roxboroughchurch.breezechms.com/form/dbd378",
+      "label": "Register",
+      "note": "The church’s page says 2026–27 registration is open."
+    },
+    "note": "Roxborough Church’s page describes snacks, homework help, games, Bible lessons and monthly electives. It doesn’t give hours, so ask how late children can stay.",
+    "sources": [
+      {
+        "label": "Roxborough Church: Roxy After-School",
+        "url": "https://www.roxboroughchurch.org/roxyafterschool"
+      }
+    ],
+    "lastVerified": "2026-11-24",
+    "pickupLists": [
+      {
+        "where": "Roxy After-School",
+        "text": "Students are picked up each day from Shawmont Elementary and Green Woods Charter Schools and are taken back to Roxborough Church.",
+        "url": "https://www.roxboroughchurch.org/roxyafterschool",
+        "read": "2026-11-24",
+        "how": "fetch"
+      }
+    ],
+    "schools": {
+      "shawmont": {
+        "relation": "pickup",
+        "note": "Roxborough Church’s own page says students are picked up each day from Shawmont Elementary and taken back to the church.",
+        "sources": [
+          {
+            "label": "Roxborough Church: Roxy After-School",
+            "url": "https://www.roxboroughchurch.org/roxyafterschool"
+          }
+        ],
+        "checked": "2026-11-24"
+      }
+    }
+  },
+  {
+    "id": "shawmont-clubs",
+    "name": "School clubs and partners",
+    "what": "Clubs, sports and partners Shawmont names on its own site: art, games, gardening, stock market, tutoring, golf, track and basketball",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "art",
+      "games",
+      "garden",
+      "stock market",
+      "tutoring",
+      "yearbook",
+      "golf",
+      "track",
+      "basketball",
+      "karate",
+      "theater",
+      "Shawmont"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-3440",
+    "email": "",
+    "website": "https://shawmont.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-3440)."
+    },
+    "note": "Shawmont’s own site lists these under extracurricular programs, clubs and activities, available sports and community partnerships, without days, times or grades. Ask the office which meet after dismissal.",
+    "sources": [
+      {
+        "label": "Shawmont School",
+        "url": "https://shawmont.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-24",
+    "schools": {
+      "shawmont": {
+        "relation": "onsite",
+        "checked": "2026-11-24"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Art Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Game Club",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Garden Club",
+        "tags": [
+          "nature"
+        ]
+      },
+      {
+        "name": "Stock Market Club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Tutoring",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Yearbook",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Middle School Girls Group",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Philadelphia Youth Basketball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Golf",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Track",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Middle Grades Conference",
+        "what": "Middle-grades sports",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Action Karate",
+        "what": "Named as a community partner. Action Karate’s Manayunk studio lists Shawmont as a school partner; neither says what runs at the school",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Big Brothers Big Sisters",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [
+          "clubs"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Enchantment Theatre Company",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [
+          "theater"
+        ],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "ymca-base-fitzpatrick",
+    "name": "YMCA Before & After School Enrichment at Fitzpatrick",
+    "what": "Paid after care inside Fitzpatrick from the Greater Philadelphia YMCA, for kindergarten to 4th grade",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "YMCA",
+      "Y",
+      "BASE",
+      "Fitzpatrick",
+      "Far Northeast",
+      "Millbrook"
+    ],
+    "address": "11061 Knights Rd",
+    "grades": "K-4",
+    "gradeNote": "The YMCA lists A.L. Fitzpatrick Elementary for kindergarten to 4th grade only",
+    "hours": "From the end of the school day to 6:00 pm, according to the YMCA’s page. Before care is only at the Christian Street YMCA.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Not published. The YMCA registers families for a package covering the whole year of care and any registration fees.",
+    "price": "paid",
+    "phone": "215-220-9199",
+    "email": "gpychildcare@philaymca.org",
+    "website": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+    "register": {
+      "how": "online",
+      "url": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+      "label": "Register",
+      "note": "The YMCA’s page says you register online for a package covering the entire year."
+    },
+    "note": "The YMCA’s page lists A.L. Fitzpatrick Elementary among its Philadelphia before and after school sites, for kindergarten to 4th grade only, and Fitzpatrick’s own site names the YMCA as a partner for grades K to 4. The price isn’t posted, so ask the YMCA.",
+    "sources": [
+      {
+        "label": "Greater Philadelphia YMCA: Before and After School",
+        "url": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/"
+      },
+      {
+        "label": "A. L. Fitzpatrick: community partnerships",
+        "url": "https://fitzpatrick.philasd.org/community-partnerships/"
+      }
+    ],
+    "lastVerified": "2026-11-24",
+    "schools": {
+      "fitzpatrick": {
+        "relation": "onsite",
+        "note": "The YMCA’s own page lists A.L. Fitzpatrick Elementary (kindergarten to 4th grade only), and Fitzpatrick’s community partners page names the YMCA for grades K to 4.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Before and After School",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/"
+          },
+          {
+            "label": "A. L. Fitzpatrick: community partnerships",
+            "url": "https://fitzpatrick.philasd.org/community-partnerships/"
+          }
+        ],
+        "checked": "2026-11-24"
+      }
+    }
+  },
+  {
+    "id": "pyn-fitzpatrick",
+    "name": "PYN AIM Afterschool at Fitzpatrick",
+    "what": "An after-school program for Fitzpatrick’s middle schoolers run by the Philadelphia Youth Network",
+    "types": [
+      "aftercare",
+      "academics"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "middle school",
+      "PYN",
+      "Philadelphia Youth Network",
+      "AIM",
+      "Fitzpatrick",
+      "Far Northeast",
+      "Millbrook"
+    ],
+    "address": "11061 Knights Rd",
+    "grades": "5-8",
+    "gradeNote": "Middle school; Fitzpatrick’s site names PYN for grades 5 to 8",
+    "hours": "Not published; ask PYN",
+    "cost": "Not published",
+    "phone": "267-502-3800",
+    "email": "afterschool@pyninc.org",
+    "website": "https://www.pyninc.org/aimafterschool",
+    "register": {
+      "how": "online",
+      "url": "https://ct.caseworthy.net/portal/default.aspx?CustomerID=PYN",
+      "label": "Enroll",
+      "note": "PYN says enrollment is open all year and that youth must be enrolled at one of its participating schools."
+    },
+    "note": "PYN’s own page lists A. L. Fitzpatrick School among its 2026–27 program locations, and Fitzpatrick’s community partners page names PYN for grades 5 to 8. PYN’s page doesn’t give days, hours or a price, so ask.",
+    "sources": [
+      {
+        "label": "PYN after school",
+        "url": "https://www.pyninc.org/aimafterschool"
+      },
+      {
+        "label": "A. L. Fitzpatrick: community partnerships",
+        "url": "https://fitzpatrick.philasd.org/community-partnerships/"
+      }
+    ],
+    "lastVerified": "2026-11-24",
+    "schools": {
+      "fitzpatrick": {
+        "relation": "onsite",
+        "note": "PYN’s own page lists A. L. Fitzpatrick School among its 2026–27 sites, and Fitzpatrick’s community partners page names PYN for grades 5 to 8.",
+        "sources": [
+          {
+            "label": "PYN after school",
+            "url": "https://www.pyninc.org/aimafterschool"
+          },
+          {
+            "label": "A. L. Fitzpatrick: community partnerships",
+            "url": "https://fitzpatrick.philasd.org/community-partnerships/"
+          }
+        ],
+        "checked": "2026-11-24"
+      }
+    }
+  },
+  {
+    "id": "fitzpatrick-clubs",
+    "name": "School clubs",
+    "what": "Clubs and middle-school sports A. L. Fitzpatrick lists for 2026–2027: chess, guitar, yoga, Girls on the Run, gardening, soccer and more",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "chess",
+      "guitar",
+      "yoga",
+      "Girls on the Run",
+      "gardening",
+      "tech",
+      "painting",
+      "crafts",
+      "basketball",
+      "soccer",
+      "track",
+      "Fitzpatrick"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-3060",
+    "email": "",
+    "website": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-3060)."
+    },
+    "note": "Fitzpatrick’s own site lists these as its 2026–2027 clubs and middle school intramural sports, without days or times. Ask the office which meet after dismissal.",
+    "sources": [
+      {
+        "label": "A. L. Fitzpatrick: extracurricular programs",
+        "url": "https://fitzpatrick.philasd.org/extracurricular-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-24",
+    "schools": {
+      "fitzpatrick": {
+        "relation": "onsite",
+        "checked": "2026-11-24"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Basketball Skills Training Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Yoga",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Yearbook",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Crafting Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Tech Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Painting Techniques",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Girls on the Run",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Gardening Club",
+        "tags": [
+          "nature"
+        ]
+      },
+      {
+        "name": "Middle School Student Council",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Guitar Club",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "PBIS",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "grades": "6-8",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Track and Field",
+        "grades": "6-8",
+        "tags": [
+          "movement"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "as-jenks-clubs",
+    "name": "School clubs",
+    "what": "Clubs A.S. Jenks names in its 2026–2027 handbook: chess, drama, student leadership and safety patrol",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "chess",
+      "drama",
+      "student government",
+      "student council",
+      "safety patrol",
+      "Jenks",
+      "A.S. Jenks"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; many are for older grades. Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-8240",
+    "email": "",
+    "website": "https://asjenks.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-8240)."
+    },
+    "note": "The school’s 2026–2027 handbook says clubs meet before, during or after school, mostly starting in October, and that three late pickups from an after-school club end a student’s place in it. It doesn’t say which clubs meet after school, or when.",
+    "sources": [
+      {
+        "label": "A.S. Jenks: parent and student handbook, 2026–2027",
+        "url": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit"
+      },
+      {
+        "label": "Abram S. Jenks School",
+        "url": "https://asjenks.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-24",
+    "schools": {
+      "as-jenks": {
+        "relation": "onsite",
+        "checked": "2026-11-24"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Chess",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Drama",
+        "tags": [
+          "theater"
+        ]
+      },
+      {
+        "name": "Student Activity Leaders",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Safety Patrol",
+        "tags": [
+          "clubs"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Student Government",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Student Council",
         "tags": [
           "clubs"
         ]

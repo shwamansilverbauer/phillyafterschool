@@ -3586,5 +3586,117 @@
       "The school is in Wynnefield and takes students who live in its attendance zone in 19131; the page has the map. Students can go on to Mastery’s Shoemaker Campus after 6th grade.",
       "If you know a program that serves Mastery Mann and isn’t here, send it in and it goes on this page."
     ]
+  },
+  {
+    "id": "dobson",
+    "name": "James Dobson School",
+    "shortName": "Dobson",
+    "aliases": [
+      "James Dobson",
+      "Dobson Elementary",
+      "Dobson School",
+      "J. Dobson"
+    ],
+    "address": "4667 Umbria St, Philadelphia, PA 19127",
+    "neighborhood": "Manayunk",
+    "grades": "K-8",
+    "dismissal": "3:39 pm",
+    "dismissalNote": "the school’s site gives the school day as 9:00 am to 3:39 pm, with kindergarten dismissed at 3:30 pm, grades 1–2 at 3:33 pm and grades 3–5 at 3:35 pm",
+    "phone": "215-400-3570",
+    "website": "https://dobson.philasd.org/",
+    "lastReviewed": "2026-11-24",
+    "added": "2026-11-24",
+    "notes": [
+      "North Light Community Center’s KidZone, on Green Lane, offers before care to Dobson students and after care with transportation from the school. It has a listing here.",
+      "Dobson’s site lists after-school enrichment, a LEGO robotics team, a gardening club, Reading Olympics, a cultural arts club and a student leadership group, plus girls’ volleyball and softball, elementary intramurals and middle-grades sports. They are listed here as the school’s clubs and teams, without days or times, so ask the office which meet after dismissal.",
+      "Early dismissal days end at 12:30 pm for kindergarten and 12:39 pm for grades 6–8, according to the school’s site. Ask KidZone whether it covers those afternoons.",
+      "Cohen (Hillside) Recreation Center is about a fifth of a mile away, on Fountain St.",
+      "If you know a program that serves Dobson and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "shawmont",
+    "name": "Shawmont School",
+    "shortName": "Shawmont",
+    "aliases": [
+      "Shawmont Elementary",
+      "Shawmont School"
+    ],
+    "address": "535 Shawmont Ave, Philadelphia, PA 19128",
+    "neighborhood": "Roxborough",
+    "grades": "PK-8",
+    "dismissal": "2:09 pm",
+    "dismissalNote": "the school’s site gives school hours as 7:30 am to 2:09 pm, with dismissal from 2:00 pm",
+    "phone": "215-400-3440",
+    "website": "https://shawmont.philasd.org/",
+    "lastReviewed": "2026-11-24",
+    "added": "2026-11-24",
+    "notes": [
+      "Roxborough Church’s Roxy After-School Program picks children up from Shawmont each day and takes them back to the church on Ridge Avenue, for kindergarten to 5th grade. It has a listing here.",
+      "Shawmont’s site lists an art club, game club, garden club, stock market club, tutoring, yearbook and a middle school girls group, and sports through Philadelphia Youth Basketball, golf, track and the Middle Grades Conference. It names Action Karate, Big Brothers Big Sisters, Philadelphia Youth Basketball and Enchantment Theatre Company as community partners. They are listed here as the school’s clubs and partners, without days or times, so ask the office which meet after dismissal.",
+      "Staff are in the schoolyard from 7:00 am for students who arrive early, according to the school’s site. For early dismissals the site points to its parent and student handbook.",
+      "If you know a program that serves Shawmont and isn’t here, send it in and it goes on this page."
+    ],
+    "alsoListed": [
+      "North Light Community Center’s KidZone: its registration form lists Shawmont among the schools it transports from, but its own page doesn’t name Shawmont, so ask KidZone.",
+      "The Schuylkill Center: a magazine roundup lists van pickup from Shawmont; the Center’s own site couldn’t be read, so ask the Center."
+    ]
+  },
+  {
+    "id": "fitzpatrick",
+    "name": "A. L. Fitzpatrick School",
+    "shortName": "Fitzpatrick",
+    "aliases": [
+      "A.L. Fitzpatrick",
+      "AL Fitzpatrick",
+      "A. L. FitzPatrick",
+      "FitzPatrick",
+      "Fitzpatrick Elementary",
+      "A.L. Fitzpatrick Elementary"
+    ],
+    "address": "11061 Knights Rd, Philadelphia, PA 19154",
+    "neighborhood": "Millbrook",
+    "grades": "K-8",
+    "dismissal": "2:09 pm",
+    "dismissalNote": "the school’s site gives the school day as 7:30 am to 2:09 pm, with pupils dismissed between 1:50 and 2:09 pm",
+    "phone": "215-400-3060",
+    "website": "https://fitzpatrick.philasd.org/",
+    "lastReviewed": "2026-11-24",
+    "added": "2026-11-24",
+    "notes": [
+      "Fitzpatrick’s community partners page names the YMCA for grades K to 4 and the Philadelphia Youth Network (PYN) for grades 5 to 8. The YMCA runs its paid Before & After School Enrichment program at the school for kindergarten to 4th grade, and PYN runs its AIM Afterschool program there for middle schoolers. Both have listings here.",
+      "Fitzpatrick’s site lists its 2026–2027 clubs: basketball skills training, yoga, yearbook, crafting, tech, chess, painting techniques, Girls on the Run, gardening, guitar, middle school student council and PBIS, plus soccer and track and field for grades 6 to 8. They are listed here as the school’s clubs, without days or times, so ask the office which meet after dismissal.",
+      "Students can enter for breakfast from 7:00 am, according to the school’s site. Its monthly calendars are posted from the calendar page; ask the office about early dismissal days.",
+      "If you know a program that serves Fitzpatrick and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "as-jenks",
+    "name": "Abram S. Jenks School",
+    "shortName": "A.S. Jenks",
+    "aliases": [
+      "Abram S. Jenks",
+      "Abram Jenks",
+      "A. S. Jenks",
+      "AS Jenks",
+      "A.S. Jenks Elementary",
+      "Jenks"
+    ],
+    "address": "2501 S 13th St, Philadelphia, PA 19148",
+    "neighborhood": "Lower Moyamensing",
+    "grades": "K-5",
+    "dismissal": "2:50 pm",
+    "dismissalNote": "the school’s site gives the school day as 8:15 to 2:50, ending at 11:50 am on half days",
+    "phone": "215-400-8240",
+    "website": "https://asjenks.philasd.org/",
+    "lastReviewed": "2026-11-24",
+    "added": "2026-11-24",
+    "notes": [
+      "Beehive @ Bok’s 2026–27 page lists Jenks among the schools it picks up from, Monday to Friday, for pre-K to 3rd grade. The page says only “Jenks”; the other schools on that list are all in South Philadelphia, so it is listed here as this Jenks, not J.S. Jenks in Chestnut Hill. Ask Beehive to confirm.",
+      "The school’s 2026–2027 parent and student handbook, linked from its site, says clubs meet before, during or after school, most starting in October, and names chess, drama, student activity leaders, safety patrol, student government and student council. For clubs after school, parents meet students in the schoolyard and sign them out. They are listed here as the school’s clubs.",
+      "Half days end at 11:50 am, according to the school’s site. Ask Beehive whether it covers those afternoons.",
+      "The school’s site has an after-school section that points to the City’s program locator, and its community partnerships section is empty.",
+      "If you know a program that serves A.S. Jenks and isn’t here, send it in and it goes on this page."
+    ]
   }
 ]
