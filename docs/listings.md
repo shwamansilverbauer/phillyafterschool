@@ -301,7 +301,8 @@ reaches the public repository. (Until November 2026 the owner ticked items on `/
   file says is ignored. `outcome` is one of `published`, `held`, `declined`,
   `duplicate`, `needs-info`, `no-change` or `failed`; `reason`, for `needs-info` and `declined`, one of `need-page`,
   `need-website`, `need-school`, `not-a-program`, `outside`, `no-own-site` or `closed`; `pr` on an item overrides
-  the file's; `tokens` is how many model tokens the run used, if it knows. An email (`m…`) can also be `answered`,
+  the file's, and only a `published` item takes the file's (a `held` item waits on a pull request only when it names
+  one itself); `tokens` is how many model tokens the run used, if it knows. An email (`m…`) can also be `answered`,
   with `reply` one of `how-to-claim`, `delete-account`, `stop-emails` or `add-school`, or `spam` (settled with no
   reply); and `published` with `"reply": "thanks-updated"` for a program's own word (DKIM passed for a listing's own
   domain, about that listing), recorded as a `told` entry. Nothing else in the file is read: any words a run writes

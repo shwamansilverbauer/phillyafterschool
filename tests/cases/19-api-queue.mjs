@@ -161,6 +161,38 @@ test('outcomes: each sender is emailed once in the site’s own words, nothing a
   noKey(site);
 });
 
+test('outcomes: the file’s pull request is the clean one, so a held item never takes it and is never told “it’s on the site”', async ({ api, site, github, mail }) => {
+  const t = Date.now().toString(36);
+  withKey(site);
+  const who = k => `${k}${t}@example.test`;
+  const names = { pub: `File PR Club ${t}`, held: `Needs Josh Club ${t}`, heldPr: `Held PR Club ${t}` };
+  for (const [k, program] of Object.entries(names)) await suggest(site, { program, email: who(k) });
+  eq((await run(api)).state, 'written');
+  const id = {}; for (const [k, program] of Object.entries(names)) { id[k] = itemFor(github, program).id; ok(id[k], program + ' is in the queue'); }
+  // The queue run's shape: the clean pull request at the top, a held item under "Needs your decision" with no pull
+  // request, and a held item in the held pull request with its own.
+  github.ops.put(`outcomes/queue-${t}.json`, JSON.stringify({ run: `queue-${t}`, pr: 51, items: [
+    { item: id.pub, outcome: 'published', listing: PREMIUM },
+    { item: id.held, outcome: 'held' },
+    { item: id.heldPr, outcome: 'held', pr: 52 },
+  ] }));
+  mail.clear();
+  const r = await run(api);
+  eq(r.outcomes.items, 3, JSON.stringify(r.outcomes));
+  const row = k => site.sql(`SELECT state, pr FROM queue_items WHERE id = '${id[k]}'`)[0];
+  eq(+row('pub').pr, 51, 'the published item takes the file’s pull request'); eq(row('pub').state, 'waiting');
+  eq(+row('held').pr, 0, 'the held item doesn’t'); eq(row('held').state, 'held', 'it waits for the owner');
+  eq(+row('heldPr').pr, 52); eq(row('heldPr').state, 'waiting', 'the held pull request’s item waits on it');
+  // The clean pull request merges: only its own item is on the site.
+  github.pulls[51] = { state: 'closed', merged: true, merged_at: new Date(Date.now() - 30 * 60000).toISOString().replace(/\.\d+Z$/, 'Z') };
+  const r2 = await run(api);
+  eq(r2.merged.published, 1, JSON.stringify(r2.merged));
+  await mail.waitFor(who('pub'), /It’s on/);
+  eq(mail.to(who('held')).length, 0, 'held: nobody told'); eq(row('held').state, 'held');
+  eq(mail.to(who('heldPr')).length, 0, 'the held pull request isn’t merged: nobody told');
+  noKey(site);
+});
+
 test('/edit/queue/ is a view: no ticking or Send, “Not for the run” takes an item off, a note joins the queue, and Rush writes it at once and reminds the owner', async ({ api, site, github, mail }) => {
   const t = Date.now().toString(36);
   withKey(site);

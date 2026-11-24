@@ -2036,7 +2036,10 @@ function queue_apply(array $doc): array {
     $was = row('SELECT state, told FROM queue_items WHERE id = ?', array($id));
     if (!$was || (int) $was['told'] > 0 || in_array($was['state'], array('closed', 'dropped'), true)) { $skipped++; continue; }   // unknown, already answered, or settled
     $listing = isset($x['listing']) && is_string($x['listing']) && preg_match('/^[pc]:[a-z0-9-]{1,80}$/', $x['listing']) ? $x['listing'] : '';
-    $pr = isset($x['pr']) && is_int($x['pr']) && $x['pr'] > 0 ? $x['pr'] : $prAll;
+    // The file's pull request is the run's clean one: only a published item takes it. A held item waits on a pull
+    // request only when it names one itself (the held one); otherwise it waits for the owner, and is never told
+    // "It's on the site" because the clean pull request merged.
+    $pr = isset($x['pr']) && is_int($x['pr']) && $x['pr'] > 0 ? $x['pr'] : ($out === 'published' ? $prAll : 0);
     $reason = isset($x['reason']) && is_string($x['reason']) && in_array($x['reason'], QUEUE_REASONS, true) ? $x['reason'] : '';
     // An email from a person can also be answered with a fixed reply, or settled as spam. Neither fits any other item.
     $mail = $id[0] === 'm';
