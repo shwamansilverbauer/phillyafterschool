@@ -1,0 +1,53 @@
+{
+  "run": "queue-2026-11-23-2045",
+  "items": [
+    {
+      "item": "sa0b1877005",
+      "kind": "update",
+      "listing": "reading:thedandelionproject.us",
+      "outcome": "held",
+      "fields": [
+        {
+          "path": "match",
+          "old": null,
+          "new": "thedandelionproject.us",
+          "source": "https://www.thedandelionproject.us/robots.txt",
+          "quote": "User-agent: anthropic-ai",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "how",
+          "old": null,
+          "new": "person",
+          "source": "https://www.thedandelionproject.us/robots.txt",
+          "quote": "User-agent: ClaudeBot",
+          "read": "2026-11-23",
+          "how": "fetch"
+        },
+        {
+          "path": "why",
+          "old": null,
+          "new": "Its robots.txt (a Squarespace site) closes the whole site to ClaudeBot, anthropic-ai and other AI crawlers, so a person has to read its after-school and spring break pages.",
+          "source": "https://www.thedandelionproject.us/robots.txt",
+          "quote": "User-agent: ClaudeBot",
+          "read": "2026-11-23",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "s0a84838ab3",
+      "kind": "new-listing",
+      "outcome": "needs-info",
+      "fields": []
+    },
+    {
+      "item": "s63c8af17d5",
+      "kind": "update",
+      "listing": "p:sawubona-creativity-project",
+      "outcome": "held",
+      "fields": []
+    }
+  ]
+}
