@@ -268,5 +268,11 @@
     "how": "person",
     "why": "Potter-Thomas posts its school calendar as screenshots, so the dates have to be read from the image.",
     "seen": "2026-11-23"
+  },
+  {
+    "match": "thedandelionproject.us",
+    "how": "person",
+    "why": "Its robots.txt (a Squarespace site) closes the whole site to ClaudeBot, anthropic-ai and other AI crawlers, so a person has to read its after-school and spring break pages.",
+    "seen": "2026-11-23"
   }
 ]
