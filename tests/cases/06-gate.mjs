@@ -18,6 +18,8 @@ const sites = new Map();   // "host/path" -> html
 const page = (url, html) => { const u = new URL(url); sites.set(u.hostname.replace(/^www\./, '') + u.pathname, html); };
 const registered = new Map();   // domain -> ISO date
 const gh = { calls: [], pulls: [], comments: new Map(), main: '' };
+// The site's answer about a review (groups/api.php, review_check): by id, the sum it holds and whether its checks pass.
+const siteReviews = new Map();   // id -> { sum, clean }
 let server = null, origin = '';
 async function standin() {
   if (server) return;
@@ -38,6 +40,12 @@ async function standin() {
         if (req.method === 'PUT' && /\/merge$/.test(p)) return json(200, { merged: true });
         if (req.method === 'POST' && /\/dispatches$/.test(p)) { res.writeHead(204); return res.end(); }
         return json(404, { message: 'Not Found' });
+      }
+      if (host === 'phillyafterschool.org' && u.pathname === '/groups/api.php' && u.searchParams.get('action') === 'review_check') {
+        const r = siteReviews.get(u.searchParams.get('id'));
+        if (!r) return json(200, { ok: true, known: false, match: false, clean: false });
+        const match = r.sum === u.searchParams.get('sum');
+        return json(200, { ok: true, known: true, match, clean: match && r.clean });
       }
       if (host === 'rdap.org') { const d = decodeURIComponent(u.pathname.replace('/domain/', '')); return registered.has(d) ? json(200, { events: [{ eventAction: 'registration', eventDate: registered.get(d) + 'T00:00:00Z' }] }) : json(404, {}); }
       if (u.pathname === '/robots.txt') { res.writeHead(404); return res.end(); }
@@ -182,6 +190,44 @@ test('the gate holds: a pickup link no quote names, what a program told us overw
   page('https://sunnyclub.example/new-home', '<p>Sunny Club</p>');
   v = await judgeChange(p => ({ ...p, register: { ...p.register, url: 'https://sunnyclub.example/new-home' } }), [field('register.url', 'https://sunnyclub.example/register', 'https://sunnyclub.example/new-home', '', 'https://sunnyclub.example/new-home')], { kind: 'link' });
   eq(v.verdict, 'publish', reasons(v));
+});
+
+test('the gate passes a new review that is the one the site stored and still clean, and holds one changed on the way, one the site’s checks hold, one with a link or a name, a removed or edited one, and one with no record', async () => {
+  const g = await gate();
+  const entry = (o = {}) => ({ id: 'v' + 'a1b2c3d4e5', programId: 'sunny-club', school: 'bayside', name: 'Rae', stars: 5, comment: 'Pickup is calm and the homework help is real. We signed up again for spring.', date: '2026-11-20', ...o });
+  const rec = id => ({ item: id, kind: 'review', listing: 'r:' + id, outcome: 'published' });
+  const judgeReview = (before, after, items, buildCheck = false) => g.judge({ before: { ...world(), 'data/reviews.json': before }, after: { ...world(), 'data/reviews.json': after }, changed: ['data/reviews.json', 'evidence/queue-2026-11-21-0610.json'], evidenceText: JSON.stringify({ run: 'queue-2026-11-21-0610', items }), branch: 'queue-2026-11-21-0610', buildCheck });
+  const e = entry();
+  siteReviews.set(e.id, { sum: g.reviewSum(e), clean: true });
+  let v = await judgeReview([], [e], [rec(e.id)]);
+  eq(v.verdict, 'publish', reasons(v)); eq(v.items[0].key, 'r:' + e.id); includes(v.items[0].label, 'A review of Sunny Club');
+  // Changed on the way: the site says it isn't what the reviewer sent.
+  v = await judgeReview([], [entry({ stars: 1 })], [rec(e.id)]);
+  includes(reasons(v), 'aren’t what the reviewer sent');
+  // The site's own checks hold it: the gate says so, and never why.
+  siteReviews.set(e.id, { sum: g.reviewSum(e), clean: false }); g._reset();
+  v = await judgeReview([], [e], [rec(e.id)]);
+  includes(reasons(v), 'The reason is on the Needs-you page');
+  siteReviews.set(e.id, { sum: g.reviewSum(e), clean: true }); g._reset();
+  // An id the site never gave, or none.
+  v = await judgeReview([], [entry({ id: 'v' + 'ffffffffff' })], [rec('v' + 'ffffffffff')]);
+  includes(reasons(v), 'The site has no review with this id');
+  v = await judgeReview([], [entry({ id: undefined })], []);
+  includes(reasons(v), 'needs the id the site gave it');
+  // The text rules, the same as the site's: a link, a name, an accusation. (The sums match, so only the words hold them.)
+  for (const [comment, why] of [['Great place, more at www.sunny-example.com if you need it.', 'It has a link in it'], ['Coach Dan is the reason my kid loves going every day.', 'It may name a person'], ['It felt unsafe at pickup on the busy days, honestly.', 'It may make an accusation']]) {
+    const x = entry({ comment }); siteReviews.set(x.id, { sum: g.reviewSum(x), clean: true }); g._reset();
+    v = await judgeReview([], [x], [rec(x.id)]);
+    includes(reasons(v), why);
+  }
+  siteReviews.set(e.id, { sum: g.reviewSum(e), clean: true }); g._reset();
+  // No "review" record in the evidence, a removed review, an edited one.
+  v = await judgeReview([], [e], []);
+  includes(reasons(v), 'no “review” record');
+  v = await judgeReview([e], [], []);
+  includes(reasons(v), 'It removes a review');
+  v = await judgeReview([e], [{ ...e, stars: 4 }], [rec(e.id)]);
+  includes(reasons(v), 'changes a review already on the site');
 });
 
 test('the gate doesn’t mistake ordinary words for instructions to an AI: an assistant principal, a painter named Claude', async () => {

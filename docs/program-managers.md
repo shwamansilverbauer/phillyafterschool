@@ -33,10 +33,48 @@ page, its card on school pages, weekend cards and camp cards. This is free and s
 
 ## Reviews
 
-Reviews are approved before they appear. The form at `/review/` emails each review to `contactEmail`, with a
-ready-made entry at the bottom of the email. To publish one, paste that entry into
-`data/reviews.json` (inside the square brackets, entries separated by commas) and commit.
-To remove a review, delete its entry. Cards show the average and the reviews for each program.
+Reviews are checked before they appear, and a clean one publishes without the owner (scaling plan, Phase 6). Cards
+show the average and the reviews for each program. The shared code is `src/server/content.php`.
+
+- **Writing one.** The form at `/review/` sends the review from the page (`site.js`). Someone not signed in types
+  their email address and gets the 6-digit sign-in code the site already uses, which makes their free account; they
+  type it in and the review is stored (`POST review_add` in `src/server/groups-api.php`, table `reviews`). Someone
+  signed in sends it from their account. One review per account per program: sending again before it is decided
+  replaces it, and after that it is refused. A review written before the code arrives is kept on the device for a day
+  (`pas-rv-draft`), so opening the email's link instead (even in another tab, which lands back on `/review/`) brings
+  it back. For a review in a child's words, the grade and first name are sealed in the database like a child's other
+  details. Nothing is emailed to the owner. Without JavaScript the form says it needs it: `review/send.php` emails
+  nothing while accounts are on (without accounts it still emails a ready-made entry, as before).
+- **Checked as it comes in** (`review_holds()`). A review waits for the owner when it has a link or contact details,
+  may make an accusation (safety, harm, discrimination, a crime, licensing), may name a person (a title before a name,
+  "Ms. Rivera" or "Coach Dan", or a family word before one, "my son Theo"), uses strong language, addresses an AI, or
+  uses a word on the private list; or when the reviewer's account is at the program's own email domain or another
+  program's, has reviewed that program already, or is under a day old with no saved school or plan. The patterns are
+  the gate's own ("moderation" and "reviewWords" in `scripts/gate.config.json`), so the site and the gate agree. The
+  private list lives next to the public folder, as `phillyafterschool-moderation.json`: `{ "review": ["…"], "content":
+  ["…"] }`. The name check catches titles and family words before a name; a bare first name is the run's to notice.
+  - `"reviewNewAccount"` under `"groups"` in `site.config.json`: `"hold"` (the default, as the hold table says) sends a
+    brand-new account's review to the owner. `"wait"` keeps it out of the queue until the account is a day old (or
+    saves a school or a plan), then it goes on like any other. Most reviewers make their account while writing, so
+    `"hold"` sends most first reviews to the owner.
+- **Held** reviews never leave the host. They wait on the Needs-you page with the reason, with **Publish** (one
+  commit to `data/reviews.json` on main with the key file, so the site rebuilds) and **Decline** (no email).
+- **Clean** reviews go to the private queue (see "The private queue" in `docs/listings.md`) with the exact entry
+  `data/reviews.json` will carry. The queue run reads each against the same rules and copies a clean one into its
+  pull request word for word; the gate checks it again and asks the site whether it is the entry the reviewer sent
+  and still passes (see "What the gate checks"). With the autopilot on, it publishes at the next hourly merge; in
+  shadow mode the owner merges it like any run's pull request.
+- **Once it's on the site** the reviewer gets one email, "Thanks for your review", with the link to it (editable on
+  `/edit/emails/`), and the listing's managers get "A review was published", as before. A declined or held review
+  emails nobody.
+- **An entry** in `data/reviews.json`: `"id"` (the site's own, `v` and ten letters and numbers), `"programId"`,
+  `"school"`, `"name"` (the reviewer's first name), `"stars"`, `"comment"`, `"date"`, and for a child's words `"kid"`
+  (below). Entries from before Phase 6 have no id. To remove a published review, delete its entry; the gate holds any
+  run's change to one.
+- **How reviews work** (`/review-policy/`, `reviewPolicyPage()` in `build.mjs`): what is allowed, how a program
+  answers, how a review comes down. Drafted for a lawyer's read: until `"reviewPolicyLive": true` in
+  `site.config.json` it says it's a draft, carries `noindex`, is left out of the sitemap, and nothing links to it;
+  then the review form's house rules link to it and it is listed.
 
 A review can be **in a child's words**: the parent types what the child said (from Kids' Playground's grown-ups' corner,
 where each confirmed program has a "Review in Sam's words" link, or by switching on the form). The entry then carries
@@ -154,11 +192,22 @@ changes where a listing appears in a list, and it has no say over reviews.
   `/edit/claims/` ("Make it premium" beside each claimed listing); a payment would set the same row later. Turning
   it off hides what was added and keeps it. By the rule under "What stays free", a free program can simply be made
   premium at no charge.
-- **Everything waits for a person.** Photos, the logo, the words, the offer line, the social links and the Instagram
-  posts each go to `/edit/claims/` to
-  be published or declined, and the manager is emailed either way. In `"preview"` those emails say that only they
-  can see it for now.
-- **Photos.** The `photos` table gained a `kind` (`photo` or `logo`). A premium listing keeps up to
+- **Checked before it shows** (scaling plan, Phase 6; `src/server/content.php`). The words, the offer line and the
+  pin go to the private queue for a research run to rate against the hold rules (a link or contact detail, a
+  licensing or accreditation claim, a guarantee or a "best" claim, another program named, a child named); so do
+  photos and logos, each with a link signed for the run to look at it for a day (a photo publishes with no child's
+  face up close and no readable name, a logo when it is plainly a logo). The run writes its word to
+  `decisions/<run>.json` in the ops repository (see "The private queue"). With the autopilot on, the site publishes
+  what the run passed, after its own text checks and, for a photo, only when the manager ticked that everyone shown
+  agreed, and emails the manager in the site's own words ("It's on your listing", editable on `/edit/emails/`).
+  Anything held waits on `/edit/claims/` and the Needs-you page with the reason. Social links and Instagram posts,
+  which are only addresses on those sites (`social_url()`, `post_url()`), go on the listing at once while the
+  autopilot is on. With it in shadow or off, everything waits for the owner as before, with the run's word beside
+  it, and once it is switched on what a run passed publishes a few an hour. Publish and Decline on `/edit/claims/`
+  work as before and email the manager either way. In `"preview"` those emails say that only they can see it for now.
+- **Photos.** Sending a photo needs two ticks: the right to use it, and "Everyone shown, or their parent, has agreed to
+  this photo being public" (`consent` in the `photos` table, Phase 6; a logo needs only the first). A photo from
+  before that tick waits for the owner. The `photos` table gained a `kind` (`photo` or `logo`). A premium listing keeps up to
   `PREMIUM_PHOTOS` approved photos: the newest sits at the top of the listing, the rest make the gallery. The older
   single-photo extra (`"groups": { "photos": true }`) still works on its own. `GET photo` serves one photo by `id`;
   a waiting photo only to the people who hold the listing.
@@ -263,7 +312,8 @@ about things a manager sent in (changes, photos), are not affected by it. `/edit
 
 ## Giving a listing by hand
 
-A claim normally needs an email address at the listing's own website. For someone the owner knows runs a program
+A claim normally needs an email address at the listing's own website, or, with claims by code on, the code sent to
+the address the listing's website publishes (see "Program managers: claiming a listing" in `docs/accounts.md`). For someone the owner knows runs a program
 whose address isn't there (a studio that uses Gmail), `/edit/claims/` has "Give a listing to an account by hand":
 the account's email address and a listing. The account has to exist already and have a name on it. The claim is
 stored like any other, with `domain` set to `by hand` (the list of claimed listings says so), the person is

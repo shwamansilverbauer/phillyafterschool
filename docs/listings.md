@@ -272,8 +272,10 @@ reaches the public repository. (Until November 2026 the owner ticked items on `/
   the log the form keeps next to the public folder, the last 90 days), changes the people who run a listing proposed
   (status `new` in the accounts database), the owner's notes from `/edit/queue/`, and mail people wrote to the site's
   address that the hold list didn't keep for the owner (handed over by the mailbox script; see "The mailbox script" in
-  `docs/emails.md`). Feature ideas and dates for a school are not research and don't go in. A later phase adds
-  reviews and managers' words.
+  `docs/emails.md`). Feature ideas and dates for a school are not research and don't go in. Since Phase 6, also
+  reviews that passed the site's checks, and what the people who run a premium listing wrote (its words, offer line
+  and Kids' Playground pin) and the photos and logos they sent, until a run has rated them (see "Reviews" and
+  "Premium listings" in `docs/program-managers.md`; the shared code is `src/server/content.php`).
 - **How it gets there.** The hourly `push_run` call (`.github/workflows/alerts.yml` makes it every hour, and
   `scripts/send-alerts.mjs` in the morning) writes `queue/open.json` to the ops repository through the same key file
   `/edit/` publishes with (`phillyafterschool-github.key`, whose token needs that repository: Contents, read and
@@ -289,7 +291,15 @@ reaches the public repository. (Until November 2026 the owner ticked items on `/
   (`email` or `contact form`) and `answersOutreach` (the sequence, when it answers an outreach email); and `schoolsAsked`, the count of families asking
   for each school without a page (one per account from the "ask for your school" button, plus the form's "A school
   to add"), most asked first, with the school's `id` where it is known. Email addresses and phone numbers are taken
-  out of the free text. In place of any address an item carries `sender`, a token (`k` and 16 hex digits, a keyed
+  out of the free text. A proposal made within a day of a claim by code carries `"claim": "by code, under a day"`.
+  A review (`v…`, kind `review`) carries `entry`, the exact entry `data/reviews.json` will hold, with its `listing`
+  and `program`. A manager's words, offer or pin (`x<id>`, kind `words`, `offer` or `pin`) carries `text` (a pin's
+  name), and an offer its `until`; a photo or logo (`f<id>`, kind `photo` or `logo`) carries `alt`, `consent` (the
+  manager ticked that everyone shown, or their parent, agreed) and `look`, a link signed with the host's key that opens
+  the waiting photo for 24 to 30 hours (`photo_look` in the API; the link changes every six hours, so a waiting photo
+  rewrites the queue at most four times a day). These are words and pictures people sent: not scrubbed, since they
+  are what would be published, and never a source for a listing.
+  In place of any address an item carries `sender`, a token (`k` and 16 hex digits, a keyed
   hash of the address): the same person always has the same token, so a run can see three items from one sender,
   and only the host can match it to an address, through the `queue_items` table in the accounts database.
 - **Answers come back.** Each run writes `outcomes/<run>.json` to the ops repository:
@@ -305,9 +315,23 @@ reaches the public repository. (Until November 2026 the owner ticked items on `/
   one itself); `tokens` is how many model tokens the run used, if it knows. An email (`m…`) can also be `answered`,
   with `reply` one of `how-to-claim`, `delete-account`, `stop-emails` or `add-school`, or `spam` (settled with no
   reply); and `published` with `"reply": "thanks-updated"` for a program's own word (DKIM passed for a listing's own
-  domain, about that listing), recorded as a `told` entry. Nothing else in the file is read: any words a run writes
-  there are ignored, and an item that isn't in the queue (`school:…`, `monthly:…`) is skipped.
-- **What happens to an item.** `push_run` reads each new or changed outcome file once. `declined`, `duplicate`,
+  domain, about that listing), recorded as a `told` entry. A review (`v…`) can only be `published` (with the pull
+  request it is in), `held` (with no pull request: it waits on the Needs-you page and its words stay on the host),
+  `declined` or `failed`. Nothing else in the file is read: any words a run writes there are ignored, and an item
+  that isn't in the queue (`school:…`, `monthly:…`) is skipped.
+- **A manager's items are answered in their own file,** `decisions/<run>.json` in the ops repository:
+  `{ "run": "queue-2026-11-30-0541", "items": [{ "item": "x12", "decision": "ok" }, { "item": "f34", "decision":
+  "hold", "rule": "child-face" }] }`. `decision` is `ok` or `hold`; `rule`, for a hold, is one of `link`, `contact`,
+  `licensing`, `claim`, `other-program`, `child-named`, `child-face`, `readable-name`, `unsuitable`, `not-logo`,
+  `no-consent`, `no-look`, `instructions`, `words` or `other` (`CONTENT_RULES` in `src/server/content.php`). `push_run`
+  reads each new file once (`content_decisions()`), and a row is rated once. `hold` keeps the row for the owner with
+  the rule as its reason. `ok` publishes only while the autopilot is on, and only when the site's own checks agree (the
+  text rules for words, offers and pins; the consent tick for a photo), and the manager is emailed; otherwise the row
+  waits for the owner with the run's word beside it. Rows a run passed while the autopilot wasn't on publish, ten of
+  each kind an hour, once it is.
+- **What happens to an item.** `push_run` reads each new or changed outcome file once. A review follows the same
+  path: a merged pull request puts it on the site and thanks its reviewer once ("Thanks for your review", with the
+  link); declined, held and failed ones email nobody (`told` -6). `declined`, `duplicate`,
   `needs-info` and `no-change` settle the item at once. `published`, and `held` with a pull request, wait for that
   pull request: about 20 minutes after it is merged (time for the site to publish) the item is published; a pull
   request closed without a merge leaves it held. `held` with no pull request waits for the owner. `failed` puts the
@@ -378,6 +402,8 @@ can be answered:
   `link:<listing>`.
 - `kind` is one of `update`, `new-listing`, `new-school`, `link`, `date`, `note`, `told`, `review`, `news`.
 - `outcome` is one of `published`, `held`, `declined`, `duplicate`, `needs-info`, `no-change`.
+- A review gets one record of kind `review` with no fields: `{ "item": "v1a2b3c4d5", "kind": "review", "listing":
+  "r:v1a2b3c4d5", "outcome": "published" }`. Its words are the reviewer's, never a quote, so nothing else goes in.
 - `listing` names the record: `p:<program id>`, `s:<school id>`, `c:<camp id>`, or `d:<school id>` for a school's
   entries in `data/school-dates.json`.
 - `path` is where the value sits in that record, written the way the gate writes it: keys joined by dots
@@ -423,6 +449,15 @@ from the pull request is run. Then `scripts/gate.mjs`:
    re-read, so its change waits. New links must open, or be linked from the page read, or be where the old link now
    leads. A new email address must be on the page.
 5. **The hold list,** below.
+   **Reviews** (Phase 6) are checked their own way. A new entry in `data/reviews.json` must carry the site's own id
+   (`r:<id>` is its key), the fields an entry has and no others, a program and a school the site lists, 1 to 5 stars,
+   and a "review" record in the evidence. The text rules ("moderation" and "reviewWords" in
+   `scripts/gate.config.json`: a link, contact details, an accusation, strong language, a name, words to an AI) are
+   the site's own. Then the gate asks the site (`groups/api.php?action=review_check&id=…&sum=…`, the sum of the
+   entry's values, `reviewSum()`) whether this is the entry the reviewer sent and whether it still passes the site's
+   checks; the answer is yes or no, never why or who, and a held review's reason is on the Needs-you page, not in the
+   comment. A review the site can't be asked about waits. A run never changes or removes a published review. With
+   `--split`, a held review goes into no pull request at all: the run answers it `held`, and its words stay on the host.
 6. **Size.** No more than `limits` in `scripts/gate.config.json` for that kind of run.
 7. **Build and tests.** A second job builds and tests `main`'s code with the pull request's data, with a read-only
    token. A note from the build that the change caused, or a failed test, holds it.
@@ -493,11 +528,15 @@ arrive with those phases.
 | Email addresses | A new address is at a free-mail domain (Gmail and the like), which can be a person's own |
 | Hidden instructions | A quote, a new value or a page read addresses an AI, or asks to skip a rule |
 | What's new | Always, for now: it's the site's own words, with no provider page to check |
-| Reviews | Always, until Phase 6 supplies the account checks; the comment also says when a review holds a link, contact details or what may be an accusation |
+| Reviews | It names a person, makes an accusation (safety, harm, discrimination, a crime, licensing), holds contact details or a link, uses strong language, or addresses an AI; or the site says it isn't the entry the reviewer sent or its own checks hold it. A run never changes or removes a published review |
+| Reviews | The account is at the listing's own email domain or another program's, has already reviewed that listing, or is under a day old with no saved school or plan. Checked by the site when the review comes in (`review_holds()` in `src/server/content.php`); such a review never reaches the queue. `"reviewNewAccount": "wait"` makes the last one a day's wait instead |
+| Manager words, offers and pins | A link or contact detail, a licensing or accreditation claim, a guarantee or a "best" claim, another program named, or a child named. The run rates it; the site checks the text again before it applies an "ok" |
+| Photos | A child's face up close, a readable name (a jersey, a name tag, a sign-in sheet), or anything unsuitable; a logo that isn't plainly a logo; a photo whose manager didn't tick that everyone shown agreed; or one the run couldn't open |
+| Claims | A shared or free-mail address with no code proof, two accounts from different domains claiming one listing, or a proposal to change the website, phone or email within a day of a claim by code (the queue run holds that one) |
 | `data/reading.json`, `data/geo.json` | A page's reading is loosened or removed; a map place already there moves, or a new one isn't in Philadelphia |
 | Mail from people | Text that addresses an AI or asks to skip a rule, legal words (lawyer, subpoena, takedown), a safety complaint, a request for someone's data, a refund or payment dispute, a school district or City address, the press, or a sponsor or partner inquiry (the last, legal and safety also push to Josh's phone at once). Checked by the host when the email comes in, before any run sees it (`mail_hold_reason()` in `src/server/mail.php`) |
 | The sender | More than three items from one sender in a day, an item that runs down another program, or an update to one program sent from another program's email domain: the queue run answers these `held` (its prompt, `docs/runs/queue-run.md`), so they wait for Josh with no pull request |
-| Manager words, photos, claims, payments | *Later* (Phases 6 and 7) |
+| Payments | *Later* (Phase 7) |
 
 **Where the numbers live.** The data thresholds and the templates are starting values in `scripts/gate.config.json`.
 Sender and spam thresholds will live in a private file on the host, because the repository is public.
@@ -536,15 +575,22 @@ words as on `/edit/claims/`). Without the key file the page says so and shows wh
   itself. It refuses a pull request that changes `data/autopilot.json`, or anything but the allowlisted data and its
   evidence file: those are read and merged on GitHub. **Decline** closes it unmerged; its queue items then show as
   held. **Open on GitHub** is the pull request.
-- **Held items from the accounts database:** claims waiting for a yes, photos, words, offers, pins and links, premium
-  sign-ups not yet premium, and queue items a run held. Their buttons post to `/edit/claims/` and `/edit/queue/`, which
-  send their emails as before and come back to this page (`back=needs`).
+- **Held items from the accounts database:** claims waiting for a yes (with how each came about: a code that ran out
+  untyped, a code typed while someone at another address holds the listing, or a request to check), photos, words,
+  offers, pins and links, premium sign-ups not yet premium, and queue items a run held. A manager's item shows what a
+  run said about it ("A run would publish this", or the rule that held it); while the autopilot is on only the held
+  ones are here, since the rest publish when a run passes them. A claim whose code is still good isn't here yet.
+  Their buttons post to `/edit/claims/` and `/edit/queue/`, which send their emails as before and come back to this
+  page (`back=needs`).
+- **Reviews** the site's checks, a run or a closed pull request held (Phase 6): the review, its stars, program and
+  school, the account that wrote it, and the reason. **Publish** (a site admin's account, with the key file) adds its
+  entry to `data/reviews.json` on main as one commit, so the site rebuilds, and its reviewer is thanked on the next
+  hourly run; **Decline** keeps it off the site and emails nobody.
 - **Mail for you,** shown to a site admin's account only: each email the hold list or a run kept, opened, with who
   sent it, why it's here, what the host worked out (its domain, whether its signature checks out, which listing's
   website it shares, the account's role, whether it answers outreach), and a draft to edit. **Send** queues the reply,
   which the mailbox script sends from the site's address in the email's own thread within ten minutes. **Done, no
   reply** settles it. **Give it to the runs** puts it in the private queue (not for one marked suspicious).
-- **Reviews** still arrive by email, and stay in the inbox; they move here with Phase 6.
 - **The shadow report,** while the switch is `shadow`: the same sums as `node scripts/gate.mjs --report`, from the
   gate's comments, and whether the test for switching on is passed.
 - **The spot-check:** ten of the changes the autopilot merged in the last seven days, picked at random and the same

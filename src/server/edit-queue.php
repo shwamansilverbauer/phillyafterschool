@@ -9,13 +9,16 @@
 // Nothing is ticked or sent from here any more. The site writes the queue to the private ops repository by itself
 // every hour (push_run in groups/api.php, with the code in src/server/queue.php), and the runs answer each item there.
 // This page shows it, takes an item off ("Not for the run"), adds a note, and Rush writes the queue at once and emails
-// the owner a reminder to press Run now. Nothing a person typed goes to the public repository.
+// the owner a reminder to press Run now. Nothing a person typed goes to the public repository. Reviews, and what
+// program managers write for a premium listing and their photos, go in the same queue (scaling plan, Phase 6; the shared
+// code is src/server/content.php): reviews show among the items, the managers' items in a count of their own.
 /*MAILER*/
 /*CONFIG*/
 /*AUTH*/
 /*GH*/
 /*QUEUE*/
 /*MAIL*/
+/*CONTENT*/
 if (!edit_signed_in()) { header('Location: ../', true, 303); exit; }
 $ROOT = dirname((string) $_SERVER['DOCUMENT_ROOT']);
 $STATE_FILE = $ROOT . '/phillyafterschool-queue.json';
@@ -40,8 +43,8 @@ function host_secret() {
   return strlen($raw) === 64 && ctype_xdigit($raw) ? (string) hex2bin($raw) : '';
 }
 function queue_page_ctx() {
-  global $ROOT, $NAMES, $CITY, $OPS, $SITE_URL;
-  return array('root' => $ROOT, 'db' => edit_db(), 'names' => $NAMES, 'city' => $CITY, 'secret' => host_secret(), 'gh' => 'gh', 'ops' => $OPS, 'site' => $SITE_URL);
+  global $ROOT, $NAMES, $CITY, $OPS, $SITE_URL, $REVIEW_FRESH;
+  return array('root' => $ROOT, 'db' => edit_db(), 'names' => $NAMES, 'city' => $CITY, 'secret' => host_secret(), 'gh' => 'gh', 'ops' => $OPS, 'site' => $SITE_URL, 'fresh' => $REVIEW_FRESH);
 }
 // Who asked for each school from an account, for this page only, so the owner can write to them when the school goes
 // up. Read from the log next to the public folder; never written to the queue.
@@ -60,7 +63,7 @@ function queue_askers() {
 
 $csrf = hash_hmac('sha256', 'queue-form', edit_key());
 $said = isset($_GET['said']) && is_string($_GET['said']) ? substr($_GET['said'], 0, 400) : '';
-$KIND = array('program' => 'A program that’s missing', 'camp' => 'A camp that’s missing', 'update' => 'An update to a listing', 'proposal' => 'Proposed by the people who run it', 'note' => 'Your note', 'mail' => 'An email someone wrote');
+$KIND = array('program' => 'A program that’s missing', 'camp' => 'A camp that’s missing', 'update' => 'An update to a listing', 'proposal' => 'Proposed by the people who run it', 'note' => 'Your note', 'mail' => 'An email someone wrote', 'review' => 'A review');
 $OUTCOME = array('published' => 'Published', 'held' => 'Held for you', 'declined' => 'Declined', 'duplicate' => 'Already listed', 'needs-info' => 'Needs more information', 'no-change' => 'Already right on the site', 'failed' => 'The run couldn’t finish it', 'earlier' => 'Sent to the weekly run before the private queue');
 
 // ----- the buttons -----
@@ -129,6 +132,7 @@ function told_line($r) {
   if ($t === -1) return 'the email to the sender failed three times';
   if ($t === -2) return 'not emailed: replies are off';
   if ($t === -3) return 'not emailed: it came in before the private queue began';
+  if ($t === -6) return 'not emailed: a reviewer hears only once the review is on the site';
   return $r['outcome'] === 'held' || $r['outcome'] === 'failed' ? '' : 'sender not emailed yet';
 }
 ?>

@@ -2593,7 +2593,7 @@ function privacyPage() {
   <ul>
     <li>${GATE ? T(`There are no ads, and nothing you send is sold. Looking things up needs no account. The planners (the week, the days off, the summer and the calendar) need a free one, and an account is also for following a program’s dates, keeping favorites, keeping your school or a plan in a profile, and sharing a week with someone.`) : GROUPS ? T(`There are no ads, and nothing you send is sold. An account is optional: it is for following a program’s dates, keeping favorites, keeping your school or a plan in a profile, and sharing a week with someone.`) : T(`There are no accounts and no ads, and nothing you send is sold.`)}</li>
     <li>${GATE ? T(`Your rosters, including any child’s name you type, are saved in your own browser. While you are signed in, a week that has a first name and a program on it is also kept in your profile, so it is there on your other devices. You can take it out of your profile, and it then stays in your browser only. Nobody else sees a week unless you share it.`) : GROUPS ? T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us unless you sign in and choose to keep one in your profile or share one.`) : T(`Your rosters, including any child’s name you type, are saved in your own browser. They are not sent to us.`)}</li>
-    <li>${T(`If you send a suggestion or a review, it arrives as an email to the person who runs the site.`)}</li>
+    <li>${GROUPS ? T(`If you send a suggestion, it arrives as an email to the person who runs the site. A review is kept with your account and checked before it is published.`) : T(`If you send a suggestion or a review, it arrives as an email to the person who runs the site.`)}</li>
     ${ALERTS ? `<li>${GROUPS ? T(`If you follow a program, a camp or a school, the list of what you follow is kept in your account, and your email address and that list are kept by Klaviyo, the service that sends the emails.`) : T(`If you ask for dates by email, your first name, your email address and the school or program you picked are kept by Klaviyo, the service that sends the emails.`)}</li>
     <li>${GROUPS ? T(`If you ask for a school that isn’t covered yet, that uses your account: which school you asked for is kept with it, so each family counts once. Klaviyo keeps your email address, your name if you’ve given it, and which school you’re waiting for, so you can be told when it has its page.`) : T(`If you ask to be emailed when a school is added, the same three things are kept by Klaviyo: your first name, your email address and which school you’re waiting for. It also adds you to our email list for occasional news about the site.`)}</li>` : ''}
     <li>${T(`We use Google Analytics and Microsoft Clarity to see how the site is used, so we can fix what’s confusing.`)}</li>
@@ -2662,12 +2662,12 @@ ${GROUPS.photos || GROUPS.premium !== 'off' ? `    <li>${T(`A photo you send for
   </ul>` : ''}
   <h2 id="forms" data-jump-to="Forms and reviews">${T(`Suggestions, corrections and reviews`)}</h2>
   <ul>
-    <li>${T(`What you type into a form is emailed to the site’s inbox, and a backup copy is kept on our web host in case the email goes missing.`)}</li>
+    <li>${GROUPS ? T(`What you type into the suggestion form is emailed to the site’s inbox, and a backup copy is kept on our web host in case the email goes missing. A review is kept in our accounts database instead (below).`) : T(`What you type into a form is emailed to the site’s inbox, and a backup copy is kept on our web host in case the email goes missing.`)}</li>
     <li>${T(`Your email address is used only to reply to you or to confirm something. It is never published.`)}</li>
     <li>${T(`A review that is approved appears on the site with your first name, your child’s school and the month. Nothing else about you is shown.`)}</li>
     <li>${T(`A review in your child’s words is sent by you, not by your child. If it is approved it shows their grade, and their first name only if you chose to show it. You can ask us to take it down at any time.`)}</li>
     <li>${T(`When a program has been on your week for a few weeks, the site may ask whether you’d review it. That is worked out in your browser, from the rosters on your device. Your device remembers the day it first saw each program on a roster, when it last asked, and which programs you reviewed or said not to ask about. None of that is sent to us, and “Don’t ask about this one” ends it for that program.`)}</li>${GROUPS ? `
-    <li>${T(`If you are signed in, the review form fills in your first name and email address from your account so you don’t have to type them. You can change either before you send it.`)}</li>` : ''}
+    <li>${T(`A review needs a free account. We email you a 6-digit code to confirm your address, which makes the account, and the review is kept with it: one review per program. It is checked against the house rules, by the site and by our research run, before it is published, and read by a person when something in it needs a look. If you are signed in, the form fills in your first name and sends the review from your account.`)}</li>` : ''}
     <li>${T(`Asking for a school to be covered sends only the school’s name.`)}</li>
     <li>${T(`A date you send in for a school’s page (picture day, a half day) is read by a person before it is published. What is published is the date and what it is, marked “from a parent”: never your name or email.`)}</li>
     <li>${T(`Please don’t include children’s names or other people’s personal details in what you send.`)}</li>${GROUPS && GROUPS.premium !== 'off' ? `
@@ -3812,7 +3812,7 @@ const asksFor = p => [
 ];
 const claimListings = () => Object.fromEntries([
   ...testListings.map(p => ['p:' + p.id, { n: p.name, d: p.claimDomain, m: 'match', h: 1 }]),
-  ...programs.map(p => ['p:' + p.id, { n: fullName(p), d: baseDomain(p.website), m: claimMode(baseDomain(p.website), !!p.clubs), ...(reviewsFor(p.id).length ? { r: reviewsFor(p.id).length } : {}), ...(upcomingDates(p).length ? { u: 1 } : {}), ...(asksFor(p).length ? { a: asksFor(p) } : {}) }]),   // r:published reviews, u: a sign-up date still to come (for the emails to its managers)
+  ...programs.map(p => ['p:' + p.id, { n: fullName(p), d: baseDomain(p.website), m: claimMode(baseDomain(p.website), !!p.clubs), ...(reviewsFor(p.id).length ? { r: reviewsFor(p.id).length } : {}), ...(upcomingDates(p).length ? { u: 1 } : {}), ...(asksFor(p).length ? { a: asksFor(p) } : {}), ...(/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(p.email || '') ? { e: p.email } : {}) }]),   // r:published reviews, u: a sign-up date still to come (for the emails to its managers), e: the address its website publishes (for a claim by code)
   ...summerCamps.map(c => ['c:' + c.id, { n: c.name + ' (summer camp)', d: baseDomain(c.website), m: claimMode(baseDomain(c.website)) }]),
 ]);
 // Under a listing: suggest an update (anyone), and claim it (whoever runs it).
@@ -4156,7 +4156,7 @@ function directorsPage() {
   // search moves down the page and the listing's own tools take its place (groups.js).
   const hero = `    <h1>${T(`Run a program or camp? Claim your listing.`)}</h1>
     <p class="lede">${T(`Find your program below and claim it with your work email. Then keep its dates, costs and hours up to date yourself. It’s free, and it takes a couple of minutes.`)}</p>`;
-  const page = `<div class="g-page" id="claims" data-clarity-mask="true"${GROUPS.photos ? ' data-photos="1"' : ''}${GROUPS.premium !== 'off' ? ` data-qr="${link('assets/qr.js', 1)}${stamp('src/qr.js')}"` : ''}${PM_LISTED ? ` data-pm-from="${PM_PRICE.month}"` : ''}></div>`;
+  const page = `<div class="g-page" id="claims" data-clarity-mask="true"${CLAIM_BY_CODE ? ' data-claim-code="1"' : ''}${GROUPS.photos ? ' data-photos="1"' : ''}${GROUPS.premium !== 'off' ? ` data-qr="${link('assets/qr.js', 1)}${stamp('src/qr.js')}"` : ''}${PM_LISTED ? ` data-pm-from="${PM_PRICE.month}"` : ''}></div>`;
   const heroGrid = `    <div class="acct-hero-text">
 ${hero}
     </div>
@@ -4387,7 +4387,7 @@ Link: ${e('$x["link"]')}<?php } ?></pre>
   </div><?php } ?>
 
   <h2>Photos waiting for you (<?php echo count($photosNew); ?>)</h2>
-  <?php if (!$photosNew) { ?><p class="hint">None waiting. A photo shows on a listing only after you publish it here.</p><?php } ?>
+  <?php if (!$photosNew) { ?><p class="hint">None waiting. A photo shows on a listing only once it’s published: here, or by the autopilot when it’s on and a run has passed it.</p><?php } ?>
   <?php foreach ($photosNew as $x) { ?><div class="panel">
     <h3>${e('$name($x["listing"])')}<?php if (isset($x["kind"]) && $x["kind"] === 'logo') { ?> <span class="hint">Logo</span><?php } ?></h3>
     <p class="hint">From ${e('$x["first"] . " " . $x["last"]')} &lt;${e('$x["email"]')}&gt;, ${e('$day($x["created"])')}. They ticked that they have the right to use it and permission from the families of any children shown.</p>
@@ -4399,7 +4399,7 @@ Link: ${e('$x["link"]')}<?php } ?></pre>
   <div class="review-grid"><?php foreach ($photosLive as $x) { ?><div class="panel"><p><img class="review-photo" src="./?photo=<?php echo (int) $x["id"]; ?>" alt=""></p><p><b>${e('$name($x["listing"])')}</b><br><span class="hint">${e('$x["alt"]')}</span></p>${form('$x["id"]', act('photo_no', 'Take it down'))}</div><?php } ?></div><?php } ?>
 
 ${GROUPS.premium !== 'off' ? `  <h2>Words, offer lines, pins and social links waiting for you (<?php echo count($extrasNew); ?>)</h2>
-  <?php if (!$extrasNew) { ?><p class="hint">None waiting. What a manager writes for a premium listing, its Kids’ Playground pin, its social links and its Instagram posts show only after you publish them here.</p><?php } ?>
+  <?php if (!$extrasNew) { ?><p class="hint">None waiting. What a manager writes for a premium listing, its Kids’ Playground pin, its social links and its Instagram posts show only once they’re published: here, or by the autopilot when it’s on (a run passes the words, offers and pins; links and posts go on at once).</p><?php } ?>
   <?php foreach ($extrasNew as $x) { ?><div class="panel">
     <h3>${e('$name($x["listing"])')} <span class="hint"><?php echo $kindName($x["kind"], true); ?></span></h3>
     <p class="hint">From ${e('$x["first"] . " " . $x["last"]')} &lt;${e('$x["email"]')}&gt;, ${e('$day($x["created"])')}<?php if ($x["kind"] === 'offer') { ?>. To show until ${e('$x["until"]')}<?php } ?></p>
@@ -4659,14 +4659,15 @@ function groupPage() {
 // The server side: one file, copied from src/server with the few settings it needs.
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
-  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, repo: /^[\w.-]+\/[\w.-]+$/.test(cfg.repo || '') ? cfg.repo : '', backupRepo: /^[\w.-]+\/[\w.-]+$/.test(cfg.backupRepo || '') ? cfg.backupRepo : '', opsRepo: OPS_REPO, ownerNotes: OWNER_NOTES, autopilot: AP_CONF, queueReplies: cfg.queueReplies !== false, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])), acts: KIDS_ACTS.map(a => a.id), citySchools: Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`])) });
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, repo: /^[\w.-]+\/[\w.-]+$/.test(cfg.repo || '') ? cfg.repo : '', backupRepo: /^[\w.-]+\/[\w.-]+$/.test(cfg.backupRepo || '') ? cfg.backupRepo : '', opsRepo: OPS_REPO, ownerNotes: OWNER_NOTES, autopilot: AP_CONF, queueReplies: cfg.queueReplies !== false, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])), acts: KIDS_ACTS.map(a => a.id), citySchools: Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`])), moderation: MODERATION, claimByCode: CLAIM_BY_CODE, reviewNewAccount: REVIEW_NEW_ACCOUNT });
   const src = phpCopy(fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8'));
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   if (!src.includes('/*MAILER*/')) throw new Error('src/server/groups-api.php has lost its /*MAILER*/ marker');
   if (!src.includes('/*QUEUE*/')) throw new Error('src/server/groups-api.php has lost its /*QUEUE*/ marker');
   if (!src.includes('/*AUTOPILOT*/')) throw new Error('src/server/groups-api.php has lost its /*AUTOPILOT*/ marker');
   if (!src.includes('/*MAIL*/')) throw new Error('src/server/groups-api.php has lost its /*MAIL*/ marker');
-  return src.replace('/*MAILER*/', () => mailerPhp()).replace('/*QUEUE*/', () => queuePhp()).replace('/*AUTOPILOT*/', () => autopilotPhp()).replace('/*MAIL*/', () => mailPhp()).replace(`'/*CONFIG*/'`, () => `'` + conf.replace(/\\/g, '\\\\').replace(/'/g, `\\'`) + `'`);
+  if (!src.includes('/*CONTENT*/')) throw new Error('src/server/groups-api.php has lost its /*CONTENT*/ marker');
+  return src.replace('/*MAILER*/', () => mailerPhp()).replace('/*QUEUE*/', () => queuePhp()).replace('/*AUTOPILOT*/', () => autopilotPhp()).replace('/*MAIL*/', () => mailPhp()).replace('/*CONTENT*/', () => contentPhp()).replace(`'/*CONFIG*/'`, () => `'` + conf.replace(/\\/g, '\\\\').replace(/'/g, `\\'`) + `'`);
 }
 // The private queue's shared code (src/server/queue.php), pasted into the API and the queue page at their /*QUEUE*/
 // marker. The ops repository is where the queue lives (opsRepo in site.config.json); with none, the queue is off.
@@ -4674,6 +4675,16 @@ const queuePhp = () => fs.readFileSync(path.join(ROOT, 'src/server/queue.php'), 
 // The mailbox's shared code (src/server/mail.php, scaling plan Phase 5): pasted into the API and the Needs-you page at
 // their /*MAIL*/ marker.
 const mailPhp = () => fs.readFileSync(path.join(ROOT, 'src/server/mail.php'), 'utf8');
+// Reviews and what program managers add, without the owner in the loop (src/server/content.php, scaling plan Phase 6):
+// pasted into the API, the Needs-you page and the queue page at their /*CONTENT*/ marker, after the mailbox's code.
+const contentPhp = () => fs.readFileSync(path.join(ROOT, 'src/server/content.php'), 'utf8');
+// The text rules a review and a manager's words are held by: the gate's own (scripts/gate.config.json, "moderation",
+// with its "reviewWords" as the accusation list), so the site and the gate never disagree about what a rule means.
+const MODERATION = (() => { const m = { ...(readJson('scripts/gate.config.json').moderation || {}) }; delete m.about; m.accusation = readJson('scripts/gate.config.json').reviewWords; return m; })();
+// Claims by code (call 2): off until "groups": { "claimByCode": true }. A review from an account under a day old with
+// nothing saved: "hold" for the owner (the default, as the hold table says) or "wait" a day and go on.
+const CLAIM_BY_CODE = !!(cfg.groups && cfg.groups.claimByCode === true);
+const REVIEW_NEW_ACCOUNT = cfg.groups && cfg.groups.reviewNewAccount === 'wait' ? 'wait' : 'hold';
 const OPS_REPO = /^[\w.-]+\/[\w.-]+$/.test(cfg.opsRepo || '') ? cfg.opsRepo : '';
 // Which notes to the site's own address go one at a time ("each", the default) and which go once a day ("digest"); and
 // whether the morning summary goes out ("summary": "on"), which then carries the sign-up digest's counts too.
@@ -4922,9 +4933,9 @@ function reviewPage() {
   const progOpts = [...programs].sort((a, b) => a.name.localeCompare(b.name)).map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('');
   const schoolOpts = [...schools].sort((a, b) => a.shortName.localeCompare(b.shortName)).map(s => `<option value="${esc(s.id)}">${esc(s.shortName)}</option>`).join('');
   const hero = `    <h1>${T(`How did it go?`)}</h1>
-    <p class="lede">${T(`A first-hand note from one family helps the next one choose. Every review is read before it’s posted.`)}</p>`;
+    <p class="lede">${T(`A first-hand note from one family helps the next one choose. Every review is checked before it’s posted.`)}</p>`;
   const body = `<div class="suggest">
-  <form class="form panel" method="post" action="send.php" id="review-form" data-clarity-mask="true"${GROUPS && !PREVIEW ? ` data-api="${link('groups/api.php', 1)}"` : ''}>
+  <form class="form panel" method="post" action="send.php" id="review-form" data-clarity-mask="true"${GROUPS && !PREVIEW ? ` data-api="${link('groups/api.php', 1)}" data-thanks="${link('review/thanks/', 1)}"` : ''}>
     <div class="pair">
       <div class="field">
         <label for="r-program">${T(`Which program?`)}</label>
@@ -4953,7 +4964,7 @@ function reviewPage() {
       <div class="field">
         <label for="r-email">${T(`Your email`)}</label>
         <input id="r-email" name="email" type="email" maxlength="150" autocomplete="email" required>
-        <span class="hint">${T(`Never shown. Only used if we need to confirm something.`)} <a href="${link('privacy/', 1)}">${T(`How we handle it.`)}</a></span>
+        <span class="hint" id="rv-email-hint">${GROUPS ? T(`Never shown. We email you a 6-digit code to confirm it’s yours, which also makes your free account.`) : T(`Never shown. Only used if we need to confirm something.`)} <a href="${link('privacy/', 1)}">${T(`How we handle it.`)}</a></span>
       </div>
     </div>
     <fieldset class="field rv-kid" id="rv-kid" hidden>
@@ -4978,7 +4989,13 @@ function reviewPage() {
       <label for="r-company">Leave this blank</label>
       <input id="r-company" name="company" type="text" tabindex="-1" autocomplete="off">
     </div>
-    <div><button class="btn primary big" type="submit">${T(`Send review`)}</button></div>
+    ${GROUPS ? `<div class="field rv-code" id="rv-code" hidden>
+      <label for="r-code">${T(`The 6-digit code we just emailed you`)}</label>
+      <span class="hint" id="rv-code-to"></span>
+      <input id="r-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="7" pattern="[0-9 ]{6,7}">
+    </div>
+    <p class="g-status" id="rv-status" aria-live="polite"></p>` : ''}
+    <div><button class="btn primary big" type="submit" id="rv-send">${T(`Send review`)}</button></div>
   </form>
   <aside class="next">
     <h2>${T(`House rules`)}</h2>
@@ -4986,24 +5003,89 @@ function reviewPage() {
       <li>${T(`First-hand only. Write about what your own family experienced.`)}</li>
       <li>${T(`Be specific and fair. Details help more than adjectives.`)}</li>
       <li>${T(`No names of other children or of individual staff.`)}</li>
-      <li>${T(`Programs can’t review themselves.`)}</li>
+      <li>${T(`Programs can’t review themselves.`)}</li>${GROUPS ? `
+      <li>${T(`One review per program from each account.`)}</li>` : ''}
     </ul>
-    <p class="hint">${T(`Reviews show your first name and school, and appear after they’ve been read. Nobody pays to have a review posted or removed.`)}</p>
+    <p class="hint">${T(`Reviews show your first name and school, and appear after they’ve been checked. A review that names someone, makes an accusation, or has contact details or links in it is read by a person first. Nobody pays to have a review posted or removed.`)}${REVIEW_POLICY_LIVE ? ` <a href="${link('review-policy/', 1)}">${T(`How reviews work.`)}</a>` : ''}</p>
   </aside>
 </div>`;
   return layout({ title: 'Write a review', description: `Share a first-hand review of an after-school program listed on ${cfg.siteName}.`, pathName: 'review/', depth: 1, current: null, hero, body, showStreet: 'parked' });
 }
 
+// How reviews work: what is allowed, how a program answers, how a review comes down (scaling plan, Phase 6). Written
+// for a lawyer's read first: until "reviewPolicyLive": true in site.config.json it carries a draft line, is kept out of
+// search engines and the sitemap, and nothing links to it. Then the review form links to it and it is listed.
+const REVIEW_POLICY_LIVE = cfg.reviewPolicyLive === true;
+function reviewPolicyPage() {
+  const mail = cfg.contactEmail ? `<a href="mailto:${esc(cfg.contactEmail)}">${esc(cfg.contactEmail)}</a>` : T(`us`);
+  const hero = `    <h1>${T(`How reviews work`)}</h1>
+    <p class="lede">${T(`Reviews on {site} are written by parents and caregivers about their own family’s experience. Here is what is allowed, how they’re checked, and how one comes down.`, { site: cfg.siteName })}</p>`;
+  const body = `<div class="prose">
+  ${REVIEW_POLICY_LIVE ? '' : `<p class="flag"><b>Draft for review.</b> Nothing on the site links to this page yet, and it hasn’t been checked by a lawyer.</p>`}
+  <h2>${T(`Who can write one`)}</h2>
+  <ul>
+    <li>${T(`A parent or caregiver, about a program their own child went to. A review can also be in a child’s own words, typed by their parent.`)}</li>
+    <li>${T(`Each review comes from an account whose email address has been confirmed with a code. One review per program from each account.`)}</li>
+    <li>${T(`The people who run a program, and people at another program, can’t review it.`)}</li>
+  </ul>
+  <h2>${T(`What’s allowed`)}</h2>
+  <ul>
+    <li>${T(`What your family experienced: pickup, the activities, homework help, how your child got on, whether you’d sign up again.`)}</li>
+    <li>${T(`Fair criticism. A low rating is welcome when it’s first-hand.`)}</li>
+  </ul>
+  <h2>${T(`What isn’t`)}</h2>
+  <ul>
+    <li>${T(`Names of other children or of individual staff.`)}</li>
+    <li>${T(`Contact details or links.`)}</li>
+    <li>${T(`Strong language.`)}</li>
+    <li>${T(`Accusations of a crime, abuse, unsafe conditions, discrimination or a licensing problem. A review isn’t the place for these: tell the program and the proper authorities, and write to us at {mail}.`, { mail })}</li>
+    <li>${T(`Anything written for someone else, paid for, or offered in exchange for something.`)}</li>
+  </ul>
+  <h2>${T(`How reviews are checked`)}</h2>
+  <ul>
+    <li>${T(`Every review is checked against these rules before it goes up. One that may break a rule, or comes from an account that may not be first-hand, is read by a person first.`)}</li>
+    <li>${T(`Ratings and words are published as written, or not at all. We don’t edit reviews.`)}</li>
+    <li>${T(`Nobody pays to have a review posted, hidden or removed, and a program’s premium listing has no say over its reviews.`)}</li>
+  </ul>
+  <h2>${T(`How a program answers`)}</h2>
+  <ul>
+    <li>${T(`A program that has claimed its listing is told when a new review of it is published.`)}</li>
+    <li>${T(`A program can’t remove or change a review. If it thinks one breaks these rules, or isn’t about its program, it can write to us at {mail}, and we’ll look at the review against these rules.`, { mail })}</li>
+  </ul>
+  <h2>${T(`How a review comes down`)}</h2>
+  <ul>
+    <li>${T(`You can ask for your own review to be changed or taken down at any time: reply to the email we sent when it went up, or write to {mail}.`, { mail })}</li>
+    <li>${T(`We take down a review that breaks these rules, including after it has been published.`)}</li>
+    <li>${T(`Deleting your account doesn’t take your review down by itself. Ask us and we will.`)}</li>
+  </ul>
+</div>`;
+  return layout({ title: 'How reviews work', description: `What a review on ${cfg.siteName} can say, how reviews are checked, and how one comes down.`, pathName: 'review-policy/', depth: 1, current: null, hero, body, noindex: !REVIEW_POLICY_LIVE });
+}
+
 function reviewThanksPage() {
   const hero = `    <h1>${T(`Thank you. It’s in.`)}</h1>
-    <p class="lede">${T(`Your review will appear once it’s been read.`)} <a href="${link('', 2)}">${T(`Back to the schools.`)}</a></p>`;
+    <p class="lede">${GROUPS ? T(`Your review will appear once it’s been checked, usually within a day. We’ll email you when it’s up.`) : T(`Your review will appear once it’s been read.`)} <a href="${link('', 2)}">${T(`Back to the schools.`)}</a></p>`;
   const body = `<section class="section rv-more" id="rv-more" data-review="${link('review/', 2)}" hidden></section>
 ${rvNames()}`;
   return layout({ title: 'Thanks for your review', description: 'Your review was sent.', pathName: 'review/thanks/', depth: 2, current: null, hero, body, showStreet: 'parked', noindex: true });
 }
 
-// Review form handler. Emails the review with a ready-to-paste entry for data/reviews.json.
+// Review form handler. With accounts on (scaling plan, Phase 6), a review is sent from the page itself, which confirms
+// the address with an emailed code and stores the review (groups/api.php, review_add): this file only answers a
+// browser without JavaScript, and emails nothing. Without accounts, it emails the review with a ready-to-paste entry for
+// data/reviews.json, as before.
+function reviewNoScriptPhp() {
+  return `<?php
+// Answers the "Write a review" form when it arrives without JavaScript. Generated by build.mjs; edit it there.
+// Reviews are sent from the page, which confirms the reviewer's email address with a code and stores the review.
+http_response_code(400);
+header('Content-Type: text/html; charset=utf-8');
+echo '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Not sent</title><link rel="stylesheet" href="../assets/site.css${CSS_V}"></head><body><main class="wrap"><h1>That did not send</h1><p>Reviews are sent from the page with JavaScript on, so we can confirm your email address with a code. Please turn JavaScript on, or try another browser, and send it again.</p><p><a href="./">Back to the form</a></p></main></body></html>';
+exit;
+`;
+}
 function reviewPhp() {
+  if (GROUPS) return reviewNoScriptPhp();
   const phpList = arr => 'array(' + arr.map(x => JSON.stringify(x)).join(', ') + ')';
   return `<?php
 // Receives the "Write a review" form. Generated by build.mjs; edit it there.
@@ -5584,7 +5666,7 @@ const ghPhp = () => fs.readFileSync(path.join(ROOT, 'src/server/gh.php'), 'utf8'
 // ---------- the research runs' queue: the owner's view of the private queue the site writes every hour ----------
 function editQueuePhp() {
   const src = fs.readFileSync(path.join(ROOT, 'src/server/edit-queue.php'), 'utf8');
-  for (const m of ['/*MAILER*/', '/*CONFIG*/', '/*AUTH*/', '/*GH*/', '/*QUEUE*/', '/*MAIL*/']) if (!src.includes(m)) throw new Error('src/server/edit-queue.php has lost its ' + m + ' marker');
+  for (const m of ['/*MAILER*/', '/*CONFIG*/', '/*AUTH*/', '/*GH*/', '/*QUEUE*/', '/*MAIL*/', '/*CONTENT*/']) if (!src.includes(m)) throw new Error('src/server/edit-queue.php has lost its ' + m + ' marker');
   const php = v => JSON.stringify(v).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
   const names = php(Object.fromEntries(Object.entries(claimListings()).map(([k, v]) => [k, v.n])));
   const city = php(Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`])));
@@ -5593,9 +5675,10 @@ $SITE = ${JSON.stringify(cfg.siteName)};
 $SITE_URL = ${JSON.stringify(cfg.siteUrl)};
 $REPO = ${JSON.stringify(cfg.repo || '')};
 $OPS = ${JSON.stringify(OPS_REPO)};
+$REVIEW_FRESH = ${JSON.stringify(REVIEW_NEW_ACCOUNT)};
 $NAMES = json_decode('${names}', true);
 $CITY = json_decode('${city}', true);`;
-  const logic = src.replace('/*MAILER*/', () => mailerPhp()).replace('/*CONFIG*/', () => config).replace('/*AUTH*/', () => editAuthPhp()).replace('/*GH*/', () => ghPhp()).replace('/*QUEUE*/', () => queuePhp()).replace('/*MAIL*/', () => mailPhp());
+  const logic = src.replace('/*MAILER*/', () => mailerPhp()).replace('/*CONFIG*/', () => config).replace('/*AUTH*/', () => editAuthPhp()).replace('/*GH*/', () => ghPhp()).replace('/*QUEUE*/', () => queuePhp()).replace('/*MAIL*/', () => mailPhp()).replace('/*CONTENT*/', () => contentPhp());
   const e = v => `<?php echo htmlspecialchars(${v}, ENT_QUOTES, 'UTF-8'); ?>`;
   const pr = x => `<?php if ((int) ${x}["row"]["pr"] > 0 && $REPO !== '') { ?> · <a href="https://github.com/${e('$REPO')}/pull/<?php echo (int) ${x}["row"]["pr"]; ?>" rel="noopener" target="_blank">pull request #<?php echo (int) ${x}["row"]["pr"]; ?></a><?php } ?>`;
   // One item: what it is, where it came from, and (for an open one) the button that takes it off.
@@ -5674,9 +5757,10 @@ $SITE = ${JSON.stringify(cfg.siteName)};
 $SITE_URL = ${JSON.stringify(cfg.siteUrl)};
 $REPO = ${JSON.stringify(/^[\w.-]+\/[\w.-]+$/.test(cfg.repo || '') ? cfg.repo : '')};
 $AP = json_decode('${php(AP_CONF)}', true);
-$LABELS = json_decode('${php(labels)}', true);`;
+$LABELS = json_decode('${php(labels)}', true);
+$SCHOOLS = json_decode('${php(Object.fromEntries(schools.map(s => [s.id, s.shortName])))}', true);`;
   const page = layout({ title, description, pathName, depth: 2, current: null, hero, body, noindex: true, quiet: true });
-  return logic.replace('/*CONFIG*/', () => config).replace('/*AUTH*/', () => editAuthPhp()).replace('/*GH*/', () => ghPhp()).replace('/*AUTOPILOT*/', () => autopilotPhp()).replace('/*MAIL*/', () => mailPhp()) + '\n' + page;
+  return logic.replace('/*CONFIG*/', () => config).replace('/*AUTH*/', () => editAuthPhp()).replace('/*GH*/', () => ghPhp()).replace('/*AUTOPILOT*/', () => autopilotPhp()).replace('/*MAIL*/', () => mailPhp()).replace('/*CONTENT*/', () => contentPhp()) + '\n' + page;
 }
 const editNeedsPhp = () => editAutopilotPage('src/server/edit-needs.php', { title: 'Needs you', description: 'Everything waiting for the owner’s say.', pathName: 'edit/needs/' });
 const editAutopilotPhp = () => editAutopilotPage('src/server/edit-autopilot.php', { title: 'What the autopilot merged', description: 'Every merge the autopilot made, with Undo.', pathName: 'edit/autopilot/' });
@@ -7038,6 +7122,7 @@ if (ALERTS) write(alertsPath + 'index.html', alertsPage());
 if (ALERTS && GROUPS) write(alertsPath + 'stop/index.html', stopPage());
 write('review/index.html', reviewPage());
 write('review/thanks/index.html', reviewThanksPage());
+write('review-policy/index.html', reviewPolicyPage());
 if (GATED) write('edit/index.php', editIndexPhp()); else write('edit/index.html', editPage());
 if (GATED && GROUPS) write('edit/stats/index.php', editStatsPhp());
 if (GATED && GROUPS) write('edit/claims/index.php', editClaimsPhp());
@@ -7123,7 +7208,7 @@ if (!PREVIEW) {
     ...(SCHOOL_PAGES ? uncoveredIndexed().map(x => [uncoveredPath(x), nearDate(x)]) : []),
     ...(weekendPrograms.length ? [[weekendPath, listDate(weekendPrograms)]] : []),
     ['privacy/', newest(cfg.privacyUpdated)],
-    ...[...(ALERTS ? [alertsPath] : []), schedulesPath, 'board/', 'suggest/', ...(GROUPS ? ['managers/'] : []), ...(PM_LISTED ? ['premium/'] : []), 'ideas/', 'review/', 'about/', ...(GROUPS ? [featPath, ...FEATS().map(([f]) => featPath + f + '/')] : []), 'contact/', ...(cfg.termsLive === true ? ['terms/'] : []), 'support/'].map(u => [u, ''])];
+    ...[...(ALERTS ? [alertsPath] : []), schedulesPath, 'board/', 'suggest/', ...(GROUPS ? ['managers/'] : []), ...(PM_LISTED ? ['premium/'] : []), 'ideas/', 'review/', ...(REVIEW_POLICY_LIVE ? ['review-policy/'] : []), 'about/', ...(GROUPS ? [featPath, ...FEATS().map(([f]) => featPath + f + '/')] : []), 'contact/', ...(cfg.termsLive === true ? ['terms/'] : []), 'support/'].map(u => [u, ''])];
   write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([u, d]) => `  <url><loc>${cfg.siteUrl}/${u}</loc>${d ? `<lastmod>${d}</lastmod>` : ''}</url>`).join('\n')}\n</urlset>\n`);
   // IndexNow: the key file a search engine reads to check that a "these pages changed" note really came from this site.
   if (/^[a-f0-9]{32}$/.test(cfg.indexNowKey || '')) write(`${cfg.indexNowKey}.txt`, cfg.indexNowKey);

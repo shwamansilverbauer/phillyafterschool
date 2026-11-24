@@ -31,6 +31,7 @@
 // stand-in for the provider sites, GitHub and the domain registry (GATE_TEST_ORIGIN, GATE_API, GATE_TODAY).
 import fs from 'node:fs';
 import os from 'node:os';
+import crypto from 'node:crypto';
 import path from 'node:path';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -45,6 +46,9 @@ const REPO = process.env.GATE_REPO || process.env.GITHUB_REPOSITORY || 'shwamans
 const TOKEN = process.env.GITHUB_TOKEN || process.env.GH_TOKEN || '';
 const TODAY = process.env.GATE_TODAY || new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(new Date());
 const MARK = 'pas-gate';
+// The site, which the gate asks about each review in a pull request (scaling plan, Phase 6): its accounts API answers
+// whether the entry is the one the reviewer sent and still passes its checks, and nothing more.
+const SITE = (process.env.GATE_SITE || (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'site.config.json'), 'utf8')).siteUrl; } catch { return ''; } })() || '').replace(/\/$/, '');
 const READY = 'autopilot-ready';   // the label the hourly merger looks for (scripts/merger.mjs)
 // Tests only: every outside page, robots.txt and the registry are asked of this stand-in instead, with the real host
 // in an x-test-host header (tests/cases/06-gate.mjs).
@@ -154,7 +158,7 @@ function recordsOf(file, data) {
     case 'c': for (const r of data.camps || []) add(`c:${r.id}`, r); rest(data, 'camps'); break;
     case 'd': for (const [id, v] of Object.entries(data.schools || {})) add(`d:${id}`, v); rest(data, 'schools'); break;
     case 'n': for (const r of data) add(`n:${r.date}|${r.title}`, r); break;
-    case 'r': for (const r of data) add(`r:${r.id || r.program || ''}|${r.date || ''}|${r.name || ''}`, r); break;
+    case 'r': for (const r of data) add(r && /^v[0-9a-f]{10}$/.test(r.id || '') ? `r:${r.id}` : `r:${r.id || r.program || r.programId || ''}|${r.date || ''}|${r.name || ''}`, r); break;   // a review the site stored has its own id (Phase 6)
     case 'geo': for (const [a, v] of Object.entries(data.places || {})) add(`geo:${a}`, v); rest(data, 'places'); break;
     case 'reading': for (const r of data) add(`reading:${r.match}`, r); break;
   }
@@ -371,7 +375,7 @@ export async function judge({ before, after, changed, evidenceText, branch, test
     const { key } = it, r = recs[key], b = r.before, a = r.after;
     const type = key.split(':')[0];
     // Files with rules of their own, where no quote is needed or none can exist.
-    if (type === 'r') { it.held.push(...reviewReasons(b, a)); return; }
+    if (type === 'r') { it.held.push(...await reviewReasons(b, a, ev, after['data/programs.json'] || before['data/programs.json'] || [], schoolsAfter)); return; }
     if (type === 'n') { it.held.push('What’s new is written in the site’s own words, with no provider page to check it against, so Josh reads it first.'); return; }
     if (type === 'geo') { if (b || !Array.isArray(a) || !(a[0] > 39.8 && a[0] < 40.2 && a[1] > -75.35 && a[1] < -74.9)) it.held.push(b ? 'It moves or removes a place on the map that was already there.' : 'The new place on the map is not in Philadelphia.'); return; }
     if (type === 'reading') { if (!a) it.held.push('It takes a page out of data/reading.json, so the page would be trusted to a plain fetch again.'); else if (!['browser', 'person'].includes(a.how)) it.held.push(`"how" for ${a.match} must be browser or person.`); else if (b && STRICT[a.how] < STRICT[b.how]) it.held.push(`It loosens how ${a.match} is read (${b.how} to ${a.how}).`); return; }
@@ -629,15 +633,64 @@ function onTemplate(text, kind, names) {
   const slot = s => { const r = CFG.noteSlots[s]; if (r === '@names') return names.length ? names.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') : '(?!)'; return r; };
   return (CFG.noteTemplates[kind] || []).some(t => new RegExp('^(?:' + t.replace(/\{(\w+)\}/g, (_, s) => '(?:' + slot(s) + ')') + ')$', 'i').test(text.trim()));
 }
-// Reviews publish on their own from Phase 6, once the host supplies the account checks. Until then each one waits,
-// with what the text checks found.
-function reviewReasons(b, a) {
+// Reviews (scaling plan, Phase 6). A new one publishes on its own when it is the entry the site stored (its own id, and
+// the same values, by their sum), the site's checks still pass it (the reviewer's account, its private words), the
+// text rules in scripts/gate.config.json ("moderation") find nothing, and the run wrote a "review" record for it.
+// The site's reasons are never asked for or posted here: a held review's reason is on the Needs-you page. A review
+// already on the site is never changed or removed by a run.
+const REVIEW_KEYS = ['id', 'programId', 'school', 'name', 'stars', 'comment', 'date', 'kid'];
+const MOD = CFG.moderation || {};
+const modRe = (k, flags = 'i') => typeof MOD[k] === 'string' ? new RegExp(MOD[k], flags) : null;
+export function reviewSum(e) {
+  const kid = isObj(e.kid) ? e.kid : {};
+  return crypto.createHash('sha256').update([e.id, e.programId, e.school, e.name, String(Math.trunc(Number(e.stars) || 0)), e.comment, e.date, kid.grade, kid.name].map(x => x === undefined || x === null ? '' : String(x)).join('\n')).digest('hex');
+}
+// The text rules alone, as the site applies them when a review comes in (src/server/content.php).
+export function reviewTextReasons(t) {
+  const out = [];
+  const h = hidden(t); if (h) out.push(`It has text that seems to talk to an AI or asks to skip a rule (“${h}”). Marked suspicious.`);
+  let m;
+  if ((m = modRe('link')?.exec(t))) out.push(`It has a link in it (“${m[0]}”).`);
+  if ((m = modRe('contact')?.exec(t))) out.push('It has contact details in it.');
+  if ((m = new RegExp(CFG.reviewWords, 'i').exec(t))) out.push(`It may make an accusation (“${m[0]}”).`);
+  if ((m = modRe('profanity')?.exec(t))) out.push('It uses strong language.');
+  for (const p of Array.isArray(MOD.personNames) ? MOD.personNames : []) if ((m = new RegExp(p).exec(t))) { out.push(`It may name a person (“${m[0]}”).`); break; }
+  return out;
+}
+const asked = new Map();
+async function askSite(e) {
+  const key = e.id + ' ' + reviewSum(e);
+  if (!asked.has(key)) asked.set(key, (async () => {
+    if (!SITE) return null;
+    try {
+      const r = await get(`${SITE}/groups/api.php?action=review_check&id=${encodeURIComponent(e.id)}&sum=${reviewSum(e)}`, { headers: { accept: 'application/json', 'user-agent': UA, 'x-pas': '1' }, redirect: 'follow', signal: AbortSignal.timeout(20000) });
+      if (!r.ok) return null;
+      const j = await r.json();
+      return j && j.ok === true ? { known: j.known === true, match: j.match === true, clean: j.clean === true } : null;
+    } catch { return null; }
+  })());
+  return asked.get(key);
+}
+async function reviewReasons(b, a, ev, programsAfter, schoolsAfter) {
   if (!a) return ['It removes a review.'];
-  const t = [a.text, a.comment, a.title].filter(Boolean).join(' ');
-  const out = ['Reviews publish on their own from Phase 6, when the site supplies the account checks. Until then Josh reads each one.'];
-  if (/https?:\/\/|www\./i.test(t)) out.push('It holds a link.');
-  if (/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}|\(?\b\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}\b/i.test(t)) out.push('It holds contact details.');
-  const acc = new RegExp(CFG.reviewWords, 'i').exec(t); if (acc) out.push(`It may make an accusation (“${acc[0]}”).`);
+  if (b) return ['It changes a review already on the site. A run never does; Josh reads any change to a published review.'];
+  if (!/^v[0-9a-f]{10}$/.test(a.id || '')) return ['A new review needs the id the site gave it (“v” and ten letters and numbers): reviews come to a run only through the private queue.'];
+  const out = [];
+  const extra = Object.keys(a).filter(k => !REVIEW_KEYS.includes(k)); if (extra.length) out.push(`It has fields a review doesn’t carry (${extra.join(', ')}).`);
+  if (!programsAfter.some(p => p.id === a.programId)) out.push('Its program isn’t on the site.');
+  if (!schoolsAfter.some(s => s.id === a.school)) out.push('Its school isn’t on the site.');
+  if (!Number.isInteger(a.stars) || a.stars < 1 || a.stars > 5) out.push('Its rating isn’t 1 to 5 stars.');
+  if (typeof a.comment !== 'string' || a.comment.trim().length < 20 || a.comment.length > 1200) out.push('Its words are missing, too short or too long.');
+  if (typeof a.name !== 'string' || !a.name.trim() || a.name.length > 40) out.push('It has no first name, or too long a one.');
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(a.date || '')) out.push('Its date isn’t a date.');
+  if (a.kid !== undefined && !(isObj(a.kid) && typeof a.kid.grade === 'string')) out.push('“kid” must name the child’s grade.');
+  if (!(ev.items || []).some(x => isObj(x) && x.kind === 'review' && (x.listing === `r:${a.id}` || x.item === a.id))) out.push('The evidence file has no “review” record for it.');
+  out.push(...reviewTextReasons(typeof a.comment === 'string' ? a.comment : ''));
+  const site = await askSite(a);
+  if (!site) out.push('The site couldn’t be asked about this review, so it waits.');
+  else if (!site.known) out.push('The site has no review with this id: reviews come only through the private queue.');
+  else if (!site.match) out.push('Its words or details aren’t what the reviewer sent.');
+  else if (!site.clean) out.push('The site’s own checks hold it (the reviewer’s account, or a word on its private list). The reason is on the Needs-you page, not here.');
   return out;
 }
 function labelOf(key, b, a, after, before) {
@@ -646,7 +699,7 @@ function labelOf(key, b, a, after, before) {
   if (t === 'p' || t === 'c' || t === 's') return r.name || id;
   if (t === 'd') { const s = [...(after['data/schools.json'] || []), ...(before['data/schools.json'] || [])].find(x => x.id === id); return 'Dates at ' + (s ? s.shortName || s.name : id); }
   if (t === 'n') return 'What’s new: ' + (r.title || id);
-  if (t === 'r') return 'A review';
+  if (t === 'r') { const p = [...(after['data/programs.json'] || []), ...(before['data/programs.json'] || [])].find(x => x.id === r.programId); return 'A review' + (p ? ' of ' + p.name : ''); }
   if (t === 'geo') return 'Map place ' + id;
   if (t === 'reading') return 'How ' + id + ' is read';
   return key;
@@ -849,21 +902,29 @@ function split(v, dir, mb, branch, evFile) {
     return out;
   };
   fs.mkdirSync(dir, { recursive: true });
+  const heldReviews = [];
   for (const { f, B, A, keys, nA, nB } of plan) {
     const clean = swap(B, A, keys, f), heldOnes = swap(A, B, keys, f);
     fs.writeFileSync(path.join(ROOT, f), JSON.stringify(clean, null, nA) + '\n');
+    // A held review's words stay private until it is published: it goes in no pull request, held or not. The run
+    // answers it "held" in its outcomes file, and it waits for Josh on the Needs-you page.
+    if (FILEKEY[f] === 'r') { heldReviews.push(...keys); continue; }
     fs.mkdirSync(path.dirname(path.join(dir, f)), { recursive: true });
     fs.writeFileSync(path.join(dir, f), JSON.stringify(heldOnes, null, nB) + '\n');
   }
   const ev = parse(fs.existsSync(evFile) ? fs.readFileSync(evFile, 'utf8') : null);
   if (isObj(ev) && Array.isArray(ev.items)) {
-    const mine = it => it && held.has(it.listing);
+    const mine = it => it && held.has(it.listing) && !String(it.listing).startsWith('r:');
     fs.mkdirSync(path.join(dir, CFG.evidenceDir), { recursive: true });
     fs.writeFileSync(path.join(dir, CFG.evidenceDir, `${branch}-held.json`), JSON.stringify({ ...ev, run: `${ev.run || branch}-held`, items: ev.items.filter(mine) }, null, 2) + '\n');
-    fs.writeFileSync(evFile, JSON.stringify({ ...ev, items: ev.items.filter(it => !mine(it)) }, null, 2) + '\n');
+    fs.writeFileSync(evFile, JSON.stringify({ ...ev, items: ev.items.filter(it => !mine(it) && !(it && heldReviews.includes(it.listing))) }, null, 2) + '\n');
   }
-  console.log(`\nSplit: ${plural(held.size, 'held listing')} (${[...held].join(', ')}) moved to ${dir}. The working tree now has only what would publish: run the gate again, then commit it.`);
-  console.log(`For the second pull request: git switch -c ${branch}-held ${mb.slice(0, 12)}, copy ${dir}/. over the repository, commit, push, and open it for Josh.`);
+  const heldListings = [...held].filter(k => !k.startsWith('r:'));
+  if (heldListings.length) {
+    console.log(`\nSplit: ${plural(heldListings.length, 'held listing')} (${heldListings.join(', ')}) moved to ${dir}. The working tree now has only what would publish: run the gate again, then commit it.`);
+    console.log(`For the second pull request: git switch -c ${branch}-held ${mb.slice(0, 12)}, copy ${dir}/. over the repository, commit, push, and open it for Josh.`);
+  } else console.log('\nSplit: no listing is held, so there is no second pull request. The working tree now has only what would publish: run the gate again, then commit it.');
+  if (heldReviews.length) console.log(`Held reviews (${heldReviews.join(', ')}) are taken out of your work and put in no pull request: a review's words stay private until it is published. Answer each one "held" in your outcomes file, with no "pr".`);
 }
 // --draft: a record for every changed value that has none yet, for the run to fill in (source, quote, how).
 function draft(v, evFile, before, after) {
@@ -871,6 +932,10 @@ function draft(v, evFile, before, after) {
   const have = new Set(ev.items.flatMap(i => (i.fields || []).map(f => `${i.listing} ${f.path}`)));
   let n = 0;
   for (const i of v.items) {
+    if (i.key.startsWith('r:')) {   // a review: one record of kind "review", with no fields (the gate asks the site about it)
+      if (/^r:v[0-9a-f]{10}$/.test(i.key) && !ev.items.some(x => x.listing === i.key)) { ev.items.push({ item: i.key.slice(2), kind: 'review', listing: i.key, outcome: 'published' }); n++; }
+      continue;
+    }
     const leaves = []; const walk = c => { const k = expand(c); if (k) k.forEach(walk); else leaves.push(c); }; i.changes.forEach(walk);
     const add = leaves.filter(c => !have.has(`${i.key} ${c.path}`)).map(c => ({ path: c.path, old: c.old ?? null, new: c.new ?? null, source: '', quote: '', read: TODAY, how: 'fetch' }));
     if (!add.length) continue;
@@ -1012,7 +1077,7 @@ async function report() {
   console.log(md);
 }
 
-export const _reset = () => { pages.clear(); ages.clear(); };
+export const _reset = () => { pages.clear(); ages.clear(); asked.clear(); };
 export { windowWith, onTemplate, readEvidence, gh, ghOk, eligible, CFG, MARK, READY, REPO, TODAY };
 
 // ---------------------------------------------------------------- start

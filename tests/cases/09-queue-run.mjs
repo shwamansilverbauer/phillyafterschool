@@ -26,6 +26,13 @@ test('the queue run’s worklist: items not yet answered, oldest first, as many 
     eq(w.todo[0].id, items[1].id, 'the failed one first: it is the oldest left'); excludes(w.todo.map(x => x.id), items[0].id); excludes(w.todo.map(x => x.id), items[2].id);
     ok(w.todo.every((x, i, a) => !i || a[i - 1].when <= x.when), 'oldest first');
     eq(w.schoolsAsked[0].school, 'Meredith');
+    // Reviews and managers' items (Phase 6) come on top of the research items; a manager's item rated in decisions/ is done.
+    fs.writeFileSync(path.join(ops, 'queue/open.json'), JSON.stringify({ written: '2026-11-30T10:00:00Z', items: [...items, { id: 'v0a0b0c0d0e', kind: 'review', when: '2026-11-01' }, { id: 'x12', kind: 'words', when: '2026-11-02' }, { id: 'f34', kind: 'photo', when: '2026-11-03' }] }));
+    fs.mkdirSync(path.join(ops, 'decisions')); fs.writeFileSync(path.join(ops, 'decisions/queue-2026-11-29-0547.json'), JSON.stringify({ run: 'queue-2026-11-29-0547', items: [{ item: 'f34', decision: 'hold', rule: 'child-face' }] }));
+    const w2 = work(ops);
+    eq(w2.todo.length, 17, '15 research items, and the review and the words on top'); includes(w2.todo.map(x => x.id), 'v0a0b0c0d0e'); includes(w2.todo.map(x => x.id), 'x12'); excludes(w2.todo.map(x => x.id), 'f34');
+    fs.rmSync(path.join(ops, 'decisions'), { recursive: true });
+    fs.writeFileSync(path.join(ops, 'queue/open.json'), JSON.stringify({ written: '2026-11-30T10:00:00Z', items: [...items].reverse(), schoolsAsked: [{ school: 'Meredith', n: 3 }] }));
     matches(w.branch, /^queue-\d{4}-\d{2}-\d{2}-\d{4}$/);
     eq(branchName(new Date('2026-11-30T10:47:00Z')), 'queue-2026-11-30-0547', 'Philadelphia time');
     // The command line: the list, and the signal to stop.
@@ -74,18 +81,25 @@ test('the gate’s --split: the held listings go to a second pull request’s fi
     // quote is on the page: held).
     write('data/programs.json', JSON.stringify([{ ...sunny, hours: '3:00 to 6:30 pm' }, { ...rainy, hours: '3:00 to 6:00 pm' }], null, 2) + '\n');
     write('data/camps.json', JSON.stringify({ season: 2026, camps: [{ ...camp, cost: '$350 a week' }] }, null, 1) + '\n');
+    // And a review the site can't vouch for here (the stand-in has no site to ask): held, and it goes in no pull request.
+    const rv = { id: 'v' + '0a0b0c0d0e', programId: 'sunny-club', school: 'bayside', name: 'Rae', stars: 5, comment: 'Calm pickup and patient counselors, every single day.', date: TODAY };
+    write('data/reviews.json', JSON.stringify([rv], null, 2) + '\n');
     const rec = (item, listing, p, old, nw, source, quote) => ({ item, kind: 'update', listing, outcome: 'published', fields: [{ path: p, old, new: nw, source, quote, read: TODAY, how: 'fetch' }] });
     write(`evidence/${branch}.json`, JSON.stringify({ run: branch, items: [
       rec('s1aaaa', 'p:sunny-club', 'hours', '3:00 to 6:00 pm', '3:00 to 6:30 pm', 'https://sunnyclub.example/after-school/', 'After School runs from dismissal until 6:30 pm.'),
       rec('s2bbbb', 'p:rainy-club', 'hours', '3:00 to 5:00 pm', '3:00 to 6:00 pm', 'https://rainyclub.example/', 'Open until 6:00 pm.'),
       rec('s3cccc', 'c:test-camp', 'cost', '$300 a week', '$350 a week', 'https://camp.example/', 'Camp is $350 a week.'),
-      { item: 'e4dddd', kind: 'update', outcome: 'no-change' }] }, null, 2) + '\n');
+      { item: 'e4dddd', kind: 'update', outcome: 'no-change' },
+      { item: rv.id, kind: 'review', listing: 'r:' + rv.id, outcome: 'published' }] }, null, 2) + '\n');
     const held = path.join(tmp, '..', path.basename(tmp) + '-held');
     let r;
     try { r = await run('node', [path.join(tmp, 'scripts/gate.mjs'), '--local', '--base', 'main', '--no-build', '--split', held], { cwd: tmp, env, encoding: 'utf8' }); }
     catch (e) { r = e; }
     eq(r.code, 1, 'held listings: the exit code still says so');
     includes(r.stdout, 'Split: 2 held listings'); includes(r.stdout, `git switch -c ${branch}-held`);
+    includes(r.stdout, `Held reviews (r:${rv.id})`);
+    eq(read('data/reviews.json'), '[]\n', 'the held review is out of the working tree');
+    ok(!fs.existsSync(path.join(held, 'data/reviews.json')), 'and in no pull request: its words stay private');
     // The working tree: Sunny's change only; the camp file back to main's, byte for byte.
     const clean = JSON.parse(read('data/programs.json'));
     eq(clean.find(x => x.id === 'sunny-club').hours, '3:00 to 6:30 pm'); eq(clean.find(x => x.id === 'rainy-club').hours, '3:00 to 5:00 pm');
@@ -100,7 +114,7 @@ test('the gate’s --split: the held listings go to a second pull request’s fi
     const hc = fs.readFileSync(path.join(held, 'data/camps.json'), 'utf8');
     eq(JSON.parse(hc).camps[0].cost, '$350 a week'); eq(hc, JSON.stringify(JSON.parse(hc), null, 1) + '\n', 'one-space layout kept');
     const hev = JSON.parse(fs.readFileSync(path.join(held, `evidence/${branch}-held.json`), 'utf8'));
-    eq(hev.items.map(i => i.item).join(','), 's2bbbb,s3cccc'); eq(hev.run, `${branch}-held`);
+    eq(hev.items.map(i => i.item).join(','), 's2bbbb,s3cccc', 'no review in the held evidence either'); eq(hev.run, `${branch}-held`);
     // Run again on the clean tree: nothing held.
     r = await run('node', [path.join(tmp, 'scripts/gate.mjs'), '--local', '--base', 'main', '--no-build'], { cwd: tmp, env, encoding: 'utf8' });
     includes(r.stdout, '1 would publish, 0 held');
@@ -147,4 +161,10 @@ test('the four scheduled runs’ prompts (docs/runs/) agree with the code: the g
   for (const w of reasons) includes(q, `"${w}"`, `the queue run knows the reason "${w}"`);
   includes(q, 'node scripts/queue-work.mjs ../phillyafterschool-ops');
   includes(q, 'Nothing to do.');
+  // Phase 6: the rules a decision about a manager's item may name are exactly the ones the host reads.
+  const content = fs.readFileSync(path.join(ROOT, 'src/server/content.php'), 'utf8');
+  const rules = [.../const CONTENT_RULES = array\(([\s\S]*?)\n\);/.exec(content)[1].matchAll(/^\s*'([a-z-]+)' =>/gm)].map(m => m[1]).filter(r => r !== 'words');   // "words" is the site's own, from its private list
+  ok(rules.length >= 10, 'the host’s list of rules');
+  includes(q, `The rule is exactly one of: ${rules.join(', ')}.`, 'the decisions’ rules are exactly the host’s');
+  includes(q, 'decisions/<your branch name>.json');
 });

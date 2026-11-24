@@ -57,7 +57,9 @@ The emails the site sends itself (sign-in link and code, the invitations to a gr
 numbers and the other notes to the people who run a listing, a parent's question passed on, and the answers to
 whoever sent a suggestion or a proposed change once a research run has settled it: "It's on the site", "It's
 already listed", "We couldn't confirm this yet" and "We can't list this one", see "The private queue" in
-`docs/listings.md`) are edited the same way. So are the words the mailbox script sends from the site's address (see
+`docs/listings.md`; and since Phase 6, "Thanks for your review" once a review is on the site, "It's on your listing"
+to a manager when the autopilot publishes their words, offer, pin, photo or logo, and the code to claim a listing,
+sent to the address its website publishes) are edited the same way. So are the words the mailbox script sends from the site's address (see
 "The mailbox script" below): the fixed replies to mail ("Thanks, it's updated", how to claim a listing, delete an
 account, stop the emails or ask for a school, and the last lines of every reply), the starting draft for a held email,
 and the three outreach sequences (the claim invite, "your school's page is live", the camp sponsor invite) with the
@@ -344,7 +346,8 @@ with the shared code in `src/server/mail.php`.
      (a publish from `/edit/`); `school-date`, `idea`, `rush` and `copy-email` for the few the forms and the edit
      pages send; `contact` for the contact form. The script labels each `PAS/Site/<kind>` and archives it, except
      `review`, `school-date`, `rush` and `copy-email`, which stay in the inbox with their label because each asks the
-     owner to do something no page shows yet (reviews move to the Needs-you page with Phase 6). Older mail, from before
+     owner to do something no page shows yet. (Since Phase 6 the review form emails nobody while accounts are on: held
+     reviews are on the Needs-you page.) Older mail, from before
      the header, is matched by its subject. A notice is trusted only when Google's own Authentication-Results header
      says it passed DKIM or SPF for the site's domain; one that claims to be the site's and isn't is labeled
      `PAS/Suspicious` and left in the inbox. The contact form's email is a person's message: it is posted like any
