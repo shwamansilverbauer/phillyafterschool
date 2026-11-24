@@ -6,8 +6,11 @@
 //   node scripts/queue-work.mjs <ops clone> [--max 15] [--json]
 //
 // An item already answered in any outcomes/*.json is left out, unless its answer was "failed" (it goes back in the
-// queue). With --json it prints { written, total, left, branch, todo: [items as queue/open.json has them],
-// schoolsAsked }. Without, a line per item. Exit code 0 either way; "Nothing to do." is the signal to stop.
+// queue); so is a manager's item ("x…", "f…") already rated in any decisions/*.json (scaling plan, Phase 6). Research
+// items (suggestions, proposals, notes, emails) are limited to the gate's limit for a queue run; reviews and managers'
+// items, which change no listing, to 20 of each on top. With --json it prints { written, total, left, branch, todo:
+// [items as queue/open.json has them], schoolsAsked }. Without, a line per item. Exit code 0 either way; "Nothing to
+// do." is the signal to stop.
 // Tests: tests/cases/09-queue-work.mjs.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -16,6 +19,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CFG = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/gate.config.json'), 'utf8'));
 const LIMIT = (CFG.limits && CFG.limits['queue-'] && CFG.limits['queue-'].listings) || 15;
+const OTHER = 20;   // reviews, and managers' items, taken in one run on top of the research items
 
 // The branch a queue run opens its pull request on: queue-YYYY-MM-DD-HHMM, Philadelphia time.
 export function branchName(now = new Date()) {
@@ -32,9 +36,17 @@ export function work(ops, max = LIMIT) {
     const doc = read(path.join(outDir, f));
     for (const x of doc && Array.isArray(doc.items) ? doc.items : []) if (x && typeof x.item === 'string' && x.outcome !== 'failed') answered.add(x.item);
   }
+  const decDir = path.join(ops, 'decisions');
+  for (const f of fs.existsSync(decDir) ? fs.readdirSync(decDir).filter(x => x.endsWith('.json')).sort() : []) {
+    const doc = read(path.join(decDir, f));
+    for (const x of doc && Array.isArray(doc.items) ? doc.items : []) if (x && typeof x.item === 'string' && (x.decision === 'ok' || x.decision === 'hold')) answered.add(x.item);
+  }
   const items = queue && Array.isArray(queue.items) ? queue.items.filter(x => x && typeof x.id === 'string') : [];
   const open = items.filter(x => !answered.has(x.id)).sort((a, b) => String(a.when || '').localeCompare(String(b.when || '')) || a.id.localeCompare(b.id));
-  return { written: queue && queue.written || null, total: open.length, left: Math.max(0, open.length - max), branch: branchName(), todo: open.slice(0, max), schoolsAsked: queue && Array.isArray(queue.schoolsAsked) ? queue.schoolsAsked : [], missing: !queue };
+  const sort = x => /^v/.test(x.id) ? 'review' : /^[xf]/.test(x.id) ? 'content' : 'research';
+  const research = open.filter(x => sort(x) === 'research'), reviews = open.filter(x => sort(x) === 'review'), content = open.filter(x => sort(x) === 'content');
+  const todo = [...research.slice(0, max), ...reviews.slice(0, OTHER), ...content.slice(0, OTHER)];
+  return { written: queue && queue.written || null, total: open.length, left: open.length - todo.length, branch: branchName(), todo, schoolsAsked: queue && Array.isArray(queue.schoolsAsked) ? queue.schoolsAsked : [], missing: !queue };
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
@@ -48,4 +60,6 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   if (!w.todo.length) { console.log('Nothing to do.'); process.exit(0); }
   console.log(`${w.total} item(s) to work${w.left ? `; this run takes the oldest ${w.todo.length}, and ${w.left} wait for the next run` : ''}. Queue written ${w.written || '(unknown)'}. Branch: ${w.branch}`);
   for (const x of w.todo) console.log(`  ${x.id}  ${x.kind}  ${x.when || ''}  ${x.listing || x.program || x.website || x.subject || ''}`.slice(0, 160));
+  const rv = w.todo.filter(x => /^v/.test(x.id)).length, mg = w.todo.filter(x => /^[xf]/.test(x.id)).length;
+  if (rv || mg) console.log(`Of these, ${rv} review(s) (answer in outcomes/) and ${mg} manager item(s) (answer in decisions/).`);
 }

@@ -187,7 +187,7 @@ test('held items from the accounts database: a claim waits on the Needs-you page
   eq((await api().as(who, 'Dana', 'Reyes').okay('POST', 'claim_add', { listing: 'p:' + prog.id })).status, 'pending');
   const { get, post } = pages(site);
   let h = await get('needs/');
-  includes(h, 'Claims waiting for your yes'); includes(h, who); includes(h, 'Reviews still reach you by email');
+  includes(h, 'Claims waiting for your yes'); includes(h, who);
   const id = site.sql(`SELECT c.id FROM claims c JOIN users u ON u.id = c.user_id WHERE u.email = '${who}'`)[0].id;
   const cc = /action="\.\.\/claims\/"[^>]*><input type="hidden" name="csrf" value="([0-9a-f]{64})"/.exec(h)[1];
   const r = await post('claims/', { csrf: cc, back: 'needs', id, do: 'claim_no' });

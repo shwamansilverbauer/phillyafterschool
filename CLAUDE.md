@@ -49,7 +49,7 @@ without `phillyafterschool-private.json`, which only the Actions runs have.
 | `data/copy.json` | Wording edits made on `/edit/`. Never edit by hand |
 | `data/autopilot.json` | The autopilot switch: `off`, `shadow` or `on`. Only Josh changes it; a run's pull request that touches it is held |
 | `evidence/<branch>.json` | A run's evidence: for each changed value, the provider's page and a quote from it. Provider quotes only |
-| `data/reviews.json`, `data/news.json`, `data/school-dates.json`, `data/days-off.json` | Reviews, What's new, dates for a school, the District's days off |
+| `data/reviews.json`, `data/news.json`, `data/school-dates.json`, `data/days-off.json` | Reviews (each with the site's own id since Phase 6), What's new, dates for a school, the District's days off |
 | `site.config.json` | Site settings. Keys and secrets never go here |
 | `build.mjs` | The whole build: validation, every page, the data files the pages read |
 | `src/site.js`, `src/groups.js`, `src/kids-corner.js`, `src/edit.js` | The pages' scripts: lists and planners, accounts, Kids' Playground, the edit pages |
@@ -58,6 +58,7 @@ without `phillyafterschool-private.json`, which only the Actions runs have.
 | `src/server/queue.php` | The private queue's shared code (pasted into the API and the queue page): gathers the items, writes `queue/open.json` to the ops repository |
 | `src/server/autopilot.php`, `edit-needs.php`, `edit-autopilot.php` | The Needs-you page (`/edit/needs/`), the autopilot log with Undo (`/edit/autopilot/`), the switch, and what the morning summary reads (pasted into the API) |
 | `src/server/mail.php` | The mailbox's shared code (pasted into the API, the Needs-you page and the queue page): the mail tables, sealing, the hold list for mail, the signature check |
+| `src/server/content.php` | Reviews and what managers add, without the owner (pasted into the API, the Needs-you page and the queue page, after `mail.php`): the reviews table, the text and account rules, the queue's review and content items, the signed photo links |
 | `mail/Code.gs` | The mailbox script, pasted into script.google.com inside the contact@ Google account: files the inbox, posts mail people wrote to the site, sends the replies and the outreach. Runs every 10 minutes |
 | `tests/` | The tests (`tests/README.md` says how to write one) |
 | `scripts/gate.mjs`, `scripts/gate.config.json` | The autopilot gate and its thresholds and templates |
@@ -90,6 +91,9 @@ without `phillyafterschool-private.json`, which only the Actions runs have.
 | Claiming a listing | [`docs/accounts.md`](docs/accounts.md): "Program managers: claiming a listing" (a bullet in the first section) |
 | Follows, favorites, the profile and account pages | [`docs/accounts.md`](docs/accounts.md) |
 | Premium listings, the monthly numbers, space, reviews | [`docs/program-managers.md`](docs/program-managers.md) |
+| Reviews: the form, the site's checks, the queue, the gate, the policy page | [`docs/program-managers.md`](docs/program-managers.md): "Reviews"; the gate's part in [`docs/listings.md`](docs/listings.md): "What the gate checks" |
+| Managers' words and photos rated by the runs, `decisions/<run>.json` | [`docs/listings.md`](docs/listings.md): "The private queue"; [`docs/program-managers.md`](docs/program-managers.md): "Premium listings" |
+| Claims by code | [`docs/accounts.md`](docs/accounts.md): "Program managers: claiming a listing" |
 | Kids' Playground | [`docs/kids-playground.md`](docs/kids-playground.md) |
 | The site's wording and its emails on `/edit/` | [`docs/emails.md`](docs/emails.md): "Editing the site's wording" and "The emails" |
 | Date emails (Klaviyo), push notifications, this week at your school | [`docs/emails.md`](docs/emails.md) |

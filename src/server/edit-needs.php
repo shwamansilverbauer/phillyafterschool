@@ -1,7 +1,9 @@
 <?php
 // The Needs-you page (scaling plan, Phase 3): everything waiting for the owner, on one page built for a phone. Run pull
 // requests the gate held (and, while the autopilot isn't on, every open one) with Approve, Decline and Open on GitHub;
-// claims, photos, words and offers and premium sign-ups, with the buttons /edit/claims/ has; items a run held, with
+// reviews the site's checks or a run held (Phase 6), with Publish (one commit to data/reviews.json) and Decline;
+// claims, photos, words and offers and premium sign-ups, with the buttons /edit/claims/ has and what a run said about
+// each; items a run held, with
 // /edit/queue/'s; mail from people the hold list kept (Phase 5), opened, with a draft reply to edit and Send; the
 // shadow report while the autopilot is in shadow; ten of the week's autopilot changes to spot-check; and the switch.
 // Generated into edit/needs/index.php by build.mjs, which fills in the marked lines (the config, the sign-in check, the
@@ -18,6 +20,7 @@
 /*GH*/
 /*AUTOPILOT*/
 /*MAIL*/
+/*CONTENT*/
 if (!edit_signed_in()) { header('Location: ../', true, 303); exit; }
 $db = edit_db();
 $admin = edit_admin() !== '';
@@ -29,6 +32,7 @@ $csrf = hash_hmac('sha256', 'needs-form', edit_key());
 $claimsCsrf = hash_hmac('sha256', 'claims-form', edit_key());   // the buttons that post to /edit/claims/
 $queueCsrf = hash_hmac('sha256', 'queue-form', edit_key());     // and to /edit/queue/
 $mailKey = mail_seal_key(mail_host_secret(dirname((string) $_SERVER['DOCUMENT_ROOT'])));   // opens the held mail
+$reviewKey = content_seal_key(mail_host_secret(dirname((string) $_SERVER['DOCUMENT_ROOT'])));   // opens a review's child's details
 $said = isset($_GET['said']) && is_string($_GET['said']) ? substr($_GET['said'], 0, 400) : '';
 function ne($v) { return htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8'); }
 function nday($t) { $d = new DateTime('@' . (int) $t); $d->setTimezone(new DateTimeZone('America/New_York')); return $d->format('M j'); }
@@ -44,6 +48,15 @@ function nextra($x) {
 $ACCOUNT = array('admin' => 'a site admin’s account', 'manager' => 'a program manager’s account', 'parent' => 'a parent’s account', 'none' => 'no account on the site');
 $KIND = array('words' => 'In their own words', 'offer' => 'Offer or event line', 'pin' => 'Kids’ Playground pin', 'social' => 'Social links', 'posts' => 'Instagram posts');
 $QKIND = array('program' => 'A program that’s missing', 'camp' => 'A camp that’s missing', 'update' => 'An update to a listing', 'proposal' => 'Proposed by the people who run it', 'note' => 'Your note');
+function nschool($id) { global $SCHOOLS; return isset($SCHOOLS[$id]) ? $SCHOOLS[$id] : (string) $id; }
+// Why a claim waits, in a sentence: how it came about (claims.via, Phase 6), or the ordinary reason.
+function nclaim($c) {
+  $via = isset($c['via']) ? (string) $c['via'] : '';
+  if ($via === 'code-sent') return 'A code went to the address on the listing’s website and wasn’t typed in before it ran out. Their own address is at ' . $c['domain'] . '.';
+  if ($via === 'code') return 'They typed the code sent to the address on the listing’s website, but someone at another address already holds the listing, so you say which stands.';
+  if ($via === 'asked') return 'Their address is at ' . $c['domain'] . ', not the listing’s website, and they asked a person to check.';
+  return 'Their address is at ' . $c['domain'] . ', the listing’s website, but many people share that website, so the claim needs your yes.';
+}
 
 // ----- the buttons -----
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -75,6 +88,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
       } catch (Exception $e) { $msg = 'That couldn’t be saved.'; }
     }
+  } elseif ($ok && in_array($do, array('review_ok', 'review_no'), true)) {
+    // A held review (Phase 6). Publish adds its entry to data/reviews.json on main with one commit, made with the key,
+    // so the site rebuilds by itself; the reviewer is thanked on the next hourly run. Decline settles it with no email.
+    $jump = '#reviews';
+    $rid = isset($_POST['review']) && is_string($_POST['review']) ? $_POST['review'] : '';
+    $r = null;
+    if ($db !== null && preg_match(REVIEW_ID, $rid)) { try { $st = $db->prepare('SELECT r.*, u.email FROM reviews r LEFT JOIN users u ON u.id = r.user_id WHERE r.id = ?'); $st->execute(array($rid)); $r = $st->fetch(PDO::FETCH_ASSOC) ?: null; } catch (Exception $e) { $r = null; } }
+    if (!$r) $msg = 'That review isn’t here any more.';
+    elseif ($r['status'] !== 'held') $msg = 'That review was already decided.';
+    elseif ($do === 'review_no') {
+      try {
+        $db->prepare("UPDATE reviews SET status = 'declined', decided = ? WHERE id = ?")->execute(array(time(), $rid));
+        $db->prepare("UPDATE queue_items SET state = 'closed', outcome = 'declined', told = -6, decided = ? WHERE id = ?")->execute(array(time(), $rid));
+        $msg = 'Declined. It won’t go on the site, and the reviewer isn’t emailed.';
+      } catch (Exception $e) { $msg = 'That couldn’t be saved.'; }
+    }
+    elseif (!$admin) $msg = 'Only a site admin’s account can publish a review: it goes on the site with a commit.';
+    elseif (!$ready) $msg = 'GitHub can’t be reached from here: the key file is missing on the server.';
+    elseif (!gh_allowed('needs-write', 30)) $msg = 'That’s a lot of changes in one hour. Wait a little and try again.';
+    else {
+      $entry = review_entry($r, $reviewKey);
+      $f = gh_file('data/reviews.json', 'main');
+      $text = $f === null ? '' : review_file_add($f[0], $entry);
+      if ($f === null) $msg = 'data/reviews.json couldn’t be read from GitHub. Try again in a minute.';
+      elseif ($text === '' && strpos($f[0], '"' . $rid . '"') === false) $msg = 'data/reviews.json on main isn’t in the shape expected, so nothing was changed.';
+      else {
+        $put = $text === '' ? array(true, '', '') : gh_put('data/reviews.json', $text, $f[1], 'A review of ' . nlabel($r['listing']) . ', approved on the Needs-you page', 'main');
+        if (!$put[0]) $msg = $put[1];
+        else {
+          try {
+            $db->prepare("UPDATE reviews SET status = 'published', decided = ? WHERE id = ?")->execute(array(time(), $rid));
+            // The thank-you goes the way every answer does: the next push_run sends it, once.
+            $db->prepare("INSERT OR IGNORE INTO queue_items (id, kind, email, listing, what, seen, state, outcome, decided, told) VALUES (?, 'review', ?, ?, ?, ?, 'closed', 'published', ?, 0)")->execute(array($rid, (string) $r['email'], (string) $r['listing'], nlabel($r['listing']), time(), time()));
+            $db->prepare("UPDATE queue_items SET state = 'closed', outcome = 'published', decided = ? WHERE id = ? AND told <= 0")->execute(array(time(), $rid));
+          } catch (Exception $e) { /* the commit stands; the thank-you just doesn't go */ }
+          $msg = 'Published: it’s on data/reviews.json on main' . ($put[1] !== '' ? ' (commit ' . $put[1] . ')' : '') . ', the site rebuilds in a few minutes, and the reviewer gets a thank-you within the hour.';
+        }
+      }
+    }
   } elseif ($ok && in_array($do, array('approve', 'decline', 'switch'), true) && !$admin) $msg = 'Only a site admin’s account can do that. You can see everything here, and decide on claims, photos and words.';
   elseif ($ok && !$ready && in_array($do, array('approve', 'decline', 'switch', 'sync'), true)) $msg = 'GitHub can’t be reached from here: the key file is missing on the server.';
   elseif ($ok && in_array($do, array('approve', 'decline', 'switch'), true) && !gh_allowed('needs-write', 30)) $msg = 'That’s a lot of changes in one hour. Wait a little and try again.';
@@ -102,7 +154,7 @@ $sync = $ready ? ap_sync($ctx) : array('state' => 'off');
 $modeInfo = $ready ? ap_mode($ctx) : array('mode' => '');
 $mode = $modeInfo['mode'];
 $prs = $db !== null ? ap_waiting($db, $mode) : array();
-$held = needs_held($db);
+$held = needs_held($db, $mode);
 $total = needs_count($held, $prs);
 $report = $db !== null ? ap_report($db, $today) : array('rows' => array(), 'first' => '', 'days' => 0, 'judged' => 0, 'wrong' => array(), 'passed' => false);
 $spot = $db !== null ? ap_spot($db, (new DateTime('now', $NY))->format('o-\WW')) : array();
@@ -159,15 +211,29 @@ function pr_reason($p, $mode) {
   <?php foreach ($held['claims'] as $c) { ?><div class="panel needs-item">
     <h3><?php echo ne(nlabel($c['listing'])); ?></h3>
     <p class="hint"><?php echo ne(trim($c['first'] . ' ' . $c['last'])); ?> &lt;<?php echo ne($c['email']); ?>&gt; · <?php echo ne(nday($c['created'])); ?></p>
-    <p>Their address is at <b><?php echo ne($c['domain']); ?></b>, the listing’s website, but many people share that website, so the claim needs your yes.</p>
+    <p><?php echo ne(nclaim($c)); ?></p>
     <form method="post" action="../claims/" class="actions"><input type="hidden" name="csrf" value="<?php echo ne($claimsCsrf); ?>"><input type="hidden" name="back" value="needs"><input type="hidden" name="id" value="<?php echo (int) $c['id']; ?>"><button class="btn primary" type="submit" name="do" value="claim_ok">Approve the claim</button><button class="btn" type="submit" name="do" value="claim_no">Decline</button></form>
   </div><?php } ?><?php } ?>
+
+  <?php if ($held['reviews']) { ?><section id="reviews"><h2>Reviews waiting (<?php echo count($held['reviews']); ?>)</h2>
+  <p class="hint">Each one waits for the reason shown. Publish puts it on the site with one commit to <code>data/reviews.json</code>, and the reviewer gets a thank-you. Decline keeps it off the site for good; nobody is emailed. Only provider pages are quoted anywhere public: a review’s words leave this page only when you publish it.</p>
+  <?php foreach ($held['reviews'] as $r) { $ent = review_entry($r, $reviewKey); ?><div class="panel needs-item" id="review-<?php echo ne($r['id']); ?>">
+    <h3><?php echo ne(nlabel($r['listing'])); ?> <span class="hint"><?php echo str_repeat('★', (int) $r['stars']) . str_repeat('☆', 5 - (int) $r['stars']); ?></span></h3>
+    <p class="hint">Signed “<?php echo ne($r['name']); ?>”, <?php echo ne(nschool($r['school'])); ?><?php if (isset($ent['kid'])) { ?> · in a child’s words: grade <?php echo ne($ent['kid']['grade']); ?><?php if (isset($ent['kid']['name'])) { ?>, shown as <?php echo ne($ent['kid']['name']); ?><?php } ?><?php } ?> · <?php echo ne(nday($r['created'])); ?><?php if ((string) $r['email'] !== '') { ?> · the account: <?php echo ne(trim($r['first'] . ' ' . $r['last'])); ?> &lt;<?php echo ne($r['email']); ?>&gt;<?php } ?></p>
+    <p><b><?php echo ne(review_hold_text((string) $r['hold'])); ?></b></p>
+    <blockquote><?php echo ne($r['comment']); ?></blockquote>
+    <form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo ne($csrf); ?>"><input type="hidden" name="review" value="<?php echo ne($r['id']); ?>">
+      <?php if ($admin && $ready) { ?><button class="btn primary" type="submit" name="do" value="review_ok">Publish it</button><?php } ?><button class="btn" type="submit" name="do" value="review_no">Decline</button>
+    </form>
+  </div><?php } ?>
+  <?php if (!$admin || !$ready) { ?><p class="hint"><?php echo !$admin ? 'Publishing a review is for a site admin’s account: it commits to the repository.' : 'Publish needs the key file on the server: GitHub can’t be reached from here.'; ?></p><?php } ?>
+  </section><?php } ?>
 
   <?php if ($held['photos']) { ?><h2>Photos waiting (<?php echo count($held['photos']); ?>)</h2>
   <?php foreach ($held['photos'] as $x) { ?><div class="panel needs-item">
     <h3><?php echo ne(nlabel($x['listing'])); ?><?php if ($x['kind'] === 'logo') { ?> <span class="hint">Logo</span><?php } ?></h3>
     <p class="hint">From <?php echo ne(trim($x['first'] . ' ' . $x['last'])); ?> · <?php echo ne(nday($x['created'])); ?></p>
-    <p>A photo shows on a listing only after you publish it. They ticked that they may use it and have the families’ permission for any children in it.</p>
+    <?php $say = content_say_text($x, $mode); ?><p><?php if ($say !== '') { ?><b><?php echo ne($say); ?></b> <?php } ?><?php if ($x['kind'] === 'logo') { ?>They ticked that it’s their logo and they may use it.<?php } elseif (isset($x['consent']) && (int) $x['consent'] === 1) { ?>They ticked that they may use it, and that everyone shown, or their parent, agreed to it being public.<?php } else { ?>They ticked that they may use it. It came in before the box saying everyone shown agreed to it being public, so it waits for you.<?php } ?></p>
     <p><img class="review-photo" src="../claims/?photo=<?php echo (int) $x['id']; ?>" alt=""></p>
     <p>Described as: <b><?php echo ne($x['alt']); ?></b></p>
     <form method="post" action="../claims/" class="actions"><input type="hidden" name="csrf" value="<?php echo ne($claimsCsrf); ?>"><input type="hidden" name="back" value="needs"><input type="hidden" name="id" value="<?php echo (int) $x['id']; ?>"><button class="btn primary" type="submit" name="do" value="photo_ok">Publish the photo</button><button class="btn" type="submit" name="do" value="photo_no">Decline</button></form>
@@ -177,7 +243,7 @@ function pr_reason($p, $mode) {
   <?php foreach ($held['extras'] as $x) { ?><div class="panel needs-item">
     <h3><?php echo ne(nlabel($x['listing'])); ?> <span class="hint"><?php echo ne(isset($KIND[$x['kind']]) ? $KIND[$x['kind']] : $x['kind']); ?></span></h3>
     <p class="hint">From <?php echo ne(trim($x['first'] . ' ' . $x['last'])); ?> · <?php echo ne(nday($x['created'])); ?><?php if ($x['kind'] === 'offer' && $x['until'] !== '') { ?> · to show until <?php echo ne($x['until']); ?><?php } ?></p>
-    <p>What a manager writes for a premium listing shows only after you publish it.</p>
+    <?php $say = content_say_text($x, $mode); ?><p><?php echo $say !== '' ? '<b>' . ne($say) . '</b>' : ne(in_array($x['kind'], array('social', 'posts'), true) ? 'Sent while the autopilot wasn’t on. With it on, social links and posts go on the listing at once.' : 'No run has looked at it yet: it’s in the queue for the next one.'); ?></p>
     <pre class="edit-ask"><?php echo ne(nextra($x)); ?></pre>
     <form method="post" action="../claims/" class="actions"><input type="hidden" name="csrf" value="<?php echo ne($claimsCsrf); ?>"><input type="hidden" name="back" value="needs"><input type="hidden" name="id" value="<?php echo (int) $x['id']; ?>"><button class="btn primary" type="submit" name="do" value="extra_ok">Publish it</button><button class="btn" type="submit" name="do" value="extra_no">Decline</button></form>
   </div><?php } ?><?php } ?>
@@ -214,8 +280,6 @@ function pr_reason($p, $mode) {
     </form>
   </div><?php } ?><?php } ?>
   </section><?php } ?>
-
-  <p class="hint">Reviews still reach you by email, and stay in the inbox. They move here when the review form stores them (Phase 6).</p>
 
   <?php if ($mode === 'shadow') { ?><section id="shadow">
   <h2>The shadow report</h2>

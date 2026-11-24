@@ -379,17 +379,29 @@ function ap_emailed(PDO $db, array $row): array {
 // ----- what else is waiting for the owner (the accounts database) -----
 // Claims, photos, words and offers, premium sign-ups and queue items held for a decision: what /edit/claims/ and
 // /edit/queue/ show with buttons today. A table from a later version that isn't there yet counts as none.
-function needs_held(?PDO $db): array {
-  $out = array('claims' => array(), 'photos' => array(), 'extras' => array(), 'premium' => array(), 'queue' => array(), 'mail' => array());
+// $mode: the autopilot's switch. While it is "on", a manager's item no run has held is with the runs (it publishes when
+// one passes it), so only held ones are here; a claim whose code was sent and is still good waits for the claimant.
+function needs_held(?PDO $db, string $mode = ''): array {
+  $out = array('claims' => array(), 'reviews' => array(), 'photos' => array(), 'extras' => array(), 'premium' => array(), 'queue' => array(), 'mail' => array());
   if ($db === null) return $out;
   $rows = function ($sql) use ($db) { try { return $db->query($sql)->fetchAll(PDO::FETCH_ASSOC); } catch (Exception $e) { return array(); } };
-  $out['claims'] = $rows("SELECT c.id, c.listing, c.domain, c.created, u.email, u.first, u.last FROM claims c JOIN users u ON u.id = c.user_id WHERE c.status = 'pending' ORDER BY c.id DESC");
-  $out['photos'] = $rows("SELECT p.id, p.listing, p.alt, p.created, p.kind, u.email, u.first, u.last FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.status = 'new' AND c.status = 'ok' ORDER BY p.id DESC");
+  try {
+    $st = $db->prepare("SELECT c.*, u.email, u.first, u.last FROM claims c JOIN users u ON u.id = c.user_id WHERE c.status = 'pending' AND NOT (c.via = 'code-sent' AND EXISTS (SELECT 1 FROM logins l WHERE l.next = 'claim:' || c.id AND l.used = 0 AND l.expires > ?)) ORDER BY c.id DESC");
+    $st->execute(array(time()));
+    $out['claims'] = $st->fetchAll(PDO::FETCH_ASSOC);
+  } catch (Exception $e) { $out['claims'] = $rows("SELECT c.id, c.listing, c.domain, c.created, u.email, u.first, u.last FROM claims c JOIN users u ON u.id = c.user_id WHERE c.status = 'pending' ORDER BY c.id DESC"); }   // a database from before claims by code
+  // Reviews the site's checks, a run or a closed pull request held (Phase 6). The page opens each one's child's details.
+  $out['reviews'] = $rows("SELECT r.*, u.email, u.first, u.last FROM reviews r LEFT JOIN users u ON u.id = r.user_id WHERE r.status = 'held' ORDER BY r.created DESC LIMIT 60");
+  // A manager's photo, logo, words, offer or pin waits for the owner until it is published: with the autopilot on, only
+  // the ones a run (or the site's own checks) held; otherwise all, each with what the run said about it ("say", "hold").
+  $out['photos'] = $rows("SELECT p.*, u.email, u.first, u.last FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.status = 'new' AND c.status = 'ok' ORDER BY p.id DESC");
   if (!$out['photos']) $out['photos'] = $rows("SELECT p.id, p.listing, p.alt, p.created, 'photo' AS kind, u.email, u.first, u.last FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.status = 'new' AND c.status = 'ok' ORDER BY p.id DESC");   // from before logos
-  $out['extras'] = $rows("SELECT e.id, e.listing, e.kind, e.body, e.until, e.created, u.email, u.first, u.last FROM extras e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.status = 'new' AND c.status = 'ok' ORDER BY e.id DESC");
+  $out['extras'] = $rows("SELECT e.*, u.email, u.first, u.last FROM extras e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.status = 'new' AND c.status = 'ok' ORDER BY e.id DESC");
+  if ($mode === 'on') foreach (array('photos', 'extras') as $k) $out[$k] = array_values(array_filter($out[$k], function ($x) use ($k) { return (isset($x['hold']) && (string) $x['hold'] !== '') || ($k === 'extras' && in_array((string) $x['kind'], array('social', 'posts'), true)); }));   // social links and posts aren't rated by a run: one still waiting was sent while the autopilot was off
   $out['premium'] = $rows("SELECT a.claim_id, a.plan, a.created, c.listing, u.email, u.first, u.last FROM premium_asks a JOIN claims c ON c.id = a.claim_id JOIN users u ON u.id = c.user_id WHERE c.status = 'ok' AND NOT EXISTS (SELECT 1 FROM premium p WHERE p.listing = c.listing) ORDER BY a.created DESC");
   // An email a run held is shown with the mail (below), with its message and a draft, not here.
-  $out['queue'] = $rows("SELECT id, kind, listing, what, pr, reason, decided FROM queue_items WHERE state = 'held' AND substr(id, 1, 1) != 'm' ORDER BY decided DESC");
+  // A review a run held is shown with the reviews (above), with its words, not here.
+  $out['queue'] = $rows("SELECT id, kind, listing, what, pr, reason, decided FROM queue_items WHERE state = 'held' AND substr(id, 1, 1) NOT IN ('m', 'v') ORDER BY decided DESC");
   // Mail from people the hold list (or a run) kept for the owner (the mailbox, Phase 5). Sealed: the page opens it.
   $out['mail'] = $rows("SELECT id, gid, thread, via, sealed, draft, subject, domain, dkim, listings, shared, account, outreach, attachments, hold, created FROM mail_in WHERE state = 'held' ORDER BY created DESC LIMIT 60");
   return $out;

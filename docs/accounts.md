@@ -119,8 +119,19 @@ These are the only parts of the site that store anything about a child on the se
   booking and site-builder services, the library, the YMCA, and franchise chains whose locations share one website,
   such as School of Rock, Code Ninjas and Brooklyn Robot Foundry), and every school-clubs listing (any listing with
   `clubs`). Add a name to
-  `CLAIM_SHARED` when a listing's website turns out to be shared. A personal address (Gmail and the like) can never
-  claim anything, because no listing's website is there.
+  `CLAIM_SHARED` when a listing's website turns out to be shared. A personal address (Gmail and the like) can't
+  claim anything this way, because no listing's website is there.
+  **Claims by code** (scaling plan, Phase 6, call 2) are for the rest: a claimant whose address isn't at the
+  listing's website (a Gmail address, a domain many share) can have a 6-digit code sent to the address the listing's
+  own website publishes, which is the listing's `email` field (`e` in what `claimListings()` hands the server). The
+  claim waits, marked `code-sent` (`claims.via`), until the code is typed in on `/managers/`; then it stands, with
+  `domain` set to `by code`, and the owner gets a note. The code works for 24 hours and five tries. It waits for the
+  owner on the Needs-you page instead when someone at another address already holds the listing, when the code ran out
+  untyped, or when the claimant chose "Ask a person to check" (`via` `asked`, also the way in for a listing whose
+  website publishes no address). Off until `"claimByCode": true` under `"groups"` in `site.config.json`; while off,
+  a mismatched address is refused as before (`claim_code_start` and `claim_code_finish` answer `off`). A proposal to
+  change a listing's website, phone or email within a day of a claim by code is for the queue run to hold (its
+  prompt, `docs/runs/queue-run.md`).
   A claimed listing shows a "Claimed" mark, fetched from `groups/api.php?action=claimed` (listing keys only, never
   who). A manager can propose changes to a listing they hold; nothing changes on the site. Each claim and each
   proposed change is emailed to the contact address and listed on `/edit/claims/` (behind the edit sign-in), where

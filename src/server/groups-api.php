@@ -210,6 +210,12 @@ function db(): PDO {
     $db->exec("CREATE TABLE IF NOT EXISTS extras (id INTEGER PRIMARY KEY, claim_id INTEGER NOT NULL REFERENCES claims(id) ON DELETE CASCADE, listing TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL, until TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'new', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0)");
     $db->exec('CREATE INDEX IF NOT EXISTS extras_listing ON extras (listing, kind, status)');
     $db->exec('CREATE TABLE IF NOT EXISTS hits_school (listing TEXT NOT NULL, school TEXT NOT NULL, month TEXT NOT NULL, n INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (listing, school, month))');
+    content_schema($db);   // reviews, and a run's word on what managers add (see "reviews and what managers add" below)
+    // How a claim came about, where it isn't the ordinary one (an address at the listing's own website): "code-sent", a
+    // code went to the address the listing's website publishes and hasn't been entered; "code", it was; "asked", the
+    // claimant asked the owner to check (scaling plan, Phase 6).
+    $ccols = array(); foreach ($db->query('PRAGMA table_info(claims)') as $c) $ccols[] = $c['name'];
+    if (!in_array('via', $ccols, true)) $db->exec("ALTER TABLE claims ADD COLUMN via TEXT NOT NULL DEFAULT ''");
     if (!$hadTally) {   // start the daily counts from what is already here
       $day = "strftime('%Y-%m-%d', created, 'unixepoch', '-4 hours')";
       $db->exec("INSERT OR IGNORE INTO tally (k, day, n) SELECT 'account', $day, COUNT(*) FROM users GROUP BY 2");
@@ -1654,7 +1660,7 @@ function claim_out(array $c): array {
   $ph = row("SELECT id, status, alt FROM photos WHERE claim_id = ? AND kind = 'photo' AND status != 'declined' ORDER BY id DESC LIMIT 1", array($c['id']));
   $live = photo_live($c['listing']);
   $asked = premium_mode() !== 'off' ? row('SELECT plan, created FROM premium_asks WHERE claim_id = ?', array($c['id'])) : null;
-  return array('listing' => $c['listing'], 'asked' => $asked ? array('plan' => $asked['plan'], 't' => (int) $asked['created']) : null, 'name' => isset($l[$c['listing']]) ? $l[$c['listing']]['n'] : 'A listing no longer on the site', 'status' => $c['status'], 'gone' => !isset($l[$c['listing']]), 'edits' => $edits,
+  return array('listing' => $c['listing'], 'asked' => $asked ? array('plan' => $asked['plan'], 't' => (int) $asked['created']) : null, 'name' => isset($l[$c['listing']]) ? $l[$c['listing']]['n'] : 'A listing no longer on the site', 'status' => $c['status'], 'via' => isset($c['via']) ? (string) $c['via'] : '', 'gone' => !isset($l[$c['listing']]), 'edits' => $edits,
     'photo' => $ph ? array('status' => $ph['status'], 'alt' => $ph['alt']) : null, 'photoLive' => $live ? (int) $live['id'] : 0, 'space' => space_of($c['listing']),
     'stats' => $c['status'] === 'ok' && isset($l[$c['listing']]) ? stats_of($c['listing']) : null,
     'premium' => $c['status'] === 'ok' && isset($l[$c['listing']]) && is_premium($c['listing']) ? premium_out($c['listing']) : null);
@@ -1671,7 +1677,7 @@ function photo_live(string $key): ?array {
 function photo_file(int $id): string { return data_dir() . '/photos/' . $id . '.jpg'; }
 function my_claims(int $uid): array {
   $out = array();
-  foreach (q("SELECT id, listing, status FROM claims WHERE user_id = ? ORDER BY id", array($uid)) as $c) $out[] = claim_out($c);
+  foreach (q("SELECT id, listing, status, via FROM claims WHERE user_id = ? ORDER BY id", array($uid)) as $c) $out[] = claim_out($c);
   return $out;
 }
 // ---------- asking for a school that isn't covered yet ----------
@@ -1972,7 +1978,7 @@ function queue_ctx(): array {
   $names = array(); foreach (listings() as $k => $l) $names[$k] = isset($l['n']) ? (string) $l['n'] : (string) $k;
   return array('root' => dirname((string) $_SERVER['DOCUMENT_ROOT']), 'db' => db(), 'names' => $names,
     'city' => isset($CFG['citySchools']) && is_array($CFG['citySchools']) ? $CFG['citySchools'] : array(),
-    'secret' => secret(), 'gh' => 'offsite_gh', 'ops' => ops_repo(), 'site' => (string) $CFG['siteUrl']);
+    'secret' => secret(), 'gh' => 'offsite_gh', 'ops' => ops_repo(), 'site' => (string) $CFG['siteUrl'], 'fresh' => review_fresh_mode());
 }
 // The hourly work: read the runs' answers, see which worked items have gone live, answer their senders, then write the
 // queue if it changed. At most once in 50 minutes, whoever asks (the tests can ask for it now).
@@ -1984,10 +1990,11 @@ function queue_run(bool $force = false): array {
   @set_time_limit(120);
   $ctx = queue_ctx();
   $read = queue_outcomes($ctx);   // first, so what a run settled leaves the queue in this same write
+  $decided = content_decisions($ctx);   // the runs' word on managers' words, offers, pins and photos (Phase 6)
   $merged = queue_merges();
   $told = queue_tell();
   $w = queue_write($ctx);
-  return $w + array('outcomes' => $read, 'merged' => $merged, 'told' => $told);
+  return $w + array('outcomes' => $read, 'decisions' => $decided, 'merged' => $merged, 'told' => $told);
 }
 // New or changed files in outcomes/, each read once (a file whose contents change is read again; an item already
 // answered is never answered twice).
@@ -2043,6 +2050,9 @@ function queue_apply(array $doc): array {
     $reason = isset($x['reason']) && is_string($x['reason']) && in_array($x['reason'], QUEUE_REASONS, true) ? $x['reason'] : '';
     // An email from a person can also be answered with a fixed reply, or settled as spam. Neither fits any other item.
     $mail = $id[0] === 'm';
+    // A review ("v…", Phase 6) is published in a pull request, held for the owner, or declined; nothing else fits one.
+    $review = $id[0] === 'v';
+    if ($review && !in_array($out, array('published', 'held', 'declined', 'failed'), true)) { $skipped++; continue; }
     $reply = $mail && isset($x['reply']) && is_string($x['reply']) && in_array($x['reply'], QUEUE_REPLIES, true) ? $x['reply'] : '';
     if (!$mail && ($out === 'answered' || $out === 'spam')) { $skipped++; continue; }
     if ($out === 'answered' && ($reply === '' || $reply === 'thanks-updated')) { $skipped++; continue; }
@@ -2053,9 +2063,17 @@ function queue_apply(array $doc): array {
     q("UPDATE queue_items SET state = ?, outcome = ?, reason = ?, reply = ?, run = ?, pr = ?, decided = ?, listing = CASE WHEN ? != '' THEN ? ELSE listing END WHERE id = ?", array($state, $out, $reason, $reply, $run, $pr, now(), $listing, $listing, $id));
     if ($state === 'closed') queue_settle_proposal($id, $out);
     if ($mail) mail_after_outcome((int) substr($id, 1), $out, $state);
+    if ($review) review_after_outcome($id, $out, $state, $pr);
     $applied++;
   }
   return array($applied, $skipped);
+}
+// A review a run answered: held with no pull request waits for the owner on the Needs-you page; declined is settled
+// (the reviewer isn't emailed); in a pull request it waits for the merge; failed goes back in the queue.
+function review_after_outcome(string $id, string $out, string $state, int $pr): void {
+  if ($state === 'held') q("UPDATE reviews SET status = 'held', hold = 'run', decided = ? WHERE id = ? AND status = 'new'", array(now(), $id));
+  elseif ($out === 'declined') q("UPDATE reviews SET status = 'declined', decided = ? WHERE id = ? AND status IN ('new', 'held')", array(now(), $id));
+  elseif ($state === 'waiting') q("UPDATE reviews SET pr = ? WHERE id = ? AND status = 'new'", array($pr, $id));
 }
 // A manager's proposed change that a run settled is settled on /edit/claims/ too, so it isn't worked twice.
 function queue_settle_proposal(string $id, string $outcome): void {
@@ -2080,9 +2098,11 @@ function queue_merges(): array {
       foreach (q("SELECT id FROM queue_items WHERE state = 'waiting' AND pr = ?", array($pr))->fetchAll() as $x) {
         q("UPDATE queue_items SET state = 'closed', outcome = 'published', decided = ? WHERE id = ?", array(now(), $x['id']));
         queue_settle_proposal((string) $x['id'], 'published');
+        if (substr((string) $x['id'], 0, 1) === 'v') q("UPDATE reviews SET status = 'published', decided = ? WHERE id = ? AND status != 'published'", array(now(), $x['id']));
         $res['published']++;
       }
     } elseif (isset($r['state']) && $r['state'] === 'closed' && empty($r['merged'])) {
+      q("UPDATE reviews SET status = 'held', hold = 'pr-closed', decided = ? WHERE status = 'new' AND id IN (SELECT id FROM queue_items WHERE state = 'waiting' AND pr = ?)", array(now(), $pr));
       $res['held'] += q("UPDATE queue_items SET state = 'held', reason = 'pr-closed', decided = ? WHERE state = 'waiting' AND pr = ?", array(now(), $pr))->rowCount();
     }
   }
@@ -2096,6 +2116,8 @@ function queue_tell(): array {
   // An email from a person is answered in its own thread, from the site's address, by the mailbox script (mail_answer).
   foreach (q("SELECT * FROM queue_items WHERE state = 'closed' AND told = 0 AND (email != '' OR substr(id, 1, 1) = 'm') AND outcome IN ('published', 'declined', 'duplicate', 'needs-info', 'no-change', 'answered') ORDER BY decided LIMIT " . QUEUE_TELL_A_RUN)->fetchAll() as $x) {
     $mail = substr((string) $x['id'], 0, 1) === 'm';
+    // A reviewer hears only when the review is on the site: a thank-you with the link. Nothing for the other answers.
+    if (substr((string) $x['id'], 0, 1) === 'v' && $x['outcome'] !== 'published') { q('UPDATE queue_items SET told = -6 WHERE id = ?', array($x['id'])); continue; }
     if ($off) { q('UPDATE queue_items SET told = -2 WHERE id = ?', array($x['id'])); if ($mail) mail_set_state(db(), (int) substr((string) $x['id'], 1), 'closed'); $res['off']++; continue; }
     if ($mail ? mail_answer($x) : queue_reply($x)) { q('UPDATE queue_items SET told = ? WHERE id = ?', array(now(), $x['id'])); $res['sent']++; bump('queue_reply'); }
     else { q('UPDATE queue_items SET tries = tries + 1, told = CASE WHEN tries + 1 >= 3 THEN -1 ELSE 0 END WHERE id = ?', array($x['id'])); $res['failed']++; }
@@ -2122,6 +2144,16 @@ function queue_reply_parts(array $x): array {
   $what = $known ? listing_plain($key) : ($x['kind'] === 'mail' ? '' : queue_one((string) $x['what'], 80));   // an email's item is named by its domain only
   $v['what'] = $what !== '' ? $what : t(__T("what you sent"), $v);
   $listingUrl = preg_match('/^[pc]:[a-z0-9-]{1,80}$/', $key) ? listing_url($key) : $CFG['siteUrl'] . '/';
+  if ($x['kind'] === 'review') {   // a review on the site (Phase 6): the only answer a reviewer gets
+    /*EMAIL Thanks for your review: it’s on the site*/
+    $subject = t(__T("Your review of {what} is on {site}"), $v);
+    $head = t(__T("Thanks for your review"), $v);
+    $lines = array(t(__T("Your review of {what} is on {site} now, where the next family choosing a program will see it."), $v),
+      t(__T("It shows your first name and your child’s school, never your email address. If you want it changed or taken down, reply to this email."), $v));
+    $button = t(__T("See your review"), $v);
+    $why = t(__T("You get this because you wrote a review on {site}. It’s the only email about it."), $v);
+    return array($subject, $head, array_values(array_filter($lines, function ($s) { return $s !== ''; })), $button, preg_replace('/#.*$/', '', $listingUrl) . '#reviews', $why);
+  }
   // "Send it again" opens the form the way the site's own buttons do: on the listing for an update, as a camp for a camp.
   $again = $x['kind'] === 'proposal' ? $CFG['siteUrl'] . '/managers/' : $CFG['siteUrl'] . '/suggest/' . ($x['kind'] === 'update' && $known ? '?kind=correction&fix=' . rawurlencode($key) : ($x['kind'] === 'camp' ? '?kind=camp' : ''));
   $out = $x['outcome'] === 'no-change' ? 'duplicate' : (string) $x['outcome'];
@@ -2418,6 +2450,133 @@ function outreach_copy(): array {
   return array('sequences' => array('claim' => array($claim1, $claim2), 'school' => array($school1, $school2), 'sponsor' => array($sponsor1, $sponsor2, $sponsor3)), 'claimed' => $claimed, 'site' => (string) $CFG['siteName'], 'siteUrl' => (string) $CFG['siteUrl']);
 }
 
+// ---------- reviews and what managers add (scaling plan, Phase 6) ----------
+// The shared half (the reviews table, the text and account rules, the queue's review and content items, the signed
+// photo links) is pasted in here from src/server/content.php. Below: the settings, and applying the runs' decisions.
+// Nothing publishes on its own unless the autopilot's switch (data/autopilot.json on main) says "on": in "shadow" a
+// run's word is kept and shown on the Needs-you page, and the owner decides, as before.
+/*CONTENT*/
+function mod_cfg(): array { global $CFG; return isset($CFG['moderation']) && is_array($CFG['moderation']) ? $CFG['moderation'] : array(); }
+function mod_private(): array { return content_private(dirname((string) $_SERVER['DOCUMENT_ROOT'])); }
+// A review from an account under a day old with nothing saved: "hold" (the default) waits for the owner, as the hold
+// table says; "wait" waits a day and then goes to the queue like any other ("reviewNewAccount" in site.config.json).
+function review_fresh_mode(): string {
+  global $CFG;
+  if (isset($GLOBALS['PAS_REVIEW_FRESH']) && in_array($GLOBALS['PAS_REVIEW_FRESH'], array('hold', 'wait'), true)) return $GLOBALS['PAS_REVIEW_FRESH'];   // the tests only
+  return isset($CFG['reviewNewAccount']) && $CFG['reviewNewAccount'] === 'wait' ? 'wait' : 'hold';
+}
+function listing_names(): array { $n = array(); foreach (listings() as $k => $l) $n[$k] = isset($l['n']) ? (string) $l['n'] : (string) $k; return $n; }
+// The autopilot's switch as the site last read it (remembered a minute): 'on', 'shadow', 'off', or '' when GitHub can't
+// be read. Only 'on' lets a review, a manager's words or a photo publish without the owner.
+function content_mode(): string {
+  if (!ap_github_ready()) return '';
+  $m = ap_mode(ap_ctx());
+  return (string) $m['mode'];
+}
+// Claims by code (call 2 in the scaling plan): a claimant whose address isn't at the listing's website can have a code
+// sent to the address the listing's website publishes. Off until "claimByCode": true is set under "groups".
+function claim_code_on(array $in): bool {
+  global $CFG;
+  if (!empty($CFG['claimByCode'])) return true;
+  return (string) getenv('PAS_TEST_PUSH') !== '' && !empty($in['test_claim_code']);   // the tests only
+}
+// "in…@example.org": enough to know where a code went, not the whole address.
+function mask_email(string $e): string { $at = strrpos($e, '@'); if ($at === false) return ''; $local = substr($e, 0, $at); return mb_substr($local, 0, min(2, max(1, mb_strlen($local) - 1))) . '…' . substr($e, $at); }
+
+// The runs' decisions on what managers added: decisions/<run>.json in the ops repository, each read once (a file whose
+// contents change is read again; a row already rated is never rated twice). Only the item ids, "ok" or "hold" and the
+// rule are read, each checked against a fixed form; anything else in the file is ignored.
+function content_decisions(array $ctx): array {
+  $res = array('files' => 0, 'published' => 0, 'held' => 0, 'waiting' => 0, 'skipped' => 0);
+  list($code, $list) = offsite_gh('GET', '/repos/' . $ctx['ops'] . '/contents/decisions', null);
+  if ($code === 404) return $res;   // no run has rated anything yet
+  if ($code !== 200 || !is_array($list)) return $res + array('why' => 'github ' . $code);
+  $known = array(); foreach (q("SELECT file, sha FROM queue_runs WHERE file LIKE 'decisions/%'") as $r) $known[$r['file']] = $r['sha'];
+  $mode = null; $n = 0;
+  foreach ($list as $f) {
+    $name = is_array($f) && isset($f['name']) ? (string) $f['name'] : ''; $sha = is_array($f) && isset($f['sha']) ? (string) $f['sha'] : '';
+    if (!is_array($f) || !isset($f['type']) || $f['type'] !== 'file' || !preg_match('/^[A-Za-z0-9._-]{1,120}\.json$/', $name)) continue;
+    if (isset($known['decisions/' . $name]) && $known['decisions/' . $name] === $sha) continue;
+    if ($n++ >= QUEUE_FILES_A_RUN) break;   // the rest next hour
+    list($c, $r) = offsite_gh('GET', '/repos/' . $ctx['ops'] . '/contents/decisions/' . rawurlencode($name), null);
+    if ($c !== 200 || !is_array($r) || !isset($r['content'])) continue;
+    $doc = json_decode((string) base64_decode(str_replace("\n", '', (string) $r['content'])), true);
+    if ($mode === null) $mode = content_mode();
+    $did = 0;
+    if (is_array($doc)) $did = content_apply($doc, $mode, $res);
+    q('INSERT INTO queue_runs (file, sha, read, items) VALUES (?, ?, ?, ?) ON CONFLICT(file) DO UPDATE SET sha = excluded.sha, read = excluded.read, items = excluded.items', array('decisions/' . $name, $sha, now(), $did));
+    $res['files']++;
+  }
+  // Rows a run passed while the autopilot wasn't on, and the owner hasn't decided since: once it is on, they publish
+  // like the rest (a few an hour).
+  $passed = array();
+  foreach (array('extras' => 'x', 'photos' => 'f') as $t => $p) foreach (q('SELECT t.*, c.user_id FROM ' . $t . " t JOIN claims c ON c.id = t.claim_id WHERE t.status = 'new' AND t.say = 'ok' AND t.hold = '' AND c.status = 'ok' ORDER BY t.id LIMIT 10")->fetchAll() as $row) $passed[] = array($p === 'f', $row);
+  if ($passed && ($mode === null ? content_mode() : $mode) === 'on') foreach ($passed as $x) { content_publish($x[0], $x[1]); $res['published']++; }
+  return $res;
+}
+// One decisions file. "ok" publishes only when the autopilot is on and the site's own checks agree (no rule in the text,
+// the consent ticked on a photo); otherwise the row waits for the owner with the reason. Gives how many rows it rated.
+function content_apply(array $doc, string $mode, array &$res): int {
+  $did = 0;
+  $items = isset($doc['items']) && is_array($doc['items']) ? array_slice($doc['items'], 0, 300) : array();
+  foreach ($items as $x) {
+    $id = is_array($x) && isset($x['item']) && is_string($x['item']) ? $x['item'] : '';
+    $dec = is_array($x) && isset($x['decision']) && is_string($x['decision']) ? $x['decision'] : '';
+    $rule = is_array($x) && isset($x['rule']) && is_string($x['rule']) && isset(CONTENT_RULES[$x['rule']]) ? $x['rule'] : '';
+    if (!preg_match('/^[xf][0-9]{1,9}$/', $id) || !in_array($dec, array('ok', 'hold'), true)) { $res['skipped']++; continue; }
+    $photo = $id[0] === 'f'; $n = (int) substr($id, 1); $table = $photo ? 'photos' : 'extras';
+    $row = row('SELECT t.*, c.user_id FROM ' . $table . " t JOIN claims c ON c.id = t.claim_id WHERE t.id = ? AND t.status = 'new' AND t.rated = 0 AND c.status = 'ok'", array($n));
+    if (!$row || (!$photo && !in_array($row['kind'], CONTENT_KINDS, true))) { $res['skipped']++; continue; }
+    $did++;
+    if ($dec === 'hold') { q('UPDATE ' . $table . " SET rated = ?, say = 'hold', hold = ? WHERE id = ?", array(now(), $rule !== '' ? $rule : 'other', $n)); $res['held']++; continue; }
+    $hold = '';
+    if ($photo) { if ($row['kind'] !== 'logo' && (int) $row['consent'] !== 1) $hold = 'no-consent'; }
+    else { $h = content_holds((string) $row['kind'], (string) $row['body'], (string) $row['listing'], listing_names(), mod_cfg(), mod_private()); if ($h) $hold = $h[0]; }
+    if ($hold !== '') { q('UPDATE ' . $table . " SET rated = ?, say = 'ok', hold = ? WHERE id = ?", array(now(), $hold, $n)); $res['held']++; continue; }
+    q('UPDATE ' . $table . " SET rated = ?, say = 'ok', hold = '' WHERE id = ?", array(now(), $n));
+    if ($mode !== 'on') { $res['waiting']++; continue; }   // shadow, off, or the switch unreadable: the owner decides, with the run's word beside it
+    content_publish($photo, $row);
+    $res['published']++;
+  }
+  return $did;
+}
+// Publishes a manager's words, offer, pin, photo or logo the way the review page's Publish button does, and tells the
+// manager who sent it, in the site's own words (editable at /edit/emails/).
+function content_publish(bool $photo, array $row): void {
+  global $CFG;
+  $id = (int) $row['id']; $key = (string) $row['listing'];
+  if ($photo) {
+    $kind = (string) $row['kind'] === 'logo' ? 'logo' : 'photo';
+    if ($kind === 'photo' && is_premium($key)) {   // a premium listing keeps its newest photos, up to PREMIUM_PHOTOS
+      $keep = q("SELECT id FROM photos WHERE listing = ? AND kind = 'photo' AND status = 'ok' AND id != ? ORDER BY id DESC", array($key, $id))->fetchAll(PDO::FETCH_COLUMN);
+      foreach (array_slice($keep, PREMIUM_PHOTOS - 1) as $old) { q("UPDATE photos SET status = 'declined', decided = ? WHERE id = ?", array(now(), (int) $old)); @unlink(photo_file((int) $old)); }
+    } else {
+      q("UPDATE photos SET status = 'declined', decided = ? WHERE listing = ? AND kind = ? AND status = 'ok' AND id != ?", array(now(), $key, $kind, $id));
+    }
+    q("UPDATE photos SET status = 'ok', decided = ? WHERE id = ?", array(now(), $id));
+    bump('photo_auto');
+  } else {
+    $kind = (string) $row['kind'];
+    q("DELETE FROM extras WHERE listing = ? AND kind = ? AND status = 'ok' AND id != ?", array($key, $kind, $id));   // the newer one takes its place
+    q("UPDATE extras SET status = 'ok', decided = ? WHERE id = ?", array(now(), $id));
+    bump('extra_auto');
+  }
+  $u = row('SELECT email, first FROM users WHERE id = ?', array((int) $row['user_id']));
+  if (!$u) return;
+  $l = listings();
+  /*EMAIL Something a manager added is on the listing (published by the autopilot)*/
+  $v = array('site' => $CFG['siteName'], 'name' => isset($l[$key]) ? (string) $l[$key]['n'] : $key, 'first' => (string) $u['first']);
+  $nouns = array('words' => t(__T("section in your own words"), $v), 'offer' => t(__T("offer line"), $v), 'pin' => t(__T("Kids’ Playground pin"), $v), 'photo' => t(__T("photo"), $v), 'logo' => t(__T("logo"), $v));
+  $v['what'] = isset($nouns[$kind]) ? $nouns[$kind] : $kind;
+  $head = t(__T("It’s on your listing"), $v);
+  $lines = array(t(__T("The {what} you sent for {name} passed the site’s checks and is on the listing now."), $v));
+  if (premium_mode() === 'preview') $lines[] = t(__T("For now only you can see it there, while premium listings are being tried out."), $v);
+  $button = t(__T("Change it or take it down"), $v); $url = $CFG['siteUrl'] . '/managers/';
+  $why = t(__T("You get this because you manage {name} on {site}."), $v);
+  $lines = array_values(array_filter($lines, function ($s) { return $s !== ''; }));
+  send_mail((string) $u['email'], t(__T("Your {what} for {name} is on {site}"), $v), implode("\n\n", $lines) . "\n\n" . $button . ': ' . $url . "\n\n" . $why, email_html($head, paras($lines), $button, $url, $why));
+}
+
 // ---------- the morning summary, and the pushes that can't wait (scaling plan, Phase 3) ----------
 // One email (and one notification on the site admins' own devices) each morning, on the first push_run at or after
 // 7:30: what was published yesterday, what is waiting on the Needs-you page, new accounts, the schools families asked
@@ -2525,10 +2684,10 @@ function owner_summary(string $today, string $clock, bool $force = false): array
   $sections[] = array(t(__T("Published yesterday"), $v), $lines);
 
   // Waiting for you.
-  $prs = ap_waiting($db, $mode); $held = needs_held($db);
+  $prs = ap_waiting($db, $mode); $held = needs_held($db, $mode);
   $waiting = needs_count($held, $prs);
   $parts = array();
-  foreach (array(array(count($prs), 'run pull request'), array(count($held['claims']), 'claim'), array(count($held['photos']), 'photo'), array(count($held['extras']), 'manager’s words or offer', 'managers’ words or offers'), array(count($held['premium']), 'premium sign-up'), array(count($held['queue']), 'item a run held', 'items a run held'), array(count($held['mail']), 'email from a person', 'emails from people')) as $x) if ($x[0]) $parts[] = sum_plural($x[0], $x[1], isset($x[2]) ? $x[2] : '');
+  foreach (array(array(count($prs), 'run pull request'), array(count($held['claims']), 'claim'), array(count($held['reviews']), 'review'), array(count($held['photos']), 'photo'), array(count($held['extras']), 'manager’s words or offer', 'managers’ words or offers'), array(count($held['premium']), 'premium sign-up'), array(count($held['queue']), 'item a run held', 'items a run held'), array(count($held['mail']), 'email from a person', 'emails from people')) as $x) if ($x[0]) $parts[] = sum_plural($x[0], $x[1], isset($x[2]) ? $x[2] : '');
   $lines = array();
   $lines[] = array($waiting ? t(__T("{n} things wait for your say: {list}."), $v + array('n' => $waiting, 'list' => implode(', ', $parts))) : t(__T("Nothing is waiting for you."), $v), $site . '/edit/needs/');
   if ($mode !== '') $lines[] = array(t(__T("The autopilot is {mode}."), $v + array('mode' => $mode)), '');
@@ -2791,7 +2950,7 @@ switch ($method . ' ' . $action) {
     $email = strtolower(str($in, 'email', 150));
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) fail('email', 'That email address doesn’t look right.');
     $next = str($in, 'next', 80);
-    if (!preg_match('~^(board|account|profile|join|summer|daysoff|calendar|todo|passport|kids|managers|directors|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80}|a:[a-z0-9-]{1,80})$~', $next)) $next = 'account';
+    if (!preg_match('~^(board|account|profile|join|summer|daysoff|calendar|todo|passport|kids|managers|directors|review|groups(\?g=[A-Za-z0-9]{6,24})?|[fv]:(p|c|s):[a-z0-9-]{1,80}|a:[a-z0-9-]{1,80})$~', $next)) $next = 'account';
     if (too_many('mail:' . h($email), 3, 900) || too_many('mail:' . h($email), 8, 86400) || too_many('ip:' . who(), 10, 900) || too_many('ip:' . who(), 40, 86400)) {
       fail('slow', 'That’s a lot of sign-in emails. Use the newest one, or wait 15 minutes and try again.', 429);
     }
@@ -3342,6 +3501,7 @@ switch ($method . ' ' . $action) {
     // The morning summary (once a day, from 7:30) and the look at the last publish (a failed one is pushed to the owner
     // at once) come after the digest. The tests ask for them by name, so other tests' calls never send one.
     if ($test && in_array(str($in, 'summary_mode', 10), array('on', 'off'), true)) $GLOBALS['PAS_SUMMARY'] = str($in, 'summary_mode', 10);
+    if ($test && in_array(str($in, 'test_fresh', 5), array('hold', 'wait'), true)) $GLOBALS['PAS_REVIEW_FRESH'] = str($in, 'test_fresh', 5);
     $nyNow = new DateTime('now', new DateTimeZone('America/New_York'));
     $off = $dry ? array() : array('queue' => queue_run($test && !empty($in['queue_force'])),
       'digest' => signup_digest($digestDay, (int) $nyNow->format('G'), $test && !empty($in['digest_force'])),
@@ -3358,6 +3518,176 @@ switch ($method . ' ' . $action) {
     else note('pushdry:' . who());
     $mgr = $dry ? 0 : array_sum(mgr_run($test && preg_match('/^\\d{4}-\\d{2}-\\d{2}$/', str($in, 'mgr_day', 10)) ? str($in, 'mgr_day', 10) : today_ny(), $test ? array_filter(array('fresh' => isset($in['mgr_fresh']) ? (int) $in['mgr_fresh'] : null, 'rv' => isset($in['mgr_rv']) && is_array($in['mgr_rv']) ? $in['mgr_rv'] : null, 'asks' => isset($in['mgr_asks']) && is_array($in['mgr_asks']) ? $in['mgr_asks'] : null), function ($v) { return $v !== null; }) : array()));
     out(array('ok' => true, 'ran' => !$dry, 'dry' => $dry, 'told' => $told, 'mgr' => $mgr) + $off + push_run($today, $dry));
+  }
+
+  // ----- reviews (scaling plan, Phase 6) -----
+  // A review from the form at /review/. The reviewer confirmed their address with the emailed code first, which signed
+  // them in (or they were signed in already): one review per account per listing. It is checked as it comes in
+  // (review_holds): one that passes goes to the private queue for the next run, one that doesn't waits for the owner on
+  // the Needs-you page and never leaves this host. Nothing is emailed, and the answer doesn't say which way it went.
+  case 'POST review_add': {
+    $u = need_user();
+    if ((string) getenv('PAS_TEST_PUSH') !== '' && in_array(str($in, 'test_fresh', 5), array('hold', 'wait'), true)) $GLOBALS['PAS_REVIEW_FRESH'] = str($in, 'test_fresh', 5);   // the tests only
+    $l = listings();
+    $key = 'p:' . str($in, 'program', 80);
+    if (!isset($l[$key]) || !empty($l[$key]['h'])) fail('program', 'Please choose the program from the list.');
+    $school = str($in, 'school', 40);
+    if (!in_array($school, schools(), true)) fail('school', 'Please choose your child’s school from the list.');
+    $stars = isset($in['stars']) && (is_int($in['stars']) || (is_string($in['stars']) && ctype_digit($in['stars']))) ? (int) $in['stars'] : 0;
+    if ($stars < 1 || $stars > 5) fail('stars', 'Please choose a rating from 1 to 5 stars.');
+    $comment = isset($in['comment']) && is_string($in['comment']) ? trim(preg_replace('/\s+/u', ' ', mb_substr(str_replace(chr(0), '', $in['comment']), 0, 1200, 'UTF-8')) ?? '') : '';
+    if (mb_strlen($comment, 'UTF-8') < 20) fail('comment', 'Please write a sentence or two so other families know what to expect.');
+    if (substr_count(strtolower($comment), 'http') > 1) fail('links', 'Reviews cannot include links. Please remove them and try again.');
+    $name = str($in, 'name', 40);
+    if ($name === '' || !preg_match('/^[\p{L}\p{M}][\p{L}\p{M} .\'’-]{0,39}$/u', $name)) fail('name', 'Please add your first name. It is shown with your review.');
+    if (empty($in['firsthand'])) fail('firsthand', 'Please confirm this is your own experience.');
+    $kid = null;   // in a child's words: the grade, and the first name only when the parent chose to show it
+    if (!empty($in['kid'])) {
+      $grade = str($in, 'kidgrade', 4);
+      if (!in_array($grade, isset($CFG['grades']) && is_array($CFG['grades']) ? $CFG['grades'] : array(), true)) fail('kidgrade', 'Please choose your child’s grade.');
+      $kid = array('grade' => $grade);
+      $kn = str($in, 'kidname', 20);
+      if (!empty($in['kidshow']) && $kn !== '' && preg_match('/^[\p{L}\p{M}][\p{L}\p{M} \'’.-]{0,19}$/u', $kn)) $kid['name'] = $kn;
+    }
+    $had = row('SELECT id, status, pr FROM reviews WHERE user_id = ? AND listing = ?', array($u['id'], $key));
+    // One review per account per listing. One not yet decided (and not yet in a run's pull request) can be sent again, which replaces it.
+    if ($had && !(in_array($had['status'], array('new', 'held'), true) && (int) $had['pr'] === 0)) fail('again', 'You’ve already reviewed this program. Write to us if you’d like your review changed.', 409);
+    if (too_many('review:' . $u['id'], 6, 86400) || too_many('rvip:' . who(), 60, 86400)) fail('slow', 'That’s a lot of reviews for one day. Try again tomorrow.', 429);
+    note('review:' . $u['id']); note('rvip:' . who());
+    $id = $had ? (string) $had['id'] : 'v' . bin2hex(random_bytes(5));
+    $sealedKid = $kid ? mail_seal(content_seal_key(secret()), (string) json_encode($kid, JSON_UNESCAPED_UNICODE)) : '';
+    $r = array('id' => $id, 'user_id' => (int) $u['id'], 'listing' => $key, 'school' => $school, 'stars' => $stars, 'comment' => $comment, 'name' => $name, 'kid' => $sealedKid, 'created' => now());
+    $holds = review_holds(db(), $r, $l, mod_cfg(), mod_private(), review_fresh_mode(), now());
+    $status = $holds ? 'held' : 'new';
+    if ($had) {
+      q("UPDATE reviews SET school = ?, stars = ?, comment = ?, name = ?, kid = ?, status = ?, hold = ?, created = ?, decided = 0 WHERE id = ?", array($school, $stars, $comment, $name, $sealedKid, $status, implode(',', $holds), now(), $id));
+      if ($status === 'new') q("UPDATE queue_items SET state = 'open', outcome = '', reason = '', told = 0 WHERE id = ? AND state = 'held'", array($id));   // a run held the first version: the new one goes back in the queue
+    }
+    else q('INSERT INTO reviews (id, user_id, listing, school, stars, comment, name, kid, status, hold, created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array($id, $u['id'], $key, $school, $stars, $comment, $name, $sealedKid, $status, implode(',', $holds), now()));
+    bump('review_sent'); if ($holds) bump('review_held');
+    out(array('ok' => true));
+  }
+
+  // The gate's question about a review in a run's pull request (scripts/gate.mjs): is this entry, by the sum of its
+  // values (review_sum), the one the reviewer sent, and does it still pass the site's checks? Yes or no only: never
+  // why, never who. The reasons are on the Needs-you page, behind the sign-in.
+  case 'GET review_check': {
+    $id = isset($_GET['id']) && is_string($_GET['id']) ? $_GET['id'] : '';
+    $sum = isset($_GET['sum']) && is_string($_GET['sum']) ? strtolower($_GET['sum']) : '';
+    if (too_many('rvcheck:' . who(), 240, 3600)) fail('slow', 'Too many questions. Try again in an hour.', 429);
+    note('rvcheck:' . who());
+    if (!preg_match(REVIEW_ID, $id) || !preg_match('/^[0-9a-f]{64}$/', $sum)) fail('bad', 'That request was not understood.');
+    $r = row('SELECT * FROM reviews WHERE id = ?', array($id));
+    if (!$r) out(array('ok' => true, 'known' => false, 'match' => false, 'clean' => false));
+    $match = hash_equals(review_sum(review_entry($r, content_seal_key(secret()))), $sum);
+    $clean = $match && in_array($r['status'], array('new', 'published'), true) && !review_holds(db(), $r, listings(), mod_cfg(), mod_private(), review_fresh_mode(), now());
+    out(array('ok' => true, 'known' => true, 'match' => $match, 'clean' => $clean));
+  }
+
+  // One waiting photo or logo, for a research run to look at (Phase 6): the queue carries a link signed with the host's
+  // key, which works for 24 to 30 hours. Nothing else shows a waiting photo to anyone not signed in as its manager.
+  case 'GET photo_look': {
+    $pid = isset($_GET['id']) && is_string($_GET['id']) && ctype_digit($_GET['id']) ? (int) $_GET['id'] : 0;
+    $exp = isset($_GET['e']) && is_string($_GET['e']) && ctype_digit($_GET['e']) ? (int) $_GET['e'] : 0;
+    $sig = isset($_GET['s']) && is_string($_GET['s']) ? $_GET['s'] : '';
+    if (too_many('look:' . who(), 300, 3600)) { http_response_code(429); exit; }
+    note('look:' . who());
+    $good = $pid > 0 && $exp > now() && $exp <= now() + 2 * 86400 && preg_match('/^[0-9a-f]{64}$/', $sig) === 1 && hash_equals(photo_look_sig(secret(), $pid, $exp), $sig);
+    $ph = $good ? row("SELECT id FROM photos WHERE id = ? AND status != 'declined'", array($pid)) : null;
+    $file = $ph ? photo_file($pid) : '';
+    if (!$ph || !is_file($file)) { http_response_code($good ? 404 : 403); exit; }
+    header('Content-Type: image/jpeg');
+    header('Cache-Control: private, no-store');
+    header('Content-Length: ' . filesize($file));
+    readfile($file);
+    exit;
+  }
+
+  // ----- claims by code (Phase 6, call 2; off until "claimByCode": true) -----
+  // A claimant whose address isn't at the listing's website (a Gmail address, or a domain many share) has a code sent to
+  // the address the listing's own website publishes (the listing's "email"). The claim waits, marked "code-sent", until
+  // the code is typed in: then it stands, "by code". Never typed, it waits for the owner on the Needs-you page.
+  case 'POST claim_code_start': {
+    $u = need_user();
+    if (!claim_code_on($in)) fail('off', 'Claiming with a code isn’t available yet.', 403);
+    if (!ready($u)) fail('name', 'Add your first and last name to your account first.');
+    $key = str($in, 'listing', 90);
+    $l = listings();
+    if (!isset($l[$key])) fail('listing', 'That listing isn’t on the site any more.', 404);
+    $to = isset($l[$key]['e']) && is_string($l[$key]['e']) ? strtolower($l[$key]['e']) : '';
+    if (!filter_var($to, FILTER_VALIDATE_EMAIL)) fail('no-email', 'This listing’s website doesn’t publish an email address we can send a code to. Ask us to check the claim instead.');
+    if (strtolower($u['email']) === $to) fail('same', 'You’re signed in with the listing’s own address: claim it with the ordinary button.');
+    $mine = row('SELECT id, status FROM claims WHERE user_id = ? AND listing = ?', array($u['id'], $key));
+    if ($mine && $mine['status'] === 'ok') out(array('ok' => true, 'status' => 'ok', 'claims' => my_claims($u['id'])));
+    if ($mine && $mine['status'] === 'declined') fail('declined', 'This claim was turned down. Write to us if that looks wrong.', 403);
+    if (too_many('ccode:' . $u['id'], 4, 86400) || too_many('ccode:' . $key, 6, 86400) || too_many('ccip:' . who(), 30, 86400)) fail('slow', 'That’s a lot of codes for one day. Use the newest one, or try again tomorrow.', 429);
+    if (!$mine) {
+      if ((int) val("SELECT COUNT(*) FROM claims WHERE user_id = ? AND status != 'declined'", array($u['id'])) >= MAX_CLAIMS) fail('limit', 'One account can claim up to ' . MAX_CLAIMS . ' listings. Write to us if you run more.');
+      if ((int) val("SELECT COUNT(*) FROM claims WHERE listing = ? AND status != 'declined'", array($key)) >= MAX_CLAIMANTS) fail('limit', 'This listing already has ' . MAX_CLAIMANTS . ' people on it. Ask a colleague to give up theirs, or write to us.');
+      q("INSERT INTO claims (user_id, listing, status, domain, created, decided, via) VALUES (?, ?, 'pending', ?, ?, 0, 'code-sent')", array($u['id'], $key, email_domain($u['email']), now()));
+      $cid = (int) db()->lastInsertId();
+      bump('claim_code');
+    } else { $cid = (int) $mine['id']; q("UPDATE claims SET via = 'code-sent' WHERE id = ?", array($cid)); }
+    note('ccode:' . $u['id']); note('ccode:' . $key); note('ccip:' . who());
+    $req = b64(random_bytes(18));
+    $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+    q('DELETE FROM logins WHERE next = ? AND used = 0', array('claim:' . $cid));   // only the newest code works
+    q('INSERT INTO logins (email, token_hash, req_hash, code_hash, next, expires) VALUES (?, ?, ?, ?, ?, ?)', array($to, h(b64(random_bytes(32))), h($req), h($req . ':' . $code), 'claim:' . $cid, now() + 24 * 3600));
+    $shown = substr($code, 0, 3) . ' ' . substr($code, 3);
+    /*EMAIL Code to claim a listing, sent to the address the listing’s website publishes*/
+    $v = array('site' => $CFG['siteName'], 'code' => $shown, 'name' => (string) $l[$key]['n'], 'who' => trim($u['first'] . ' ' . $u['last']), 'email' => (string) $u['email'], 'contact' => $CFG['from']);
+    $heading = t(__T("A code to manage {name} on {site}"), $v);
+    $asked = t(__T("{who} ({email}) asked to manage the listing for {name} on {site}, the free directory of after-school programs in Philadelphia. We sent this code here because this is the address your website lists."), $v);
+    $give = t(__T("If {who} works with you, give them this code. It works for 24 hours:"), $v);
+    $not = t(__T("If you don’t know them, ignore this email: nothing changes without the code. Questions: {contact}."), $v);
+    $text = $heading . "
+
+" . $asked . "
+
+" . $give . ' ' . $shown . "
+
+" . $not . "
+";
+    $html = email_html($heading, paras(array($asked, $give), 'margin:0 0 10px') . '<p style="margin:0;font-size:28px;font-weight:bold;letter-spacing:2px">' . $shown . '</p>', '', '', $not);
+    if (!send_mail($to, t(__T("Someone asked to manage {name} on {site}"), $v), $text, $html)) fail('mail', 'The code could not be sent. Please try again in a minute.', 502);
+    out(array('ok' => true, 'req' => $req, 'to' => mask_email($to), 'claims' => my_claims($u['id'])));
+  }
+
+  case 'POST claim_code_finish': {
+    $u = need_user();
+    if (!claim_code_on($in)) fail('off', 'Claiming with a code isn’t available yet.', 403);
+    $req = str($in, 'req', 60);
+    $code = preg_replace('/\D/', '', str($in, 'code', 12)) ?? '';
+    if (too_many('try:' . who(), 30, 900)) fail('slow', 'Too many tries. Wait 15 minutes, then ask for a new code.', 429);
+    $login = row('SELECT * FROM logins WHERE req_hash = ?', array(h($req)));
+    $c = $login && preg_match('/^claim:(\d+)$/', (string) $login['next'], $m) ? row('SELECT * FROM claims WHERE id = ? AND user_id = ?', array((int) $m[1], $u['id'])) : null;
+    if (!$login || !$c || $login['used'] || $login['expires'] < now()) fail('expired', 'That code has been used or has run out. Ask for a new one.', 410);
+    if ((int) $login['tries'] >= 5) fail('expired', 'Too many wrong codes. Ask for a new one.', 410);
+    if (!hash_equals($login['code_hash'], h($req . ':' . $code))) {
+      q('UPDATE logins SET tries = tries + 1 WHERE id = ?', array($login['id']));
+      note('try:' . who());
+      fail('code', 'That code isn’t right. Check the newest email to that address and try again.');
+    }
+    q('UPDATE logins SET used = 1 WHERE id = ?', array($login['id']));
+    $l = listings(); $key = (string) $c['listing']; $name = isset($l[$key]) ? (string) $l[$key]['n'] : $key;
+    if ($c['status'] === 'declined') fail('declined', 'This claim was turned down. Write to us if that looks wrong.', 403);
+    // Two accounts at different addresses on one listing: the code proves this one reads the listing's inbox, but the
+    // owner still says which stands.
+    $mine = email_domain($u['email']);
+    $others = q("SELECT u.email FROM claims c JOIN users u ON u.id = c.user_id WHERE c.listing = ? AND c.status = 'ok' AND c.user_id != ?", array($key, $u['id']))->fetchAll(PDO::FETCH_COLUMN);
+    $clash = false; foreach ($others as $o) if (email_domain((string) $o) !== $mine) $clash = true;
+    $who = $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>';
+    if ($clash) {
+      q("UPDATE claims SET via = 'code', status = 'pending' WHERE id = ?", array($c['id']));
+      tell_owner('A claim needs your yes: ' . $name, $who . ' typed the code sent to the address on “' . $name . '”’s website, but someone at another address already holds the listing, so it waits for you. Approve or decline it on the Needs-you page.', 'claims', 'needs-yes');
+      out(array('ok' => true, 'status' => 'pending', 'claims' => my_claims($u['id'])));
+    }
+    q("UPDATE claims SET status = 'ok', domain = 'by code', via = 'code', decided = ? WHERE id = ?", array(now(), $c['id']));
+    bump('claim_by_code');
+    if ((int) val('SELECT told FROM users WHERE id = ?', array($u['id'])) !== 2 && !(int) val("SELECT COUNT(*) FROM claims WHERE user_id = ? AND status = 'ok' AND id != ?", array($u['id'], $c['id'])))
+      signup_note((int) $u['id'], 'manager', $name, 'They typed the code sent to the address on the listing’s website, so the claim stands without you. You can take it away on the review page.', '');
+    else tell_owner('Listing claimed by code: ' . $name, $who . ' typed the code sent to the address on “' . $name . '”’s website, so the claim stands without you. You can take it away on the review page.');
+    out(array('ok' => true, 'status' => 'ok', 'claims' => my_claims($u['id'])));
   }
 
   // ----- the mailbox script (scaling plan, Phase 5). Each request is signed with the secret in
@@ -3515,6 +3845,14 @@ switch ($method . ' ' . $action) {
     if (too_many('extra:' . $u['id'], 12, 86400)) fail('slow', 'That’s a lot of changes for one day. Try again tomorrow.', 429);
     note('extra:' . $u['id']);
     q("DELETE FROM extras WHERE listing = ? AND kind = ? AND status IN ('new', 'declined')", array($key, $kind));   // a newer one replaces one still waiting
+    // Social links and Instagram posts are plain addresses on those sites, already checked by social_url() and post_url().
+    // With the autopilot on (Phase 6) they go on the listing at once; otherwise they wait for the owner, as before.
+    if (($kind === 'social' || $kind === 'posts') && content_mode() === 'on') {
+      q("DELETE FROM extras WHERE listing = ? AND kind = ? AND status = 'ok'", array($key, $kind));
+      q("INSERT INTO extras (claim_id, listing, kind, body, until, status, created, decided, rated, say) VALUES (?, ?, ?, ?, '', 'ok', ?, ?, ?, 'ok')", array($c['id'], $key, $kind, $body, now(), now(), now()));
+      bump('extra_auto');
+      out(array('ok' => true, 'live' => true, 'claims' => my_claims($u['id'])));
+    }
     q('INSERT INTO extras (claim_id, listing, kind, body, until, created) VALUES (?, ?, ?, ?, ?, ?)', array($c['id'], $key, $kind, $body, $until, now()));
     bump('extra_sent');
     $l = listings(); $name = isset($l[$key]) ? $l[$key]['n'] : $key;
@@ -3545,6 +3883,8 @@ switch ($method . ' ' . $action) {
     if (!$c) fail('claim', 'You can add a photo once your claim on this listing stands.', 403);
     if ($prem && $kind === 'photo' && (int) val("SELECT COUNT(*) FROM photos p JOIN claims c ON c.id = p.claim_id WHERE p.listing = ? AND p.kind = 'photo' AND p.status != 'declined' AND c.status = 'ok'", array($key)) >= PREMIUM_PHOTOS) fail('full', 'That’s the most photos one listing can have (' . PREMIUM_PHOTOS . '). Remove one first.');
     if (empty($in['permission'])) fail('permission', 'Tick the box to say you have the right to use this photo.');
+    // Phase 6: a photo can publish without the owner only when the manager has said everyone in it agreed (or their parent did).
+    if ($kind === 'photo' && empty($in['consent'])) fail('consent', 'Tick the box to say everyone shown, or their parent, has agreed to this photo being public.');
     $alt = str($in, 'alt', 160);
     if (mb_strlen($alt, 'UTF-8') < 8) fail('alt', 'Describe the photo in a few words, for people who can’t see it.');
     if (too_many('photo:' . $u['id'], $prem ? 20 : 6, 86400)) fail('slow', 'That’s a lot of photos for one day. Try again tomorrow.', 429);
@@ -3567,7 +3907,7 @@ switch ($method . ' ' . $action) {
       foreach (q("SELECT id FROM photos WHERE claim_id = ? AND kind = ? AND status = 'new'", array($c['id'], $kind)) as $old) @unlink(photo_file((int) $old['id']));
       q("DELETE FROM photos WHERE claim_id = ? AND kind = ? AND status = 'new'", array($c['id'], $kind));
     }
-    q('INSERT INTO photos (claim_id, listing, alt, kind, created) VALUES (?, ?, ?, ?, ?)', array($c['id'], $key, $alt, $kind, now()));
+    q('INSERT INTO photos (claim_id, listing, alt, kind, consent, created) VALUES (?, ?, ?, ?, ?, ?)', array($c['id'], $key, $alt, $kind, $kind === 'photo' && !empty($in['consent']) ? 1 : 0, now()));
     $id = (int) db()->lastInsertId();
     if (@file_put_contents(photo_file($id), $bin, LOCK_EX) === false) { q('DELETE FROM photos WHERE id = ?', array($id)); fail('storage', 'The photo could not be saved. Please try again.', 503); }
     @chmod(photo_file($id), 0600);
@@ -3618,8 +3958,28 @@ switch ($method . ' ' . $action) {
     $want = (string) $l[$key]['d'];
     $have = email_domain($u['email']);
     if ($want === '' || $have === '' || !hash_equals($want, $have)) {
-      bump('claim_mismatch');
-      fail('domain', 'This listing’s website is at ' . ($want === '' ? 'an address we can’t check' : $want) . ', and you’re signed in with an address at ' . $have . '. To claim it, sign in with an email address at ' . ($want === '' ? 'its website' : $want) . '.', 403);
+      $said = 'This listing’s website is at ' . ($want === '' ? 'an address we can’t check' : $want) . ', and you’re signed in with an address at ' . $have . '. To claim it, sign in with an email address at ' . ($want === '' ? 'its website' : $want) . '.';
+      if (!claim_code_on($in)) { bump('claim_mismatch'); fail('domain', $said, 403); }
+      // Claims by code are on (Phase 6): offer the code, sent to the address the listing's website publishes, or, with
+      // none (or by choice, with "ask"), a claim that waits for the owner on the Needs-you page.
+      $had = row('SELECT id, status FROM claims WHERE user_id = ? AND listing = ?', array($u['id'], $key));
+      if ($had && $had['status'] === 'declined') fail('declined', 'This claim was turned down. Write to us if that looks wrong.', 403);
+      if ($had && $had['status'] === 'ok') out(array('ok' => true, 'status' => 'ok', 'claims' => my_claims($u['id'])));
+      $pub = isset($l[$key]['e']) && is_string($l[$key]['e']) && filter_var($l[$key]['e'], FILTER_VALIDATE_EMAIL) ? (string) $l[$key]['e'] : '';
+      if (empty($in['ask'])) {
+        bump('claim_mismatch');
+        out(array('ok' => false, 'error' => 'domain', 'message' => $pub !== '' ? 'This listing’s website is at ' . ($want === '' ? 'an address we can’t check' : $want) . ', and you’re signed in at ' . $have . '. We can send a code to the address its website lists (' . mask_email($pub) . ') instead, or a person can check your claim.' : $said . ' Or a person can check your claim.', 'code' => $pub !== '' ? mask_email($pub) : '', 'ask' => true), 403);
+      }
+      if (!$had) {
+        if (too_many('claim:' . $u['id'], 8, 86400)) fail('slow', 'That’s a lot of claims for one day. Try again tomorrow.', 429);
+        if ((int) val("SELECT COUNT(*) FROM claims WHERE user_id = ? AND status != 'declined'", array($u['id'])) >= MAX_CLAIMS) fail('limit', 'One account can claim up to ' . MAX_CLAIMS . ' listings. Write to us if you run more.');
+        if ((int) val("SELECT COUNT(*) FROM claims WHERE listing = ? AND status != 'declined'", array($key)) >= MAX_CLAIMANTS) fail('limit', 'This listing already has ' . MAX_CLAIMANTS . ' people on it. Ask a colleague to give up theirs, or write to us.');
+        note('claim:' . $u['id']);
+        q("INSERT INTO claims (user_id, listing, status, domain, created, decided, via) VALUES (?, ?, 'pending', ?, ?, 0, 'asked')", array($u['id'], $key, $have, now()));
+        bump('claim_pending');
+      } elseif ($had['status'] === 'pending') q("UPDATE claims SET via = 'asked' WHERE id = ?", array($had['id']));
+      tell_owner('A claim needs your yes: ' . $l[$key]['n'], $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '> asked to claim “' . $l[$key]['n'] . '” from an address at ' . $have . ', which isn’t its website’s, and asked a person to check. Approve or decline it on the Needs-you page.', 'claims', 'needs-yes');
+      out(array('ok' => true, 'status' => 'pending', 'claims' => my_claims($u['id'])));
     }
     $mine = row('SELECT id, status FROM claims WHERE user_id = ? AND listing = ?', array($u['id'], $key));
     if ($mine && $mine['status'] !== 'declined') out(array('ok' => true, 'status' => $mine['status'], 'claims' => my_claims($u['id'])));
