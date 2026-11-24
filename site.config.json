@@ -35,7 +35,7 @@
   "termsLive": true,
   "termsOperator": "Schools Out Now What LLC",
   "termsUpdated": "2026-11-12",
-  "reviewPolicyLive": false,
+  "reviewPolicyLive": true,
   "alerts": {
     "klaviyoKey": "RJsBTu",
     "listId": "QQ848w",
@@ -54,7 +54,7 @@
     "premiumPrice": { "month": 19, "year": 190, "laterMonth": 29, "laterYear": 290 },
     "premiumPay": { "month": "https://buy.stripe.com/3cI9AU86abMme10cEW9R600", "year": "https://buy.stripe.com/7sY7sM4TYaIi3mm6gy9R601" },
     "klaviyoList": "Wib7TV",
-    "claimByCode": false,
+    "claimByCode": true,
     "reviewNewAccount": "hold",
     "googleClientId": "420915102949-7gfu5o00gn6oionaijid2jak6om38rda.apps.googleusercontent.com"
   }

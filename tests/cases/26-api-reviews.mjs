@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { test, ok, eq, includes, excludes, matches, someone, codeIn } from '../lib/harness.mjs';
-import { programs, schools } from '../lib/data.mjs';
+import { programs, schools, config } from '../lib/data.mjs';
 
 const PREMIUM = 'p:test-listing-premium';   // a hidden test listing at phillyafterschool.org (data/test-listings.json)
 const fakeKey = () => ['github', 'pat', 'r'.repeat(48)].join('_');   // key-shaped, made here: nothing in the repository looks like a token
@@ -78,11 +78,18 @@ test('a review: sent from the page by a signed-in account, checked as it comes i
   const nojs = await fetch(`${site.base}/review/send.php`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: form({ program: program().id, school: schools()[0].id, stars: '5', comment: review().comment, name: 'Pat', email: 'pat@example.test', firsthand: 'yes' }), redirect: 'manual' });
   eq(nojs.status, 400); includes(await nojs.text(), 'JavaScript');
   eq(mail.messages.length, 0);
-  // The page: the code step is there, and the policy page is a draft nobody is pointed to.
+  // The page: the code step is there. The policy page follows "reviewPolicyLive": a draft nobody is pointed to, or
+  // linked from the form's house rules and listed for search engines.
   const page = site.read('review/index.html');
-  includes(page, 'id="rv-code"'); includes(page, 'data-thanks='); excludes(page, 'review-policy/');
+  includes(page, 'id="rv-code"'); includes(page, 'data-thanks=');
   const policy = site.read('review-policy/index.html');
-  includes(policy, 'Draft for review'); includes(policy, 'noindex'); excludes(site.read('sitemap.xml'), 'review-policy');
+  if (config().reviewPolicyLive === true) {
+    includes(page, 'review-policy/');
+    excludes(policy, 'Draft for review'); excludes(policy, 'noindex'); includes(site.read('sitemap.xml'), 'review-policy');
+  } else {
+    excludes(page, 'review-policy/');
+    includes(policy, 'Draft for review'); includes(policy, 'noindex'); excludes(site.read('sitemap.xml'), 'review-policy');
+  }
 });
 
 test('the site holds a review that has a link, an accusation, a name or strong words, one from the program’s own address, and one from a brand-new account; held ones never reach the queue', async (ctx) => {
@@ -288,8 +295,8 @@ test('claims by code: off until it’s switched on; then a code goes to the list
   ok(p, 'a program whose website publishes an email address');
   const key = 'p:' + p.id;
   const pat = ctx.api().as(`pat${t}@example.test`, 'Pat', 'Lee');
-  await pat.fails('POST', 'claim_add', { listing: key }, 'domain');   // off: as before
-  await pat.fails('POST', 'claim_code_start', { listing: key }, 'off');
+  await pat.fails('POST', 'claim_add', { listing: key }, 'domain');   // a mismatched address is never a claim by itself
+  if (!(config().groups || {}).claimByCode) await pat.fails('POST', 'claim_code_start', { listing: key }, 'off');   // off: as before
   const offer = await pat.fails('POST', 'claim_add', { listing: key, ...ON }, 'domain');
   eq(offer.ask, true); matches(offer.code, /^.{1,2}…@/); includes(offer.message, offer.code);
   mail.clear();
