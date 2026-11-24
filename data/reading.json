@@ -274,5 +274,17 @@
     "how": "person",
     "why": "Its robots.txt (a Squarespace site) closes the whole site to ClaudeBot, anthropic-ai and other AI crawlers, so a person has to read its after-school and spring break pages.",
     "seen": "2026-11-23"
+  },
+  {
+    "match": "cybabasketball.org",
+    "how": "browser",
+    "why": "The pages are built in the browser: a plain fetch on 2026-11-24 returned none of the program text.",
+    "seen": "2026-11-24"
+  },
+  {
+    "match": "launchphilly.org",
+    "how": "person",
+    "why": "A plain fetch answered HTTP 403 on 2026-11-24.",
+    "seen": "2026-11-24"
   }
 ]

@@ -4370,7 +4370,7 @@
       "as-jenks": {
         "relation": "pickup",
         "distance": "about two-thirds of a mile southwest of Bok",
-        "note": "Beehive’s 2026–27 list for Bok names “Jenks”, Monday to Friday, for pre-K to 3rd grade. Every other school on that list is in South Philadelphia, so this is read as A.S. Jenks; ask Beehive to confirm.",
+        "note": "Beehive’s list for Bok names “Jenks”, Monday to Friday, for pre-K to 3rd grade. Every other school on that list is in South Philadelphia, so this is read as A.S. Jenks; ask Beehive to confirm.",
         "sources": [
           {
             "label": "Beehive After Care",
@@ -22876,7 +22876,7 @@
     "website": "https://www.northlightcommunitycenter.org/kidzone/",
     "register": {
       "how": "online",
-      "url": "https://docs.google.com/forms/d/e/1FAIpQLSdRqYrSjNH_fN1lxLXu8SWer0ZgPzrX01GGbXdhbDZ0kjm13Q/viewform",
+      "url": "https://docs.google.com/forms/d/e/1FAIpQLSdRqYrSjNH_fN1lxLXu8SWer0ZgPzrX01GGbXdhbDZ0kjm13Q/viewform?usp=header",
       "label": "Register",
       "note": "North Light’s page links this form. KidZone runs September 8, 2026 to June 9, 2027."
     },
@@ -23080,7 +23080,7 @@
       "how": "online",
       "url": "https://roxboroughchurch.breezechms.com/form/dbd378",
       "label": "Register",
-      "note": "The church’s page says 2026–27 registration is open."
+      "note": "The church’s page says Roxy aftercare registration is open."
     },
     "note": "Roxborough Church’s page describes snacks, homework help, games, Bible lessons and monthly electives. It doesn’t give hours, so ask how late children can stay.",
     "sources": [
@@ -23286,8 +23286,8 @@
     "pickupBy": "6:00 pm",
     "cost": "Not published. The YMCA registers families for a package covering the whole year of care and any registration fees.",
     "price": "paid",
-    "phone": "215-220-9199",
-    "email": "gpychildcare@philaymca.org",
+    "phone": "",
+    "email": "",
     "website": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
     "register": {
       "how": "online",
@@ -23609,6 +23609,180 @@
         "tags": [
           "clubs"
         ]
+      }
+    ]
+  },
+  {
+    "id": "launch-philly-dick",
+    "name": "Launch Philly Creative Kids at William Dick",
+    "what": "Free after-school program inside William Dick from Launch Philly’s Creative Kids, for kindergarten to 8th grade, with meals",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "meals",
+      "Launch Philly",
+      "Creative Kids",
+      "Launch of Philadelphia",
+      "OST",
+      "William Dick",
+      "Strawberry Mansion"
+    ],
+    "address": "2498 W Diamond St",
+    "grades": "K-8",
+    "gradeNote": "The City’s locator lists kindergarten to 8th grade",
+    "hours": "3:30 to 6:00 pm, Monday to Friday, September 8, 2026 to June 9, 2027, according to the City’s program locator.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free, with meals, according to the City’s program locator.",
+    "price": "free",
+    "phone": "267-278-8799",
+    "email": "",
+    "website": "https://launchphilly.org/",
+    "register": {
+      "how": "phone",
+      "note": "The City’s locator says registration is required and lists registration from August 11, 2026 to August 17, 2027. Call Launch Philly at 267-278-8799."
+    },
+    "note": "The City’s locator lists the program at William Dick by grade group, with no transportation and meals provided. Launch Philly’s own site couldn’t be read automatically, so ask the program about activities and how to apply.",
+    "sources": [
+      {
+        "label": "City program locator: Launch Philly at William Dick",
+        "url": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48"
+      },
+      {
+        "label": "William Dick School",
+        "url": "https://wdick.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-24",
+    "schools": {
+      "dick": {
+        "relation": "onsite",
+        "note": "The school’s own site names Launch Philly/Creative Kids as its after-school program for K–8 students, and the City’s locator lists it at the school this school year.",
+        "sources": [
+          {
+            "label": "William Dick School",
+            "url": "https://wdick.philasd.org/"
+          },
+          {
+            "label": "City program locator: Launch Philly at William Dick",
+            "url": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48"
+          }
+        ],
+        "checked": "2026-11-24"
+      }
+    }
+  },
+  {
+    "id": "cyba-basketball",
+    "name": "CYBA Free After School Sports Program",
+    "what": "Free after-school basketball training, scrimmages and character development from the Christian Youth Basketball Association, for ages 8 to 17",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "basketball",
+      "sports",
+      "after school",
+      "free",
+      "CYBA",
+      "Christian Youth Basketball Association",
+      "character development",
+      "William Dick"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ages 8 to 17",
+    "hours": "Not published; ask CYBA",
+    "cost": "Free, according to CYBA’s page.",
+    "price": "free",
+    "phone": "215-915-4243",
+    "email": "",
+    "website": "https://cybabasketball.org/",
+    "register": {
+      "how": "online",
+      "url": "https://cybabasketball.org/reg",
+      "label": "Register",
+      "note": "CYBA’s page says to register online and select your location."
+    },
+    "note": "CYBA’s page lists William Dick, Edmonds, Lamberton and McCloskey public schools as its after-school locations, without days or times. It is a faith-based program: CYBA says it uses the Bible for its character development. Ask which days it meets at each school.",
+    "sources": [
+      {
+        "label": "CYBA: After School Sports Program",
+        "url": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program"
+      }
+    ],
+    "lastVerified": "2026-11-24",
+    "schools": {
+      "dick": {
+        "relation": "onsite",
+        "note": "CYBA’s own page lists William Dick Public School as a location for its free after-school program. It doesn’t give days or times.",
+        "sources": [
+          {
+            "label": "CYBA: After School Sports Program",
+            "url": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program"
+          }
+        ],
+        "checked": "2026-11-24"
+      }
+    }
+  },
+  {
+    "id": "dick-partners",
+    "name": "School partners",
+    "what": "Partners William Dick names on its own site besides its after-school program: the Wagner Free Institute",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "partners",
+      "Wagner",
+      "science",
+      "William Dick"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-7340",
+    "email": "",
+    "website": "https://wdick.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-7340)."
+    },
+    "note": "William Dick’s own site names the Wagner Institute under community partnerships, without saying what it runs or when. Ask the office.",
+    "sources": [
+      {
+        "label": "William Dick School",
+        "url": "https://wdick.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-24",
+    "schools": {
+      "dick": {
+        "relation": "onsite",
+        "checked": "2026-11-24"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Wagner Institute",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [
+          "stem"
+        ],
+        "roster": false
       }
     ]
   }
