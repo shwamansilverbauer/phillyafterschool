@@ -430,7 +430,7 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
   </div><?php } ?>
 
   <h2>Photos waiting for you (<?php echo count($photosNew); ?>)</h2>
-  <?php if (!$photosNew) { ?><p class="hint">None waiting. A photo shows on a listing only after you publish it here.</p><?php } ?>
+  <?php if (!$photosNew) { ?><p class="hint">None waiting. A photo shows on a listing only once it’s published: here, or by the autopilot when it’s on and a run has passed it.</p><?php } ?>
   <?php foreach ($photosNew as $x) { ?><div class="panel">
     <h3><?php echo htmlspecialchars($name($x["listing"]), ENT_QUOTES, 'UTF-8'); ?><?php if (isset($x["kind"]) && $x["kind"] === 'logo') { ?> <span class="hint">Logo</span><?php } ?></h3>
     <p class="hint">From <?php echo htmlspecialchars($x["first"] . " " . $x["last"], ENT_QUOTES, 'UTF-8'); ?> &lt;<?php echo htmlspecialchars($x["email"], ENT_QUOTES, 'UTF-8'); ?>&gt;, <?php echo htmlspecialchars($day($x["created"]), ENT_QUOTES, 'UTF-8'); ?>. They ticked that they have the right to use it and permission from the families of any children shown.</p>
@@ -442,7 +442,7 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
   <div class="review-grid"><?php foreach ($photosLive as $x) { ?><div class="panel"><p><img class="review-photo" src="./?photo=<?php echo (int) $x["id"]; ?>" alt=""></p><p><b><?php echo htmlspecialchars($name($x["listing"]), ENT_QUOTES, 'UTF-8'); ?></b><br><span class="hint"><?php echo htmlspecialchars($x["alt"], ENT_QUOTES, 'UTF-8'); ?></span></p><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $x["id"]; ?>"><button class="btn" type="submit" name="do" value="photo_no">Take it down</button></form></div><?php } ?></div><?php } ?>
 
   <h2>Words, offer lines, pins and social links waiting for you (<?php echo count($extrasNew); ?>)</h2>
-  <?php if (!$extrasNew) { ?><p class="hint">None waiting. What a manager writes for a premium listing, its Kids’ Playground pin, its social links and its Instagram posts show only after you publish them here.</p><?php } ?>
+  <?php if (!$extrasNew) { ?><p class="hint">None waiting. What a manager writes for a premium listing, its Kids’ Playground pin, its social links and its Instagram posts show only once they’re published: here, or by the autopilot when it’s on (a run passes the words, offers and pins; links and posts go on at once).</p><?php } ?>
   <?php foreach ($extrasNew as $x) { ?><div class="panel">
     <h3><?php echo htmlspecialchars($name($x["listing"]), ENT_QUOTES, 'UTF-8'); ?> <span class="hint"><?php echo $kindName($x["kind"], true); ?></span></h3>
     <p class="hint">From <?php echo htmlspecialchars($x["first"] . " " . $x["last"], ENT_QUOTES, 'UTF-8'); ?> &lt;<?php echo htmlspecialchars($x["email"], ENT_QUOTES, 'UTF-8'); ?>&gt;, <?php echo htmlspecialchars($day($x["created"]), ENT_QUOTES, 'UTF-8'); ?><?php if ($x["kind"] === 'offer') { ?>. To show until <?php echo htmlspecialchars($x["until"], ENT_QUOTES, 'UTF-8'); ?><?php } ?></p>
@@ -567,7 +567,7 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
   <p class="hint"><span data-copy="632056cf5c">It’s this same site, kept like an app: free, nothing from an app store, and it opens right to your plans.</span></p>
   <button type="button" class="btn primary" data-dialog-close><span data-copy="5b8027fa0e">Got it</span></button>
 </div></dialog>
-<script src="../../assets/site.js?v=9a92b1a9" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
+<script src="../../assets/site.js?v=0bde3a78" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
 
 </body>
 </html>

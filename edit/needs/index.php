@@ -1,7 +1,9 @@
 <?php
 // The Needs-you page (scaling plan, Phase 3): everything waiting for the owner, on one page built for a phone. Run pull
 // requests the gate held (and, while the autopilot isn't on, every open one) with Approve, Decline and Open on GitHub;
-// claims, photos, words and offers and premium sign-ups, with the buttons /edit/claims/ has; items a run held, with
+// reviews the site's checks or a run held (Phase 6), with Publish (one commit to data/reviews.json) and Decline;
+// claims, photos, words and offers and premium sign-ups, with the buttons /edit/claims/ has and what a run said about
+// each; items a run held, with
 // /edit/queue/'s; mail from people the hold list kept (Phase 5), opened, with a draft reply to edit and Send; the
 // shadow report while the autopilot is in shadow; ten of the week's autopilot changes to spot-check; and the switch.
 // Generated into edit/needs/index.php by build.mjs, which fills in the marked lines (the config, the sign-in check, the
@@ -19,6 +21,7 @@ $SITE_URL = "https://phillyafterschool.org";
 $REPO = "shwamansilverbauer/phillyafterschool";
 $AP = json_decode('{"branches":["queue-","new-schools-","weekly-","monthly-check-"],"authors":["shwamansilverbauer"],"allow":["data/programs.json","data/schools.json","data/camps.json","data/geo.json","data/reading.json","data/news.json","data/school-dates.json","data/reviews.json"],"evidenceDir":"evidence/"}', true);
 $LABELS = json_decode('{"p:test-listing-premium":"Test Listing (Premium)","p:test-listing-free":"Test Listing (Free)","p:imagine-that-philly":"Imagine That Philly","p:nebinger-clubs":"School clubs and teams at Nebinger","p:girls-on-the-run":"Girls on the Run","p:soccer-shots-bache-martin":"Soccer Shots at Bache-Martin","p:fairmount-mountain-bike-team":"Fairmount Mountain Bike Team at Bache-Martin","p:beat-the-streets-wrestling":"Beat the Streets wrestling (middle school)","p:philadelphia-city-rowing":"Philadelphia City Rowing (middle school)","p:nebinger-arts-partners":"Arts partners and Science Olympiad at Nebinger","p:meredith-clubs":"Meredith after-school clubs","p:coppin-clubs":"School clubs and ensembles at Coppin","p:zhang-sah":"Zhang Sah","p:zhang-sah-mt-airy":"Zhang Sah (Mt. Airy)","p:jordan-family-learning-center":"Jordan Family Learning Center","p:shot-tower-rec":"Shot Tower Recreation Center","p:chew-playground":"Chew Playground","p:wharton-square-playground":"Wharton Square Playground","p:disilvestro-playground":"DiSilvestro Playground","p:francisville-rec":"Francisville Playground & Rec Center","p:clemente-playground":"Clemente Playground","p:rumph-rec":"Rumph Recreation Center","p:mount-airy-playground":"Mount Airy Playground","p:marian-anderson-rec":"Marian Anderson Recreation Center","p:capitolo-playground":"Capitolo Playground","p:markward-playground":"Markward Playground","p:philly-inmovement":"Philly InMovement: MOVE After School","p:settlement-kaleidoscope-plus":"Settlement Music School: Kaleidoscope Plus","p:philly-art-center-qv":"Philly Art Center, Queen Village","p:old-pine":"The NeighborHub","p:parent-infant-center":"Parent Infant Center After School Center","p:butchers-sew-shop":"Butcher’s Sew Shop Junior","p:mister-johns-music":"Mister John’s Music","p:music-theatre-philly":"Music Theatre Philly","p:arden-drama-school":"Arden Drama School","p:walnut-street-theatre-school":"Walnut Street Theatre School","p:coco-academy":"CoCo Academy","p:queen-and-rook":"Queen & Rook Game Cafe","p:everland-homework-club":"Homework Club at Everland","p:beehive-at-bok":"Beehive at Bok","p:dandelion-after-school":"Dandelion After School","p:code-ninjas-south-philly":"Code Ninjas (South Philly)","p:brilliant-minds":"Brilliant Minds","p:early-childhood-environment":"Early Childhood Environment","p:principal-academy":"Principal Academy","p:little-shepherds":"Little Shepherds Christian Learning Center","p:movemakers":"MoveMakers Philly","p:kids-on-12th":"Kids on 12th","p:columbus-square-rec":"Columbus Square Recreation Center","p:hawthorne-cultural-center":"Hawthorne Cultural Center","p:starr-garden-rec":"Starr Garden Recreation Center","p:palumbo-rec":"Palumbo Recreation Center","p:mighty-writers-el-futuro":"Mighty Writers El Futuro","p:free-library-leap":"Free Library LEAP","p:fleisher-art-memorial":"Fleisher Art Memorial","p:makom-community":"Makom Community","p:vare-washington-edey":"Extended Day, Extended Year at Vare-Washington","p:childs-edey":"Extended Day, Extended Year at Childs","p:vare-washington-clubs":"School clubs and teams at Vare-Washington","p:sunrise-mccall":"Sunrise of Philadelphia at McCall","p:sunrise-stanton":"Sunrise of Philadelphia at Stanton","p:mccall-clubs":"McCall clubs and teams","p:sawubona-creativity-project":"Sawubona Creativity Project","p:playarts-day-camps":"PlayArts day camps","p:philly-rock-gym-day-camps":"Philadelphia Rock Gym","p:skate-the-foundry":"Skate The Foundry","p:pafa-saturday-art":"PAFA Saturday Studio Art","p:moore-young-artists-workshop":"Moore Young Artists Workshop","p:philadelphia-museum-of-art-kids":"Philadelphia Museum of Art: Art Kids Classes","p:made-institute-sunday-sewing":"MADE Institute: Sunday Sewing","p:rock-school-for-dance":"The Rock School for Dance Education","p:koresh-school-of-dance":"Koresh School of Dance","p:school-of-philadelphia-ballet":"School of Philadelphia Ballet","p:zazz-dance":"ZAZZ","p:ics-21st-century":"21st Century Community Learning Center at ICS at Independence Charter","p:beacon-center":"Beacon Center for Children: After-School Program","p:evolve-dance":"Evolve Dance","p:martial-posture":"Martial Posture After School","p:yous-fitfulness":"Yous “Fitfulness” After-School","p:temple-music-prep-cmsp":"Temple Music Prep: Community Music Scholars","p:wissahickon-skating-club":"Wissahickon Skating Club","p:penn-ice-rink":"Penn Ice Rink","p:starfinder-saturday-soccer":"Starfinder: Saturday soccer","p:franklin-institute-pacts":"The Franklin Institute: PACTS","p:macguffin-theatre":"MacGuffin Theatre & Film Company","p:philadelphia-dance-academy":"The Philadelphia Dance Academy","p:sunrise-kirkbride":"Sunrise of Philadelphia at Kirkbride","p:kirkbride-clubs":"Kirkbride clubs and teams","p:sunrise-southwark":"Sunrise of Philadelphia at Southwark","p:southwark-clubs":"Southwark clubs and teams","p:stanton-clubs":"School clubs and teams at Stanton","p:marian-anderson-clubs":"School clubs and teams at Marian Anderson","p:childs-clubs":"School clubs and teams at Childs","p:bache-martin-clubs":"School clubs and teams at Bache-Martin","p:greenfield-clubs":"School clubs and teams at Greenfield","p:east-passyunk-rec":"East Passyunk Community Center","p:philadelphia-martial-arts-academy":"Philadelphia Martial Arts Academy","p:fitness-alive-south-philly":"Fitness Alive: swim lessons in South Philly","p:christian-street-ymca":"Christian Street YMCA","p:hudson-table-philadelphia":"Hudson Table","p:rizzo-rink":"Rizzo Rink","p:flips-4-kidz":"Flips 4 Kidz","p:equilibrium-dance-academy":"Equilibrium Dance Academy","p:blue-chip-flag-south-philadelphia":"Blue Chip Flag football, South Philadelphia","p:kumon-south-philadelphia":"Kumon Math & Reading Center of South Philadelphia","p:pennsport-school-of-dance":"Pennsport School of Dance","p:philly-pack":"Philly PACK","p:magic-gardens-family-jams":"Philadelphia’s Magic Gardens: Family Jams","p:phield-house":"Phield House","p:philadelphia-school-of-circus-arts":"Philadelphia School of Circus Arts","p:schuylkill-center":"The Schuylkill Center for Environmental Education","p:flipout-productions":"FlipOut Productions","p:elite-sports-factory":"Elite Sports Factory","p:movement-callowhill":"Movement Callowhill","p:the-philadelphia-school":"Camp TPS at The Philadelphia School","p:nlarts":"NLArts","p:philadelphia-youth-basketball":"Philadelphia Youth Basketball","p:awbury-arboretum":"Awbury Arboretum","p:skilladelphia":"Skilladelphia","p:philly-art-center-mt-airy":"Philly Art Center, Mt. Airy","p:philly-art-center-fairmount":"Philly Art Center (Fairmount)","p:uykq-after-care":"Urban Youth King & Queens (UYKQ) After-School","p:byers-after-school":"Russell Byers Charter School: After School Program","p:cpa-robert-morris":"Caring People Alliance at Robert Morris","p:morris-clubs":"School clubs at Robert Morris","p:water-tower-rec":"Water Tower Recreation Center","p:mastermindz-thomas":"Mastermindz Aftercare at Mastery Thomas","p:safehaven-thomas":"SafeHaven Aftercare at Mastery Thomas","p:bgc-emlen":"Boys & Girls Club at Emlen","p:emlen-clubs":"School clubs at Emlen","p:legacy-champions-on-the-rise":"LEGACY Champions on the Rise at Wright","p:sbnp-wright":"Shoot Basketballs NOT People: After School at Wright","p:zhang-sah-school-based":"Zhang Sah School-Based Programs","p:iac-edmonds":"Indochinese American Council (IAC) Afterschool at Edmonds","p:ymwic-edmonds":"Young Men and Women In Charge (YMWIC) at Edmonds","p:mander-playground":"Mander Playground","p:gathers-rec":"Gathers Recreation Center","p:happy-hollow-playground":"Happy Hollow Playground","p:ela-willard":"Early Life Academy at Willard","p:wes-willard":"WES Health: WLCAS at Willard","p:uacs-lea":"UACS After-School Program at Lea","p:safe-haven-rhoads":"Safe Haven IV at Rhoads","p:rebel-tumblers-rhoads":"Rebel Arts Movement: Rebel Tumblers at Rhoads","p:ymca-juniata-park":"YMCA OST School Program at Juniata Park","p:asas-juniata-park":"After-School All-Stars at Juniata Park","p:bgc-greenberg":"Boys & Girls Club at Greenberg","p:philly-kidz-greenberg":"Philly KiDZ Initiative at Greenberg","p:pennypack-environmental-center":"Pennypack Environmental Center: Afterschool Adventures","p:gpca-fell":"GPCA Out of School Time at Fell","p:ace-locke":"Community Council ACE Program at Locke","p:ela-richmond":"Early Life Academy at Richmond","p:bgc-stephen-girard":"Boys & Girls Club at Stephen Girard","p:bgc-mifflin":"Boys & Girls Club at Mifflin","p:cpa-south-bgc":"Caring People Alliance: South Philadelphia Boys & Girls Club","p:lee-cultural-center":"Lee Cultural Center","p:cohocksink-rec":"Cohocksink Recreation Center","p:ymca-dunbar":"YMCA Out of School Time at Dunbar","p:catholic-charities-cayuga":"Catholic Charities OST at Cayuga","p:bgc-bayard-taylor":"Boys & Girls Club at Bayard Taylor","p:xiente-moffet":"Xiente After Care at Moffet","p:al-bustan-moffet":"Al-Bustan Drumming at Moffet","p:philly-kidz-anne-frank":"Philly KiDZ Initiative at Anne Frank","p:dendy-rec":"Dendy Recreation Center","p:hunting-park-rec":"Hunting Park Recreation Area","p:towey-playground":"Towey Playground","p:ymca-kelley":"YMCA Out of School Time at Kelley","p:ymca-gideon":"YMCA Out of School Time at Gideon","p:ymca-blaine":"YMCA Out of School Time at Blaine","p:ymca-hopkinson":"YMCA Out of School Time at Hopkinson","p:kelley-clubs":"School clubs and teams at Kelley","p:gideon-clubs":"School clubs and teams at Gideon","p:blaine-clubs":"School clubs and teams at Blaine","p:hopkinson-clubs":"School clubs and teams at Hopkinson","p:penn-alexander-clubs":"School clubs and teams at Penn Alexander","p:gpca-steel":"GPCA After School at Steel","p:steel-clubs":"School clubs and teams at Steel","p:ad-prima-clubs":"School clubs and teams at Ad Prima","p:pyn-conwell":"PYN AIM Afterschool at Conwell","p:lets-dance-conwell":"Philadelphia Ballet: Let’s Dance at Conwell","p:conwell-clubs":"School clubs and teams at Conwell","p:ecs-mya":"Episcopal Community Services: After School at MYA","p:mya-clubs":"School clubs and teams at MYA","p:ace-martha-washington":"Community Council ACE Program at Martha Washington","p:martha-washington-clubs":"School clubs and teams at Martha Washington","p:playarts-afterschool":"PlayArts AfterSchool","p:fishtown-rec":"Fishtown Recreation Center","p:shissler-rec":"Shissler Recreation Center","p:stem-prep":"STEM Prep: After-School STEM","p:adaire-clubs":"School clubs and teams at Adaire","p:community-academy-clubs":"School clubs and teams at Community Academy","p:change-4-a-dollar-mastery-prep":"Change 4 A Dollar at Mastery Prep","p:mastery-prep-clubs":"School clubs and teams at Mastery Prep","p:gamp-clubs":"School clubs and teams at GAMP","p:aspira-acap-esperanza":"ASPIRA Children’s Achievement Program at Esperanza at Esperanza Elementary","p:esperanza-elementary-clubs":"School clubs and teams at Esperanza Elementary","p:baywaycares-mastery-cleveland":"Baywaycares at Mastery Cleveland","p:mastery-cleveland-clubs":"School clubs and teams at Mastery Cleveland","p:asas-mcdaniel":"After-School All-Stars at McDaniel","p:brooklyn-robot-foundry-mcdaniel":"Brooklyn Robot Foundry at McDaniel","p:brooklyn-robot-foundry-fundays":"Brooklyn Robot Foundry: Foundry Fundays (East Falls)","p:sunrise-blankenburg":"Sunrise of Philadelphia at Blankenburg","p:blankenburg-clubs":"School clubs and programs at Blankenburg","p:gla-southwest-clubs":"School sports at GLA Southwest","p:hackett-clubs":"School clubs and activities at Hackett","p:uacs-hamilton":"UACS After-School Program at Hamilton","p:hamilton-clubs":"School sports and teams at Hamilton","p:christy-rec":"Christy Recreation Center","p:baywaycares-mastery-harrity":"Baywaycares at Mastery Harrity","p:mastery-harrity-clubs":"School clubs and teams at Mastery Harrity","p:right-at-school-ethel-allen":"Right At School at Dr. Ethel Allen","p:ethel-allen-clubs":"School clubs and teams at Ethel Allen","p:joshuas-academy-mastery-wister":"Joshua’s Academy at Mastery Wister","p:mastery-wister-clubs":"School clubs and teams at Mastery Wister","p:girls-inc-heston":"Girls Inc. H.Y.P.E. at Heston","p:heston-clubs":"School clubs and teams at Heston","p:sunrise-mcmichael":"Sunrise of Philadelphia at McMichael","p:mcmichael-clubs":"School clubs and programs at McMichael","p:squashsmarts":"SquashSmarts","p:miles-mack-playground":"Miles Mack Playground","p:cora-northwood":"YouthCOR at Northwood","p:northwood-clubs":"School clubs and sports at Northwood","p:uacs-comegys":"UACS After-School Program at Comegys","p:comegys-clubs":"School sports at Comegys","p:baywaycares-mastery-clymer":"Baywaycares at Mastery Clymer","p:mastery-clymer-clubs":"School clubs and teams at Mastery Clymer","p:harlem-lacrosse-olney":"Harlem Lacrosse at Olney Elementary","p:cora-olney":"CORA Services before and after care at Olney at Olney Elementary","p:ziehler-playground":"Ziehler Playground","p:sunrise-bluford":"Sunrise of Philadelphia at Bluford","p:legacy-mcclure":"LEGACY Champions on the Rise at McClure","p:belmont-academy-ost":"Belmont Academy after school (OST)","p:greener-partners-belmont-academy":"Greener Partners at Belmont Academy","p:catharine-clubs":"School clubs and partners at Catharine","p:mcclure-clubs":"School clubs and partners at McClure","p:bluford-clubs":"School clubs, teams and partners at Bluford","p:mccreesh-playground":"McCreesh Playground","p:sunrise-bryant":"Sunrise of Philadelphia at Bryant","p:bryant-clubs":"School clubs and partners at Bryant","p:ecs-add-b-anderson":"Episcopal Community Services: After School at Add B. Anderson","p:add-b-anderson-clubs":"School clubs and partners at Add B. Anderson","p:ymca-rhodes":"YMCA Out of School Time at Rhodes","p:rhodes-clubs":"School clubs and teams at Rhodes","p:shuler-playground":"Shuler Playground","p:ymca-duckrey":"YMCA Out of School Time at Duckrey","p:duckrey-clubs":"School teams and after-school programs at Duckrey","p:winchester-playground":"Winchester Playground","p:ymca-potter-thomas":"YMCA Out of School Time at Potter-Thomas","p:potter-thomas-clubs":"School clubs and partners at Potter-Thomas","p:mastermindz-mastery-mann":"Mastermindz Aftercare at Mastery Mann","p:mastery-mann-clubs":"School clubs and teams at Mastery Mann","c:philly-art-center":"Philly Art Center (summer camp)","c:fleisher-art-memorial-camp":"Fleisher Art Memorial (summer camp)","c:mister-johns-music-camp":"Mister John’s Music (summer camp)","c:music-theatre-philly-camp":"Music Theatre Philly (summer camp)","c:movemakers-camp":"MoveMakers Philly (summer camp)","c:queen-and-rook-camp":"Queen & Rook Game Cafe (summer camp)","c:parks-and-rec-camps":"Philadelphia Parks & Recreation day camps (summer camp)","c:theatre-horizon-woodmere":"Theatre Horizon drama camp at Woodmere (summer camp)","c:butchers-sew-shop-camp":"Butcher’s Sew Shop Junior (summer camp)","c:clay-studio-camp":"The Clay Studio (summer camp)","c:pafa-camp":"PAFA summer art camp (summer camp)","c:moore-young-artists":"Moore College of Art & Design youth courses (summer camp)","c:school-of-rock-philadelphia":"School of Rock Philadelphia (summer camp)","c:arden-summer-camp":"Arden Drama School (summer camp)","c:camp-walnut":"Camp Walnut at Walnut Street Theatre (summer camp)","c:macguffin-camps":"MacGuffin Theatre & Film Company (summer camp)","c:flipout-camp":"FlipOut Productions (summer camp)","c:philadelphia-ballet-camps":"School of Philadelphia Ballet dance camps (summer camp)","c:wissahickon-figure-skating":"Wissahickon Skating Club figure skating camp (summer camp)","c:philadelphia-dance-academy":"The Philadelphia Dance Academy (summer camp)","c:legacy-tennis-camp":"Legacy Youth Tennis community camp (summer camp)","c:ceo-camp-phield-house":"C.E.O. Camp at Phield House (summer camp)","c:awbury-adventures":"Awbury Adventures at Awbury Arboretum (summer camp)","c:camp-schuylkill":"Camp Schuylkill at the Schuylkill Center (summer camp)","c:morris-arboretum-camp":"Nature Explorers at Morris Arboretum & Gardens (summer camp)","c:circus-arts-camp":"Philadelphia School of Circus Arts (summer camp)","c:work-to-ride-camp":"Work to Ride at Chamounix Equestrian Center (summer camp)","c:seaport-summer-camp":"Seaport Summer Camp at Independence Seaport Museum (summer camp)","c:taller-puertorriqueno-camp":"Taller Puertorriqueño (summer camp)","c:camp-tps":"Camp TPS at The Philadelphia School (summer camp)","c:ymca-day-camps":"Greater Philadelphia YMCA day camps (summer camp)","c:summer-achievers-edey":"Summer Achievers at Extended Day, Extended Year schools (summer camp)","c:allens-lane-art-camp":"Allens Lane Art Center summer art camp (summer camp)","c:nlarts-summer-camp":"NLArts summer art camp (summer camp)","c:yes-and-camp":"Yes! And… Collaborative Arts camps (summer camp)","c:zazz-summer-camp":"ZAZZ Dance & Drama (summer camp)","c:sawubona-summer-camp":"Sawubona Creativity Project (summer camp)","c:zoomdance-camp":"ZoomDance camp (summer camp)","c:dandelion-summer-camp":"The Dandelion Project summer camp (summer camp)","c:rutabaga-naturearts":"Rutabaga NatureArts summer camp (summer camp)","c:skate-the-foundry-camp":"Skate The Foundry skateboard camp (summer camp)","c:lavner-tech-camp-upenn":"Camp Tech Revolution at UPenn (Lavner) (summer camp)","c:philly-rock-gym-camps":"Philadelphia Rock Gym summer camps (summer camp)","c:coco-academy-summer-camp":"CoCo Academy (summer camp)","c:philly-pack-summer-camp":"Philly PACK (summer camp)","c:esf-camps":"ESF Camps (summer camp)","c:skateboard-academy-rizzo-rink":"The Skateboard Academy summer camp at Rizzo Rink (summer camp)","c:hawk-hill-day-camp":"Hawk Hill Day Camp at Saint Joseph’s University (Future Stars) (summer camp)","c:kids-on-12th-summer-camp":"Kids on 12th summer camp (summer camp)","c:stem-prep-summer-camp":"STEM Prep summer camp (summer camp)","c:camp-nerd-street":"Camp Nerd Street video game and esports camp (summer camp)","c:makom-community-camp":"Makom Community (summer camp)","c:natural-creativity-camp":"Creativity Camp at Natural Creativity (summer camp)","s:nebinger":"Nebinger","d:nebinger":"Nebinger dates","s:meredith":"Meredith","d:meredith":"Meredith dates","s:coppin":"Coppin","d:coppin":"Coppin dates","s:vare-washington":"Vare-Washington","d:vare-washington":"Vare-Washington dates","s:stanton":"Stanton","d:stanton":"Stanton dates","s:mccall":"McCall","d:mccall":"McCall dates","s:kirkbride":"Kirkbride","d:kirkbride":"Kirkbride dates","s:southwark":"Southwark","d:southwark":"Southwark dates","s:columbus-charter":"Columbus Charter","d:columbus-charter":"Columbus Charter dates","s:marian-anderson":"Marian Anderson","d:marian-anderson":"Marian Anderson dates","s:lingelbach":"Lingelbach","d:lingelbach":"Lingelbach dates","s:houston":"Houston","d:houston":"Houston dates","s:childs":"Childs","d:childs":"Childs dates","s:bache-martin":"Bache-Martin","d:bache-martin":"Bache-Martin dates","s:independence-charter":"Independence Charter","d:independence-charter":"Independence Charter dates","s:greenfield":"Greenfield","d:greenfield":"Greenfield dates","s:jenks":"J.S. Jenks","d:jenks":"J.S. Jenks dates","s:byers":"Russell Byers","d:byers":"Russell Byers dates","s:cook-wissahickon":"Cook-Wissahickon","d:cook-wissahickon":"Cook-Wissahickon dates","s:morris":"Robert Morris","d:morris":"Robert Morris dates","s:henry":"C.W. Henry","d:henry":"C.W. Henry dates","s:mastery-thomas":"Mastery Thomas","d:mastery-thomas":"Mastery Thomas dates","s:emlen":"Emlen","d:emlen":"Emlen dates","s:wright":"Wright","d:wright":"Wright dates","s:jb-kelly":"J.B. Kelly","d:jb-kelly":"J.B. Kelly dates","s:edmonds":"Edmonds","d:edmonds":"Edmonds dates","s:willard":"Willard","d:willard":"Willard dates","s:lea":"Lea","d:lea":"Lea dates","s:rhoads":"Rhoads","d:rhoads":"Rhoads dates","s:juniata-park":"Juniata Park","d:juniata-park":"Juniata Park dates","s:greenberg":"Greenberg","d:greenberg":"Greenberg dates","s:fell":"Fell","d:fell":"Fell dates","s:locke":"Locke","d:locke":"Locke dates","s:richmond":"Richmond","d:richmond":"Richmond dates","s:stephen-girard":"Stephen Girard","d:stephen-girard":"Stephen Girard dates","s:mifflin":"Mifflin","d:mifflin":"Mifflin dates","s:dunbar":"Dunbar","d:dunbar":"Dunbar dates","s:cayuga":"Cayuga","d:cayuga":"Cayuga dates","s:bayard-taylor":"Bayard Taylor","d:bayard-taylor":"Bayard Taylor dates","s:moffet":"Moffet","d:moffet":"Moffet dates","s:anne-frank":"Anne Frank","d:anne-frank":"Anne Frank dates","s:kelley":"Kelley","d:kelley":"Kelley dates","s:penn-alexander":"Penn Alexander","d:penn-alexander":"Penn Alexander dates","s:gideon":"Gideon","d:gideon":"Gideon dates","s:blaine":"Blaine","d:blaine":"Blaine dates","s:hopkinson":"Hopkinson","d:hopkinson":"Hopkinson dates","s:steel":"Steel","d:steel":"Steel dates","s:ad-prima":"Ad Prima","d:ad-prima":"Ad Prima dates","s:conwell":"Conwell","d:conwell":"Conwell dates","s:mya":"MYA","d:mya":"MYA dates","s:martha-washington":"Martha Washington","d:martha-washington":"Martha Washington dates","s:adaire":"Adaire","d:adaire":"Adaire dates","s:community-academy":"Community Academy","d:community-academy":"Community Academy dates","s:mastery-prep":"Mastery Prep","d:mastery-prep":"Mastery Prep dates","s:gamp":"GAMP","d:gamp":"GAMP dates","s:esperanza-elementary":"Esperanza Elementary","d:esperanza-elementary":"Esperanza Elementary dates","s:hackett":"Hackett","d:hackett":"Hackett dates","s:mastery-cleveland":"Mastery Cleveland","d:mastery-cleveland":"Mastery Cleveland dates","s:mcdaniel":"McDaniel","d:mcdaniel":"McDaniel dates","s:blankenburg":"Blankenburg","d:blankenburg":"Blankenburg dates","s:gla-southwest":"GLA Southwest","d:gla-southwest":"GLA Southwest dates","s:hamilton":"Hamilton","d:hamilton":"Hamilton dates","s:mastery-harrity":"Mastery Harrity","d:mastery-harrity":"Mastery Harrity dates","s:ethel-allen":"Ethel Allen","d:ethel-allen":"Ethel Allen dates","s:mastery-wister":"Mastery Wister","d:mastery-wister":"Mastery Wister dates","s:heston":"Heston","d:heston":"Heston dates","s:mcmichael":"McMichael","d:mcmichael":"McMichael dates","s:northwood":"Northwood","d:northwood":"Northwood dates","s:comegys":"Comegys","d:comegys":"Comegys dates","s:mastery-clymer":"Mastery Clymer","d:mastery-clymer":"Mastery Clymer dates","s:olney":"Olney Elementary","d:olney":"Olney Elementary dates","s:catharine":"Catharine","d:catharine":"Catharine dates","s:mcclure":"McClure","d:mcclure":"McClure dates","s:belmont-academy":"Belmont Academy","d:belmont-academy":"Belmont Academy dates","s:bluford":"Bluford","d:bluford":"Bluford dates","s:bryant":"Bryant","d:bryant":"Bryant dates","s:add-b-anderson":"Add B. Anderson","d:add-b-anderson":"Add B. Anderson dates","s:rhodes":"Rhodes","d:rhodes":"Rhodes dates","s:duckrey":"Duckrey","d:duckrey":"Duckrey dates","s:potter-thomas":"Potter-Thomas","d:potter-thomas":"Potter-Thomas dates","s:mastery-mann":"Mastery Mann","d:mastery-mann":"Mastery Mann dates"}', true);
+$SCHOOLS = json_decode('{"nebinger":"Nebinger","meredith":"Meredith","coppin":"Coppin","vare-washington":"Vare-Washington","stanton":"Stanton","mccall":"McCall","kirkbride":"Kirkbride","southwark":"Southwark","columbus-charter":"Columbus Charter","marian-anderson":"Marian Anderson","lingelbach":"Lingelbach","houston":"Houston","childs":"Childs","bache-martin":"Bache-Martin","independence-charter":"Independence Charter","greenfield":"Greenfield","jenks":"J.S. Jenks","byers":"Russell Byers","cook-wissahickon":"Cook-Wissahickon","morris":"Robert Morris","henry":"C.W. Henry","mastery-thomas":"Mastery Thomas","emlen":"Emlen","wright":"Wright","jb-kelly":"J.B. Kelly","edmonds":"Edmonds","willard":"Willard","lea":"Lea","rhoads":"Rhoads","juniata-park":"Juniata Park","greenberg":"Greenberg","fell":"Fell","locke":"Locke","richmond":"Richmond","stephen-girard":"Stephen Girard","mifflin":"Mifflin","dunbar":"Dunbar","cayuga":"Cayuga","bayard-taylor":"Bayard Taylor","moffet":"Moffet","anne-frank":"Anne Frank","kelley":"Kelley","penn-alexander":"Penn Alexander","gideon":"Gideon","blaine":"Blaine","hopkinson":"Hopkinson","steel":"Steel","ad-prima":"Ad Prima","conwell":"Conwell","mya":"MYA","martha-washington":"Martha Washington","adaire":"Adaire","community-academy":"Community Academy","mastery-prep":"Mastery Prep","gamp":"GAMP","esperanza-elementary":"Esperanza Elementary","hackett":"Hackett","mastery-cleveland":"Mastery Cleveland","mcdaniel":"McDaniel","blankenburg":"Blankenburg","gla-southwest":"GLA Southwest","hamilton":"Hamilton","mastery-harrity":"Mastery Harrity","ethel-allen":"Ethel Allen","mastery-wister":"Mastery Wister","heston":"Heston","mcmichael":"McMichael","northwood":"Northwood","comegys":"Comegys","mastery-clymer":"Mastery Clymer","olney":"Olney Elementary","catharine":"Catharine","mcclure":"McClure","belmont-academy":"Belmont Academy","bluford":"Bluford","bryant":"Bryant","add-b-anderson":"Add B. Anderson","rhodes":"Rhodes","duckrey":"Duckrey","potter-thomas":"Potter-Thomas","mastery-mann":"Mastery Mann"}', true);
 $EDIT_ADMINS = json_decode('["contact@phillyafterschool.org","contact@schoolsoutwhatnow.com"]', true);
 header('Cache-Control: no-store, private');
 header('X-Robots-Tag: noindex');
@@ -566,17 +569,29 @@ function ap_emailed(PDO $db, array $row): array {
 // ----- what else is waiting for the owner (the accounts database) -----
 // Claims, photos, words and offers, premium sign-ups and queue items held for a decision: what /edit/claims/ and
 // /edit/queue/ show with buttons today. A table from a later version that isn't there yet counts as none.
-function needs_held(?PDO $db): array {
-  $out = array('claims' => array(), 'photos' => array(), 'extras' => array(), 'premium' => array(), 'queue' => array(), 'mail' => array());
+// $mode: the autopilot's switch. While it is "on", a manager's item no run has held is with the runs (it publishes when
+// one passes it), so only held ones are here; a claim whose code was sent and is still good waits for the claimant.
+function needs_held(?PDO $db, string $mode = ''): array {
+  $out = array('claims' => array(), 'reviews' => array(), 'photos' => array(), 'extras' => array(), 'premium' => array(), 'queue' => array(), 'mail' => array());
   if ($db === null) return $out;
   $rows = function ($sql) use ($db) { try { return $db->query($sql)->fetchAll(PDO::FETCH_ASSOC); } catch (Exception $e) { return array(); } };
-  $out['claims'] = $rows("SELECT c.id, c.listing, c.domain, c.created, u.email, u.first, u.last FROM claims c JOIN users u ON u.id = c.user_id WHERE c.status = 'pending' ORDER BY c.id DESC");
-  $out['photos'] = $rows("SELECT p.id, p.listing, p.alt, p.created, p.kind, u.email, u.first, u.last FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.status = 'new' AND c.status = 'ok' ORDER BY p.id DESC");
+  try {
+    $st = $db->prepare("SELECT c.*, u.email, u.first, u.last FROM claims c JOIN users u ON u.id = c.user_id WHERE c.status = 'pending' AND NOT (c.via = 'code-sent' AND EXISTS (SELECT 1 FROM logins l WHERE l.next = 'claim:' || c.id AND l.used = 0 AND l.expires > ?)) ORDER BY c.id DESC");
+    $st->execute(array(time()));
+    $out['claims'] = $st->fetchAll(PDO::FETCH_ASSOC);
+  } catch (Exception $e) { $out['claims'] = $rows("SELECT c.id, c.listing, c.domain, c.created, u.email, u.first, u.last FROM claims c JOIN users u ON u.id = c.user_id WHERE c.status = 'pending' ORDER BY c.id DESC"); }   // a database from before claims by code
+  // Reviews the site's checks, a run or a closed pull request held (Phase 6). The page opens each one's child's details.
+  $out['reviews'] = $rows("SELECT r.*, u.email, u.first, u.last FROM reviews r LEFT JOIN users u ON u.id = r.user_id WHERE r.status = 'held' ORDER BY r.created DESC LIMIT 60");
+  // A manager's photo, logo, words, offer or pin waits for the owner until it is published: with the autopilot on, only
+  // the ones a run (or the site's own checks) held; otherwise all, each with what the run said about it ("say", "hold").
+  $out['photos'] = $rows("SELECT p.*, u.email, u.first, u.last FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.status = 'new' AND c.status = 'ok' ORDER BY p.id DESC");
   if (!$out['photos']) $out['photos'] = $rows("SELECT p.id, p.listing, p.alt, p.created, 'photo' AS kind, u.email, u.first, u.last FROM photos p JOIN claims c ON c.id = p.claim_id JOIN users u ON u.id = c.user_id WHERE p.status = 'new' AND c.status = 'ok' ORDER BY p.id DESC");   // from before logos
-  $out['extras'] = $rows("SELECT e.id, e.listing, e.kind, e.body, e.until, e.created, u.email, u.first, u.last FROM extras e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.status = 'new' AND c.status = 'ok' ORDER BY e.id DESC");
+  $out['extras'] = $rows("SELECT e.*, u.email, u.first, u.last FROM extras e JOIN claims c ON c.id = e.claim_id JOIN users u ON u.id = c.user_id WHERE e.status = 'new' AND c.status = 'ok' ORDER BY e.id DESC");
+  if ($mode === 'on') foreach (array('photos', 'extras') as $k) $out[$k] = array_values(array_filter($out[$k], function ($x) use ($k) { return (isset($x['hold']) && (string) $x['hold'] !== '') || ($k === 'extras' && in_array((string) $x['kind'], array('social', 'posts'), true)); }));   // social links and posts aren't rated by a run: one still waiting was sent while the autopilot was off
   $out['premium'] = $rows("SELECT a.claim_id, a.plan, a.created, c.listing, u.email, u.first, u.last FROM premium_asks a JOIN claims c ON c.id = a.claim_id JOIN users u ON u.id = c.user_id WHERE c.status = 'ok' AND NOT EXISTS (SELECT 1 FROM premium p WHERE p.listing = c.listing) ORDER BY a.created DESC");
   // An email a run held is shown with the mail (below), with its message and a draft, not here.
-  $out['queue'] = $rows("SELECT id, kind, listing, what, pr, reason, decided FROM queue_items WHERE state = 'held' AND substr(id, 1, 1) != 'm' ORDER BY decided DESC");
+  // A review a run held is shown with the reviews (above), with its words, not here.
+  $out['queue'] = $rows("SELECT id, kind, listing, what, pr, reason, decided FROM queue_items WHERE state = 'held' AND substr(id, 1, 1) NOT IN ('m', 'v') ORDER BY decided DESC");
   // Mail from people the hold list (or a run) kept for the owner (the mailbox, Phase 5). Sealed: the page opens it.
   $out['mail'] = $rows("SELECT id, gid, thread, via, sealed, draft, subject, domain, dkim, listings, shared, account, outreach, attachments, hold, created FROM mail_in WHERE state = 'held' ORDER BY created DESC LIMIT 60");
   return $out;
@@ -764,6 +779,280 @@ function mail_host_secret(string $root): string {
   return strlen($raw) === 64 && ctype_xdigit($raw) ? (string) hex2bin($raw) : '';
 }
 
+// ----- reviews, and what program managers add, without the owner in the loop (scaling plan, Phase 6) -----
+// Shared by groups/api.php (the review form's requests, the queue's review and content items, the runs' decisions, the
+// gate's question about a review), edit/needs/ (held reviews, with Approve and Decline) and edit/queue/ (which writes the
+// same queue). build.mjs pastes this file in at each one's /*CONTENT*/ marker; edit it here. It needs src/server/mail.php
+// (its sealing) pasted in before it. Nothing here sends an email.
+//
+// Reviews. The form at /review/ stores a review in the reviews table (it no longer emails a ready-made entry). The
+// reviewer confirms their email address with the emailed code the site already uses, which makes an account; one
+// review per account per listing. The site checks each review when it comes in (review_holds): the text against the
+// rules in scripts/gate.config.json ("moderation") and the words in the private file on the host, and the account
+// (the program's own email domain, another program's, a review already sent, an account under a day old with nothing
+// saved). One that passes goes to the private queue with the exact entry data/reviews.json will carry; the queue run
+// reads it against the same rules and puts it in its pull request; the gate checks it again and asks this host
+// (review_check) whether the entry is the one the reviewer sent and still clean. One that doesn't pass waits for the
+// owner on the Needs-you page, and never leaves the host.
+//
+// Words, offers and pins (rows in extras) and photos and logos (rows in photos) go to the private queue as items of
+// their own ("x<id>" and "f<id>"), each photo with a signed link the run can open for 24 hours. The run rates each and
+// writes decisions/<run>.json to the ops repository; the API applies them (content_decisions).
+const REVIEW_ID = '/^v[0-9a-f]{10}$/';
+// Why a review waits for the owner, in a sentence. The codes are what the reviews table keeps in "hold".
+const REVIEW_HOLDS = array(
+  'link' => 'It has a link in it.',
+  'contact' => 'It has contact details in it: an email address or a phone number.',
+  'accusation' => 'It may make an accusation (safety, harm, discrimination, a crime or licensing).',
+  'profanity' => 'It uses strong language.',
+  'person' => 'It may name a person: a member of staff, or a child.',
+  'instructions' => 'It addresses an AI or asks to skip a rule. Marked suspicious: nothing in it was followed.',
+  'words' => 'It uses a word on the site’s private list.',
+  'own-domain' => 'The reviewer’s account is at the program’s own email domain.',
+  'other-program' => 'The reviewer’s account is at another program’s email domain.',
+  'again' => 'This account has already reviewed this program.',
+  'new-account' => 'The account is under a day old, with no saved school or plan.',
+  'run' => 'A research run held it for your decision.',
+  'pr-closed' => 'Its pull request was closed without a merge.',
+);
+// Why something a manager added waits: the rules a run (or this host) may name in a decision. Fixed words only.
+const CONTENT_RULES = array(
+  'link' => 'It has a link or a web address in it.',
+  'contact' => 'It has contact details in it.',
+  'licensing' => 'It claims a license or an accreditation, which the site can’t check.',
+  'claim' => 'It makes a guarantee or a “best” claim.',
+  'other-program' => 'It names another program.',
+  'child-named' => 'It names a child.',
+  'child-face' => 'A child’s face is shown up close.',
+  'readable-name' => 'A name can be read in it (a jersey, a name tag, a sign-in sheet).',
+  'unsuitable' => 'It isn’t suitable for the site.',
+  'not-logo' => 'It doesn’t look like a logo.',
+  'no-consent' => 'The manager didn’t tick that everyone shown (or their parent) agreed to it being public.',
+  'no-look' => 'The run couldn’t open the photo, so it holds.',
+  'instructions' => 'It addresses an AI or asks to skip a rule. Marked suspicious: nothing in it was followed.',
+  'words' => 'It uses a word on the site’s private list.',
+  'other' => 'The run held it for your decision.',
+);
+const CONTENT_KINDS = array('words', 'offer', 'pin');   // what a run rates among the extras; social links and Instagram posts publish on their own checks
+const CONTENT_A_RUN = 40;                              // items of each sort (reviews, extras, photos) put in the queue at once
+const PHOTO_LOOK_WINDOW = 21600;                       // a photo's link changes every six hours and works for 24 to 30
+
+function content_schema(PDO $db): void {
+  // One review per account per listing. kid: the child's grade and first name, sealed like the mail (a child's details
+  // are never kept in clear). status: new (in the queue or in a run's pull request), held (waits for the owner, "hold"
+  // says why), published, declined.
+  $db->exec("CREATE TABLE IF NOT EXISTS reviews (id TEXT PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, listing TEXT NOT NULL, school TEXT NOT NULL, stars INTEGER NOT NULL, comment TEXT NOT NULL, name TEXT NOT NULL, kid TEXT NOT NULL DEFAULT '', status TEXT NOT NULL DEFAULT 'new', hold TEXT NOT NULL DEFAULT '', created INTEGER NOT NULL, decided INTEGER NOT NULL DEFAULT 0, pr INTEGER NOT NULL DEFAULT 0, UNIQUE (user_id, listing))");
+  $db->exec('CREATE INDEX IF NOT EXISTS reviews_status ON reviews (status, created)');
+  // A run's word on a manager's words, offer, pin, photo or logo: when it rated it, ok or hold, and the rule (hold).
+  // A photo also keeps whether the manager ticked that everyone shown, or their parent, agreed to it being public.
+  foreach (array('extras', 'photos') as $t) {
+    $cols = array(); foreach ($db->query('PRAGMA table_info(' . $t . ')')->fetchAll(PDO::FETCH_ASSOC) as $c) $cols[] = $c['name'];
+    if (!$cols) continue;
+    foreach (array('rated' => 'INTEGER NOT NULL DEFAULT 0', 'say' => "TEXT NOT NULL DEFAULT ''", 'hold' => "TEXT NOT NULL DEFAULT ''") as $col => $type) if (!in_array($col, $cols, true)) $db->exec('ALTER TABLE ' . $t . ' ADD COLUMN ' . $col . ' ' . $type);
+    if ($t === 'photos' && !in_array('consent', $cols, true)) $db->exec('ALTER TABLE photos ADD COLUMN consent INTEGER NOT NULL DEFAULT 0');
+  }
+}
+
+// ---------- the text rules ----------
+function content_cut(string $s, int $max): string { return function_exists('mb_substr') ? mb_substr($s, 0, $max, 'UTF-8') : substr($s, 0, $max); }
+function content_re(string $pattern, bool $caseless = true): string { return '~' . str_replace('~', '\~', $pattern) . '~' . ($caseless ? 'iu' : 'u'); }
+// The private words, from phillyafterschool-moderation.json next to the public folder: { "review": [...], "content": [...] }.
+function content_private(string $root): array {
+  static $c = array();
+  if (isset($c[$root])) return $c[$root];
+  $d = json_decode((string) @file_get_contents($root . '/phillyafterschool-moderation.json'), true);
+  $out = array('review' => array(), 'content' => array());
+  foreach (array('review', 'content') as $k) if (is_array($d) && isset($d[$k]) && is_array($d[$k])) foreach ($d[$k] as $w) if (is_string($w) && trim($w) !== '') $out[$k][] = mb_strtolower(trim($w), 'UTF-8');
+  return $c[$root] = $out;
+}
+// The hidden-instruction patterns (the same list the gate and the mailbox use, in short).
+function content_instructions(string $t): bool {
+  return (bool) preg_match('~\b((ignore|disregard|forget) (all |any |the )?(previous|prior|above|earlier|your|other) (instructions|rules|prompts?)|you are (now )?an? (ai|assistant|language model|chatbot)|system prompt|(dear|hey|hi|attention|note to|message to) (ai|assistant|claude|chatgpt|gpt|gemini|the ai|llms?|ai agents?)\b|(skip|bypass|override) (the |this |any |all )?(rules?|checks?|gate|review|moderation)|(do not|don.t) (tell|mention|show|flag|report) (this|anyone|josh|the owner)|new instructions?:)~iu', $t);
+}
+// What in a text a rule catches. $kind: review or content. $mod: "moderation" from scripts/gate.config.json. Gives codes.
+function content_text_holds(string $text, array $mod, array $private, string $kind): array {
+  $out = array();
+  $has = function ($k, $caseless = true) use ($mod, $text) { return isset($mod[$k]) && is_string($mod[$k]) && @preg_match(content_re($mod[$k], $caseless), $text) === 1; };
+  if (content_instructions($text)) $out[] = 'instructions';
+  if ($has('link')) $out[] = 'link';
+  if ($has('contact')) $out[] = 'contact';
+  $names = false;
+  foreach (isset($mod['personNames']) && is_array($mod['personNames']) ? $mod['personNames'] : array() as $p) if (is_string($p) && @preg_match(content_re($p, false), $text) === 1) $names = true;
+  if ($kind === 'review') {
+    if (isset($mod['accusation']) && is_string($mod['accusation']) && @preg_match(content_re($mod['accusation']), $text) === 1) $out[] = 'accusation';
+    if ($has('profanity')) $out[] = 'profanity';
+    if ($names) $out[] = 'person';
+  } else {
+    if ($has('licensing')) $out[] = 'licensing';
+    if ($has('claims')) $out[] = 'claim';
+    if ($has('profanity')) $out[] = 'unsuitable';
+    if ($names) $out[] = 'child-named';
+  }
+  $low = mb_strtolower($text, 'UTF-8');
+  foreach ($private[$kind === 'review' ? 'review' : 'content'] as $w) if (preg_match('~(?<![\p{L}\p{N}])' . preg_quote($w, '~') . '(?![\p{L}\p{N}])~u', $low)) { $out[] = 'words'; break; }
+  return array_values(array_unique($out));
+}
+// Another program's name in what a manager wrote: any other listing's name of two words or more (eight characters at
+// least), as a whole phrase. $names: listing key => name.
+function content_other_program(string $text, string $own, array $names): bool {
+  $low = ' ' . mb_strtolower((string) preg_replace('/[^\p{L}\p{N}]+/u', ' ', $text), 'UTF-8') . ' ';
+  $ownName = isset($names[$own]) ? mb_strtolower((string) $names[$own], 'UTF-8') : '';
+  foreach ($names as $k => $n) {
+    if ($k === $own) continue;
+    $n = trim(mb_strtolower((string) preg_replace('/\s*\(summer camp\)$/', '', (string) preg_replace('/[^\p{L}\p{N}()]+/u', ' ', (string) $n)), 'UTF-8'));
+    if (mb_strlen($n, 'UTF-8') < 8 || strpos($n, ' ') === false || ($ownName !== '' && strpos($ownName, $n) !== false)) continue;
+    if (strpos($low, ' ' . $n . ' ') !== false) return true;
+  }
+  return false;
+}
+// The host's own check of a manager's words, offer or pin, before anything a run said is applied. Gives rule codes.
+function content_holds(string $kind, string $body, string $listing, array $names, array $mod, array $private): array {
+  $text = $body;
+  if ($kind === 'pin') { $p = json_decode($body, true); $text = is_array($p) && isset($p['n']) ? (string) $p['n'] : ''; }
+  $out = content_text_holds($text, $mod, $private, 'content');
+  if (content_other_program($text, $listing, $names)) $out[] = 'other-program';
+  return array_values(array_unique($out));
+}
+
+// ---------- reviews ----------
+function content_seal_key(string $secret): string { return $secret === '' ? '' : hash_hmac('sha256', 'pas-review-v1', $secret, true); }
+function content_domain(string $email): string {
+  $at = strrpos($email, '@'); $host = $at === false ? '' : strtolower(trim(substr($email, $at + 1), ". \t"));
+  $parts = array_values(array_filter(explode('.', $host), 'strlen'));
+  return count($parts) >= 2 ? implode('.', array_slice($parts, -2)) : $host;
+}
+function content_day(int $t): string { $d = new DateTime('@' . $t); $d->setTimezone(new DateTimeZone('America/New_York')); return $d->format('Y-m-d'); }
+// The entry data/reviews.json carries for a review, exactly: the run copies it, the gate compares it (review_sum).
+function review_entry(array $r, string $key): array {
+  $e = array('id' => (string) $r['id'], 'programId' => (string) preg_replace('/^p:/', '', (string) $r['listing']), 'school' => (string) $r['school'], 'name' => (string) $r['name'], 'stars' => (int) $r['stars'], 'comment' => (string) $r['comment'], 'date' => content_day((int) $r['created']));
+  $kid = $r['kid'] !== '' ? json_decode(mail_open($key, $r['kid']), true) : null;
+  if (is_array($kid) && isset($kid['grade']) && is_string($kid['grade'])) { $e['kid'] = array('grade' => $kid['grade']); if (isset($kid['name']) && is_string($kid['name']) && $kid['name'] !== '') $e['kid']['name'] = $kid['name']; }
+  return $e;
+}
+// What the gate sends to say which entry it is looking at: one line per value, so no JSON spelling can differ.
+function review_sum(array $e): string {
+  $kid = isset($e['kid']) && is_array($e['kid']) ? $e['kid'] : array();
+  return hash('sha256', implode("\n", array((string) ($e['id'] ?? ''), (string) ($e['programId'] ?? ''), (string) ($e['school'] ?? ''), (string) ($e['name'] ?? ''), (string) (int) ($e['stars'] ?? 0), (string) ($e['comment'] ?? ''), (string) ($e['date'] ?? ''), (string) ($kid['grade'] ?? ''), (string) ($kid['name'] ?? ''))));
+}
+// Is the account fresh: under a day old, with no saved school and no plan kept?
+function review_fresh(PDO $db, int $uid, int $now): bool {
+  $st = $db->prepare('SELECT created, school FROM users WHERE id = ?'); $st->execute(array($uid)); $u = $st->fetch(PDO::FETCH_ASSOC);
+  if (!$u) return true;
+  if ((int) $u['created'] < $now - 86400 || (string) $u['school'] !== '') return false;
+  foreach (array('weeks', 'summers', 'daysoffs') as $t) { try { $q = $db->prepare('SELECT 1 FROM ' . $t . ' WHERE user_id = ? LIMIT 1'); $q->execute(array($uid)); if ($q->fetchColumn()) return false; } catch (Exception $e) { /* a table from later */ } }
+  return true;
+}
+// The account rules for a review. $listings: key => array('d' => its website's domain, 'm' => match or manual).
+// $fresh: 'hold' (an account under a day old with nothing saved waits for the owner) or 'wait' (it waits a day and goes
+// on). Gives codes.
+function review_account_holds(PDO $db, array $r, array $listings, string $fresh, int $now): array {
+  $out = array();
+  $st = $db->prepare('SELECT email FROM users WHERE id = ?'); $st->execute(array((int) $r['user_id'])); $email = (string) $st->fetchColumn();
+  $dom = content_domain($email);
+  $own = isset($listings[$r['listing']]['d']) ? (string) $listings[$r['listing']]['d'] : '';
+  if ($dom !== '' && $own !== '' && $dom === $own) $out[] = 'own-domain';
+  elseif ($dom !== '') foreach ($listings as $k => $l) if ($k !== $r['listing'] && isset($l['d'], $l['m']) && $l['m'] === 'match' && (string) $l['d'] === $dom) { $out[] = 'other-program'; break; }
+  $st = $db->prepare("SELECT COUNT(*) FROM reviews WHERE user_id = ? AND listing = ? AND id != ? AND status != 'declined'"); $st->execute(array((int) $r['user_id'], (string) $r['listing'], (string) $r['id']));
+  if ((int) $st->fetchColumn() > 0) $out[] = 'again';
+  if ($fresh === 'hold' && review_fresh($db, (int) $r['user_id'], $now)) $out[] = 'new-account';
+  return $out;
+}
+// Every rule at once, for one review as stored.
+function review_holds(PDO $db, array $r, array $listings, array $mod, array $private, string $fresh, int $now): array {
+  return array_values(array_unique(array_merge(content_text_holds((string) $r['comment'], $mod, $private, 'review'), review_account_holds($db, $r, $listings, $fresh, $now))));
+}
+function review_hold_text(string $codes): string {
+  $out = array(); foreach (array_filter(explode(',', $codes)) as $c) $out[] = isset(REVIEW_HOLDS[$c]) ? REVIEW_HOLDS[$c] : $c;
+  return $out ? implode(' ', $out) : 'Held for you.';
+}
+
+// ---------- the queue's review and content items ----------
+// Reviews that passed the site's checks, for queue/open.json: each with the exact entry, the listing and its name, and
+// the reviewer's address (private: for the thank-you only, never written to the ops repository). With $fresh 'wait', a
+// review from an account under a day old with nothing saved waits until the account is a day old.
+function queue_reviews(?PDO $db, string $secret, array $names, string $fresh, int $now): array {
+  $out = array();
+  if ($db === null || $secret === '') return $out;
+  $key = content_seal_key($secret);
+  try {
+    $st = $db->prepare("SELECT r.*, u.email FROM reviews r JOIN users u ON u.id = r.user_id WHERE r.status = 'new' ORDER BY r.created LIMIT " . CONTENT_A_RUN);
+    $st->execute();
+    foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $r) {
+      if ($fresh === 'wait' && review_fresh($db, (int) $r['user_id'], $now)) continue;
+      $out[] = array('id' => (string) $r['id'], 'kind' => 'review', 'when' => gmdate('Y-m-d', (int) $r['created']), 'listing' => (string) $r['listing'],
+        'program' => isset($names[$r['listing']]) ? (string) $names[$r['listing']] : (string) $r['listing'], 'email' => (string) $r['email'],
+        'extra' => array('entry' => review_entry($r, $key)));
+    }
+  } catch (Exception $e) { /* no reviews table yet */ }
+  return $out;
+}
+// The signed link to one waiting photo: the run opens it to look, and it stops working after 24 to 30 hours.
+function photo_look_exp(int $now): int { return (intdiv($now, PHOTO_LOOK_WINDOW) + 5) * PHOTO_LOOK_WINDOW; }
+function photo_look_sig(string $secret, int $id, int $exp): string { return hash_hmac('sha256', 'photo-look|' . $id . '|' . $exp, $secret); }
+function photo_look_url(string $site, string $secret, int $id, int $now): string {
+  $exp = photo_look_exp($now);
+  return rtrim($site, '/') . '/groups/api.php?action=photo_look&id=' . $id . '&e=' . $exp . '&s=' . photo_look_sig($secret, $id, $exp);
+}
+// What managers added that a run hasn't rated yet: words, offers and pins, and photos and logos. Not registered as
+// queue items (nobody is emailed about the run's answer; the API tells the manager when one is published).
+function queue_content(?PDO $db, string $secret, string $site, array $names, int $now): array {
+  $out = array();
+  if ($db === null) return $out;
+  $name = function ($k) use ($names) { return isset($names[$k]) ? (string) $names[$k] : (string) $k; };
+  try {
+    $st = $db->prepare("SELECT e.id, e.listing, e.kind, e.body, e.until, e.created FROM extras e JOIN claims c ON c.id = e.claim_id WHERE e.status = 'new' AND e.rated = 0 AND c.status = 'ok' AND e.kind IN ('words', 'offer', 'pin') ORDER BY e.id LIMIT " . CONTENT_A_RUN);
+    $st->execute();
+    foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $x) {
+      $text = (string) $x['body'];
+      if ($x['kind'] === 'pin') { $p = json_decode($text, true); $text = is_array($p) && isset($p['n']) ? (string) $p['n'] : ''; }
+      $item = array('id' => 'x' . (int) $x['id'], 'kind' => (string) $x['kind'], 'when' => gmdate('Y-m-d', (int) $x['created']), 'listing' => (string) $x['listing'], 'program' => $name($x['listing']), 'text' => $text);
+      if ($x['kind'] === 'offer' && $x['until'] !== '') $item['until'] = (string) $x['until'];
+      $out[] = $item;
+    }
+  } catch (Exception $e) { /* a database from before premium */ }
+  if ($secret === '') return $out;
+  try {
+    $st = $db->prepare("SELECT p.id, p.listing, p.kind, p.alt, p.consent, p.created FROM photos p JOIN claims c ON c.id = p.claim_id WHERE p.status = 'new' AND p.rated = 0 AND c.status = 'ok' ORDER BY p.id LIMIT " . CONTENT_A_RUN);
+    $st->execute();
+    foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $p) {
+      $out[] = array('id' => 'f' . (int) $p['id'], 'kind' => (string) $p['kind'] === 'logo' ? 'logo' : 'photo', 'when' => gmdate('Y-m-d', (int) $p['created']), 'listing' => (string) $p['listing'], 'program' => $name($p['listing']),
+        'alt' => (string) $p['alt'], 'consent' => (int) $p['consent'] === 1, 'look' => photo_look_url($site, $secret, (int) $p['id'], $now));
+    }
+  } catch (Exception $e) { /* a database from before Phase 6 */ }
+  return $out;
+}
+
+// ---------- for the owner's pages ----------
+// Reviews waiting for the owner, newest first, with the child's details opened.
+function needs_reviews(?PDO $db, string $secret): array {
+  if ($db === null) return array();
+  $key = content_seal_key($secret);
+  try {
+    $rows = $db->query("SELECT r.*, u.email, u.first, u.last FROM reviews r LEFT JOIN users u ON u.id = r.user_id WHERE r.status = 'held' ORDER BY r.created DESC LIMIT 60")->fetchAll(PDO::FETCH_ASSOC);
+  } catch (Exception $e) { return array(); }
+  foreach ($rows as &$r) $r['entry'] = review_entry($r, $key);
+  unset($r);
+  return $rows;
+}
+// What a run (or the host) said about a manager's item, in a sentence for the Needs-you page. '' when nothing was said.
+function content_say_text(array $x, string $mode): string {
+  $hold = isset($x['hold']) ? (string) $x['hold'] : ''; $say = isset($x['say']) ? (string) $x['say'] : '';
+  if ($hold !== '') return isset(CONTENT_RULES[$hold]) ? CONTENT_RULES[$hold] : 'Held for you.';
+  if ($say === 'ok') return $mode === 'on' ? 'A run passed it; it publishes with the next hourly run.' : 'A run would publish this (the autopilot isn’t on, so it waits for you).';
+  return '';
+}
+// Adds a review's entry to data/reviews.json's text (two-space JSON, as the build writes it), unless it is already there.
+// Gives the new text, or '' when the entry is already in it or the file can't be read.
+function review_file_add(string $text, array $entry): string {
+  $list = trim($text) === '' ? array() : json_decode($text, true);
+  if (!is_array($list)) return '';
+  foreach ($list as $x) if (is_array($x) && isset($x['id']) && $x['id'] === $entry['id']) return '';
+  $list[] = $entry;
+  $json = (string) json_encode(array_values($list), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_LINE_TERMINATORS);
+  $json = (string) preg_replace_callback('/^( +)/m', function ($m) { return str_repeat(' ', intdiv(strlen($m[1]), 2)); }, $json);
+  return $json . "\n";
+}
+
 if (!edit_signed_in()) { header('Location: ../', true, 303); exit; }
 $db = edit_db();
 $admin = edit_admin() !== '';
@@ -775,6 +1064,7 @@ $csrf = hash_hmac('sha256', 'needs-form', edit_key());
 $claimsCsrf = hash_hmac('sha256', 'claims-form', edit_key());   // the buttons that post to /edit/claims/
 $queueCsrf = hash_hmac('sha256', 'queue-form', edit_key());     // and to /edit/queue/
 $mailKey = mail_seal_key(mail_host_secret(dirname((string) $_SERVER['DOCUMENT_ROOT'])));   // opens the held mail
+$reviewKey = content_seal_key(mail_host_secret(dirname((string) $_SERVER['DOCUMENT_ROOT'])));   // opens a review's child's details
 $said = isset($_GET['said']) && is_string($_GET['said']) ? substr($_GET['said'], 0, 400) : '';
 function ne($v) { return htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8'); }
 function nday($t) { $d = new DateTime('@' . (int) $t); $d->setTimezone(new DateTimeZone('America/New_York')); return $d->format('M j'); }
@@ -790,6 +1080,15 @@ function nextra($x) {
 $ACCOUNT = array('admin' => 'a site admin’s account', 'manager' => 'a program manager’s account', 'parent' => 'a parent’s account', 'none' => 'no account on the site');
 $KIND = array('words' => 'In their own words', 'offer' => 'Offer or event line', 'pin' => 'Kids’ Playground pin', 'social' => 'Social links', 'posts' => 'Instagram posts');
 $QKIND = array('program' => 'A program that’s missing', 'camp' => 'A camp that’s missing', 'update' => 'An update to a listing', 'proposal' => 'Proposed by the people who run it', 'note' => 'Your note');
+function nschool($id) { global $SCHOOLS; return isset($SCHOOLS[$id]) ? $SCHOOLS[$id] : (string) $id; }
+// Why a claim waits, in a sentence: how it came about (claims.via, Phase 6), or the ordinary reason.
+function nclaim($c) {
+  $via = isset($c['via']) ? (string) $c['via'] : '';
+  if ($via === 'code-sent') return 'A code went to the address on the listing’s website and wasn’t typed in before it ran out. Their own address is at ' . $c['domain'] . '.';
+  if ($via === 'code') return 'They typed the code sent to the address on the listing’s website, but someone at another address already holds the listing, so you say which stands.';
+  if ($via === 'asked') return 'Their address is at ' . $c['domain'] . ', not the listing’s website, and they asked a person to check.';
+  return 'Their address is at ' . $c['domain'] . ', the listing’s website, but many people share that website, so the claim needs your yes.';
+}
 
 // ----- the buttons -----
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -821,6 +1120,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
       } catch (Exception $e) { $msg = 'That couldn’t be saved.'; }
     }
+  } elseif ($ok && in_array($do, array('review_ok', 'review_no'), true)) {
+    // A held review (Phase 6). Publish adds its entry to data/reviews.json on main with one commit, made with the key,
+    // so the site rebuilds by itself; the reviewer is thanked on the next hourly run. Decline settles it with no email.
+    $jump = '#reviews';
+    $rid = isset($_POST['review']) && is_string($_POST['review']) ? $_POST['review'] : '';
+    $r = null;
+    if ($db !== null && preg_match(REVIEW_ID, $rid)) { try { $st = $db->prepare('SELECT r.*, u.email FROM reviews r LEFT JOIN users u ON u.id = r.user_id WHERE r.id = ?'); $st->execute(array($rid)); $r = $st->fetch(PDO::FETCH_ASSOC) ?: null; } catch (Exception $e) { $r = null; } }
+    if (!$r) $msg = 'That review isn’t here any more.';
+    elseif ($r['status'] !== 'held') $msg = 'That review was already decided.';
+    elseif ($do === 'review_no') {
+      try {
+        $db->prepare("UPDATE reviews SET status = 'declined', decided = ? WHERE id = ?")->execute(array(time(), $rid));
+        $db->prepare("UPDATE queue_items SET state = 'closed', outcome = 'declined', told = -6, decided = ? WHERE id = ?")->execute(array(time(), $rid));
+        $msg = 'Declined. It won’t go on the site, and the reviewer isn’t emailed.';
+      } catch (Exception $e) { $msg = 'That couldn’t be saved.'; }
+    }
+    elseif (!$admin) $msg = 'Only a site admin’s account can publish a review: it goes on the site with a commit.';
+    elseif (!$ready) $msg = 'GitHub can’t be reached from here: the key file is missing on the server.';
+    elseif (!gh_allowed('needs-write', 30)) $msg = 'That’s a lot of changes in one hour. Wait a little and try again.';
+    else {
+      $entry = review_entry($r, $reviewKey);
+      $f = gh_file('data/reviews.json', 'main');
+      $text = $f === null ? '' : review_file_add($f[0], $entry);
+      if ($f === null) $msg = 'data/reviews.json couldn’t be read from GitHub. Try again in a minute.';
+      elseif ($text === '' && strpos($f[0], '"' . $rid . '"') === false) $msg = 'data/reviews.json on main isn’t in the shape expected, so nothing was changed.';
+      else {
+        $put = $text === '' ? array(true, '', '') : gh_put('data/reviews.json', $text, $f[1], 'A review of ' . nlabel($r['listing']) . ', approved on the Needs-you page', 'main');
+        if (!$put[0]) $msg = $put[1];
+        else {
+          try {
+            $db->prepare("UPDATE reviews SET status = 'published', decided = ? WHERE id = ?")->execute(array(time(), $rid));
+            // The thank-you goes the way every answer does: the next push_run sends it, once.
+            $db->prepare("INSERT OR IGNORE INTO queue_items (id, kind, email, listing, what, seen, state, outcome, decided, told) VALUES (?, 'review', ?, ?, ?, ?, 'closed', 'published', ?, 0)")->execute(array($rid, (string) $r['email'], (string) $r['listing'], nlabel($r['listing']), time(), time()));
+            $db->prepare("UPDATE queue_items SET state = 'closed', outcome = 'published', decided = ? WHERE id = ? AND told <= 0")->execute(array(time(), $rid));
+          } catch (Exception $e) { /* the commit stands; the thank-you just doesn't go */ }
+          $msg = 'Published: it’s on data/reviews.json on main' . ($put[1] !== '' ? ' (commit ' . $put[1] . ')' : '') . ', the site rebuilds in a few minutes, and the reviewer gets a thank-you within the hour.';
+        }
+      }
+    }
   } elseif ($ok && in_array($do, array('approve', 'decline', 'switch'), true) && !$admin) $msg = 'Only a site admin’s account can do that. You can see everything here, and decide on claims, photos and words.';
   elseif ($ok && !$ready && in_array($do, array('approve', 'decline', 'switch', 'sync'), true)) $msg = 'GitHub can’t be reached from here: the key file is missing on the server.';
   elseif ($ok && in_array($do, array('approve', 'decline', 'switch'), true) && !gh_allowed('needs-write', 30)) $msg = 'That’s a lot of changes in one hour. Wait a little and try again.';
@@ -848,7 +1186,7 @@ $sync = $ready ? ap_sync($ctx) : array('state' => 'off');
 $modeInfo = $ready ? ap_mode($ctx) : array('mode' => '');
 $mode = $modeInfo['mode'];
 $prs = $db !== null ? ap_waiting($db, $mode) : array();
-$held = needs_held($db);
+$held = needs_held($db, $mode);
 $total = needs_count($held, $prs);
 $report = $db !== null ? ap_report($db, $today) : array('rows' => array(), 'first' => '', 'days' => 0, 'judged' => 0, 'wrong' => array(), 'passed' => false);
 $spot = $db !== null ? ap_spot($db, (new DateTime('now', $NY))->format('o-\WW')) : array();
@@ -951,15 +1289,29 @@ function pr_reason($p, $mode) {
   <?php foreach ($held['claims'] as $c) { ?><div class="panel needs-item">
     <h3><?php echo ne(nlabel($c['listing'])); ?></h3>
     <p class="hint"><?php echo ne(trim($c['first'] . ' ' . $c['last'])); ?> &lt;<?php echo ne($c['email']); ?>&gt; · <?php echo ne(nday($c['created'])); ?></p>
-    <p>Their address is at <b><?php echo ne($c['domain']); ?></b>, the listing’s website, but many people share that website, so the claim needs your yes.</p>
+    <p><?php echo ne(nclaim($c)); ?></p>
     <form method="post" action="../claims/" class="actions"><input type="hidden" name="csrf" value="<?php echo ne($claimsCsrf); ?>"><input type="hidden" name="back" value="needs"><input type="hidden" name="id" value="<?php echo (int) $c['id']; ?>"><button class="btn primary" type="submit" name="do" value="claim_ok">Approve the claim</button><button class="btn" type="submit" name="do" value="claim_no">Decline</button></form>
   </div><?php } ?><?php } ?>
+
+  <?php if ($held['reviews']) { ?><section id="reviews"><h2>Reviews waiting (<?php echo count($held['reviews']); ?>)</h2>
+  <p class="hint">Each one waits for the reason shown. Publish puts it on the site with one commit to <code>data/reviews.json</code>, and the reviewer gets a thank-you. Decline keeps it off the site for good; nobody is emailed. Only provider pages are quoted anywhere public: a review’s words leave this page only when you publish it.</p>
+  <?php foreach ($held['reviews'] as $r) { $ent = review_entry($r, $reviewKey); ?><div class="panel needs-item" id="review-<?php echo ne($r['id']); ?>">
+    <h3><?php echo ne(nlabel($r['listing'])); ?> <span class="hint"><?php echo str_repeat('★', (int) $r['stars']) . str_repeat('☆', 5 - (int) $r['stars']); ?></span></h3>
+    <p class="hint">Signed “<?php echo ne($r['name']); ?>”, <?php echo ne(nschool($r['school'])); ?><?php if (isset($ent['kid'])) { ?> · in a child’s words: grade <?php echo ne($ent['kid']['grade']); ?><?php if (isset($ent['kid']['name'])) { ?>, shown as <?php echo ne($ent['kid']['name']); ?><?php } ?><?php } ?> · <?php echo ne(nday($r['created'])); ?><?php if ((string) $r['email'] !== '') { ?> · the account: <?php echo ne(trim($r['first'] . ' ' . $r['last'])); ?> &lt;<?php echo ne($r['email']); ?>&gt;<?php } ?></p>
+    <p><b><?php echo ne(review_hold_text((string) $r['hold'])); ?></b></p>
+    <blockquote><?php echo ne($r['comment']); ?></blockquote>
+    <form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo ne($csrf); ?>"><input type="hidden" name="review" value="<?php echo ne($r['id']); ?>">
+      <?php if ($admin && $ready) { ?><button class="btn primary" type="submit" name="do" value="review_ok">Publish it</button><?php } ?><button class="btn" type="submit" name="do" value="review_no">Decline</button>
+    </form>
+  </div><?php } ?>
+  <?php if (!$admin || !$ready) { ?><p class="hint"><?php echo !$admin ? 'Publishing a review is for a site admin’s account: it commits to the repository.' : 'Publish needs the key file on the server: GitHub can’t be reached from here.'; ?></p><?php } ?>
+  </section><?php } ?>
 
   <?php if ($held['photos']) { ?><h2>Photos waiting (<?php echo count($held['photos']); ?>)</h2>
   <?php foreach ($held['photos'] as $x) { ?><div class="panel needs-item">
     <h3><?php echo ne(nlabel($x['listing'])); ?><?php if ($x['kind'] === 'logo') { ?> <span class="hint">Logo</span><?php } ?></h3>
     <p class="hint">From <?php echo ne(trim($x['first'] . ' ' . $x['last'])); ?> · <?php echo ne(nday($x['created'])); ?></p>
-    <p>A photo shows on a listing only after you publish it. They ticked that they may use it and have the families’ permission for any children in it.</p>
+    <?php $say = content_say_text($x, $mode); ?><p><?php if ($say !== '') { ?><b><?php echo ne($say); ?></b> <?php } ?><?php if ($x['kind'] === 'logo') { ?>They ticked that it’s their logo and they may use it.<?php } elseif (isset($x['consent']) && (int) $x['consent'] === 1) { ?>They ticked that they may use it, and that everyone shown, or their parent, agreed to it being public.<?php } else { ?>They ticked that they may use it. It came in before the box saying everyone shown agreed to it being public, so it waits for you.<?php } ?></p>
     <p><img class="review-photo" src="../claims/?photo=<?php echo (int) $x['id']; ?>" alt=""></p>
     <p>Described as: <b><?php echo ne($x['alt']); ?></b></p>
     <form method="post" action="../claims/" class="actions"><input type="hidden" name="csrf" value="<?php echo ne($claimsCsrf); ?>"><input type="hidden" name="back" value="needs"><input type="hidden" name="id" value="<?php echo (int) $x['id']; ?>"><button class="btn primary" type="submit" name="do" value="photo_ok">Publish the photo</button><button class="btn" type="submit" name="do" value="photo_no">Decline</button></form>
@@ -969,7 +1321,7 @@ function pr_reason($p, $mode) {
   <?php foreach ($held['extras'] as $x) { ?><div class="panel needs-item">
     <h3><?php echo ne(nlabel($x['listing'])); ?> <span class="hint"><?php echo ne(isset($KIND[$x['kind']]) ? $KIND[$x['kind']] : $x['kind']); ?></span></h3>
     <p class="hint">From <?php echo ne(trim($x['first'] . ' ' . $x['last'])); ?> · <?php echo ne(nday($x['created'])); ?><?php if ($x['kind'] === 'offer' && $x['until'] !== '') { ?> · to show until <?php echo ne($x['until']); ?><?php } ?></p>
-    <p>What a manager writes for a premium listing shows only after you publish it.</p>
+    <?php $say = content_say_text($x, $mode); ?><p><?php echo $say !== '' ? '<b>' . ne($say) . '</b>' : ne(in_array($x['kind'], array('social', 'posts'), true) ? 'Sent while the autopilot wasn’t on. With it on, social links and posts go on the listing at once.' : 'No run has looked at it yet: it’s in the queue for the next one.'); ?></p>
     <pre class="edit-ask"><?php echo ne(nextra($x)); ?></pre>
     <form method="post" action="../claims/" class="actions"><input type="hidden" name="csrf" value="<?php echo ne($claimsCsrf); ?>"><input type="hidden" name="back" value="needs"><input type="hidden" name="id" value="<?php echo (int) $x['id']; ?>"><button class="btn primary" type="submit" name="do" value="extra_ok">Publish it</button><button class="btn" type="submit" name="do" value="extra_no">Decline</button></form>
   </div><?php } ?><?php } ?>
@@ -1006,8 +1358,6 @@ function pr_reason($p, $mode) {
     </form>
   </div><?php } ?><?php } ?>
   </section><?php } ?>
-
-  <p class="hint">Reviews still reach you by email, and stay in the inbox. They move here when the review form stores them (Phase 6).</p>
 
   <?php if ($mode === 'shadow') { ?><section id="shadow">
   <h2>The shadow report</h2>
@@ -1129,7 +1479,7 @@ function pr_reason($p, $mode) {
   <p class="hint"><span data-copy="632056cf5c">It’s this same site, kept like an app: free, nothing from an app store, and it opens right to your plans.</span></p>
   <button type="button" class="btn primary" data-dialog-close><span data-copy="5b8027fa0e">Got it</span></button>
 </div></dialog>
-<script src="../../assets/site.js?v=9a92b1a9" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
+<script src="../../assets/site.js?v=0bde3a78" data-edit="{&quot;js&quot;:&quot;../../assets/edit.js?v=1646bb83&quot;,&quot;send&quot;:&quot;../../edit/send.php&quot;,&quot;home&quot;:&quot;../../edit/&quot;,&quot;contact&quot;:&quot;contact@phillyafterschool.org&quot;}" data-api="../../groups/api.php"></script>
 
 </body>
 </html>

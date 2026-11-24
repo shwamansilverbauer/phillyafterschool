@@ -1144,14 +1144,26 @@ document.addEventListener('click', function (e) {
     // no school in the link: start on the school saved on this device
     var rSchool = review.querySelector('[name="school"]'), rMine = mySchool();
     if (!qs.school && rMine && all(rSchool, 'option').some(function (o) { return o.value === rMine.id; })) rSchool.value = rMine.id;
-    // signed in: the first name and email address are already known, so they are filled in (and can be changed)
+    // A review written before the emailed code came (scaling plan, Phase 6) is kept on this device for a day, so opening
+    // the email's link instead of typing the code, even in another tab, brings it back. Gone once it is sent.
+    var RV_DRAFT = 'pas-rv-draft';
+    var dropDraft = function () { try { window.localStorage.removeItem(RV_DRAFT); } catch (e) { /* nothing kept */ } };
+    var draft = null; try { draft = JSON.parse(store(RV_DRAFT) || 'null'); } catch (e) { draft = null; }
+    var draftOk = !!(draft && draft.f && draft.t > Date.now() - 864e5 && (!qs.program || qs.program === draft.f.program));
+    if (draftOk) {
+      ['program', 'school', 'comment', 'name', 'email', 'kidname', 'kidgrade'].forEach(function (k) { var x = review.querySelector('[name="' + k + '"]'); if (x && draft.f[k] && (x.tagName !== 'SELECT' || all(x, 'option').some(function (o) { return o.value === draft.f[k]; }))) x.value = draft.f[k]; });
+      var st0 = review.querySelector('input[name="stars"][value="' + draft.f.stars + '"]'); if (st0) st0.checked = true;
+    } else if (draft) dropDraft();
+    // signed in: the first name and email address are already known, so they are filled in; the review is sent from
+    // that account, so its address can't be changed here
     var rApi = review.getAttribute('data-api');
-    if (rApi && store('pas-in') === '1' && window.fetch) {
+    var rvIn = store('pas-in') === '1';
+    if (rApi && rvIn && window.fetch) {
       window.fetch(rApi + '?action=me', { credentials: 'same-origin', headers: { 'X-PAS': '1' } }).then(function (r) { return r.json(); }).then(function (d) {
-        if (!d || !d.ok || !d.user) return;
-        var n = review.querySelector('[name="name"]'), m = review.querySelector('[name="email"]');
+        if (!d || !d.ok || !d.user) { rvIn = false; return; }
+        var n = review.querySelector('[name="name"]'), m = review.querySelector('[name="email"]'), mh = review.querySelector('#rv-email-hint');
         if (n && !n.value && d.user.first) n.value = d.user.first;
-        if (m && !m.value && d.user.email) m.value = d.user.email;
+        if (m && d.user.email) { m.value = d.user.email; m.readOnly = true; if (mh) mh.textContent = 'You’re signed in, so your review is sent from this account. Never shown.'; }
         if (!qs.school && !rMine && d.user.school && all(rSchool, 'option').some(function (o) { return o.value === d.user.school; })) rSchool.value = d.user.school;
       }).then(null, function () { /* they can type them */ });
     }
@@ -1175,15 +1187,71 @@ document.addEventListener('click', function (e) {
         if (kg0 && qs.grade && all(kg0, 'option').some(function (o) { return o.value === qs.grade; })) kg0.value = qs.grade;
         setKid(true);
       }
+      if (draftOk && draft.f.kid) setKid(true);   // a kept draft in a child's words
       if (kidOn) kidOn.addEventListener('click', function () { setKid(true); var kg = review.querySelector('[name="kidgrade"]'); if (kg) kg.focus(); });
       if (kidOff) kidOff.addEventListener('click', function () { setKid(false); });
       var knIn = review.querySelector('[name="kidname"]'); if (knIn) knIn.addEventListener('input', function () { if (kidFlag.value === 'yes') setKid(true); });
     }
-    review.addEventListener('submit', function () {
+    var sent = function () {
       var s = review.querySelector('input[name="stars"]:checked');
       RV.done(review.querySelector('[name="program"]').value);   // this device won't ask about it again
       track({ event: 'pas_review_submit', program_id: review.querySelector('[name="program"]').value, school: review.querySelector('[name="school"]').value, stars: s ? s.value : '', kid: kidFlag && kidFlag.value === 'yes' ? 'yes' : 'no' });   // whether it is in a child's words, nothing about the child
-    });
+    };
+    if (!rApi || !window.fetch) review.addEventListener('submit', sent);   // no accounts: the form posts to send.php, which emails it
+    else {
+      // With accounts (Phase 6) the review is sent from here: someone not signed in gets a 6-digit code by email (the
+      // sign-in code the site already uses, which makes their account), types it in, and the review is stored. Nothing
+      // is posted to send.php, and nothing about a child leaves this page except to the site itself.
+      var codeBox = review.querySelector('#rv-code'), codeIn = review.querySelector('#r-code'), codeTo = review.querySelector('#rv-code-to'), status = review.querySelector('#rv-status'), sendBtn = review.querySelector('#rv-send');
+      var req = '', busy = false;
+      var say = function (t, bad) { if (status) { status.textContent = t || ''; status.className = 'g-status' + (bad ? ' bad' : ''); } };
+      var post = function (action, body) {
+        return window.fetch(rApi + '?action=' + action, { method: 'POST', credentials: 'same-origin', headers: { 'X-PAS': '1', 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+          .then(function (r) { return r.json().then(null, function () { return { ok: false, message: 'Something went wrong on our side. Please try again.' }; }); });
+      };
+      var val = function (k) { var x = review.querySelector('[name="' + k + '"]'); return x ? x.value : ''; };
+      var fields = function () {
+        var s = review.querySelector('input[name="stars"]:checked'), fh = review.querySelector('[name="firsthand"]'), ks = review.querySelector('[name="kidshow"]');
+        var f = { program: val('program'), school: val('school'), stars: s ? parseInt(s.value, 10) : 0, comment: val('comment'), name: val('name'), email: val('email').trim(), firsthand: !!(fh && fh.checked) };
+        if (kidFlag && kidFlag.value === 'yes') { f.kid = true; f.kidgrade = val('kidgrade'); f.kidname = val('kidname'); f.kidshow = !!(ks && ks.checked); }
+        return f;
+      };
+      var askCode = function (f) {
+        store(RV_DRAFT, JSON.stringify({ t: Date.now(), f: f }));
+        return post('login_start', { email: f.email, next: 'review' }).then(function (d) {
+          if (!d || !d.ok) { say(d && d.message ? d.message : 'The code couldn’t be sent. Please try again.', true); return; }
+          req = d.req;
+          if (codeBox) codeBox.hidden = false;
+          if (codeIn) { codeIn.required = true; codeIn.value = ''; codeIn.focus(); }
+          if (codeTo) codeTo.textContent = 'Sent to ' + f.email + '. It can take a minute; check the spam folder if it doesn’t come. Or open the link in the email.';
+          if (sendBtn) sendBtn.textContent = 'Confirm and send';
+          say('');
+        });
+      };
+      var store1 = function (f) {
+        say('Sending…');
+        return post('review_add', f).then(function (d) {
+          if (d && d.ok) { sent(); dropDraft(); location.href = review.getAttribute('data-thanks') || 'thanks/'; return; }
+          if (d && d.error === 'signin') { rvIn = false; store('pas-in', null); return askCode(f); }
+          say(d && d.message ? d.message : 'That didn’t send. Please try again.', true);
+        });
+      };
+      review.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        if (busy) return;
+        var f = fields();
+        busy = true; if (sendBtn) sendBtn.disabled = true;
+        var step = req
+          ? post('login_finish', { req: req, code: codeIn ? codeIn.value : '' }).then(function (d) {
+              if (!d || !d.ok) { say(d && d.message ? d.message : 'That code isn’t right.', true); return; }
+              store('pas-in', '1'); rvIn = true; req = '';
+              if (codeBox) codeBox.hidden = true; if (codeIn) codeIn.required = false; if (sendBtn) sendBtn.textContent = 'Send review';
+              return store1(f);
+            })
+          : rvIn ? store1(f) : askCode(f);
+        step.then(function () { busy = false; if (sendBtn) sendBtn.disabled = false; }, function () { busy = false; if (sendBtn) sendBtn.disabled = false; say('That didn’t send. Check your connection and try again.', true); });
+      });
+    }
   }
   // On a program's page, parents' and kids' reviews side by side: a switch between the two lists.
   all(document, '.rv-tabs').forEach(function (tabs) {

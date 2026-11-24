@@ -499,6 +499,7 @@
     var goNext = function (next) {
       if (next === 'join') { location.href = page('join/'); return true; }
       if (next === 'board') { location.href = page('board/') + '?back=1'; return true; }
+      if (next === 'review') { location.href = page('review/') + '?back=1'; return true; }   // the review form keeps the draft on this device
       if (next === 'summer') { location.href = page('summer-schedule/') + '#plan'; return true; }
       if (next === 'daysoff') { location.href = page('days-off/') + '#plan'; return true; }
       if (next === 'calendar') { location.href = page('calendar/'); return true; }
@@ -1718,6 +1719,7 @@
     var cMe = null, cDomain = '', cClaims = [], cMail = true, cState = 'checking';   // checking | out | name | in
     var said = '', saidBad = false;
     var PERSONAL = /^(gmail|googlemail|yahoo|hotmail|outlook|live|msn|aol|icloud|me|comcast|verizon|proton|protonmail)\.(com|net|me)$/;
+    var CLAIM_CODE = claimsBox.getAttribute('data-claim-code') === '1';   // claims by code (scaling plan, Phase 6, call 2)
     var when = function (t) { try { return new Date(t * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); } catch (e) { return ''; } };
     var STATUS = { ok: 'Claimed', pending: 'Waiting for our yes', declined: 'Not approved' };
     var EDIT = { 'new': 'Waiting to be read', done: 'Published', declined: 'Not made' };
@@ -1937,6 +1939,9 @@
         var ok = el('input'); ok.type = 'checkbox'; okRow.appendChild(ok);
         okRow.appendChild(document.createTextNode(' I have the right to use this photo, and permission from the families of any children in it.'));
         pf.appendChild(okRow);
+        var agreeRow = el('label', 'check'), agree = el('input'); agree.type = 'checkbox'; agreeRow.appendChild(agree);
+        agreeRow.appendChild(document.createTextNode(' Everyone shown, or their parent, has agreed to this photo being public.'));
+        pf.appendChild(agreeRow);
         var ps = el('p', 'g-status'); ps.setAttribute('aria-live', 'polite'); pf.appendChild(ps);
         var pa = el('div', 'actions');
         var pb = el('button', 'btn primary', 'Send the photo'); pb.type = 'submit'; pa.appendChild(pb);
@@ -1961,11 +1966,12 @@
           if (!ready) { ps.textContent = 'Choose a photo first.'; ps.className = 'g-status bad'; return; }
           if (alt.value.replace(/\s+/g, ' ').replace(/^ | $/g, '').length < 8) { ps.textContent = 'Describe the photo in a few words, for people who can’t see it.'; ps.className = 'g-status bad'; return; }
           if (!ok.checked) { ps.textContent = 'Tick the box to say you have the right to use this photo.'; ps.className = 'g-status bad'; return; }
+          if (!agree.checked) { ps.textContent = 'Tick the box to say everyone shown, or their parent, has agreed to it being public.'; ps.className = 'g-status bad'; return; }
           pb.disabled = true; ps.className = 'g-status'; ps.textContent = 'Sending…';
-          call('photo_add', { listing: c.listing, alt: alt.value, permission: true, data: ready.data.slice(ready.data.indexOf(',') + 1) }).then(function (r) {
+          call('photo_add', { listing: c.listing, alt: alt.value, permission: true, consent: true, data: ready.data.slice(ready.data.indexOf(',') + 1) }).then(function (r) {
             pb.disabled = false;
             if (!r.ok) { ps.textContent = r.message; ps.className = 'g-status bad'; return; }
-            said = 'Photo sent. It goes on ' + c.name + ' once a person has looked at it, and we’ll email you.'; saidBad = false;
+            said = 'Photo sent. It goes on ' + c.name + ' once it’s been checked, and we’ll email you.'; saidBad = false;
             pushStep('photo_sent');
             cClaims = r.claims || []; render();
           });
@@ -2039,6 +2045,8 @@
         var okRow = el('label', 'check'), ok = el('input'); ok.type = 'checkbox'; okRow.appendChild(ok);
         okRow.appendChild(document.createTextNode(isLogo ? ' This is our logo, and I have the right to use it.' : ' I have the right to use this photo, and permission from the families of any children in it.'));
         f.appendChild(okRow);
+        var agree = null;
+        if (!isLogo) { var agreeRow = el('label', 'check'); agree = el('input'); agree.type = 'checkbox'; agreeRow.appendChild(agree); agreeRow.appendChild(document.createTextNode(' Everyone shown, or their parent, has agreed to this photo being public.')); f.appendChild(agreeRow); }
         var st = el('p', 'g-status'); st.setAttribute('aria-live', 'polite'); f.appendChild(st);
         var acts = el('div', 'actions'), go = el('button', 'btn primary', isLogo ? 'Send the logo' : 'Send the photo'); go.type = 'submit'; acts.appendChild(go); f.appendChild(acts);
         var ready = null;
@@ -2053,12 +2061,13 @@
           if (!ready) { st.textContent = 'Choose a ' + kind + ' first.'; st.className = 'g-status bad'; return; }
           if (alt.value.replace(/\s+/g, ' ').replace(/^ | $/g, '').length < 8) { st.textContent = 'Describe it in a few words, for people who can’t see it.'; st.className = 'g-status bad'; return; }
           if (!ok.checked) { st.textContent = 'Tick the box to say you have the right to use it.'; st.className = 'g-status bad'; return; }
+          if (agree && !agree.checked) { st.textContent = 'Tick the box to say everyone shown, or their parent, has agreed to it being public.'; st.className = 'g-status bad'; return; }
           go.disabled = true; st.className = 'g-status'; st.textContent = 'Sending…';
-          call('photo_add', { listing: key, kind: kind, alt: alt.value, permission: true, data: ready.data.slice(ready.data.indexOf(',') + 1) }).then(function (r) {
+          call('photo_add', { listing: key, kind: kind, alt: alt.value, permission: true, consent: !!agree, data: ready.data.slice(ready.data.indexOf(',') + 1) }).then(function (r) {
             go.disabled = false;
             if (!r.ok) { st.textContent = r.message; st.className = 'g-status bad'; return; }
             pushStep(kind + '_sent');
-            after((isLogo ? 'Logo' : 'Photo') + ' sent. It goes on ' + c.name + ' once a person has looked at it, and we’ll email you.')(r);
+            after((isLogo ? 'Logo' : 'Photo') + ' sent. It goes on ' + c.name + ' once it’s been checked, and we’ll email you.')(r);
           });
         });
         part.appendChild(f);
@@ -2343,17 +2352,73 @@
       // find a listing
       var add = el('section', 'panel'); add.id = 'claim-search';
       add.appendChild(el('h2', null, cState === 'in' && cClaims.length ? 'Claim another listing' : 'Find your listing'));
-      if (holder) add.appendChild(el('p', 'hint', PERSONAL.test(cDomain) ? 'You’re signed in with a personal address, which can’t claim a listing.' : 'You can claim listings whose website is at ' + (cDomain || 'your address') + '.'));
+      if (holder) add.appendChild(el('p', 'hint', PERSONAL.test(cDomain) ? (CLAIM_CODE ? 'You’re signed in with a personal address: claim with a code sent to the address your listing’s website shows.' : 'You’re signed in with a personal address, which can’t claim a listing.') : 'You can claim listings whose website is at ' + (cDomain || 'your address') + '.' + (CLAIM_CODE ? ' Others, with a code sent to the address their website shows.' : '')));
       var sl = el('label', null, 'Search by name'); sl.htmlFor = 'claim-find';
       var si = el('input'); si.id = 'claim-find'; si.type = 'search'; si.autocomplete = 'off'; si.placeholder = 'Start typing your program’s name'; si.value = findText;
       var results = el('ul', 'g-list claim-results');
       var note = el('p', 'hint');
       add.appendChild(sl); add.appendChild(si); add.appendChild(results); add.appendChild(note);
+      // A claim that stood or waits: the page says so and redraws.
+      var claimed = function (l, r) {
+        sset('pas-claim', null); wanted = ''; findText = '';
+        said = r.status === 'ok' ? 'It’s yours: ' + l.name + ' now shows as claimed. Send an update whenever something changes.' : 'Asked. A person checks your claim on ' + l.name + ', and you’ll get an email either way.';
+        saidBad = false; cClaims = r.claims || []; tellRole();
+        render();
+        window.scrollTo(0, Math.max(0, claimsBox.getBoundingClientRect().top + window.pageYOffset - 90));
+      };
+      // Claims by code: the address doesn't match, so a code goes to the address the listing's website shows (the
+      // server says it, partly hidden), or a person checks the claim. box: where the choices go; r: claim_add's answer.
+      var otherWay = function (l, box, r) {
+        box.textContent = '';
+        box.appendChild(el('p', 'hint', r && r.message ? r.message : 'Your address isn’t at ' + (l.domain || 'its website') + '.'));
+        var row = el('div', 'actions'), status = el('p', 'g-status'); status.setAttribute('aria-live', 'polite');
+        if (!r || r.code) {
+          var send = btn('btn primary', r && r.code ? 'Send a code to ' + r.code : 'Send a code to the address its website shows');
+          send.addEventListener('click', function () {
+            send.disabled = true; status.className = 'g-status'; status.textContent = 'Sending…';
+            call('claim_code_start', { listing: l.key }).then(function (d) {
+              send.disabled = false;
+              if (d.ok && d.status === 'ok') { claimed(l, d); return; }
+              if (!d.ok) { status.textContent = d.message; status.className = 'g-status bad'; if (d.error === 'no-email') send.hidden = true; return; }
+              pushStep('code_sent');
+              box.textContent = '';
+              box.appendChild(el('p', 'hint', 'We sent a 6-digit code to ' + d.to + ', the address ' + l.name + '’s website shows. Ask whoever reads that inbox for it, then type it here. It works for 24 hours.'));
+              var f = el('form', 'g-form'), code = field(f, 'cc-' + l.key.replace(/[^a-z0-9]/g, '-'), 'The code', 'input', { type: 'text', inputMode: 'numeric', autocomplete: 'one-time-code', maxLength: 7 });
+              var st2 = el('p', 'g-status'); st2.setAttribute('aria-live', 'polite'); f.appendChild(st2);
+              var a2 = el('div', 'actions'), go = el('button', 'btn primary', 'Claim it'); go.type = 'submit'; a2.appendChild(go); f.appendChild(a2);
+              f.addEventListener('submit', function (e) {
+                e.preventDefault(); go.disabled = true; st2.className = 'g-status'; st2.textContent = 'Checking…';
+                call('claim_code_finish', { req: d.req, code: code.value }).then(function (fin) {
+                  go.disabled = false;
+                  if (!fin.ok) { st2.textContent = fin.message; st2.className = 'g-status bad'; return; }
+                  pushStep(fin.status === 'ok' ? 'claimed_by_code' : 'waiting');
+                  claimed(l, fin);
+                });
+              });
+              box.appendChild(f);
+              code.focus();
+            });
+          });
+          row.appendChild(send);
+        }
+        var ask = btn('btn', 'Ask a person to check');
+        ask.addEventListener('click', function () {
+          ask.disabled = true; status.className = 'g-status'; status.textContent = 'Asking…';
+          call('claim_add', { listing: l.key, ask: true }).then(function (d) {
+            ask.disabled = false;
+            if (!d.ok) { status.textContent = d.message; status.className = 'g-status bad'; return; }
+            pushStep('waiting'); claimed(l, d);
+          });
+        });
+        row.appendChild(ask);
+        box.appendChild(row); box.appendChild(status);
+      };
       var claim = function (l, b, st) {
         b.disabled = true; st.className = 'g-status'; st.textContent = 'Checking…';
         call('claim_add', { listing: l.key }).then(function (r) {
           b.disabled = false;
           pushStep(r.ok ? (r.status === 'ok' ? 'claimed' : 'waiting') : (r.error === 'domain' ? 'address_mismatch' : 'refused'));
+          if (!r.ok && r.error === 'domain' && r.ask) { b.hidden = true; st.className = ''; otherWay(l, st, r); return; }
           if (!r.ok) { st.textContent = r.message; st.className = 'g-status bad'; return; }
           sset('pas-claim', null); wanted = ''; findText = '';
           said = r.status === 'ok' ? 'It’s yours: ' + l.name + ' now shows as claimed. Send an update whenever something changes.' : 'Asked. ' + l.name + ' is on a website many people share, so a person checks the claim. You’ll get an email either way.';
@@ -2377,6 +2442,7 @@
             var same = !!cDomain && l.domain === cDomain;
             li3.appendChild(el('span', 'hint', l.domain ? 'Website at ' + l.domain + (same ? (l.match ? '. Your address matches.' : '. Your address matches, and a person checks this one.') : '. You’re signed in at ' + cDomain + ', which doesn’t match.') : 'No website we can check.'));
             if (same) { var b = btn('btn primary', 'Claim this listing'); b.addEventListener('click', function () { claim(l, b, st); }); li3.appendChild(b); }
+            else if (CLAIM_CODE) { var bo = btn('btn primary', 'Claim this listing'); bo.addEventListener('click', function () { claim(l, bo, st); }); li3.appendChild(bo); }
             else li3.appendChild(el('span', 'hint', 'To claim it, sign out and sign in with an address at ' + (l.domain || 'its website') + '.'));
           } else {
             li3.appendChild(el('span', 'hint', l.domain ? 'Website at ' + l.domain + '. You’ll need an email address there to claim it.' : 'No website we can check.'));
