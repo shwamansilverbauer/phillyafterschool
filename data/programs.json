@@ -4366,18 +4366,6 @@
           }
         ],
         "checked": "2026-11-10"
-      },
-      "as-jenks": {
-        "relation": "pickup",
-        "distance": "about two-thirds of a mile southwest of Bok",
-        "note": "Beehive’s list for Bok names “Jenks”, Monday to Friday, for pre-K to 3rd grade. Every other school on that list is in South Philadelphia, so this is read as A.S. Jenks; ask Beehive to confirm.",
-        "sources": [
-          {
-            "label": "Beehive After Care",
-            "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs"
-          }
-        ],
-        "checked": "2026-11-24"
       }
     },
     "pickupLists": [
@@ -23526,93 +23514,6 @@
     ]
   },
   {
-    "id": "as-jenks-clubs",
-    "name": "School clubs",
-    "what": "Clubs A.S. Jenks names in its 2026–2027 handbook: chess, drama, student leadership and safety patrol",
-    "types": [
-      "clubs"
-    ],
-    "keywords": [
-      "clubs",
-      "chess",
-      "drama",
-      "student government",
-      "student council",
-      "safety patrol",
-      "Jenks",
-      "A.S. Jenks"
-    ],
-    "address": "",
-    "grades": null,
-    "gradeNote": "Varies by club; many are for older grades. Ask the school",
-    "hours": "Not published; ask the school office",
-    "cost": "Not published",
-    "phone": "215-400-8240",
-    "email": "",
-    "website": "https://asjenks.philasd.org/",
-    "register": {
-      "how": "school",
-      "note": "Ask the school office (215-400-8240)."
-    },
-    "note": "The school’s 2026–2027 handbook says clubs meet before, during or after school, mostly starting in October, and that three late pickups from an after-school club end a student’s place in it. It doesn’t say which clubs meet after school, or when.",
-    "sources": [
-      {
-        "label": "A.S. Jenks: parent and student handbook, 2026–2027",
-        "url": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit"
-      },
-      {
-        "label": "Abram S. Jenks School",
-        "url": "https://asjenks.philasd.org/"
-      }
-    ],
-    "lastVerified": "2026-11-24",
-    "schools": {
-      "as-jenks": {
-        "relation": "onsite",
-        "checked": "2026-11-24"
-      }
-    },
-    "clubs": [
-      {
-        "name": "Chess",
-        "tags": [
-          "games"
-        ]
-      },
-      {
-        "name": "Drama",
-        "tags": [
-          "theater"
-        ]
-      },
-      {
-        "name": "Student Activity Leaders",
-        "tags": [
-          "clubs"
-        ]
-      },
-      {
-        "name": "Safety Patrol",
-        "tags": [
-          "clubs"
-        ],
-        "roster": false
-      },
-      {
-        "name": "Student Government",
-        "tags": [
-          "clubs"
-        ]
-      },
-      {
-        "name": "Student Council",
-        "tags": [
-          "clubs"
-        ]
-      }
-    ]
-  },
-  {
     "id": "launch-philly-dick",
     "name": "Launch Philly Creative Kids at William Dick",
     "what": "Free after-school program inside William Dick from Launch Philly’s Creative Kids, for kindergarten to 8th grade, with meals",
@@ -23676,60 +23577,6 @@
           {
             "label": "City program locator: Launch Philly at William Dick",
             "url": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48"
-          }
-        ],
-        "checked": "2026-11-24"
-      }
-    }
-  },
-  {
-    "id": "cyba-basketball",
-    "name": "CYBA Free After School Sports Program",
-    "what": "Free after-school basketball training, scrimmages and character development from the Christian Youth Basketball Association, for ages 8 to 17",
-    "types": [
-      "movement"
-    ],
-    "keywords": [
-      "basketball",
-      "sports",
-      "after school",
-      "free",
-      "CYBA",
-      "Christian Youth Basketball Association",
-      "character development",
-      "William Dick"
-    ],
-    "address": "",
-    "grades": null,
-    "gradeNote": "Ages 8 to 17",
-    "hours": "Not published; ask CYBA",
-    "cost": "Free, according to CYBA’s page.",
-    "price": "free",
-    "phone": "215-915-4243",
-    "email": "",
-    "website": "https://cybabasketball.org/",
-    "register": {
-      "how": "online",
-      "url": "https://cybabasketball.org/reg",
-      "label": "Register",
-      "note": "CYBA’s page says to register online and select your location."
-    },
-    "note": "CYBA’s page lists William Dick, Edmonds, Lamberton and McCloskey public schools as its after-school locations, without days or times. It is a faith-based program: CYBA says it uses the Bible for its character development. Ask which days it meets at each school.",
-    "sources": [
-      {
-        "label": "CYBA: After School Sports Program",
-        "url": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program"
-      }
-    ],
-    "lastVerified": "2026-11-24",
-    "schools": {
-      "dick": {
-        "relation": "onsite",
-        "note": "CYBA’s own page lists William Dick Public School as a location for its free after-school program. It doesn’t give days or times.",
-        "sources": [
-          {
-            "label": "CYBA: After School Sports Program",
-            "url": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program"
           }
         ],
         "checked": "2026-11-24"
