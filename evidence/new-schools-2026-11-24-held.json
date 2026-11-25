@@ -1,0 +1,2169 @@
+{
+ "run": "new-schools-2026-11-24-held",
+ "items": [
+  {
+   "item": "school:as-jenks",
+   "kind": "link",
+   "listing": "p:beehive-at-bok",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "schools.as-jenks.relation",
+     "old": null,
+     "new": "pickup",
+     "source": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
+     "quote": "Monday through Friday from Kirkbride, Coppin, Nebinger, Southwark, Jenks, and Vare Washington Pre-K through 3rd grade",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "schools.as-jenks.distance",
+     "old": null,
+     "new": "about two-thirds of a mile southwest of Bok",
+     "source": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
+     "quote": "Monday through Friday from Kirkbride, Coppin, Nebinger, Southwark, Jenks, and Vare Washington Pre-K through 3rd grade",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "schools.as-jenks.note",
+     "old": null,
+     "new": "Beehive’s list for Bok names “Jenks”, Monday to Friday, for pre-K to 3rd grade. Every other school on that list is in South Philadelphia, so this is read as A.S. Jenks; ask Beehive to confirm.",
+     "source": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
+     "quote": "Monday through Friday from Kirkbride, Coppin, Nebinger, Southwark, Jenks, and Vare Washington Pre-K through 3rd grade",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "schools.as-jenks.sources[https://www.beehiveatbok.com/afterschool-and-summer-programs].label",
+     "old": null,
+     "new": "Beehive After Care",
+     "source": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
+     "quote": "Monday through Friday from Kirkbride, Coppin, Nebinger, Southwark, Jenks, and Vare Washington Pre-K through 3rd grade",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "schools.as-jenks.sources[https://www.beehiveatbok.com/afterschool-and-summer-programs].url",
+     "old": null,
+     "new": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
+     "source": "https://www.beehiveatbok.com/afterschool-and-summer-programs",
+     "quote": "Monday through Friday from Kirkbride, Coppin, Nebinger, Southwark, Jenks, and Vare Washington Pre-K through 3rd grade",
+     "read": "2026-11-24",
+     "how": "browser"
+    }
+   ]
+  },
+  {
+   "item": "school:as-jenks",
+   "kind": "new-listing",
+   "listing": "p:as-jenks-clubs",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "name",
+     "old": null,
+     "new": "School clubs",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "what",
+     "old": null,
+     "new": "Clubs A.S. Jenks names in its 2026–2027 handbook: chess, drama, student leadership and safety patrol",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "2026–2027 School Year",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "what",
+     "old": null,
+     "new": "Clubs A.S. Jenks names in its 2026–2027 handbook: chess, drama, student leadership and safety patrol",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "types",
+     "old": null,
+     "new": [
+      "clubs"
+     ],
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "keywords",
+     "old": null,
+     "new": [
+      "clubs",
+      "chess",
+      "drama",
+      "student government",
+      "student council",
+      "safety patrol",
+      "Jenks",
+      "A.S. Jenks"
+     ],
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "address",
+     "old": null,
+     "new": "",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "gradeNote",
+     "old": null,
+     "new": "Varies by club; many are for older grades. Ask the school",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "hours",
+     "old": null,
+     "new": "Not published; ask the school office",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "cost",
+     "old": null,
+     "new": "Not published",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "phone",
+     "old": null,
+     "new": "215-400-8240",
+     "source": "https://asjenks.philasd.org/",
+     "quote": "Phone: 215-400-8240 Fax: 215-400-8241 Address: 2501 S. 13th St. Philadelphia, PA 19148",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "email",
+     "old": null,
+     "new": "",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "website",
+     "old": null,
+     "new": "https://asjenks.philasd.org/",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.how",
+     "old": null,
+     "new": "school",
+     "source": "https://asjenks.philasd.org/",
+     "quote": "Phone: 215-400-8240 Fax: 215-400-8241 Address: 2501 S. 13th St. Philadelphia, PA 19148",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.note",
+     "old": null,
+     "new": "Ask the school office (215-400-8240).",
+     "source": "https://asjenks.philasd.org/",
+     "quote": "Phone: 215-400-8240 Fax: 215-400-8241 Address: 2501 S. 13th St. Philadelphia, PA 19148",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "note",
+     "old": null,
+     "new": "The school’s 2026–2027 handbook says clubs meet before, during or after school, mostly starting in October, and that three late pickups from an after-school club end a student’s place in it. It doesn’t say which clubs meet after school, or when.",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "note",
+     "old": null,
+     "new": "The school’s 2026–2027 handbook says clubs meet before, during or after school, mostly starting in October, and that three late pickups from an after-school club end a student’s place in it. It doesn’t say which clubs meet after school, or when.",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Three late pick ups will result in the student not continuing in the club.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit].label",
+     "old": null,
+     "new": "A.S. Jenks: parent and student handbook, 2026–2027",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit].url",
+     "old": null,
+     "new": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://asjenks.philasd.org/].label",
+     "old": null,
+     "new": "Abram S. Jenks School",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://asjenks.philasd.org/].url",
+     "old": null,
+     "new": "https://asjenks.philasd.org/",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.as-jenks.relation",
+     "old": null,
+     "new": "onsite",
+     "source": "https://asjenks.philasd.org/",
+     "quote": "Abram S. Jenks School, located in the Lower Moyamensing neighborhood of South Philadelphia, is a public elementary school serving students from Kindergarten through 5th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Chess].name",
+     "old": null,
+     "new": "Chess",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Chess].tags",
+     "old": null,
+     "new": [
+      "games"
+     ],
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Drama].name",
+     "old": null,
+     "new": "Drama",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Drama].tags",
+     "old": null,
+     "new": [
+      "theater"
+     ],
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Student Activity Leaders].name",
+     "old": null,
+     "new": "Student Activity Leaders",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Student Activity Leaders].tags",
+     "old": null,
+     "new": [
+      "clubs"
+     ],
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Safety Patrol].name",
+     "old": null,
+     "new": "Safety Patrol",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Safety Patrol].tags",
+     "old": null,
+     "new": [
+      "clubs"
+     ],
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Safety Patrol].roster",
+     "old": null,
+     "new": false,
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Student Government].name",
+     "old": null,
+     "new": "Student Government",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Student Government].tags",
+     "old": null,
+     "new": [
+      "clubs"
+     ],
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Student Council].name",
+     "old": null,
+     "new": "Student Council",
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Student Council].tags",
+     "old": null,
+     "new": [
+      "clubs"
+     ],
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  },
+  {
+   "item": "school:dick",
+   "kind": "new-listing",
+   "listing": "p:cyba-basketball",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "name",
+     "old": null,
+     "new": "CYBA Free After School Sports Program",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "What: Free After School Program Our Program Includes: Training Scrimmages Character Development* Who: Youth ages 8-17 Location & When: William Dick Public School Edmonds Public School Lamberton Public School McCloskey Public School",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "what",
+     "old": null,
+     "new": "Free after-school basketball training, scrimmages and character development from the Christian Youth Basketball Association, for ages 8 to 17",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "What: Free After School Program Our Program Includes: Training Scrimmages Character Development* Who: Youth ages 8-17 Location & When: William Dick Public School Edmonds Public School Lamberton Public School McCloskey Public School",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "types",
+     "old": null,
+     "new": [
+      "movement"
+     ],
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "What: Free After School Program Our Program Includes: Training Scrimmages Character Development* Who: Youth ages 8-17 Location & When: William Dick Public School Edmonds Public School Lamberton Public School McCloskey Public School",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "keywords",
+     "old": null,
+     "new": [
+      "basketball",
+      "sports",
+      "after school",
+      "free",
+      "CYBA",
+      "Christian Youth Basketball Association",
+      "character development",
+      "William Dick"
+     ],
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "What: Free After School Program Our Program Includes: Training Scrimmages Character Development* Who: Youth ages 8-17 Location & When: William Dick Public School Edmonds Public School Lamberton Public School McCloskey Public School",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "address",
+     "old": null,
+     "new": "",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "What: Free After School Program Our Program Includes: Training Scrimmages Character Development* Who: Youth ages 8-17 Location & When: William Dick Public School Edmonds Public School Lamberton Public School McCloskey Public School",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "gradeNote",
+     "old": null,
+     "new": "Ages 8 to 17",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "What: Free After School Program Our Program Includes: Training Scrimmages Character Development* Who: Youth ages 8-17 Location & When: William Dick Public School Edmonds Public School Lamberton Public School McCloskey Public School",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "hours",
+     "old": null,
+     "new": "Not published; ask CYBA",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "What: Free After School Program Our Program Includes: Training Scrimmages Character Development* Who: Youth ages 8-17 Location & When: William Dick Public School Edmonds Public School Lamberton Public School McCloskey Public School",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "cost",
+     "old": null,
+     "new": "Free, according to CYBA’s page.",
+     "source": "https://cybabasketball.org/program-cost",
+     "quote": "Afterschool Program Character Development Free",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "price",
+     "old": null,
+     "new": "free",
+     "source": "https://cybabasketball.org/program-cost",
+     "quote": "Afterschool Program Character Development Free",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "phone",
+     "old": null,
+     "new": "215-915-4243",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "Phone: 215-915-4243",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "email",
+     "old": null,
+     "new": "",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "What: Free After School Program Our Program Includes: Training Scrimmages Character Development* Who: Youth ages 8-17 Location & When: William Dick Public School Edmonds Public School Lamberton Public School McCloskey Public School",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "website",
+     "old": null,
+     "new": "https://cybabasketball.org/",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "What: Free After School Program Our Program Includes: Training Scrimmages Character Development* Who: Youth ages 8-17 Location & When: William Dick Public School Edmonds Public School Lamberton Public School McCloskey Public School",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "register.how",
+     "old": null,
+     "new": "online",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "To join us, register on line and select your location.",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "register.url",
+     "old": null,
+     "new": "https://cybabasketball.org/reg",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "To join us, register on line and select your location.",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "register.label",
+     "old": null,
+     "new": "Register",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "To join us, register on line and select your location.",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "register.note",
+     "old": null,
+     "new": "CYBA’s page says to register online and select your location.",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "To join us, register on line and select your location.",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "note",
+     "old": null,
+     "new": "CYBA’s page lists William Dick, Edmonds, Lamberton and McCloskey public schools as its after-school locations, without days or times. It is a faith-based program: CYBA says it uses the Bible for its character development. Ask which days it meets at each school.",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "What: Free After School Program Our Program Includes: Training Scrimmages Character Development* Who: Youth ages 8-17 Location & When: William Dick Public School Edmonds Public School Lamberton Public School McCloskey Public School",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "note",
+     "old": null,
+     "new": "CYBA’s page lists William Dick, Edmonds, Lamberton and McCloskey public schools as its after-school locations, without days or times. It is a faith-based program: CYBA says it uses the Bible for its character development. Ask which days it meets at each school.",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "We use the bible as our character development tool",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "sources[https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program].label",
+     "old": null,
+     "new": "CYBA: After School Sports Program",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "What: Free After School Program Our Program Includes: Training Scrimmages Character Development* Who: Youth ages 8-17 Location & When: William Dick Public School Edmonds Public School Lamberton Public School McCloskey Public School",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "sources[https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program].url",
+     "old": null,
+     "new": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "What: Free After School Program Our Program Includes: Training Scrimmages Character Development* Who: Youth ages 8-17 Location & When: William Dick Public School Edmonds Public School Lamberton Public School McCloskey Public School",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "schools.dick.relation",
+     "old": null,
+     "new": "onsite",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "What: Free After School Program Our Program Includes: Training Scrimmages Character Development* Who: Youth ages 8-17 Location & When: William Dick Public School Edmonds Public School Lamberton Public School McCloskey Public School",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "schools.dick.note",
+     "old": null,
+     "new": "CYBA’s own page lists William Dick Public School as a location for its free after-school program. It doesn’t give days or times.",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "What: Free After School Program Our Program Includes: Training Scrimmages Character Development* Who: Youth ages 8-17 Location & When: William Dick Public School Edmonds Public School Lamberton Public School McCloskey Public School",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "schools.dick.sources[https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program].label",
+     "old": null,
+     "new": "CYBA: After School Sports Program",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "What: Free After School Program Our Program Includes: Training Scrimmages Character Development* Who: Youth ages 8-17 Location & When: William Dick Public School Edmonds Public School Lamberton Public School McCloskey Public School",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "schools.dick.sources[https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program].url",
+     "old": null,
+     "new": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "source": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+     "quote": "What: Free After School Program Our Program Includes: Training Scrimmages Character Development* Who: Youth ages 8-17 Location & When: William Dick Public School Edmonds Public School Lamberton Public School McCloskey Public School",
+     "read": "2026-11-24",
+     "how": "browser"
+    }
+   ]
+  },
+  {
+   "item": "school:as-jenks",
+   "kind": "new-school",
+   "listing": "s:as-jenks",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "name",
+     "old": null,
+     "new": "Abram S. Jenks School",
+     "source": "https://asjenks.philasd.org/",
+     "quote": "Abram S. Jenks School, located in the Lower Moyamensing neighborhood of South Philadelphia, is a public elementary school serving students from Kindergarten through 5th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "shortName",
+     "old": null,
+     "new": "A.S. Jenks",
+     "source": "https://asjenks.philasd.org/",
+     "quote": "Abram S. Jenks School, located in the Lower Moyamensing neighborhood of South Philadelphia, is a public elementary school serving students from Kindergarten through 5th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "aliases",
+     "old": null,
+     "new": [
+      "Abram S. Jenks",
+      "Abram Jenks",
+      "A. S. Jenks",
+      "AS Jenks",
+      "A.S. Jenks Elementary",
+      "Jenks"
+     ],
+     "source": "https://asjenks.philasd.org/",
+     "quote": "Abram S. Jenks School, located in the Lower Moyamensing neighborhood of South Philadelphia, is a public elementary school serving students from Kindergarten through 5th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "address",
+     "old": null,
+     "new": "2501 S 13th St, Philadelphia, PA 19148",
+     "source": "https://asjenks.philasd.org/",
+     "quote": "Phone: 215-400-8240 Fax: 215-400-8241 Address: 2501 S. 13th St. Philadelphia, PA 19148",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "neighborhood",
+     "old": null,
+     "new": "Lower Moyamensing",
+     "source": "https://asjenks.philasd.org/",
+     "quote": "Abram S. Jenks School, located in the Lower Moyamensing neighborhood of South Philadelphia, is a public elementary school serving students from Kindergarten through 5th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "grades",
+     "old": null,
+     "new": "K-5",
+     "source": "https://asjenks.philasd.org/",
+     "quote": "Abram S. Jenks School, located in the Lower Moyamensing neighborhood of South Philadelphia, is a public elementary school serving students from Kindergarten through 5th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "dismissal",
+     "old": null,
+     "new": "2:50 pm",
+     "source": "https://asjenks.philasd.org/",
+     "quote": "School Day: 8:15-2:50 (11:50 a.m. on half days)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "dismissalNote",
+     "old": null,
+     "new": "the school’s site gives the school day as 8:15 to 2:50, ending at 11:50 am on half days",
+     "source": "https://asjenks.philasd.org/",
+     "quote": "School Day: 8:15-2:50 (11:50 a.m. on half days)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "phone",
+     "old": null,
+     "new": "215-400-8240",
+     "source": "https://asjenks.philasd.org/",
+     "quote": "Phone: 215-400-8240 Fax: 215-400-8241 Address: 2501 S. 13th St. Philadelphia, PA 19148",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "website",
+     "old": null,
+     "new": "https://asjenks.philasd.org/",
+     "source": "https://asjenks.philasd.org/",
+     "quote": "Abram S. Jenks School, located in the Lower Moyamensing neighborhood of South Philadelphia, is a public elementary school serving students from Kindergarten through 5th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "Beehive @ Bok lists Jenks among the schools it picks up from, Monday to Friday. Its list says only “Jenks”; the other schools on it are all in South Philadelphia, so it is listed here as this Jenks, not J.S. Jenks in Chestnut Hill. Ask Beehive to confirm.",
+      "The school’s parent and student handbook, linked from its site, says clubs meet before, during or after school, most starting in October, and names chess, drama, student activity leaders, safety patrol, student government and student council. For clubs after school, parents meet students in the schoolyard and sign them out. They are listed here as the school’s clubs.",
+      "Half days end at 11:50 am, according to the school’s site. Ask Beehive whether it covers those afternoons.",
+      "The school’s site has an after-school section that points to the City’s program locator, and its community partnerships section is empty.",
+      "If you know a program that serves A.S. Jenks and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://asjenks.philasd.org/",
+     "quote": "School Day: 8:15-2:50 (11:50 a.m. on half days)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "Beehive @ Bok lists Jenks among the schools it picks up from, Monday to Friday. Its list says only “Jenks”; the other schools on it are all in South Philadelphia, so it is listed here as this Jenks, not J.S. Jenks in Chestnut Hill. Ask Beehive to confirm.",
+      "The school’s parent and student handbook, linked from its site, says clubs meet before, during or after school, most starting in October, and names chess, drama, student activity leaders, safety patrol, student government and student council. For clubs after school, parents meet students in the schoolyard and sign them out. They are listed here as the school’s clubs.",
+      "Half days end at 11:50 am, according to the school’s site. Ask Beehive whether it covers those afternoons.",
+      "The school’s site has an after-school section that points to the City’s program locator, and its community partnerships section is empty.",
+      "If you know a program that serves A.S. Jenks and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://asjenks.philasd.org/",
+     "quote": "After-School & Summer Programming Out-of-School Time (OST)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "Beehive @ Bok lists Jenks among the schools it picks up from, Monday to Friday. Its list says only “Jenks”; the other schools on it are all in South Philadelphia, so it is listed here as this Jenks, not J.S. Jenks in Chestnut Hill. Ask Beehive to confirm.",
+      "The school’s parent and student handbook, linked from its site, says clubs meet before, during or after school, most starting in October, and names chess, drama, student activity leaders, safety patrol, student government and student council. For clubs after school, parents meet students in the schoolyard and sign them out. They are listed here as the school’s clubs.",
+      "Half days end at 11:50 am, according to the school’s site. Ask Beehive whether it covers those afternoons.",
+      "The school’s site has an after-school section that points to the City’s program locator, and its community partnerships section is empty.",
+      "If you know a program that serves A.S. Jenks and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://asjenks.philasd.org/",
+     "quote": "Community Partnerships",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "Beehive @ Bok lists Jenks among the schools it picks up from, Monday to Friday. Its list says only “Jenks”; the other schools on it are all in South Philadelphia, so it is listed here as this Jenks, not J.S. Jenks in Chestnut Hill. Ask Beehive to confirm.",
+      "The school’s parent and student handbook, linked from its site, says clubs meet before, during or after school, most starting in October, and names chess, drama, student activity leaders, safety patrol, student government and student council. For clubs after school, parents meet students in the schoolyard and sign them out. They are listed here as the school’s clubs.",
+      "Half days end at 11:50 am, according to the school’s site. Ask Beehive whether it covers those afternoons.",
+      "The school’s site has an after-school section that points to the City’s program locator, and its community partnerships section is empty.",
+      "If you know a program that serves A.S. Jenks and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+     "quote": "Throughout the school year, there will be a number of clubs students may join before, during, or after school. Most start in October.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  },
+  {
+   "item": "news:new-schools-2026-11-24",
+   "kind": "news",
+   "listing": "n:2026-11-24|Five more schools: A.S. Jenks, Dobson, Shawmont, Fitzpatrick and William Dick",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "date",
+     "old": null,
+     "new": "2026-11-24",
+     "source": "https://dobson.philasd.org/",
+     "quote": "",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "title",
+     "old": null,
+     "new": "Five more schools: A.S. Jenks, Dobson, Shawmont, Fitzpatrick and William Dick",
+     "source": "https://dobson.philasd.org/",
+     "quote": "",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "text",
+     "old": null,
+     "new": "Each has its own page with what runs there, what picks up from it and what’s a short walk away. New to the site are North Light’s KidZone, which picks up from Dobson; Roxborough Church’s Roxy After-School, which picks up from Shawmont; the YMCA’s after care and PYN’s AIM Afterschool inside Fitzpatrick; Launch Philly’s free Creative Kids program and CYBA’s free basketball at William Dick; and Beehive @ Bok’s pickup from A.S. Jenks in South Philadelphia. That makes 86 schools in all.",
+     "source": "https://dobson.philasd.org/",
+     "quote": "",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "href",
+     "old": null,
+     "new": "as-jenks/",
+     "source": "https://dobson.philasd.org/",
+     "quote": "",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "link",
+     "old": null,
+     "new": "See A.S. Jenks",
+     "source": "https://dobson.philasd.org/",
+     "quote": "",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  },
+  {
+   "item": "school:fitzpatrick",
+   "kind": "new-listing",
+   "listing": "p:ymca-base-fitzpatrick",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "name",
+     "old": null,
+     "new": "YMCA Before & After School Enrichment at Fitzpatrick",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "what",
+     "old": null,
+     "new": "Paid after care inside Fitzpatrick from the Greater Philadelphia YMCA, for kindergarten to 4th grade",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "types",
+     "old": null,
+     "new": [
+      "aftercare"
+     ],
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "keywords",
+     "old": null,
+     "new": [
+      "aftercare",
+      "after school",
+      "YMCA",
+      "Y",
+      "BASE",
+      "Fitzpatrick",
+      "Far Northeast",
+      "Millbrook"
+     ],
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "address",
+     "old": null,
+     "new": "11061 Knights Rd",
+     "source": "https://fitzpatrick.philasd.org/",
+     "quote": "A. L. Fitzpatrick School 11061 Knights Rd. Philadelphia, PA 19154 call us at 215-400-3060 Grades: K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "grades",
+     "old": null,
+     "new": "K-4",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "gradeNote",
+     "old": null,
+     "new": "The YMCA lists A.L. Fitzpatrick Elementary for kindergarten to 4th grade only",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "hours",
+     "old": null,
+     "new": "From the end of the school day to 6:00 pm, according to the YMCA’s page. Before care is only at the Christian Street YMCA.",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "7:00 AM - Start of school day (only available for Christian Street YMCA) End of school day - 6:00 PM",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "days",
+     "old": null,
+     "new": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+     ],
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "7:00 AM - Start of school day (only available for Christian Street YMCA) End of school day - 6:00 PM",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "pickupBy",
+     "old": null,
+     "new": "6:00 pm",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "7:00 AM - Start of school day (only available for Christian Street YMCA) End of school day - 6:00 PM",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "cost",
+     "old": null,
+     "new": "Not published. The YMCA registers families for a package covering the whole year of care and any registration fees.",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "when you register for child care online, you will be registered for a child care package that includes the entire year of care and any applicable registration fees.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "price",
+     "old": null,
+     "new": "paid",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "phone",
+     "old": null,
+     "new": "",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "email",
+     "old": null,
+     "new": "",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "website",
+     "old": null,
+     "new": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.how",
+     "old": null,
+     "new": "online",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "when you register for child care online, you will be registered for a child care package that includes the entire year of care and any applicable registration fees.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.url",
+     "old": null,
+     "new": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "when you register for child care online, you will be registered for a child care package that includes the entire year of care and any applicable registration fees.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.label",
+     "old": null,
+     "new": "Register",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "when you register for child care online, you will be registered for a child care package that includes the entire year of care and any applicable registration fees.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.note",
+     "old": null,
+     "new": "The YMCA’s page says you register online for a package covering the entire year.",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "when you register for child care online, you will be registered for a child care package that includes the entire year of care and any applicable registration fees.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "note",
+     "old": null,
+     "new": "The YMCA’s page lists A.L. Fitzpatrick Elementary among its Philadelphia before and after school sites, for kindergarten to 4th grade only, and Fitzpatrick’s own site names the YMCA as a partner for grades K to 4. The price isn’t posted, so ask the YMCA.",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "note",
+     "old": null,
+     "new": "The YMCA’s page lists A.L. Fitzpatrick Elementary among its Philadelphia before and after school sites, for kindergarten to 4th grade only, and Fitzpatrick’s own site names the YMCA as a partner for grades K to 4. The price isn’t posted, so ask the YMCA.",
+     "source": "https://fitzpatrick.philasd.org/community-partnerships/",
+     "quote": "Community Partners YMCA — grades K-4 Philadelphia Youth Network (PYN) — grades 5-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/].label",
+     "old": null,
+     "new": "Greater Philadelphia YMCA: Before and After School",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/].url",
+     "old": null,
+     "new": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://fitzpatrick.philasd.org/community-partnerships/].label",
+     "old": null,
+     "new": "A. L. Fitzpatrick: community partnerships",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://fitzpatrick.philasd.org/community-partnerships/].url",
+     "old": null,
+     "new": "https://fitzpatrick.philasd.org/community-partnerships/",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.relation",
+     "old": null,
+     "new": "onsite",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.relation",
+     "old": null,
+     "new": "onsite",
+     "source": "https://fitzpatrick.philasd.org/community-partnerships/",
+     "quote": "Community Partners YMCA — grades K-4 Philadelphia Youth Network (PYN) — grades 5-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.relation",
+     "old": null,
+     "new": "onsite",
+     "source": "https://fitzpatrick.philasd.org/",
+     "quote": "A. L. Fitzpatrick School 11061 Knights Rd. Philadelphia, PA 19154 call us at 215-400-3060 Grades: K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.note",
+     "old": null,
+     "new": "The YMCA’s own page lists A.L. Fitzpatrick Elementary (kindergarten to 4th grade only), and Fitzpatrick’s community partners page names the YMCA for grades K to 4.",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.note",
+     "old": null,
+     "new": "The YMCA’s own page lists A.L. Fitzpatrick Elementary (kindergarten to 4th grade only), and Fitzpatrick’s community partners page names the YMCA for grades K to 4.",
+     "source": "https://fitzpatrick.philasd.org/community-partnerships/",
+     "quote": "Community Partners YMCA — grades K-4 Philadelphia Youth Network (PYN) — grades 5-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.note",
+     "old": null,
+     "new": "The YMCA’s own page lists A.L. Fitzpatrick Elementary (kindergarten to 4th grade only), and Fitzpatrick’s community partners page names the YMCA for grades K to 4.",
+     "source": "https://fitzpatrick.philasd.org/",
+     "quote": "A. L. Fitzpatrick School 11061 Knights Rd. Philadelphia, PA 19154 call us at 215-400-3060 Grades: K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.sources[https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/].label",
+     "old": null,
+     "new": "Greater Philadelphia YMCA: Before and After School",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.sources[https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/].url",
+     "old": null,
+     "new": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.sources[https://fitzpatrick.philasd.org/community-partnerships/].label",
+     "old": null,
+     "new": "A. L. Fitzpatrick: community partnerships",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.sources[https://fitzpatrick.philasd.org/community-partnerships/].url",
+     "old": null,
+     "new": "https://fitzpatrick.philasd.org/community-partnerships/",
+     "source": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+     "quote": "A.L. Fitzpatrick Elementary (only Kindergarten - 4th Grade available)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  },
+  {
+   "item": "school:fitzpatrick",
+   "kind": "new-listing",
+   "listing": "p:pyn-fitzpatrick",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "name",
+     "old": null,
+     "new": "PYN AIM Afterschool at Fitzpatrick",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "what",
+     "old": null,
+     "new": "An after-school program for Fitzpatrick’s middle schoolers run by the Philadelphia Youth Network",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "types",
+     "old": null,
+     "new": [
+      "aftercare",
+      "academics"
+     ],
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "keywords",
+     "old": null,
+     "new": [
+      "aftercare",
+      "after school",
+      "middle school",
+      "PYN",
+      "Philadelphia Youth Network",
+      "AIM",
+      "Fitzpatrick",
+      "Far Northeast",
+      "Millbrook"
+     ],
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "address",
+     "old": null,
+     "new": "11061 Knights Rd",
+     "source": "https://fitzpatrick.philasd.org/",
+     "quote": "A. L. Fitzpatrick School 11061 Knights Rd. Philadelphia, PA 19154 call us at 215-400-3060 Grades: K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "grades",
+     "old": null,
+     "new": "5-8",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "grades",
+     "old": null,
+     "new": "5-8",
+     "source": "https://fitzpatrick.philasd.org/community-partnerships/",
+     "quote": "Community Partners YMCA — grades K-4 Philadelphia Youth Network (PYN) — grades 5-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "gradeNote",
+     "old": null,
+     "new": "Middle school; Fitzpatrick’s site names PYN for grades 5 to 8",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "gradeNote",
+     "old": null,
+     "new": "Middle school; Fitzpatrick’s site names PYN for grades 5 to 8",
+     "source": "https://fitzpatrick.philasd.org/community-partnerships/",
+     "quote": "Community Partners YMCA — grades K-4 Philadelphia Youth Network (PYN) — grades 5-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "hours",
+     "old": null,
+     "new": "Not published; ask PYN",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "cost",
+     "old": null,
+     "new": "Not published",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "phone",
+     "old": null,
+     "new": "267-502-3800",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "afterschool@pyninc.org (267) 502-3800",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "email",
+     "old": null,
+     "new": "afterschool@pyninc.org",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "afterschool@pyninc.org (267) 502-3800",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "website",
+     "old": null,
+     "new": "https://www.pyninc.org/aimafterschool",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.how",
+     "old": null,
+     "new": "online",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "Enrollment is open all year round!",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.how",
+     "old": null,
+     "new": "online",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "Youth must currently be enrolled at one of PYN's participating school sites.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.url",
+     "old": null,
+     "new": "https://ct.caseworthy.net/portal/default.aspx?CustomerID=PYN",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "Enrollment is open all year round!",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.label",
+     "old": null,
+     "new": "Enroll",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "Enrollment is open all year round!",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.label",
+     "old": null,
+     "new": "Enroll",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "Youth must currently be enrolled at one of PYN's participating school sites.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.note",
+     "old": null,
+     "new": "PYN says enrollment is open all year and that youth must be enrolled at one of its participating schools.",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "Enrollment is open all year round!",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.note",
+     "old": null,
+     "new": "PYN says enrollment is open all year and that youth must be enrolled at one of its participating schools.",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "Youth must currently be enrolled at one of PYN's participating school sites.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "note",
+     "old": null,
+     "new": "PYN’s own page lists A. L. Fitzpatrick School among its 2026–27 program locations, and Fitzpatrick’s community partners page names PYN for grades 5 to 8. PYN’s page doesn’t give days, hours or a price, so ask.",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "note",
+     "old": null,
+     "new": "PYN’s own page lists A. L. Fitzpatrick School among its 2026–27 program locations, and Fitzpatrick’s community partners page names PYN for grades 5 to 8. PYN’s page doesn’t give days, hours or a price, so ask.",
+     "source": "https://fitzpatrick.philasd.org/community-partnerships/",
+     "quote": "Community Partners YMCA — grades K-4 Philadelphia Youth Network (PYN) — grades 5-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://www.pyninc.org/aimafterschool].label",
+     "old": null,
+     "new": "PYN after school",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://www.pyninc.org/aimafterschool].url",
+     "old": null,
+     "new": "https://www.pyninc.org/aimafterschool",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://fitzpatrick.philasd.org/community-partnerships/].label",
+     "old": null,
+     "new": "A. L. Fitzpatrick: community partnerships",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://fitzpatrick.philasd.org/community-partnerships/].url",
+     "old": null,
+     "new": "https://fitzpatrick.philasd.org/community-partnerships/",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.relation",
+     "old": null,
+     "new": "onsite",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.relation",
+     "old": null,
+     "new": "onsite",
+     "source": "https://fitzpatrick.philasd.org/community-partnerships/",
+     "quote": "Community Partners YMCA — grades K-4 Philadelphia Youth Network (PYN) — grades 5-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.note",
+     "old": null,
+     "new": "PYN’s own page lists A. L. Fitzpatrick School among its 2026–27 sites, and Fitzpatrick’s community partners page names PYN for grades 5 to 8.",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.note",
+     "old": null,
+     "new": "PYN’s own page lists A. L. Fitzpatrick School among its 2026–27 sites, and Fitzpatrick’s community partners page names PYN for grades 5 to 8.",
+     "source": "https://fitzpatrick.philasd.org/community-partnerships/",
+     "quote": "Community Partners YMCA — grades K-4 Philadelphia Youth Network (PYN) — grades 5-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.sources[https://www.pyninc.org/aimafterschool].label",
+     "old": null,
+     "new": "PYN after school",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.sources[https://www.pyninc.org/aimafterschool].url",
+     "old": null,
+     "new": "https://www.pyninc.org/aimafterschool",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.sources[https://fitzpatrick.philasd.org/community-partnerships/].label",
+     "old": null,
+     "new": "A. L. Fitzpatrick: community partnerships",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.sources[https://fitzpatrick.philasd.org/community-partnerships/].url",
+     "old": null,
+     "new": "https://fitzpatrick.philasd.org/community-partnerships/",
+     "source": "https://www.pyninc.org/aimafterschool",
+     "quote": "2026/27 School Year Program Locations C.C.A. Baldi Middle School Roberto Clemente Middle School Russell Conwell Middle School Jay Cooke Elementary School Thomas K. Finletter School A. L. Fitzpatrick School",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  },
+  {
+   "item": "school:fitzpatrick",
+   "kind": "new-listing",
+   "listing": "p:fitzpatrick-clubs",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "name",
+     "old": null,
+     "new": "School clubs",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "what",
+     "old": null,
+     "new": "Clubs and middle-school sports A. L. Fitzpatrick lists for 2026–2027: chess, guitar, yoga, Girls on the Run, gardening, soccer and more",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "types",
+     "old": null,
+     "new": [
+      "clubs"
+     ],
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "keywords",
+     "old": null,
+     "new": [
+      "clubs",
+      "chess",
+      "guitar",
+      "yoga",
+      "Girls on the Run",
+      "gardening",
+      "tech",
+      "painting",
+      "crafts",
+      "basketball",
+      "soccer",
+      "track",
+      "Fitzpatrick"
+     ],
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "address",
+     "old": null,
+     "new": "",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "gradeNote",
+     "old": null,
+     "new": "Varies by club; ask the school",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "hours",
+     "old": null,
+     "new": "Not published; ask the school office",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "cost",
+     "old": null,
+     "new": "Not published",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "phone",
+     "old": null,
+     "new": "215-400-3060",
+     "source": "https://fitzpatrick.philasd.org/",
+     "quote": "A. L. Fitzpatrick School 11061 Knights Rd. Philadelphia, PA 19154 call us at 215-400-3060 Grades: K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "email",
+     "old": null,
+     "new": "",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "website",
+     "old": null,
+     "new": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.how",
+     "old": null,
+     "new": "school",
+     "source": "https://fitzpatrick.philasd.org/",
+     "quote": "A. L. Fitzpatrick School 11061 Knights Rd. Philadelphia, PA 19154 call us at 215-400-3060 Grades: K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.note",
+     "old": null,
+     "new": "Ask the school office (215-400-3060).",
+     "source": "https://fitzpatrick.philasd.org/",
+     "quote": "A. L. Fitzpatrick School 11061 Knights Rd. Philadelphia, PA 19154 call us at 215-400-3060 Grades: K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "note",
+     "old": null,
+     "new": "Fitzpatrick’s own site lists these as its 2026–2027 clubs and middle school intramural sports, without days or times. Ask the office which meet after dismissal.",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://fitzpatrick.philasd.org/extracurricular-programs/].label",
+     "old": null,
+     "new": "A. L. Fitzpatrick: extracurricular programs",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://fitzpatrick.philasd.org/extracurricular-programs/].url",
+     "old": null,
+     "new": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.fitzpatrick.relation",
+     "old": null,
+     "new": "onsite",
+     "source": "https://fitzpatrick.philasd.org/",
+     "quote": "A. L. Fitzpatrick School 11061 Knights Rd. Philadelphia, PA 19154 call us at 215-400-3060 Grades: K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Basketball Skills Training Club].name",
+     "old": null,
+     "new": "Basketball Skills Training Club",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Basketball Skills Training Club].tags",
+     "old": null,
+     "new": [
+      "movement"
+     ],
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Yoga].name",
+     "old": null,
+     "new": "Yoga",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Yoga].tags",
+     "old": null,
+     "new": [
+      "movement"
+     ],
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Yearbook].name",
+     "old": null,
+     "new": "Yearbook",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Yearbook].tags",
+     "old": null,
+     "new": [
+      "art"
+     ],
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Crafting Club].name",
+     "old": null,
+     "new": "Crafting Club",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Crafting Club].tags",
+     "old": null,
+     "new": [
+      "art"
+     ],
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Tech Club].name",
+     "old": null,
+     "new": "Tech Club",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Tech Club].tags",
+     "old": null,
+     "new": [
+      "stem"
+     ],
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Chess].name",
+     "old": null,
+     "new": "Chess",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Chess].tags",
+     "old": null,
+     "new": [
+      "games"
+     ],
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Painting Techniques].name",
+     "old": null,
+     "new": "Painting Techniques",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Painting Techniques].tags",
+     "old": null,
+     "new": [
+      "art"
+     ],
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Girls on the Run].name",
+     "old": null,
+     "new": "Girls on the Run",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Girls on the Run].tags",
+     "old": null,
+     "new": [
+      "movement"
+     ],
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Gardening Club].name",
+     "old": null,
+     "new": "Gardening Club",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Gardening Club].tags",
+     "old": null,
+     "new": [
+      "nature"
+     ],
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Middle School Student Council].name",
+     "old": null,
+     "new": "Middle School Student Council",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Middle School Student Council].tags",
+     "old": null,
+     "new": [
+      "clubs"
+     ],
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Guitar Club].name",
+     "old": null,
+     "new": "Guitar Club",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Guitar Club].tags",
+     "old": null,
+     "new": [
+      "music"
+     ],
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[PBIS].name",
+     "old": null,
+     "new": "PBIS",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[PBIS].tags",
+     "old": null,
+     "new": [
+      "clubs"
+     ],
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Soccer].name",
+     "old": null,
+     "new": "Soccer",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Soccer].grades",
+     "old": null,
+     "new": "6-8",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Soccer].tags",
+     "old": null,
+     "new": [
+      "movement"
+     ],
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Track and Field].name",
+     "old": null,
+     "new": "Track and Field",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Track and Field].grades",
+     "old": null,
+     "new": "6-8",
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Track and Field].tags",
+     "old": null,
+     "new": [
+      "movement"
+     ],
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  },
+  {
+   "item": "school:fitzpatrick",
+   "kind": "new-school",
+   "listing": "s:fitzpatrick",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "name",
+     "old": null,
+     "new": "A. L. Fitzpatrick School",
+     "source": "https://fitzpatrick.philasd.org/",
+     "quote": "A. L. Fitzpatrick School 11061 Knights Rd. Philadelphia, PA 19154 call us at 215-400-3060 Grades: K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "shortName",
+     "old": null,
+     "new": "Fitzpatrick",
+     "source": "https://fitzpatrick.philasd.org/",
+     "quote": "A. L. Fitzpatrick School 11061 Knights Rd. Philadelphia, PA 19154 call us at 215-400-3060 Grades: K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "aliases",
+     "old": null,
+     "new": [
+      "A.L. Fitzpatrick",
+      "AL Fitzpatrick",
+      "A. L. FitzPatrick",
+      "FitzPatrick",
+      "Fitzpatrick Elementary",
+      "A.L. Fitzpatrick Elementary"
+     ],
+     "source": "https://fitzpatrick.philasd.org/",
+     "quote": "A. L. Fitzpatrick School 11061 Knights Rd. Philadelphia, PA 19154 call us at 215-400-3060 Grades: K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "address",
+     "old": null,
+     "new": "11061 Knights Rd, Philadelphia, PA 19154",
+     "source": "https://fitzpatrick.philasd.org/",
+     "quote": "A. L. Fitzpatrick School 11061 Knights Rd. Philadelphia, PA 19154 call us at 215-400-3060 Grades: K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "neighborhood",
+     "old": null,
+     "new": "Millbrook",
+     "source": "https://fitzpatrick.philasd.org/",
+     "quote": "A. L. Fitzpatrick School 11061 Knights Rd. Philadelphia, PA 19154 call us at 215-400-3060 Grades: K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "grades",
+     "old": null,
+     "new": "K-8",
+     "source": "https://fitzpatrick.philasd.org/",
+     "quote": "A. L. Fitzpatrick School 11061 Knights Rd. Philadelphia, PA 19154 call us at 215-400-3060 Grades: K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "dismissal",
+     "old": null,
+     "new": "2:09 pm",
+     "source": "https://fitzpatrick.philasd.org/operating-schedule/",
+     "quote": "Our school day is 7:30 am-2:09 pm. Students can enter the building between 7:00 am-7:20 am for breakfast.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "dismissalNote",
+     "old": null,
+     "new": "the school’s site gives the school day as 7:30 am to 2:09 pm, with pupils dismissed between 1:50 and 2:09 pm",
+     "source": "https://fitzpatrick.philasd.org/operating-schedule/",
+     "quote": "Our school day is 7:30 am-2:09 pm. Students can enter the building between 7:00 am-7:20 am for breakfast.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "dismissalNote",
+     "old": null,
+     "new": "the school’s site gives the school day as 7:30 am to 2:09 pm, with pupils dismissed between 1:50 and 2:09 pm",
+     "source": "https://fitzpatrick.philasd.org/operating-schedule/",
+     "quote": "Pupils are dismissed between 1:50-2:09 p.m.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "phone",
+     "old": null,
+     "new": "215-400-3060",
+     "source": "https://fitzpatrick.philasd.org/",
+     "quote": "A. L. Fitzpatrick School 11061 Knights Rd. Philadelphia, PA 19154 call us at 215-400-3060 Grades: K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "website",
+     "old": null,
+     "new": "https://fitzpatrick.philasd.org/",
+     "source": "https://fitzpatrick.philasd.org/",
+     "quote": "A. L. Fitzpatrick School 11061 Knights Rd. Philadelphia, PA 19154 call us at 215-400-3060 Grades: K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "Fitzpatrick’s community partners page names the YMCA for grades K to 4 and the Philadelphia Youth Network (PYN) for grades 5 to 8. The YMCA runs its paid Before & After School Enrichment program at the school for kindergarten to 4th grade, and PYN runs its AIM Afterschool program there for middle schoolers. Both have listings here.",
+      "Fitzpatrick’s site lists its 2026–2027 clubs: basketball skills training, yoga, yearbook, crafting, tech, chess, painting techniques, Girls on the Run, gardening, guitar, middle school student council and PBIS, plus soccer and track and field for grades 6 to 8. They are listed here as the school’s clubs, without days or times, so ask the office which meet after dismissal.",
+      "Students can enter for breakfast from 7:00 am, according to the school’s site. Its monthly calendars are posted from the calendar page; ask the office about early dismissal days.",
+      "If you know a program that serves Fitzpatrick and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://fitzpatrick.philasd.org/community-partnerships/",
+     "quote": "Community Partners YMCA — grades K-4 Philadelphia Youth Network (PYN) — grades 5-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "Fitzpatrick’s community partners page names the YMCA for grades K to 4 and the Philadelphia Youth Network (PYN) for grades 5 to 8. The YMCA runs its paid Before & After School Enrichment program at the school for kindergarten to 4th grade, and PYN runs its AIM Afterschool program there for middle schoolers. Both have listings here.",
+      "Fitzpatrick’s site lists its 2026–2027 clubs: basketball skills training, yoga, yearbook, crafting, tech, chess, painting techniques, Girls on the Run, gardening, guitar, middle school student council and PBIS, plus soccer and track and field for grades 6 to 8. They are listed here as the school’s clubs, without days or times, so ask the office which meet after dismissal.",
+      "Students can enter for breakfast from 7:00 am, according to the school’s site. Its monthly calendars are posted from the calendar page; ask the office about early dismissal days.",
+      "If you know a program that serves Fitzpatrick and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+     "quote": "Clubs 2026-2027 Basketball Skills Training Club Yoga Yearbook Crafting Club Tech Club Chess Painting Techniques Girls on the Run Gardening Club Middle School Student Council Guitar Club PBIS Middle School Intramural Sports (grades 6-8) 2026-2027 Soccer Track & Field",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "Fitzpatrick’s community partners page names the YMCA for grades K to 4 and the Philadelphia Youth Network (PYN) for grades 5 to 8. The YMCA runs its paid Before & After School Enrichment program at the school for kindergarten to 4th grade, and PYN runs its AIM Afterschool program there for middle schoolers. Both have listings here.",
+      "Fitzpatrick’s site lists its 2026–2027 clubs: basketball skills training, yoga, yearbook, crafting, tech, chess, painting techniques, Girls on the Run, gardening, guitar, middle school student council and PBIS, plus soccer and track and field for grades 6 to 8. They are listed here as the school’s clubs, without days or times, so ask the office which meet after dismissal.",
+      "Students can enter for breakfast from 7:00 am, according to the school’s site. Its monthly calendars are posted from the calendar page; ask the office about early dismissal days.",
+      "If you know a program that serves Fitzpatrick and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://fitzpatrick.philasd.org/operating-schedule/",
+     "quote": "Our school day is 7:30 am-2:09 pm. Students can enter the building between 7:00 am-7:20 am for breakfast.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "Fitzpatrick’s community partners page names the YMCA for grades K to 4 and the Philadelphia Youth Network (PYN) for grades 5 to 8. The YMCA runs its paid Before & After School Enrichment program at the school for kindergarten to 4th grade, and PYN runs its AIM Afterschool program there for middle schoolers. Both have listings here.",
+      "Fitzpatrick’s site lists its 2026–2027 clubs: basketball skills training, yoga, yearbook, crafting, tech, chess, painting techniques, Girls on the Run, gardening, guitar, middle school student council and PBIS, plus soccer and track and field for grades 6 to 8. They are listed here as the school’s clubs, without days or times, so ask the office which meet after dismissal.",
+      "Students can enter for breakfast from 7:00 am, according to the school’s site. Its monthly calendars are posted from the calendar page; ask the office about early dismissal days.",
+      "If you know a program that serves Fitzpatrick and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://fitzpatrick.philasd.org/school-calendar/",
+     "quote": "The school calendar will be updated every month by the first Friday of that month.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  }
+ ]
+}
