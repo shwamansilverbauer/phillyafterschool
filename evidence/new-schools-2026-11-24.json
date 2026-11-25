@@ -1,0 +1,2913 @@
+{
+ "run": "new-schools-2026-11-24",
+ "items": [
+  {
+   "item": "school:dobson",
+   "kind": "new-listing",
+   "listing": "p:north-light-kidzone",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "name",
+     "old": null,
+     "new": "North Light KidZone",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Kidzone Before- and After-School Child Care for Grades K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "what",
+     "old": null,
+     "new": "Before and after care at North Light Community Center for kindergarten to 8th grade, with transportation from some schools",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Kidzone Before- and After-School Child Care for Grades K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "types",
+     "old": null,
+     "new": [
+      "aftercare"
+     ],
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Kidzone Before- and After-School Child Care for Grades K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "keywords",
+     "old": null,
+     "new": [
+      "aftercare",
+      "after school",
+      "before care",
+      "KidZone",
+      "North Light",
+      "community center",
+      "transportation",
+      "homework",
+      "Manayunk",
+      "Dobson"
+     ],
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Kidzone Before- and After-School Child Care for Grades K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "address",
+     "old": null,
+     "new": "175 Green Ln",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "North Light Community Center 175 Green Lane Philadelphia, PA 19127 P (215) 483-4800",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "neighborhoods",
+     "old": null,
+     "new": [
+      "Manayunk"
+     ],
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Kidzone Before- and After-School Child Care for Grades K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "grades",
+     "old": null,
+     "new": "K-8",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Kidzone Before- and After-School Child Care for Grades K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "gradeNote",
+     "old": null,
+     "new": "Kindergarten to 8th grade",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Kidzone Before- and After-School Child Care for Grades K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "hours",
+     "old": null,
+     "new": "After care 2:00 to 6:00 pm; before care 7:00 to 9:00 am, offered to Dobson students. Full-day care when the School District is closed to students, except holidays, for an extra fee.",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Before Care* (7am – 9am): $245/month After Care (2pm – 6pm): $570/month Before AND After Care: $750/month Full day care** (8am-6pm) for additional fee",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "hours",
+     "old": null,
+     "new": "After care 2:00 to 6:00 pm; before care 7:00 to 9:00 am, offered to Dobson students. Full-day care when the School District is closed to students, except holidays, for an extra fee.",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "*Before care is offered to James Dobson School students. **Full day care available when Philadelphia School District is closed to students, except holidays.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "days",
+     "old": null,
+     "new": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+     ],
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Before Care* (7am – 9am): $245/month After Care (2pm – 6pm): $570/month Before AND After Care: $750/month Full day care** (8am-6pm) for additional fee",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "days",
+     "old": null,
+     "new": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+     ],
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "*Before care is offered to James Dobson School students. **Full day care available when Philadelphia School District is closed to students, except holidays.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "pickupBy",
+     "old": null,
+     "new": "6:00 pm",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Before Care* (7am – 9am): $245/month After Care (2pm – 6pm): $570/month Before AND After Care: $750/month Full day care** (8am-6pm) for additional fee",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "pickupBy",
+     "old": null,
+     "new": "6:00 pm",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "*Before care is offered to James Dobson School students. **Full day care available when Philadelphia School District is closed to students, except holidays.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "cost",
+     "old": null,
+     "new": "After care $570 a month; before care $245 a month; both $750 a month, according to North Light’s page.",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Before Care* (7am – 9am): $245/month After Care (2pm – 6pm): $570/month Before AND After Care: $750/month Full day care** (8am-6pm) for additional fee",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "cost",
+     "old": null,
+     "new": "After care $570 a month; before care $245 a month; both $750 a month, according to North Light’s page.",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "*Before care is offered to James Dobson School students. **Full day care available when Philadelphia School District is closed to students, except holidays.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "price",
+     "old": null,
+     "new": "paid",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Kidzone Before- and After-School Child Care for Grades K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "rate.per",
+     "old": null,
+     "new": "month",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Before Care* (7am – 9am): $245/month After Care (2pm – 6pm): $570/month Before AND After Care: $750/month Full day care** (8am-6pm) for additional fee",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "rate.per",
+     "old": null,
+     "new": "month",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "*Before care is offered to James Dobson School students. **Full day care available when Philadelphia School District is closed to students, except holidays.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "rate.flat",
+     "old": null,
+     "new": 570,
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Before Care* (7am – 9am): $245/month After Care (2pm – 6pm): $570/month Before AND After Care: $750/month Full day care** (8am-6pm) for additional fee",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "rate.flat",
+     "old": null,
+     "new": 570,
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "*Before care is offered to James Dobson School students. **Full day care available when Philadelphia School District is closed to students, except holidays.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "rate.extra",
+     "old": null,
+     "new": "Full-week after care. Before care and partial weeks are priced separately.",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Before Care* (7am – 9am): $245/month After Care (2pm – 6pm): $570/month Before AND After Care: $750/month Full day care** (8am-6pm) for additional fee",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "rate.extra",
+     "old": null,
+     "new": "Full-week after care. Before care and partial weeks are priced separately.",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "*Before care is offered to James Dobson School students. **Full day care available when Philadelphia School District is closed to students, except holidays.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "phone",
+     "old": null,
+     "new": "215-483-4800",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "North Light Community Center 175 Green Lane Philadelphia, PA 19127 P (215) 483-4800",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "email",
+     "old": null,
+     "new": "",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Kidzone Before- and After-School Child Care for Grades K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "website",
+     "old": null,
+     "new": "https://www.northlightcommunitycenter.org/kidzone/",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Kidzone Before- and After-School Child Care for Grades K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.how",
+     "old": null,
+     "new": "online",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Registration for the 26-27 school year is now open! Sign Up Now",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.how",
+     "old": null,
+     "new": "online",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "KidZone Dates: 9/8/2026 – 6/9/2027",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.url",
+     "old": null,
+     "new": "https://docs.google.com/forms/d/e/1FAIpQLSdRqYrSjNH_fN1lxLXu8SWer0ZgPzrX01GGbXdhbDZ0kjm13Q/viewform?usp=header",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Registration for the 26-27 school year is now open! Sign Up Now",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.label",
+     "old": null,
+     "new": "Register",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Registration for the 26-27 school year is now open! Sign Up Now",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.label",
+     "old": null,
+     "new": "Register",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "KidZone Dates: 9/8/2026 – 6/9/2027",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.note",
+     "old": null,
+     "new": "North Light’s page links this form. KidZone runs September 8, 2026 to June 9, 2027.",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Registration for the 26-27 school year is now open! Sign Up Now",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.note",
+     "old": null,
+     "new": "North Light’s page links this form. KidZone runs September 8, 2026 to June 9, 2027.",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "KidZone Dates: 9/8/2026 – 6/9/2027",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "note",
+     "old": null,
+     "new": "North Light’s page says transportation is provided for select schools and before care is offered to Dobson students. Its sign-up form lists the schools it transports from. Ask KidZone about pickup from your school.",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Transportation provided for select schools",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "note",
+     "old": null,
+     "new": "North Light’s page says transportation is provided for select schools and before care is offered to Dobson students. Its sign-up form lists the schools it transports from. Ask KidZone about pickup from your school.",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "*Before care is offered to James Dobson School students. **Full day care available when Philadelphia School District is closed to students, except holidays.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://www.northlightcommunitycenter.org/kidzone/].label",
+     "old": null,
+     "new": "North Light Community Center: KidZone",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Kidzone Before- and After-School Child Care for Grades K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://www.northlightcommunitycenter.org/kidzone/].url",
+     "old": null,
+     "new": "https://www.northlightcommunitycenter.org/kidzone/",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "Kidzone Before- and After-School Child Care for Grades K-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.dobson.relation",
+     "old": null,
+     "new": "pickup",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "*Before care is offered to James Dobson School students. **Full day care available when Philadelphia School District is closed to students, except holidays.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.dobson.relation",
+     "old": null,
+     "new": "pickup",
+     "source": "https://dobson.philasd.org/",
+     "quote": "James Dobson School, located in the Manayunk and Roxborough neighborhoods of Philadelphia, is a public K–8 school serving students in Kindergarten through 8th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.dobson.note",
+     "old": null,
+     "new": "North Light’s own page says before care is offered to James Dobson School students, and its sign-up form lists Dobson among the schools it provides transportation to and from.",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "*Before care is offered to James Dobson School students. **Full day care available when Philadelphia School District is closed to students, except holidays.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.dobson.note",
+     "old": null,
+     "new": "North Light’s own page says before care is offered to James Dobson School students, and its sign-up form lists Dobson among the schools it provides transportation to and from.",
+     "source": "https://dobson.philasd.org/",
+     "quote": "James Dobson School, located in the Manayunk and Roxborough neighborhoods of Philadelphia, is a public K–8 school serving students in Kindergarten through 8th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.dobson.sources[https://www.northlightcommunitycenter.org/kidzone/].label",
+     "old": null,
+     "new": "North Light Community Center: KidZone",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "*Before care is offered to James Dobson School students. **Full day care available when Philadelphia School District is closed to students, except holidays.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.dobson.sources[https://www.northlightcommunitycenter.org/kidzone/].url",
+     "old": null,
+     "new": "https://www.northlightcommunitycenter.org/kidzone/",
+     "source": "https://www.northlightcommunitycenter.org/kidzone/",
+     "quote": "*Before care is offered to James Dobson School students. **Full day care available when Philadelphia School District is closed to students, except holidays.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  },
+  {
+   "item": "school:dobson",
+   "kind": "new-listing",
+   "listing": "p:dobson-clubs",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "name",
+     "old": null,
+     "new": "School clubs and teams",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Our school offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "what",
+     "old": null,
+     "new": "Clubs and teams James Dobson School names on its own site: after-school enrichment, LEGO robotics, gardening, Reading Olympics and sports",
+     "source": "https://dobson.philasd.org/",
+     "quote": "After-School Enrichment LEGO Robotics Team Gardening Club Reading Olympics Cultural Arts Club",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "types",
+     "old": null,
+     "new": [
+      "clubs"
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "Our school offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "keywords",
+     "old": null,
+     "new": [
+      "clubs",
+      "after school",
+      "LEGO",
+      "robotics",
+      "gardening",
+      "Reading Olympics",
+      "volleyball",
+      "softball",
+      "intramurals",
+      "Dobson"
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "Our school offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "address",
+     "old": null,
+     "new": "",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Our school offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "gradeNote",
+     "old": null,
+     "new": "Varies by club; ask the school",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Our school offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "hours",
+     "old": null,
+     "new": "Not published; ask the school office",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Our school offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "cost",
+     "old": null,
+     "new": "Not published",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Our school offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "phone",
+     "old": null,
+     "new": "215-400-3570",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Phone: 215-400-3570 Fax: 215-400-3571",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "email",
+     "old": null,
+     "new": "",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Our school offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "website",
+     "old": null,
+     "new": "https://dobson.philasd.org/",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Our school offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.how",
+     "old": null,
+     "new": "school",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Phone: 215-400-3570 Fax: 215-400-3571",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.note",
+     "old": null,
+     "new": "Ask the school office (215-400-3570).",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Phone: 215-400-3570 Fax: 215-400-3571",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "note",
+     "old": null,
+     "new": "Dobson’s own site lists these under extracurricular programs, clubs and activities, without days, times or grades. It also names the Rendell Center, Mural Arts and the Schuylkill Center as community partners. Ask the office which meet after dismissal.",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Community Partnerships Rendell Center Mural Arts Schuylkill Center",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://dobson.philasd.org/].label",
+     "old": null,
+     "new": "James Dobson School",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Our school offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://dobson.philasd.org/].url",
+     "old": null,
+     "new": "https://dobson.philasd.org/",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Our school offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.dobson.relation",
+     "old": null,
+     "new": "onsite",
+     "source": "https://dobson.philasd.org/",
+     "quote": "James Dobson School, located in the Manayunk and Roxborough neighborhoods of Philadelphia, is a public K–8 school serving students in Kindergarten through 8th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[After-School Enrichment].name",
+     "old": null,
+     "new": "After-School Enrichment",
+     "source": "https://dobson.philasd.org/",
+     "quote": "After-School Enrichment LEGO Robotics Team Gardening Club Reading Olympics Cultural Arts Club",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[After-School Enrichment].tags",
+     "old": null,
+     "new": [
+      "academics"
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "After-School Enrichment LEGO Robotics Team Gardening Club Reading Olympics Cultural Arts Club",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[LEGO Robotics Team].name",
+     "old": null,
+     "new": "LEGO Robotics Team",
+     "source": "https://dobson.philasd.org/",
+     "quote": "After-School Enrichment LEGO Robotics Team Gardening Club Reading Olympics Cultural Arts Club",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[LEGO Robotics Team].tags",
+     "old": null,
+     "new": [
+      "stem"
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "After-School Enrichment LEGO Robotics Team Gardening Club Reading Olympics Cultural Arts Club",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Gardening Club].name",
+     "old": null,
+     "new": "Gardening Club",
+     "source": "https://dobson.philasd.org/",
+     "quote": "After-School Enrichment LEGO Robotics Team Gardening Club Reading Olympics Cultural Arts Club",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Gardening Club].tags",
+     "old": null,
+     "new": [
+      "nature"
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "After-School Enrichment LEGO Robotics Team Gardening Club Reading Olympics Cultural Arts Club",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Reading Olympics].name",
+     "old": null,
+     "new": "Reading Olympics",
+     "source": "https://dobson.philasd.org/",
+     "quote": "After-School Enrichment LEGO Robotics Team Gardening Club Reading Olympics Cultural Arts Club",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Reading Olympics].tags",
+     "old": null,
+     "new": [
+      "academics"
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "After-School Enrichment LEGO Robotics Team Gardening Club Reading Olympics Cultural Arts Club",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Cultural Arts Club].name",
+     "old": null,
+     "new": "Cultural Arts Club",
+     "source": "https://dobson.philasd.org/",
+     "quote": "After-School Enrichment LEGO Robotics Team Gardening Club Reading Olympics Cultural Arts Club",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Cultural Arts Club].tags",
+     "old": null,
+     "new": [
+      "art"
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "After-School Enrichment LEGO Robotics Team Gardening Club Reading Olympics Cultural Arts Club",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Student Leadership].name",
+     "old": null,
+     "new": "Student Leadership",
+     "source": "https://dobson.philasd.org/",
+     "quote": "After-School Enrichment LEGO Robotics Team Gardening Club Reading Olympics Cultural Arts Club",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Student Leadership].what",
+     "old": null,
+     "new": "Listed as “Dive Into Action”",
+     "source": "https://dobson.philasd.org/",
+     "quote": "After-School Enrichment LEGO Robotics Team Gardening Club Reading Olympics Cultural Arts Club",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Student Leadership].tags",
+     "old": null,
+     "new": [
+      "clubs"
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "After-School Enrichment LEGO Robotics Team Gardening Club Reading Olympics Cultural Arts Club",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Girls Volleyball].name",
+     "old": null,
+     "new": "Girls Volleyball",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Available Sports PIAA Sports Girls’ Volleyball (Winter) Girls’ Softball (Spring)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Girls Volleyball].what",
+     "old": null,
+     "new": "Winter",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Available Sports PIAA Sports Girls’ Volleyball (Winter) Girls’ Softball (Spring)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Girls Volleyball].tags",
+     "old": null,
+     "new": [
+      "movement"
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "Available Sports PIAA Sports Girls’ Volleyball (Winter) Girls’ Softball (Spring)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Girls Softball].name",
+     "old": null,
+     "new": "Girls Softball",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Available Sports PIAA Sports Girls’ Volleyball (Winter) Girls’ Softball (Spring)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Girls Softball].what",
+     "old": null,
+     "new": "Spring",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Available Sports PIAA Sports Girls’ Volleyball (Winter) Girls’ Softball (Spring)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Girls Softball].tags",
+     "old": null,
+     "new": [
+      "movement"
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "Available Sports PIAA Sports Girls’ Volleyball (Winter) Girls’ Softball (Spring)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Elementary Intramurals].name",
+     "old": null,
+     "new": "Elementary Intramurals",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Elementary Intramural Sports Grades K–5 learn fundamentals, good sportsmanship, and team-building skills. Middle Grades Conference (MGC) Grades 6–8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Elementary Intramurals].grades",
+     "old": null,
+     "new": "K-5",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Elementary Intramural Sports Grades K–5 learn fundamentals, good sportsmanship, and team-building skills. Middle Grades Conference (MGC) Grades 6–8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Elementary Intramurals].tags",
+     "old": null,
+     "new": [
+      "movement"
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "Elementary Intramural Sports Grades K–5 learn fundamentals, good sportsmanship, and team-building skills. Middle Grades Conference (MGC) Grades 6–8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Middle Grades Conference].name",
+     "old": null,
+     "new": "Middle Grades Conference",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Elementary Intramural Sports Grades K–5 learn fundamentals, good sportsmanship, and team-building skills. Middle Grades Conference (MGC) Grades 6–8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Middle Grades Conference].grades",
+     "old": null,
+     "new": "6-8",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Elementary Intramural Sports Grades K–5 learn fundamentals, good sportsmanship, and team-building skills. Middle Grades Conference (MGC) Grades 6–8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Middle Grades Conference].tags",
+     "old": null,
+     "new": [
+      "movement"
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "Elementary Intramural Sports Grades K–5 learn fundamentals, good sportsmanship, and team-building skills. Middle Grades Conference (MGC) Grades 6–8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Rendell Center].name",
+     "old": null,
+     "new": "Rendell Center",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Community Partnerships Rendell Center Mural Arts Schuylkill Center",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Rendell Center].what",
+     "old": null,
+     "new": "Named as a community partner; the site doesn’t say what it runs",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Community Partnerships Rendell Center Mural Arts Schuylkill Center",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Rendell Center].tags",
+     "old": null,
+     "new": [
+      "clubs"
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "Community Partnerships Rendell Center Mural Arts Schuylkill Center",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Rendell Center].roster",
+     "old": null,
+     "new": false,
+     "source": "https://dobson.philasd.org/",
+     "quote": "Community Partnerships Rendell Center Mural Arts Schuylkill Center",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Mural Arts].name",
+     "old": null,
+     "new": "Mural Arts",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Community Partnerships Rendell Center Mural Arts Schuylkill Center",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Mural Arts].what",
+     "old": null,
+     "new": "Named as a community partner; the site doesn’t say what it runs",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Community Partnerships Rendell Center Mural Arts Schuylkill Center",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Mural Arts].tags",
+     "old": null,
+     "new": [
+      "art"
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "Community Partnerships Rendell Center Mural Arts Schuylkill Center",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Mural Arts].roster",
+     "old": null,
+     "new": false,
+     "source": "https://dobson.philasd.org/",
+     "quote": "Community Partnerships Rendell Center Mural Arts Schuylkill Center",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Schuylkill Center].name",
+     "old": null,
+     "new": "Schuylkill Center",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Community Partnerships Rendell Center Mural Arts Schuylkill Center",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Schuylkill Center].what",
+     "old": null,
+     "new": "Named as a community partner; the site doesn’t say what it runs",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Community Partnerships Rendell Center Mural Arts Schuylkill Center",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Schuylkill Center].tags",
+     "old": null,
+     "new": [
+      "nature"
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "Community Partnerships Rendell Center Mural Arts Schuylkill Center",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Schuylkill Center].roster",
+     "old": null,
+     "new": false,
+     "source": "https://dobson.philasd.org/",
+     "quote": "Community Partnerships Rendell Center Mural Arts Schuylkill Center",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  },
+  {
+   "item": "school:shawmont",
+   "kind": "new-listing",
+   "listing": "p:roxy-after-school",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "name",
+     "old": null,
+     "new": "Roxy After-School Program",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "provides a low-cost, safe, and educational after-school program for children grades K-5.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "what",
+     "old": null,
+     "new": "Low-cost after care at Roxborough Church for kindergarten to 5th grade, with pickup from Shawmont and Green Woods Charter",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "Students are picked up each day from Shawmont Elementary and Green Woods Charter Schools and are taken back to Roxborough Church.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "what",
+     "old": null,
+     "new": "Low-cost after care at Roxborough Church for kindergarten to 5th grade, with pickup from Shawmont and Green Woods Charter",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "provides a low-cost, safe, and educational after-school program for children grades K-5.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "types",
+     "old": null,
+     "new": [
+      "aftercare"
+     ],
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "provides a low-cost, safe, and educational after-school program for children grades K-5.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "keywords",
+     "old": null,
+     "new": [
+      "aftercare",
+      "after school",
+      "pickup",
+      "homework",
+      "snack",
+      "church",
+      "Roxy",
+      "Roxborough Church",
+      "Roxborough",
+      "Shawmont",
+      "Green Woods"
+     ],
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "provides a low-cost, safe, and educational after-school program for children grades K-5.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "address",
+     "old": null,
+     "new": "8230 Ridge Ave",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "Roxborough Church: 8230 Ridge Avenue Philadelphia, PA 19128 (215) 483-2762",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "neighborhoods",
+     "old": null,
+     "new": [
+      "Roxborough"
+     ],
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "provides a low-cost, safe, and educational after-school program for children grades K-5.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "grades",
+     "old": null,
+     "new": "K-5",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "provides a low-cost, safe, and educational after-school program for children grades K-5.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "gradeNote",
+     "old": null,
+     "new": "Kindergarten to 5th grade",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "provides a low-cost, safe, and educational after-school program for children grades K-5.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "hours",
+     "old": null,
+     "new": "Not published; ask the program",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "provides a low-cost, safe, and educational after-school program for children grades K-5.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "cost",
+     "old": null,
+     "new": "$300 a month full time; $150 a month part time (less than three days a week), according to the church’s page.",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "K-5 Programs & Annual Tuition Full time Tuition: $300 per month Part time Tuition: $150 per month (less than 3 days per week)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "price",
+     "old": null,
+     "new": "paid",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "provides a low-cost, safe, and educational after-school program for children grades K-5.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "rate.per",
+     "old": null,
+     "new": "month",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "K-5 Programs & Annual Tuition Full time Tuition: $300 per month Part time Tuition: $150 per month (less than 3 days per week)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "rate.flat",
+     "old": null,
+     "new": 300,
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "K-5 Programs & Annual Tuition Full time Tuition: $300 per month Part time Tuition: $150 per month (less than 3 days per week)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "rate.extra",
+     "old": null,
+     "new": "Full time. Part time, under three days a week, is $150 a month.",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "K-5 Programs & Annual Tuition Full time Tuition: $300 per month Part time Tuition: $150 per month (less than 3 days per week)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "phone",
+     "old": null,
+     "new": "215-483-2762",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "Roxborough Church: 8230 Ridge Avenue Philadelphia, PA 19128 (215) 483-2762",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "email",
+     "old": null,
+     "new": "education@roxboroughchurch.org",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "Contact us at education@roxboroughchurch.org",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "website",
+     "old": null,
+     "new": "https://www.roxboroughchurch.org/roxyafterschool",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "provides a low-cost, safe, and educational after-school program for children grades K-5.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.how",
+     "old": null,
+     "new": "online",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "ROXY AFTERCARE registration now open! Register",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.url",
+     "old": null,
+     "new": "https://roxboroughchurch.breezechms.com/form/dbd378",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "ROXY AFTERCARE registration now open! Register",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.label",
+     "old": null,
+     "new": "Register",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "ROXY AFTERCARE registration now open! Register",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.note",
+     "old": null,
+     "new": "The church’s page says Roxy aftercare registration is open.",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "ROXY AFTERCARE registration now open! Register",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "note",
+     "old": null,
+     "new": "Roxborough Church’s page describes snacks, homework help, games, Bible lessons and monthly electives. It doesn’t give hours, so ask how late children can stay.",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "provides a low-cost, safe, and educational after-school program for children grades K-5.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://www.roxboroughchurch.org/roxyafterschool].label",
+     "old": null,
+     "new": "Roxborough Church: Roxy After-School",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "provides a low-cost, safe, and educational after-school program for children grades K-5.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://www.roxboroughchurch.org/roxyafterschool].url",
+     "old": null,
+     "new": "https://www.roxboroughchurch.org/roxyafterschool",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "provides a low-cost, safe, and educational after-school program for children grades K-5.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "pickupLists[https://www.roxboroughchurch.org/roxyafterschool].where",
+     "old": null,
+     "new": "Roxy After-School",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "Students are picked up each day from Shawmont Elementary and Green Woods Charter Schools and are taken back to Roxborough Church.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "pickupLists[https://www.roxboroughchurch.org/roxyafterschool].text",
+     "old": null,
+     "new": "Students are picked up each day from Shawmont Elementary and Green Woods Charter Schools and are taken back to Roxborough Church.",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "Students are picked up each day from Shawmont Elementary and Green Woods Charter Schools and are taken back to Roxborough Church.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "pickupLists[https://www.roxboroughchurch.org/roxyafterschool].url",
+     "old": null,
+     "new": "https://www.roxboroughchurch.org/roxyafterschool",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "Students are picked up each day from Shawmont Elementary and Green Woods Charter Schools and are taken back to Roxborough Church.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "pickupLists[https://www.roxboroughchurch.org/roxyafterschool].how",
+     "old": null,
+     "new": "fetch",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "Students are picked up each day from Shawmont Elementary and Green Woods Charter Schools and are taken back to Roxborough Church.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.shawmont.relation",
+     "old": null,
+     "new": "pickup",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "Students are picked up each day from Shawmont Elementary and Green Woods Charter Schools and are taken back to Roxborough Church.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.shawmont.note",
+     "old": null,
+     "new": "Roxborough Church’s own page says students are picked up each day from Shawmont Elementary and taken back to the church.",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "Students are picked up each day from Shawmont Elementary and Green Woods Charter Schools and are taken back to Roxborough Church.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.shawmont.sources[https://www.roxboroughchurch.org/roxyafterschool].label",
+     "old": null,
+     "new": "Roxborough Church: Roxy After-School",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "Students are picked up each day from Shawmont Elementary and Green Woods Charter Schools and are taken back to Roxborough Church.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.shawmont.sources[https://www.roxboroughchurch.org/roxyafterschool].url",
+     "old": null,
+     "new": "https://www.roxboroughchurch.org/roxyafterschool",
+     "source": "https://www.roxboroughchurch.org/roxyafterschool",
+     "quote": "Students are picked up each day from Shawmont Elementary and Green Woods Charter Schools and are taken back to Roxborough Church.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  },
+  {
+   "item": "school:shawmont",
+   "kind": "new-listing",
+   "listing": "p:shawmont-clubs",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "name",
+     "old": null,
+     "new": "School clubs and partners",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Our School offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "what",
+     "old": null,
+     "new": "Clubs, sports and partners Shawmont names on its own site: art, games, gardening, stock market, tutoring, golf, track and basketball",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Art Club Game Club Garden Club Stock Market Club Tutoring Yearbook Middle School Girls Group",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "types",
+     "old": null,
+     "new": [
+      "clubs"
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Our School offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "keywords",
+     "old": null,
+     "new": [
+      "clubs",
+      "art",
+      "games",
+      "garden",
+      "stock market",
+      "tutoring",
+      "yearbook",
+      "golf",
+      "track",
+      "basketball",
+      "karate",
+      "theater",
+      "Shawmont"
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Our School offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "address",
+     "old": null,
+     "new": "",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Our School offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "gradeNote",
+     "old": null,
+     "new": "Varies by club; ask the school",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Our School offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "hours",
+     "old": null,
+     "new": "Not published; ask the school office",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Our School offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "cost",
+     "old": null,
+     "new": "Not published",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Our School offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "phone",
+     "old": null,
+     "new": "215-400-3440",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Phone: 215-400-3440 Fax: 215-400-3441 Address: 535 Shawmont Avenue Philadelphia, PA 19128",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "email",
+     "old": null,
+     "new": "",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Our School offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "website",
+     "old": null,
+     "new": "https://shawmont.philasd.org/",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Our School offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.how",
+     "old": null,
+     "new": "school",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Phone: 215-400-3440 Fax: 215-400-3441 Address: 535 Shawmont Avenue Philadelphia, PA 19128",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.note",
+     "old": null,
+     "new": "Ask the school office (215-400-3440).",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Phone: 215-400-3440 Fax: 215-400-3441 Address: 535 Shawmont Avenue Philadelphia, PA 19128",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "note",
+     "old": null,
+     "new": "Shawmont’s own site lists these under extracurricular programs, clubs and activities, available sports and community partnerships, without days, times or grades. Ask the office which meet after dismissal.",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Our School offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://shawmont.philasd.org/].label",
+     "old": null,
+     "new": "Shawmont School",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Our School offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://shawmont.philasd.org/].url",
+     "old": null,
+     "new": "https://shawmont.philasd.org/",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Our School offers several programs to broaden the horizons of our young scholars.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.shawmont.relation",
+     "old": null,
+     "new": "onsite",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Shawmont School is a neighborhood school in the Roxborough section of Philadelphia serving students in Pre-Kindergarten through 8th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Art Club].name",
+     "old": null,
+     "new": "Art Club",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Art Club Game Club Garden Club Stock Market Club Tutoring Yearbook Middle School Girls Group",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Art Club].tags",
+     "old": null,
+     "new": [
+      "art"
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Art Club Game Club Garden Club Stock Market Club Tutoring Yearbook Middle School Girls Group",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Game Club].name",
+     "old": null,
+     "new": "Game Club",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Art Club Game Club Garden Club Stock Market Club Tutoring Yearbook Middle School Girls Group",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Game Club].tags",
+     "old": null,
+     "new": [
+      "games"
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Art Club Game Club Garden Club Stock Market Club Tutoring Yearbook Middle School Girls Group",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Garden Club].name",
+     "old": null,
+     "new": "Garden Club",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Art Club Game Club Garden Club Stock Market Club Tutoring Yearbook Middle School Girls Group",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Garden Club].tags",
+     "old": null,
+     "new": [
+      "nature"
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Art Club Game Club Garden Club Stock Market Club Tutoring Yearbook Middle School Girls Group",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Stock Market Club].name",
+     "old": null,
+     "new": "Stock Market Club",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Art Club Game Club Garden Club Stock Market Club Tutoring Yearbook Middle School Girls Group",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Stock Market Club].tags",
+     "old": null,
+     "new": [
+      "academics"
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Art Club Game Club Garden Club Stock Market Club Tutoring Yearbook Middle School Girls Group",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Tutoring].name",
+     "old": null,
+     "new": "Tutoring",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Art Club Game Club Garden Club Stock Market Club Tutoring Yearbook Middle School Girls Group",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Tutoring].tags",
+     "old": null,
+     "new": [
+      "academics"
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Art Club Game Club Garden Club Stock Market Club Tutoring Yearbook Middle School Girls Group",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Yearbook].name",
+     "old": null,
+     "new": "Yearbook",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Art Club Game Club Garden Club Stock Market Club Tutoring Yearbook Middle School Girls Group",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Yearbook].tags",
+     "old": null,
+     "new": [
+      "art"
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Art Club Game Club Garden Club Stock Market Club Tutoring Yearbook Middle School Girls Group",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Middle School Girls Group].name",
+     "old": null,
+     "new": "Middle School Girls Group",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Art Club Game Club Garden Club Stock Market Club Tutoring Yearbook Middle School Girls Group",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Middle School Girls Group].tags",
+     "old": null,
+     "new": [
+      "clubs"
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Art Club Game Club Garden Club Stock Market Club Tutoring Yearbook Middle School Girls Group",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Philadelphia Youth Basketball].name",
+     "old": null,
+     "new": "Philadelphia Youth Basketball",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Community Partnerships Action Karate Big Brothers Big Sisters Northern Children Philadelphia Youth Basketball Enchantment Theatre Company",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Philadelphia Youth Basketball].tags",
+     "old": null,
+     "new": [
+      "movement"
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Community Partnerships Action Karate Big Brothers Big Sisters Northern Children Philadelphia Youth Basketball Enchantment Theatre Company",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Golf].name",
+     "old": null,
+     "new": "Golf",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Available Sports: Golf Track",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Golf].tags",
+     "old": null,
+     "new": [
+      "movement"
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Available Sports: Golf Track",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Track].name",
+     "old": null,
+     "new": "Track",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Available Sports: Golf Track",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Track].tags",
+     "old": null,
+     "new": [
+      "movement"
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Available Sports: Golf Track",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Middle Grades Conference].name",
+     "old": null,
+     "new": "Middle Grades Conference",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Middle Grades Conference (MGC) Grades 6–8 are taught the benefits of interscholastic athletics",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Middle Grades Conference].what",
+     "old": null,
+     "new": "Middle-grades sports",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Middle Grades Conference (MGC) Grades 6–8 are taught the benefits of interscholastic athletics",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Middle Grades Conference].tags",
+     "old": null,
+     "new": [
+      "movement"
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Middle Grades Conference (MGC) Grades 6–8 are taught the benefits of interscholastic athletics",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Action Karate].name",
+     "old": null,
+     "new": "Action Karate",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Community Partnerships Action Karate Big Brothers Big Sisters Northern Children Philadelphia Youth Basketball Enchantment Theatre Company",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Action Karate].what",
+     "old": null,
+     "new": "Named as a community partner. Action Karate’s Manayunk studio lists Shawmont as a school partner; neither says what runs at the school",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Community Partnerships Action Karate Big Brothers Big Sisters Northern Children Philadelphia Youth Basketball Enchantment Theatre Company",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Action Karate].tags",
+     "old": null,
+     "new": [
+      "movement"
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Community Partnerships Action Karate Big Brothers Big Sisters Northern Children Philadelphia Youth Basketball Enchantment Theatre Company",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Action Karate].roster",
+     "old": null,
+     "new": false,
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Community Partnerships Action Karate Big Brothers Big Sisters Northern Children Philadelphia Youth Basketball Enchantment Theatre Company",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Big Brothers Big Sisters].name",
+     "old": null,
+     "new": "Big Brothers Big Sisters",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Community Partnerships Action Karate Big Brothers Big Sisters Northern Children Philadelphia Youth Basketball Enchantment Theatre Company",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Big Brothers Big Sisters].what",
+     "old": null,
+     "new": "Named as a community partner; the site doesn’t say what it runs",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Community Partnerships Action Karate Big Brothers Big Sisters Northern Children Philadelphia Youth Basketball Enchantment Theatre Company",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Big Brothers Big Sisters].tags",
+     "old": null,
+     "new": [
+      "clubs"
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Community Partnerships Action Karate Big Brothers Big Sisters Northern Children Philadelphia Youth Basketball Enchantment Theatre Company",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Big Brothers Big Sisters].roster",
+     "old": null,
+     "new": false,
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Community Partnerships Action Karate Big Brothers Big Sisters Northern Children Philadelphia Youth Basketball Enchantment Theatre Company",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Enchantment Theatre Company].name",
+     "old": null,
+     "new": "Enchantment Theatre Company",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Community Partnerships Action Karate Big Brothers Big Sisters Northern Children Philadelphia Youth Basketball Enchantment Theatre Company",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Enchantment Theatre Company].what",
+     "old": null,
+     "new": "Named as a community partner; the site doesn’t say what it runs",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Community Partnerships Action Karate Big Brothers Big Sisters Northern Children Philadelphia Youth Basketball Enchantment Theatre Company",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Enchantment Theatre Company].tags",
+     "old": null,
+     "new": [
+      "theater"
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Community Partnerships Action Karate Big Brothers Big Sisters Northern Children Philadelphia Youth Basketball Enchantment Theatre Company",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Enchantment Theatre Company].roster",
+     "old": null,
+     "new": false,
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Community Partnerships Action Karate Big Brothers Big Sisters Northern Children Philadelphia Youth Basketball Enchantment Theatre Company",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  },
+  {
+   "item": "school:dick",
+   "kind": "new-listing",
+   "listing": "p:launch-philly-dick",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "name",
+     "old": null,
+     "new": "Launch Philly Creative Kids at William Dick",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "CIS/ Launch Philly William Dick Elementry Share Print 2498 W DIAMOND ST Philadelphia, PA19121 Organization Phone: (267) 278-8799",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "what",
+     "old": null,
+     "new": "Free after-school program inside William Dick from Launch Philly’s Creative Kids, for kindergarten to 8th grade, with meals",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "Grades: K, 1, 2, 3, 4, 5, 6, 7, 8 Costs: Free Fee frequency: Term: School Year Services: Transportation: No Transportation Provided Meals: Meals Provided",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "types",
+     "old": null,
+     "new": [
+      "aftercare"
+     ],
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "CIS/ Launch Philly William Dick Elementry Share Print 2498 W DIAMOND ST Philadelphia, PA19121 Organization Phone: (267) 278-8799",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "keywords",
+     "old": null,
+     "new": [
+      "aftercare",
+      "after school",
+      "free",
+      "meals",
+      "Launch Philly",
+      "Creative Kids",
+      "Launch of Philadelphia",
+      "OST",
+      "William Dick",
+      "Strawberry Mansion"
+     ],
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "CIS/ Launch Philly William Dick Elementry Share Print 2498 W DIAMOND ST Philadelphia, PA19121 Organization Phone: (267) 278-8799",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "address",
+     "old": null,
+     "new": "2498 W Diamond St",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "CIS/ Launch Philly William Dick Elementry Share Print 2498 W DIAMOND ST Philadelphia, PA19121 Organization Phone: (267) 278-8799",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "grades",
+     "old": null,
+     "new": "K-8",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "Grades: K, 1, 2, 3, 4, 5, 6, 7, 8 Costs: Free Fee frequency: Term: School Year Services: Transportation: No Transportation Provided Meals: Meals Provided",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "gradeNote",
+     "old": null,
+     "new": "The City’s locator lists kindergarten to 8th grade",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "Grades: K, 1, 2, 3, 4, 5, 6, 7, 8 Costs: Free Fee frequency: Term: School Year Services: Transportation: No Transportation Provided Meals: Meals Provided",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "hours",
+     "old": null,
+     "new": "3:30 to 6:00 pm, Monday to Friday, September 8, 2026 to June 9, 2027, according to the City’s program locator.",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "Registration: Registration required Registration start: Tuesday, Aug 11, 2026 Registration end: Tuesday, Aug 17, 2027 Program runs from: Tuesday, Sep 8, 2026 - Wednesday, Jun 9, 2027 Days offered: M, Tu, W, Th, F Time offered: 3:30 PM - 6:00 PM",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "days",
+     "old": null,
+     "new": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+     ],
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "Registration: Registration required Registration start: Tuesday, Aug 11, 2026 Registration end: Tuesday, Aug 17, 2027 Program runs from: Tuesday, Sep 8, 2026 - Wednesday, Jun 9, 2027 Days offered: M, Tu, W, Th, F Time offered: 3:30 PM - 6:00 PM",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "pickupBy",
+     "old": null,
+     "new": "6:00 pm",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "Registration: Registration required Registration start: Tuesday, Aug 11, 2026 Registration end: Tuesday, Aug 17, 2027 Program runs from: Tuesday, Sep 8, 2026 - Wednesday, Jun 9, 2027 Days offered: M, Tu, W, Th, F Time offered: 3:30 PM - 6:00 PM",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "cost",
+     "old": null,
+     "new": "Free, with meals, according to the City’s program locator.",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "Grades: K, 1, 2, 3, 4, 5, 6, 7, 8 Costs: Free Fee frequency: Term: School Year Services: Transportation: No Transportation Provided Meals: Meals Provided",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "price",
+     "old": null,
+     "new": "free",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "Grades: K, 1, 2, 3, 4, 5, 6, 7, 8 Costs: Free Fee frequency: Term: School Year Services: Transportation: No Transportation Provided Meals: Meals Provided",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "phone",
+     "old": null,
+     "new": "267-278-8799",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "CIS/ Launch Philly William Dick Elementry Share Print 2498 W DIAMOND ST Philadelphia, PA19121 Organization Phone: (267) 278-8799",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "email",
+     "old": null,
+     "new": "",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "CIS/ Launch Philly William Dick Elementry Share Print 2498 W DIAMOND ST Philadelphia, PA19121 Organization Phone: (267) 278-8799",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "website",
+     "old": null,
+     "new": "https://launchphilly.org/",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "CIS/ Launch Philly William Dick Elementry Share Print 2498 W DIAMOND ST Philadelphia, PA19121 Organization Phone: (267) 278-8799",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "register.how",
+     "old": null,
+     "new": "phone",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "Registration: Registration required Registration start: Tuesday, Aug 11, 2026 Registration end: Tuesday, Aug 17, 2027 Program runs from: Tuesday, Sep 8, 2026 - Wednesday, Jun 9, 2027 Days offered: M, Tu, W, Th, F Time offered: 3:30 PM - 6:00 PM",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "register.how",
+     "old": null,
+     "new": "phone",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "CIS/ Launch Philly William Dick Elementry Share Print 2498 W DIAMOND ST Philadelphia, PA19121 Organization Phone: (267) 278-8799",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "register.note",
+     "old": null,
+     "new": "The City’s locator says registration is required and lists registration from August 11, 2026 to August 17, 2027. Call Launch Philly at 267-278-8799.",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "Registration: Registration required Registration start: Tuesday, Aug 11, 2026 Registration end: Tuesday, Aug 17, 2027 Program runs from: Tuesday, Sep 8, 2026 - Wednesday, Jun 9, 2027 Days offered: M, Tu, W, Th, F Time offered: 3:30 PM - 6:00 PM",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "register.note",
+     "old": null,
+     "new": "The City’s locator says registration is required and lists registration from August 11, 2026 to August 17, 2027. Call Launch Philly at 267-278-8799.",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "CIS/ Launch Philly William Dick Elementry Share Print 2498 W DIAMOND ST Philadelphia, PA19121 Organization Phone: (267) 278-8799",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "note",
+     "old": null,
+     "new": "The City’s locator lists the program at William Dick by grade group, with no transportation and meals provided. Launch Philly’s own site couldn’t be read automatically, so ask the program about activities and how to apply.",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "Grades: K, 1, 2, 3, 4, 5, 6, 7, 8 Costs: Free Fee frequency: Term: School Year Services: Transportation: No Transportation Provided Meals: Meals Provided",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "sources[https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48].label",
+     "old": null,
+     "new": "City program locator: Launch Philly at William Dick",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "CIS/ Launch Philly William Dick Elementry Share Print 2498 W DIAMOND ST Philadelphia, PA19121 Organization Phone: (267) 278-8799",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "sources[https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48].url",
+     "old": null,
+     "new": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "CIS/ Launch Philly William Dick Elementry Share Print 2498 W DIAMOND ST Philadelphia, PA19121 Organization Phone: (267) 278-8799",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "sources[https://wdick.philasd.org/].label",
+     "old": null,
+     "new": "William Dick School",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "CIS/ Launch Philly William Dick Elementry Share Print 2498 W DIAMOND ST Philadelphia, PA19121 Organization Phone: (267) 278-8799",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "sources[https://wdick.philasd.org/].url",
+     "old": null,
+     "new": "https://wdick.philasd.org/",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "CIS/ Launch Philly William Dick Elementry Share Print 2498 W DIAMOND ST Philadelphia, PA19121 Organization Phone: (267) 278-8799",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "schools.dick.relation",
+     "old": null,
+     "new": "onsite",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Launch Philly/Creative Kids An afterschool and summer program for K–8 students.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.dick.relation",
+     "old": null,
+     "new": "onsite",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "CIS/ Launch Philly William Dick Elementry Share Print 2498 W DIAMOND ST Philadelphia, PA19121 Organization Phone: (267) 278-8799",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "schools.dick.relation",
+     "old": null,
+     "new": "onsite",
+     "source": "https://wdick.philasd.org/",
+     "quote": "William Dick School, situated in the Strawberry Mansion neighborhood of North Philadelphia, is a public elementary school serving students from Kindergarten",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.dick.note",
+     "old": null,
+     "new": "The school’s own site names Launch Philly/Creative Kids as its after-school program for K–8 students, and the City’s locator lists it at the school this school year.",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Launch Philly/Creative Kids An afterschool and summer program for K–8 students.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.dick.note",
+     "old": null,
+     "new": "The school’s own site names Launch Philly/Creative Kids as its after-school program for K–8 students, and the City’s locator lists it at the school this school year.",
+     "source": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "quote": "CIS/ Launch Philly William Dick Elementry Share Print 2498 W DIAMOND ST Philadelphia, PA19121 Organization Phone: (267) 278-8799",
+     "read": "2026-11-24",
+     "how": "browser"
+    },
+    {
+     "path": "schools.dick.note",
+     "old": null,
+     "new": "The school’s own site names Launch Philly/Creative Kids as its after-school program for K–8 students, and the City’s locator lists it at the school this school year.",
+     "source": "https://wdick.philasd.org/",
+     "quote": "William Dick School, situated in the Strawberry Mansion neighborhood of North Philadelphia, is a public elementary school serving students from Kindergarten",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.dick.sources[https://wdick.philasd.org/].label",
+     "old": null,
+     "new": "William Dick School",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Launch Philly/Creative Kids An afterschool and summer program for K–8 students.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.dick.sources[https://wdick.philasd.org/].url",
+     "old": null,
+     "new": "https://wdick.philasd.org/",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Launch Philly/Creative Kids An afterschool and summer program for K–8 students.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.dick.sources[https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48].label",
+     "old": null,
+     "new": "City program locator: Launch Philly at William Dick",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Launch Philly/Creative Kids An afterschool and summer program for K–8 students.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.dick.sources[https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48].url",
+     "old": null,
+     "new": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Launch Philly/Creative Kids An afterschool and summer program for K–8 students.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  },
+  {
+   "item": "school:dick",
+   "kind": "new-listing",
+   "listing": "p:dick-partners",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "name",
+     "old": null,
+     "new": "School partners",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "what",
+     "old": null,
+     "new": "Partners William Dick names on its own site besides its after-school program: the Wagner Free Institute",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "types",
+     "old": null,
+     "new": [
+      "clubs"
+     ],
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "keywords",
+     "old": null,
+     "new": [
+      "partners",
+      "Wagner",
+      "science",
+      "William Dick"
+     ],
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "address",
+     "old": null,
+     "new": "",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "gradeNote",
+     "old": null,
+     "new": "Ask the school",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "hours",
+     "old": null,
+     "new": "Not published; ask the school office",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "cost",
+     "old": null,
+     "new": "Not published",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "phone",
+     "old": null,
+     "new": "215-400-7340",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Phone: 215-400-7340 Fax: 215-400-7341 Address: 2498 W. Diamond St. Philadelphia, PA 19121",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "email",
+     "old": null,
+     "new": "",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "website",
+     "old": null,
+     "new": "https://wdick.philasd.org/",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.how",
+     "old": null,
+     "new": "school",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Phone: 215-400-7340 Fax: 215-400-7341 Address: 2498 W. Diamond St. Philadelphia, PA 19121",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "register.note",
+     "old": null,
+     "new": "Ask the school office (215-400-7340).",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Phone: 215-400-7340 Fax: 215-400-7341 Address: 2498 W. Diamond St. Philadelphia, PA 19121",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "note",
+     "old": null,
+     "new": "William Dick’s own site names the Wagner Institute under community partnerships, without saying what it runs or when. Ask the office.",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://wdick.philasd.org/].label",
+     "old": null,
+     "new": "William Dick School",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "sources[https://wdick.philasd.org/].url",
+     "old": null,
+     "new": "https://wdick.philasd.org/",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "schools.dick.relation",
+     "old": null,
+     "new": "onsite",
+     "source": "https://wdick.philasd.org/",
+     "quote": "William Dick School, situated in the Strawberry Mansion neighborhood of North Philadelphia, is a public elementary school serving students from Kindergarten",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Wagner Institute].name",
+     "old": null,
+     "new": "Wagner Institute",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Wagner Institute].what",
+     "old": null,
+     "new": "Named as a community partner; the site doesn’t say what it runs",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Wagner Institute].tags",
+     "old": null,
+     "new": [
+      "stem"
+     ],
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "clubs[Wagner Institute].roster",
+     "old": null,
+     "new": false,
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  },
+  {
+   "item": "school:dobson",
+   "kind": "new-school",
+   "listing": "s:dobson",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "name",
+     "old": null,
+     "new": "James Dobson School",
+     "source": "https://dobson.philasd.org/",
+     "quote": "James Dobson School, located in the Manayunk and Roxborough neighborhoods of Philadelphia, is a public K–8 school serving students in Kindergarten through 8th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "shortName",
+     "old": null,
+     "new": "Dobson",
+     "source": "https://dobson.philasd.org/",
+     "quote": "James Dobson School, located in the Manayunk and Roxborough neighborhoods of Philadelphia, is a public K–8 school serving students in Kindergarten through 8th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "aliases",
+     "old": null,
+     "new": [
+      "James Dobson",
+      "Dobson Elementary",
+      "Dobson School",
+      "J. Dobson"
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "James Dobson School, located in the Manayunk and Roxborough neighborhoods of Philadelphia, is a public K–8 school serving students in Kindergarten through 8th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "address",
+     "old": null,
+     "new": "4667 Umbria St, Philadelphia, PA 19127",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Address: 4667 Umbria Street Philadelphia, PA 19127",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "neighborhood",
+     "old": null,
+     "new": "Manayunk",
+     "source": "https://dobson.philasd.org/",
+     "quote": "James Dobson School, located in the Manayunk and Roxborough neighborhoods of Philadelphia, is a public K–8 school serving students in Kindergarten through 8th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "grades",
+     "old": null,
+     "new": "K-8",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Grade Levels: K–8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "dismissal",
+     "old": null,
+     "new": "3:39 pm",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Regular Dismissal Time Kindergarten: 3:30 PM Grades 1–2: 3:33 PM Grades 3–5: 3:35 PM Grades 6–8: 3:39 PM",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "dismissalNote",
+     "old": null,
+     "new": "the school’s site gives the school day as 9:00 am to 3:39 pm, with kindergarten dismissed at 3:30 pm, grades 1–2 at 3:33 pm and grades 3–5 at 3:35 pm",
+     "source": "https://dobson.philasd.org/",
+     "quote": "School Day: 9:00 AM – 3:39 PM",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "dismissalNote",
+     "old": null,
+     "new": "the school’s site gives the school day as 9:00 am to 3:39 pm, with kindergarten dismissed at 3:30 pm, grades 1–2 at 3:33 pm and grades 3–5 at 3:35 pm",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Regular Dismissal Time Kindergarten: 3:30 PM Grades 1–2: 3:33 PM Grades 3–5: 3:35 PM Grades 6–8: 3:39 PM",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "phone",
+     "old": null,
+     "new": "215-400-3570",
+     "source": "https://dobson.philasd.org/",
+     "quote": "Phone: 215-400-3570 Fax: 215-400-3571",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "website",
+     "old": null,
+     "new": "https://dobson.philasd.org/",
+     "source": "https://dobson.philasd.org/",
+     "quote": "James Dobson School, located in the Manayunk and Roxborough neighborhoods of Philadelphia, is a public K–8 school serving students in Kindergarten through 8th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "North Light Community Center’s KidZone, on Green Lane, offers before care to Dobson students and after care with transportation from the school. It has a listing here.",
+      "Dobson’s site lists after-school enrichment, a LEGO robotics team, a gardening club, Reading Olympics, a cultural arts club and a student leadership group, plus girls’ volleyball and softball, elementary intramurals and middle-grades sports. They are listed here as the school’s clubs and teams, without days or times, so ask the office which meet after dismissal.",
+      "Early dismissal days end at 12:30 pm for kindergarten and 12:39 pm for grades 6–8, according to the school’s site. Ask KidZone whether it covers those afternoons.",
+      "If you know a program that serves Dobson and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "After-School Enrichment LEGO Robotics Team Gardening Club Reading Olympics Cultural Arts Club",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "North Light Community Center’s KidZone, on Green Lane, offers before care to Dobson students and after care with transportation from the school. It has a listing here.",
+      "Dobson’s site lists after-school enrichment, a LEGO robotics team, a gardening club, Reading Olympics, a cultural arts club and a student leadership group, plus girls’ volleyball and softball, elementary intramurals and middle-grades sports. They are listed here as the school’s clubs and teams, without days or times, so ask the office which meet after dismissal.",
+      "Early dismissal days end at 12:30 pm for kindergarten and 12:39 pm for grades 6–8, according to the school’s site. Ask KidZone whether it covers those afternoons.",
+      "If you know a program that serves Dobson and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "Early Dismissal Time Kindergarten: 12:30 PM Grades 1–2: 12:33 PM Grades 3–5: 12:35 PM Grades 6–8: 12:39 PM",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "North Light Community Center’s KidZone, on Green Lane, offers before care to Dobson students and after care with transportation from the school. It has a listing here.",
+      "Dobson’s site lists after-school enrichment, a LEGO robotics team, a gardening club, Reading Olympics, a cultural arts club and a student leadership group, plus girls’ volleyball and softball, elementary intramurals and middle-grades sports. They are listed here as the school’s clubs and teams, without days or times, so ask the office which meet after dismissal.",
+      "Early dismissal days end at 12:30 pm for kindergarten and 12:39 pm for grades 6–8, according to the school’s site. Ask KidZone whether it covers those afternoons.",
+      "If you know a program that serves Dobson and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "Available Sports PIAA Sports Girls’ Volleyball (Winter) Girls’ Softball (Spring)",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "North Light Community Center’s KidZone, on Green Lane, offers before care to Dobson students and after care with transportation from the school. It has a listing here.",
+      "Dobson’s site lists after-school enrichment, a LEGO robotics team, a gardening club, Reading Olympics, a cultural arts club and a student leadership group, plus girls’ volleyball and softball, elementary intramurals and middle-grades sports. They are listed here as the school’s clubs and teams, without days or times, so ask the office which meet after dismissal.",
+      "Early dismissal days end at 12:30 pm for kindergarten and 12:39 pm for grades 6–8, according to the school’s site. Ask KidZone whether it covers those afternoons.",
+      "If you know a program that serves Dobson and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://dobson.philasd.org/",
+     "quote": "Elementary Intramural Sports Grades K–5 learn fundamentals, good sportsmanship, and team-building skills. Middle Grades Conference (MGC) Grades 6–8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  },
+  {
+   "item": "school:shawmont",
+   "kind": "new-school",
+   "listing": "s:shawmont",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "name",
+     "old": null,
+     "new": "Shawmont School",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Shawmont School is a neighborhood school in the Roxborough section of Philadelphia serving students in Pre-Kindergarten through 8th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "shortName",
+     "old": null,
+     "new": "Shawmont",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Shawmont School is a neighborhood school in the Roxborough section of Philadelphia serving students in Pre-Kindergarten through 8th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "aliases",
+     "old": null,
+     "new": [
+      "Shawmont Elementary",
+      "Shawmont School"
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Shawmont School is a neighborhood school in the Roxborough section of Philadelphia serving students in Pre-Kindergarten through 8th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "address",
+     "old": null,
+     "new": "535 Shawmont Ave, Philadelphia, PA 19128",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Phone: 215-400-3440 Fax: 215-400-3441 Address: 535 Shawmont Avenue Philadelphia, PA 19128",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "neighborhood",
+     "old": null,
+     "new": "Roxborough",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Shawmont School is a neighborhood school in the Roxborough section of Philadelphia serving students in Pre-Kindergarten through 8th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "grades",
+     "old": null,
+     "new": "PK-8",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Grade Levels: PreK-8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "dismissal",
+     "old": null,
+     "new": "2:09 pm",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "School Hours: 7:30 a.m. – 2:09 p.m. Staff members are in the schoolyard beginning at 7:00 a.m. to supervise students who arrive early.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "dismissalNote",
+     "old": null,
+     "new": "the school’s site gives school hours as 7:30 am to 2:09 pm, with dismissal from 2:00 pm",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "School Hours: 7:30 a.m. – 2:09 p.m. Staff members are in the schoolyard beginning at 7:00 a.m. to supervise students who arrive early.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "dismissalNote",
+     "old": null,
+     "new": "the school’s site gives school hours as 7:30 am to 2:09 pm, with dismissal from 2:00 pm",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Dismissal begins at 2:00 p.m. and concludes by 2:09 p.m.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "phone",
+     "old": null,
+     "new": "215-400-3440",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Phone: 215-400-3440 Fax: 215-400-3441 Address: 535 Shawmont Avenue Philadelphia, PA 19128",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "website",
+     "old": null,
+     "new": "https://shawmont.philasd.org/",
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Shawmont School is a neighborhood school in the Roxborough section of Philadelphia serving students in Pre-Kindergarten through 8th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "Roxborough Church’s Roxy After-School Program picks children up from Shawmont each day and takes them back to the church on Ridge Avenue. It has a listing here.",
+      "Shawmont’s site lists an art club, game club, garden club, stock market club, tutoring, yearbook and a middle school girls group, and sports through Philadelphia Youth Basketball, golf, track and the Middle Grades Conference. It names Action Karate, Big Brothers Big Sisters, Philadelphia Youth Basketball and Enchantment Theatre Company as community partners. They are listed here as the school’s clubs and partners, without days or times, so ask the office which meet after dismissal.",
+      "Staff are in the schoolyard from 7:00 am for students who arrive early, according to the school’s site. For early dismissals the site points to its parent and student handbook.",
+      "If you know a program that serves Shawmont and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Art Club Game Club Garden Club Stock Market Club Tutoring Yearbook Middle School Girls Group",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "Roxborough Church’s Roxy After-School Program picks children up from Shawmont each day and takes them back to the church on Ridge Avenue. It has a listing here.",
+      "Shawmont’s site lists an art club, game club, garden club, stock market club, tutoring, yearbook and a middle school girls group, and sports through Philadelphia Youth Basketball, golf, track and the Middle Grades Conference. It names Action Karate, Big Brothers Big Sisters, Philadelphia Youth Basketball and Enchantment Theatre Company as community partners. They are listed here as the school’s clubs and partners, without days or times, so ask the office which meet after dismissal.",
+      "Staff are in the schoolyard from 7:00 am for students who arrive early, according to the school’s site. For early dismissals the site points to its parent and student handbook.",
+      "If you know a program that serves Shawmont and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Available Sports: Golf Track",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "Roxborough Church’s Roxy After-School Program picks children up from Shawmont each day and takes them back to the church on Ridge Avenue. It has a listing here.",
+      "Shawmont’s site lists an art club, game club, garden club, stock market club, tutoring, yearbook and a middle school girls group, and sports through Philadelphia Youth Basketball, golf, track and the Middle Grades Conference. It names Action Karate, Big Brothers Big Sisters, Philadelphia Youth Basketball and Enchantment Theatre Company as community partners. They are listed here as the school’s clubs and partners, without days or times, so ask the office which meet after dismissal.",
+      "Staff are in the schoolyard from 7:00 am for students who arrive early, according to the school’s site. For early dismissals the site points to its parent and student handbook.",
+      "If you know a program that serves Shawmont and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Middle Grades Conference (MGC) Grades 6–8 are taught the benefits of interscholastic athletics",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "Roxborough Church’s Roxy After-School Program picks children up from Shawmont each day and takes them back to the church on Ridge Avenue. It has a listing here.",
+      "Shawmont’s site lists an art club, game club, garden club, stock market club, tutoring, yearbook and a middle school girls group, and sports through Philadelphia Youth Basketball, golf, track and the Middle Grades Conference. It names Action Karate, Big Brothers Big Sisters, Philadelphia Youth Basketball and Enchantment Theatre Company as community partners. They are listed here as the school’s clubs and partners, without days or times, so ask the office which meet after dismissal.",
+      "Staff are in the schoolyard from 7:00 am for students who arrive early, according to the school’s site. For early dismissals the site points to its parent and student handbook.",
+      "If you know a program that serves Shawmont and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Community Partnerships Action Karate Big Brothers Big Sisters Northern Children Philadelphia Youth Basketball Enchantment Theatre Company",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "Roxborough Church’s Roxy After-School Program picks children up from Shawmont each day and takes them back to the church on Ridge Avenue. It has a listing here.",
+      "Shawmont’s site lists an art club, game club, garden club, stock market club, tutoring, yearbook and a middle school girls group, and sports through Philadelphia Youth Basketball, golf, track and the Middle Grades Conference. It names Action Karate, Big Brothers Big Sisters, Philadelphia Youth Basketball and Enchantment Theatre Company as community partners. They are listed here as the school’s clubs and partners, without days or times, so ask the office which meet after dismissal.",
+      "Staff are in the schoolyard from 7:00 am for students who arrive early, according to the school’s site. For early dismissals the site points to its parent and student handbook.",
+      "If you know a program that serves Shawmont and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "School Hours: 7:30 a.m. – 2:09 p.m. Staff members are in the schoolyard beginning at 7:00 a.m. to supervise students who arrive early.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "Roxborough Church’s Roxy After-School Program picks children up from Shawmont each day and takes them back to the church on Ridge Avenue. It has a listing here.",
+      "Shawmont’s site lists an art club, game club, garden club, stock market club, tutoring, yearbook and a middle school girls group, and sports through Philadelphia Youth Basketball, golf, track and the Middle Grades Conference. It names Action Karate, Big Brothers Big Sisters, Philadelphia Youth Basketball and Enchantment Theatre Company as community partners. They are listed here as the school’s clubs and partners, without days or times, so ask the office which meet after dismissal.",
+      "Staff are in the schoolyard from 7:00 am for students who arrive early, according to the school’s site. For early dismissals the site points to its parent and student handbook.",
+      "If you know a program that serves Shawmont and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "For details on early dismissals, inclement weather procedures, delayed openings, and emergency closings, please refer to the Parent & Student Handbook",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "alsoListed",
+     "old": null,
+     "new": [
+      "North Light Community Center’s KidZone: its registration form lists Shawmont among the schools it transports from, but its own page doesn’t name Shawmont, so ask KidZone.",
+      "The Schuylkill Center: a magazine roundup lists van pickup from Shawmont; the Center’s own site couldn’t be read, so ask the Center."
+     ],
+     "source": "https://shawmont.philasd.org/",
+     "quote": "Shawmont School is a neighborhood school in the Roxborough section of Philadelphia serving students in Pre-Kindergarten through 8th grade.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  },
+  {
+   "item": "school:dick",
+   "kind": "new-school",
+   "listing": "s:dick",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "name",
+     "old": null,
+     "new": "William Dick School",
+     "source": "https://wdick.philasd.org/",
+     "quote": "William Dick School, situated in the Strawberry Mansion neighborhood of North Philadelphia, is a public elementary school serving students from Kindergarten",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "shortName",
+     "old": null,
+     "new": "William Dick",
+     "source": "https://wdick.philasd.org/",
+     "quote": "William Dick School, situated in the Strawberry Mansion neighborhood of North Philadelphia, is a public elementary school serving students from Kindergarten",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "aliases",
+     "old": null,
+     "new": [
+      "William Dick",
+      "Dick School",
+      "William Dick Elementary",
+      "Dick Elementary"
+     ],
+     "source": "https://wdick.philasd.org/",
+     "quote": "William Dick School, situated in the Strawberry Mansion neighborhood of North Philadelphia, is a public elementary school serving students from Kindergarten",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "address",
+     "old": null,
+     "new": "2498 W Diamond St, Philadelphia, PA 19121",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Phone: 215-400-7340 Fax: 215-400-7341 Address: 2498 W. Diamond St. Philadelphia, PA 19121",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "neighborhood",
+     "old": null,
+     "new": "Strawberry Mansion",
+     "source": "https://wdick.philasd.org/",
+     "quote": "William Dick School, situated in the Strawberry Mansion neighborhood of North Philadelphia, is a public elementary school serving students from Kindergarten",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "grades",
+     "old": null,
+     "new": "K-8",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Grade Levels: K–8",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "dismissal",
+     "old": null,
+     "new": "3:39 pm",
+     "source": "https://wdick.philasd.org/",
+     "quote": "School Day: 9:00 AM – 3:39 PM Breakfast: 8:30 – 9:00 AM",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "dismissalNote",
+     "old": null,
+     "new": "the school’s site gives the school day as 9:00 am to 3:39 pm, with breakfast from 8:30 am",
+     "source": "https://wdick.philasd.org/",
+     "quote": "School Day: 9:00 AM – 3:39 PM Breakfast: 8:30 – 9:00 AM",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "phone",
+     "old": null,
+     "new": "215-400-7340",
+     "source": "https://wdick.philasd.org/",
+     "quote": "Phone: 215-400-7340 Fax: 215-400-7341 Address: 2498 W. Diamond St. Philadelphia, PA 19121",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "website",
+     "old": null,
+     "new": "https://wdick.philasd.org/",
+     "source": "https://wdick.philasd.org/",
+     "quote": "William Dick School, situated in the Strawberry Mansion neighborhood of North Philadelphia, is a public elementary school serving students from Kindergarten",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "Launch Philly’s Creative Kids program runs a free after-school program inside William Dick for kindergarten to 8th grade. The school’s site names it under after-school programming, community partnerships and extracurricular activities, and the City’s program locator lists it this school year. It has a listing here.",
+      "The school’s site also names the Wagner Institute as a community partner. It is listed here as a school partner.",
+      "If you know a program that serves William Dick and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://wdick.philasd.org/",
+     "quote": "Launch Philly/Creative Kids An afterschool and summer program for K–8 students.",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "notes",
+     "old": null,
+     "new": [
+      "Launch Philly’s Creative Kids program runs a free after-school program inside William Dick for kindergarten to 8th grade. The school’s site names it under after-school programming, community partnerships and extracurricular activities, and the City’s program locator lists it this school year. It has a listing here.",
+      "The school’s site also names the Wagner Institute as a community partner. It is listed here as a school partner.",
+      "If you know a program that serves William Dick and isn’t here, send it in and it goes on this page."
+     ],
+     "source": "https://wdick.philasd.org/",
+     "quote": "Community Partnerships Launch Philly/Creative Kids Wagner Institute",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  },
+  {
+   "item": "school:dick",
+   "kind": "note",
+   "listing": "reading:cybabasketball.org",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "match",
+     "old": null,
+     "new": "cybabasketball.org",
+     "source": "https://wdick.philasd.org/",
+     "quote": "",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "how",
+     "old": null,
+     "new": "browser",
+     "source": "https://wdick.philasd.org/",
+     "quote": "",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "why",
+     "old": null,
+     "new": "The pages are built in the browser: a plain fetch on 2026-11-24 returned none of the program text.",
+     "source": "https://wdick.philasd.org/",
+     "quote": "",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  },
+  {
+   "item": "school:dick",
+   "kind": "note",
+   "listing": "reading:launchphilly.org",
+   "outcome": "published",
+   "fields": [
+    {
+     "path": "match",
+     "old": null,
+     "new": "launchphilly.org",
+     "source": "https://wdick.philasd.org/",
+     "quote": "",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "how",
+     "old": null,
+     "new": "person",
+     "source": "https://wdick.philasd.org/",
+     "quote": "",
+     "read": "2026-11-24",
+     "how": "fetch"
+    },
+    {
+     "path": "why",
+     "old": null,
+     "new": "A plain fetch answered HTTP 403 on 2026-11-24.",
+     "source": "https://wdick.philasd.org/",
+     "quote": "",
+     "read": "2026-11-24",
+     "how": "fetch"
+    }
+   ]
+  }
+ ]
+}
