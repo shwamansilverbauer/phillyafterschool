@@ -3642,6 +3642,34 @@
     ]
   },
   {
+    "id": "fitzpatrick",
+    "name": "A. L. Fitzpatrick School",
+    "shortName": "Fitzpatrick",
+    "aliases": [
+      "A.L. Fitzpatrick",
+      "AL Fitzpatrick",
+      "A. L. FitzPatrick",
+      "FitzPatrick",
+      "Fitzpatrick Elementary",
+      "A.L. Fitzpatrick Elementary"
+    ],
+    "address": "11061 Knights Rd, Philadelphia, PA 19154",
+    "neighborhood": "Millbrook",
+    "grades": "K-8",
+    "dismissal": "2:09 pm",
+    "dismissalNote": "the school’s site gives the school day as 7:30 am to 2:09 pm, with pupils dismissed between 1:50 and 2:09 pm",
+    "phone": "215-400-3060",
+    "website": "https://fitzpatrick.philasd.org/",
+    "lastReviewed": "2026-11-24",
+    "added": "2026-11-24",
+    "notes": [
+      "Fitzpatrick’s community partners page names the YMCA for grades K to 4 and the Philadelphia Youth Network (PYN) for grades 5 to 8. The YMCA runs its paid Before & After School Enrichment program at the school for kindergarten to 4th grade, and PYN runs its AIM Afterschool program there for middle schoolers. Both have listings here.",
+      "Fitzpatrick’s site lists its 2026–2027 clubs: basketball skills training, yoga, yearbook, crafting, tech, chess, painting techniques, Girls on the Run, gardening, guitar, middle school student council and PBIS, plus soccer and track and field for grades 6 to 8. They are listed here as the school’s clubs, without days or times, so ask the office which meet after dismissal.",
+      "Students can enter for breakfast from 7:00 am, according to the school’s site. Its monthly calendars are posted from the calendar page; ask the office about early dismissal days.",
+      "If you know a program that serves Fitzpatrick and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
     "id": "dick",
     "name": "William Dick School",
     "shortName": "William Dick",
