@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-11-24",
+  "generated": "2026-11-25",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -328,6 +328,18 @@
     {
       "id": "mastery-mann",
       "name": "Mastery Mann"
+    },
+    {
+      "id": "dobson",
+      "name": "Dobson"
+    },
+    {
+      "id": "shawmont",
+      "name": "Shawmont"
+    },
+    {
+      "id": "dick",
+      "name": "William Dick"
     }
   ],
   "programs": [
@@ -2135,6 +2147,48 @@
       "parts": [
         "after"
       ]
+    },
+    {
+      "id": "north-light-kidzone",
+      "name": "North Light KidZone",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "dobson-clubs",
+      "name": "School clubs and teams at Dobson",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "roxy-after-school",
+      "name": "Roxy After-School Program",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "shawmont-clubs",
+      "name": "School clubs and partners at Shawmont",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "launch-philly-dick",
+      "name": "Launch Philly Creative Kids at William Dick",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "dick-partners",
+      "name": "School partners at William Dick",
+      "parts": [
+        "after"
+      ]
     }
   ],
   "camps": [
@@ -2358,91 +2412,6 @@
   },
   "alerts": [
     {
-      "id": "added-belmont-academy",
-      "kind": "added",
-      "date": "2026-11-22",
-      "sendOn": "2026-11-22",
-      "expires": "2026-11-24",
-      "schools": [],
-      "programs": [],
-      "waiting": [
-        "belmont-academy-charter-school"
-      ],
-      "when": "New",
-      "title": "Belmont Academy now has a page",
-      "text": "You asked to be told. 2 programs are listed for Belmont Academy so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/belmont-academy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the page"
-    },
-    {
-      "id": "added-bluford",
-      "kind": "added",
-      "date": "2026-11-22",
-      "sendOn": "2026-11-22",
-      "expires": "2026-11-24",
-      "schools": [],
-      "programs": [],
-      "waiting": [
-        "guion-s-bluford-elementary-school"
-      ],
-      "when": "New",
-      "title": "Bluford now has a page",
-      "text": "You asked to be told. 2 programs are listed for Bluford so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/bluford/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the page"
-    },
-    {
-      "id": "added-bryant",
-      "kind": "added",
-      "date": "2026-11-22",
-      "sendOn": "2026-11-22",
-      "expires": "2026-11-24",
-      "schools": [],
-      "programs": [],
-      "waiting": [
-        "william-c-bryant-school"
-      ],
-      "when": "New",
-      "title": "Bryant now has a page",
-      "text": "You asked to be told. 3 programs are listed for Bryant so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/bryant/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the page"
-    },
-    {
-      "id": "added-catharine",
-      "kind": "added",
-      "date": "2026-11-22",
-      "sendOn": "2026-11-22",
-      "expires": "2026-11-24",
-      "schools": [],
-      "programs": [],
-      "waiting": [
-        "joseph-w-catharine-school"
-      ],
-      "when": "New",
-      "title": "Catharine now has a page",
-      "text": "You asked to be told. 3 programs are listed for Catharine so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/catharine/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the page"
-    },
-    {
-      "id": "added-mcclure",
-      "kind": "added",
-      "date": "2026-11-22",
-      "sendOn": "2026-11-22",
-      "expires": "2026-11-24",
-      "schools": [],
-      "programs": [],
-      "waiting": [
-        "alexander-k-mcclure-school"
-      ],
-      "when": "New",
-      "title": "McClure now has a page",
-      "text": "You asked to be told. 3 programs are listed for McClure so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/mcclure/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the page"
-    },
-    {
       "id": "added-add-b-anderson",
       "kind": "added",
       "date": "2026-11-23",
@@ -2528,74 +2497,55 @@
       "button": "See the page"
     },
     {
-      "id": "reg-fleisher-art-memorial-2026-11-24",
-      "schools": [
-        "nebinger",
-        "meredith",
-        "coppin",
-        "vare-washington",
-        "mccall",
-        "kirkbride"
-      ],
-      "programs": [
-        "fleisher-art-memorial"
-      ],
-      "part": "after",
-      "title": "Fleisher Art Memorial",
-      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing",
-      "kind": "register",
-      "date": "2026-11-24",
-      "sendOn": "2026-11-22",
-      "when": "Tuesday, November 24",
-      "text": "Winter term registration opens for new students."
-    },
-    {
-      "id": "reg-fleisher-art-memorial-2026-11-24-day",
-      "schools": [
-        "nebinger",
-        "meredith",
-        "coppin",
-        "vare-washington",
-        "mccall",
-        "kirkbride"
-      ],
-      "programs": [
-        "fleisher-art-memorial"
-      ],
-      "part": "after",
-      "title": "Fleisher Art Memorial",
-      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing",
-      "kind": "today",
+      "id": "added-dick",
+      "kind": "added",
       "date": "2026-11-24",
       "sendOn": "2026-11-24",
-      "when": "Today, Tuesday, November 24",
-      "text": "Winter term registration opens for new students."
+      "expires": "2026-11-26",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "william-dick-school"
+      ],
+      "when": "New",
+      "title": "William Dick now has a page",
+      "text": "You asked to be told. 2 programs are listed for William Dick so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/dick/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
     },
     {
-      "id": "reg-fleisher-art-memorial-2026-11-24-eve",
-      "schools": [
-        "nebinger",
-        "meredith",
-        "coppin",
-        "vare-washington",
-        "mccall",
-        "kirkbride"
-      ],
-      "programs": [
-        "fleisher-art-memorial"
-      ],
-      "part": "after",
-      "title": "Fleisher Art Memorial",
-      "url": "https://phillyafterschool.org/programs/fleisher-art-memorial/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing",
-      "kind": "soon",
+      "id": "added-dobson",
+      "kind": "added",
       "date": "2026-11-24",
-      "sendOn": "2026-11-23",
-      "expires": "2026-11-23",
-      "when": "Tomorrow, Tuesday, November 24",
-      "text": "Winter term registration opens for new students."
+      "sendOn": "2026-11-24",
+      "expires": "2026-11-26",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "james-dobson-school"
+      ],
+      "when": "New",
+      "title": "Dobson now has a page",
+      "text": "You asked to be told. 2 programs are listed for Dobson so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/dobson/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-shawmont",
+      "kind": "added",
+      "date": "2026-11-24",
+      "sendOn": "2026-11-24",
+      "expires": "2026-11-26",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "shawmont-school"
+      ],
+      "when": "New",
+      "title": "Shawmont now has a page",
+      "text": "You asked to be told. 2 programs are listed for Shawmont so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/shawmont/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
     },
     {
       "id": "camp-butchers-sew-shop-2026-11-25",
@@ -3761,6 +3711,70 @@
       "first": "Tuesday: Sign-ups, Fleisher Art Memorial: Winter term registration opens for new students; Wednesday: no school, Staff professional development",
       "url": "https://phillyafterschool.org/coppin/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Coppin’s week"
+    },
+    {
+      "id": "week-dick-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "dick"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at William Dick",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/dick/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See William Dick’s week"
+    },
+    {
+      "id": "week-dobson-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "dobson"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Dobson",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/dobson/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Dobson’s week"
     },
     {
       "id": "week-duckrey-2026-11-23",
@@ -5473,6 +5487,38 @@
       "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
       "url": "https://phillyafterschool.org/richmond/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Richmond’s week"
+    },
+    {
+      "id": "week-shawmont-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "shawmont"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Shawmont",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/shawmont/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Shawmont’s week"
     },
     {
       "id": "week-southwark-2026-11-23",

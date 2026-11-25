@@ -1,14 +1,14 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. docs/listings.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 395,
-    "pagesNeedingABrowser": 70,
-    "pagesNeedingAPerson": 20,
-    "links": 380,
-    "pickupLinks": 132,
-    "pickupOnAStoredList": 112,
+    "pages": 404,
+    "pagesNeedingABrowser": 71,
+    "pagesNeedingAPerson": 21,
+    "links": 386,
+    "pickupLinks": 134,
+    "pickupOnAStoredList": 113,
     "pickupFromAThirdPartyList": 0,
-    "pickupOnItsOwnSource": 20,
+    "pickupOnItsOwnSource": 21,
     "pickupWithNothingBehindIt": 0,
     "pickupNotOnTheProvidersList": 0,
     "oldestCheck": "2026-10-05"
@@ -3054,6 +3054,50 @@
       "school": "rhodes",
       "relation": "onsite",
       "checked": "2026-11-23"
+    },
+    {
+      "program": "dick-partners",
+      "school": "dick",
+      "relation": "onsite",
+      "checked": "2026-11-24"
+    },
+    {
+      "program": "dobson-clubs",
+      "school": "dobson",
+      "relation": "onsite",
+      "checked": "2026-11-24"
+    },
+    {
+      "program": "launch-philly-dick",
+      "school": "dick",
+      "relation": "onsite",
+      "checked": "2026-11-24"
+    },
+    {
+      "program": "north-light-kidzone",
+      "school": "dobson",
+      "relation": "pickup",
+      "checked": "2026-11-24",
+      "basis": "own-source"
+    },
+    {
+      "program": "roxy-after-school",
+      "school": "shawmont",
+      "relation": "pickup",
+      "checked": "2026-11-24",
+      "basis": "list",
+      "list": {
+        "where": "Roxy After-School",
+        "read": "2026-11-24",
+        "how": "fetch",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "shawmont-clubs",
+      "school": "shawmont",
+      "relation": "onsite",
+      "checked": "2026-11-24"
     }
   ],
   "pages": [
@@ -3738,6 +3782,15 @@
       "lists": []
     },
     {
+      "url": "https://wdick.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "launch-philly-dick",
+        "dick-partners"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://web.vwtigers.com/before-and-aftercare-at-vw/",
       "how": "fetch",
       "programs": [
@@ -4181,6 +4234,14 @@
       "lists": []
     },
     {
+      "url": "https://dobson.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "dobson-clubs"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://docs.google.com/document/d/1iIV6Jx7TeBi0Nmg-DJxO-hF4vt8gQVRtxMrYIkw7cG0/edit",
       "how": "fetch",
       "programs": [
@@ -4201,6 +4262,14 @@
       "how": "fetch",
       "programs": [
         "sunrise-mccall"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://docs.google.com/forms/d/e/1FAIpQLSdRqYrSjNH_fN1lxLXu8SWer0ZgPzrX01GGbXdhbDZ0kjm13Q/viewform?usp=header",
+      "how": "fetch",
+      "programs": [
+        "north-light-kidzone"
       ],
       "lists": []
     },
@@ -4523,6 +4592,15 @@
       "how": "fetch",
       "programs": [
         "kids-on-12th"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://launchphilly.org/",
+      "how": "person",
+      "why": "A plain fetch answered HTTP 403 on 2026-11-24.",
+      "programs": [
+        "launch-philly-dick"
       ],
       "lists": []
     },
@@ -5132,6 +5210,14 @@
       "lists": []
     },
     {
+      "url": "https://roxboroughchurch.breezechms.com/form/dbd378",
+      "how": "fetch",
+      "programs": [
+        "roxy-after-school"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://schools.procareconnect.com/form/a603e139-39fe-4887-a5a2-8151f4b817ea",
       "how": "fetch",
       "programs": [
@@ -5194,6 +5280,14 @@
           "by": "provider"
         }
       ]
+    },
+    {
+      "url": "https://shawmont.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "shawmont-clubs"
+      ],
+      "lists": []
     },
     {
       "url": "https://shopeverland.com/",
@@ -5849,6 +5943,14 @@
       "lists": []
     },
     {
+      "url": "https://www.northlightcommunitycenter.org/kidzone/",
+      "how": "fetch",
+      "programs": [
+        "north-light-kidzone"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.northwoodcs.org/clubs-sports",
       "how": "fetch",
       "programs": [
@@ -6042,6 +6144,15 @@
       "why": "A JavaScript app: a plain fetch returns no listings.",
       "programs": [
         "legacy-champions-on-the-rise"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.phila.gov/ost/program-locator/?address=2498+W+Diamond+St&resource=ost_48",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "launch-philly-dick"
       ],
       "lists": []
     },
@@ -6561,6 +6672,23 @@
         "right-at-school-ethel-allen"
       ],
       "lists": []
+    },
+    {
+      "url": "https://www.roxboroughchurch.org/roxyafterschool",
+      "how": "fetch",
+      "programs": [
+        "roxy-after-school"
+      ],
+      "lists": [
+        {
+          "program": "roxy-after-school",
+          "where": "Roxy After-School",
+          "text": "Students are picked up each day from Shawmont Elementary and Green Woods Charter Schools and are taken back to Roxborough Church.",
+          "read": "2026-11-24",
+          "how": "fetch",
+          "by": "provider"
+        }
+      ]
     },
     {
       "url": "https://www.sawubonacreativityproject.org/campinformationandschedules",
@@ -7087,7 +7215,7 @@
         "schools.*.address"
       ],
       "says": "Old Pine Community Center and The Neighborhub are the same building after a rebrand, at 401 Lombard St; Fall II starts November 2, 2026, registration is open, and families can join whenever there is space, with the fee pro-rated.",
-      "daysAgo": 36,
+      "daysAgo": 37,
       "stale": false
     },
     {
@@ -7102,7 +7230,7 @@
         "daysNote"
       ],
       "says": "After-school care is $250 a month for full time, 4 or more days a week, or $175 a month for part time, 3 days a week, with a snack included.",
-      "daysAgo": 20,
+      "daysAgo": 21,
       "stale": false
     },
     {
@@ -7123,7 +7251,7 @@
         "schools.meredith"
       ],
       "says": "Homework Club is Everland’s Monday aftercare, run with Prep Academy Tutors, for 2nd to 4th graders at Meredith only: staff pick up from Meredith and walk the group to Everland, children do homework in small groups with certified teachers and then have organized downtime, parents pick up from Everland between 5:45 and 6:00 pm, 1:1 tutoring during the club is $65 per 40-minute session, and the 2027 semester is 17 Mondays from January 4 to June 7, ending with a showcase.",
-      "daysAgo": 15,
+      "daysAgo": 16,
       "stale": false
     },
     {
@@ -7138,7 +7266,7 @@
         "rate"
       ],
       "says": "The base cost of Homework Club for the 2027 semester is $1,190, which works out to $70 per 3-hour session over its 17 Mondays.",
-      "daysAgo": 15,
+      "daysAgo": 16,
       "stale": false
     },
     {
@@ -7160,7 +7288,7 @@
         "schools.childs"
       ],
       "says": "Makom is aftercare and a day camp, at 2401 Washington Ave, Unit C1. Aftercare runs 4 to 6 pm, five days a week, with days that differ by age group; K–5 starts at $280 a month for Fridays only and grades 6 and 7 at $746 a month for 3 days, with tuition assistance. Day camps are for ages 4 and up. It does not pick up at Nebinger or Coppin (it needs at least four children from a school to pick up there); at Independence Charter it picks up for early dismissal on Wednesdays, and at Childs it has a special early Friday pickup for pre-K children. It also picks up at The Philadelphia School, and runs summer camp.",
-      "daysAgo": 13,
+      "daysAgo": 14,
       "stale": false
     },
     {
@@ -7177,7 +7305,7 @@
         "note"
       ],
       "says": "Enrollment is open. Dandelion After School runs 3 to 6 pm and costs $165 a month for each weekday enrolled, and tuition includes certain day-off camps. It is a self-directed space with cooking, group games, park trips, arts and crafts, messy science and building projects, and each child decides how to spend their afternoon.",
-      "daysAgo": 12,
+      "daysAgo": 13,
       "stale": false
     }
   ],
