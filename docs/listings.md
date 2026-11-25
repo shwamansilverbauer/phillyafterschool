@@ -340,9 +340,13 @@ reaches the public repository. (Until November 2026 the owner ticked items on `/
 - **The sender hears once.** When an item is settled, its sender gets one email in the site's own words (editable
   at `/edit/emails/`, see "The emails" in `docs/emails.md`): published ("It's on the site", the listing's link, and
   an invitation to save their school or follow the listing), duplicate and no-change ("It's already listed", with
-  the link), needs-info ("We couldn't confirm this yet", and what would help, by `reason`), declined ("We can't list
-  this one", with the rule in a sentence, by `reason`). Held and failed send nothing. The run picks the outcome and
-  the reason; the host writes the words, so no sentence a run wrote is ever emailed to anyone. An email's answer
+  the link), needs-info ("We couldn't verify this one yet", and what would help, by `reason`), declined ("We weren't
+  able to add this one", with the rule in a sentence, by `reason`). The two that turn something down are written to be
+  warm: a thank-you, why it "didn't pass our automated approver" (the site never says a person checked it), and the
+  site's address to write to if they'd like it added. Held and failed send nothing. The run picks the outcome and
+  the reason; the host writes the words, so no sentence a run wrote is ever emailed to anyone. A copy of each answer
+  the site's mailer sends comes to the site's own address too (see "An email to you for each answer" in
+  `docs/emails.md`). An email's answer
   goes from the site's address as a reply in its own thread, sent by the mailbox script, not by the site's mailer: the
   same words, or the fixed reply the run chose ("Thanks, it's updated" waits for the merge like "It's on the site").
   An email a run holds goes to the Needs-you page with its message and a draft. At most 30 answers go

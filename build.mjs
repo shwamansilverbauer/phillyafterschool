@@ -4517,7 +4517,7 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
       $db->prepare('UPDATE claims SET status = ?, decided = ? WHERE id = ?')->execute(array($to, time(), $id));
       $n = $name($c['listing']);
       if ($to === 'ok') tell($c['email'], 'Your claim on ' . $n . ' is approved', 'Hi ' . $c['first'] . ",\\n\\nYour claim on “" . $n . '” at ' . $SITE . ' is approved. The listing now shows as claimed, and you can send changes to it here:' . "\\n" . $SITE_URL . '/managers/');
-      else tell($c['email'], 'About your claim on ' . $n, 'Hi ' . $c['first'] . ",\\n\\nWe couldn’t confirm your claim on “" . $n . '” at ' . $SITE . ', so it has been ' . ($do === 'claim_remove' ? 'removed' : 'declined') . '. If that looks wrong, reply to this email and tell us how you’re connected to the program.');
+      else tell($c['email'], 'About your claim on ' . $n, 'Hi ' . $c['first'] . ",\\n\\nThanks so much for claiming “" . $n . '” on ' . $SITE . '! Unfortunately, we weren’t able to confirm that you run it, so the claim has been ' . ($do === 'claim_remove' ? 'removed' : 'declined') . ' for now.' . "\\n\\n" . 'If we got this wrong, please reach out to ' . $FROM . ' or just reply to this email, tell us how you’re connected to the program, and we’ll take another look.');
       $msg = $to === 'ok' ? 'Approved, and they’ve been told.' : 'Done, and they’ve been told.';
     }
   } elseif ($ok && in_array($do, array('edit_done', 'edit_no'), true)) {
@@ -4526,7 +4526,7 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
       $db->prepare('UPDATE edits SET status = ?, decided = ? WHERE id = ?')->execute(array($do === 'edit_done' ? 'done' : 'declined', time(), $id));
       $n = $name($x['listing']);
       if ($do === 'edit_done') tell($x['email'], 'Your change to ' . $n . ' is published', 'Hi ' . $x['first'] . ",\\n\\nThe change you sent for “" . $n . '” is on the site now. Have a look, and send another if anything is off:' . "\\n" . $SITE_URL . '/managers/');
-      else tell($x['email'], 'About the change you sent for ' . $n, 'Hi ' . $x['first'] . ",\\n\\nWe weren’t able to make the change you sent for “" . $n . '”, usually because we couldn’t find it on the program’s own website. Reply to this email if you’d like to talk it through.');
+      else tell($x['email'], 'About the change you sent for ' . $n, 'Hi ' . $x['first'] . ",\\n\\nThanks so much for sending a change for “" . $n . '”! Unfortunately, we weren’t able to make it this time, usually because we couldn’t find it on the program’s own website.' . "\\n\\n" . 'Please reach out to ' . $FROM . ' or just reply to this email if you’d like to talk it through. We’re happy to help.');
       $msg = $do === 'edit_done' ? 'Marked published, and they’ve been told.' : 'Declined, and they’ve been told.';
     }
   }
@@ -4687,8 +4687,9 @@ const CLAIM_BY_CODE = !!(cfg.groups && cfg.groups.claimByCode === true);
 const REVIEW_NEW_ACCOUNT = cfg.groups && cfg.groups.reviewNewAccount === 'wait' ? 'wait' : 'hold';
 const OPS_REPO = /^[\w.-]+\/[\w.-]+$/.test(cfg.opsRepo || '') ? cfg.opsRepo : '';
 // Which notes to the site's own address go one at a time ("each", the default) and which go once a day ("digest"); and
-// whether the morning summary goes out ("summary": "on"), which then carries the sign-up digest's counts too.
-const OWNER_NOTES = { parentSignup: cfg.ownerNotes && cfg.ownerNotes.parentSignup === 'digest' ? 'digest' : 'each', summary: cfg.ownerNotes && cfg.ownerNotes.summary === 'on' ? 'on' : 'off' };
+// whether the morning summary goes out ("summary": "on"), which then carries the sign-up digest's counts too; and
+// whether a copy of each answer the site emails a sender comes here too ("answerCopies", on unless it says "off").
+const OWNER_NOTES = { parentSignup: cfg.ownerNotes && cfg.ownerNotes.parentSignup === 'digest' ? 'digest' : 'each', summary: cfg.ownerNotes && cfg.ownerNotes.summary === 'on' ? 'on' : 'off', answerCopies: cfg.ownerNotes && cfg.ownerNotes.answerCopies === 'off' ? 'off' : 'on' };
 // The wording of the emails the server sends is written in src/server/groups-api.php as __T("…"), with {words} filled
 // in at send time by its t() helper. The build turns each into a PHP string with any edit from data/copy.json applied
 // (an emptied sentence becomes ''), and registers it like a page sentence, so it can be edited at /edit/emails/.
@@ -5563,7 +5564,7 @@ ${page}`;
 // The site's own emails, each rendered once with sample values so their sentences can be edited like a page's.
 // Sentences come from __T("…") in src/server/groups-api.php (see phpCopy); {words} show the sample here and are
 // filled in for real when an email is sent.
-const EMAIL_SAMPLE = { site: cfg.siteName, code: '123 456', minutes: '20', name: 'Sam Rivera', from: 'Sam Rivera (sam@example.com)', first: 'Sam', email: 'you@example.com', contact: cfg.contactEmail || 'contact@example.com', times: '120 times', before: '96', address: 'you@example.com', newAddress: 'new@example.com', group: 'Tuesday crew', listing: 'Maple Street Arts Club', program: 'Maple Street Arts Club', count: '3', n: '3', question: 'Is the Thursday clinic still 3:30 to 5:30?', days: '7', numbers: 'Opened 120 times, 14 clicks to your sign-up page, on 9 plans.', todo: 'Mark whether there’s space.', more: '1', school: 'Nebinger', programs: '3 programs are', what: 'Maple Street Arts Club', pr: '41', title: 'Weekly queue, 30 Nov', undo: '44', list: '2 run pull requests, 1 claim', mode: 'shadow', parents: '4', managers: '1', week: '19', run: 'Five schools a day', when: 'Mon Nov 30, 6:12 am', day: 'Monday, November 30', why: 'github 502', prs: '9', files: '12', tokens: '1,840,000', emails: '212',
+const EMAIL_SAMPLE = { site: cfg.siteName, subject: 'About what you sent to ' + cfg.siteName + ': Maple Street Arts Club', outcome: 'Not added (not-a-program)', code: '123 456', minutes: '20', name: 'Sam Rivera', from: 'Sam Rivera (sam@example.com)', first: 'Sam', email: 'you@example.com', contact: cfg.contactEmail || 'contact@example.com', times: '120 times', before: '96', address: 'you@example.com', newAddress: 'new@example.com', group: 'Tuesday crew', listing: 'Maple Street Arts Club', program: 'Maple Street Arts Club', count: '3', n: '3', question: 'Is the Thursday clinic still 3:30 to 5:30?', days: '7', numbers: 'Opened 120 times, 14 clicks to your sign-up page, on 9 plans.', todo: 'Mark whether there’s space.', more: '1', school: 'Nebinger', programs: '3 programs are', what: 'Maple Street Arts Club', pr: '41', title: 'Weekly queue, 30 Nov', undo: '44', list: '2 run pull requests, 1 claim', mode: 'shadow', parents: '4', managers: '1', week: '19', run: 'Five schools a day', when: 'Mon Nov 30, 6:12 am', day: 'Monday, November 30', why: 'github 502', prs: '9', files: '12', tokens: '1,840,000', emails: '212',
   // the mailbox's replies and the outreach sender's emails (scaling plan, Phase 5)
   org: 'Maple Street Arts Club', link: (cfg.siteUrl || '') + '/programs/maple-street-arts-club/', domain: 'maplestreetarts.org', signature: cfg.siteName, postal: 'PO Box 100, Philadelphia, PA 19103', managers: (cfg.siteUrl || '') + '/managers/', held: '1', sent: '28', cap: '30', replied: '3', optout: '1', bounced: '0' };
 function editEmailsPage() {

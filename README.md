@@ -97,6 +97,7 @@ The docs refer to each other by section name ("see \"Site admins\""). This list 
   - [Dates by email](docs/emails.md#dates-by-email)
   - [This week at your school](docs/emails.md#this-week-at-your-school)
   - [An email to you for each new account](docs/emails.md#an-email-to-you-for-each-new-account)
+  - [An email to you for each answer](docs/emails.md#an-email-to-you-for-each-answer)
   - [The morning summary](docs/emails.md#the-morning-summary)
   - [The mailbox script](docs/emails.md#the-mailbox-script)
 - [`docs/search-and-analytics.md`](docs/search-and-analytics.md)
