@@ -9,10 +9,15 @@ export const schools = () => json('schools.json');
 export const camps = () => json('camps.json');
 export const daysOff = () => json('days-off.json');
 // A school on the citywide list that has no page yet: what "Ask for this school" is for.
+// The build counts a City school as covered when a page has its street address (finderData in build.mjs), even when
+// the page's id differs from the City's (a-l-fitzpatrick-school is covered by fitzpatrick's page): skip those too.
 export function uncoveredSchool() {
-  const have = new Set(schools().map(s => s.id));
+  const street = a => String(a || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  const pages = schools();
+  const have = new Set(pages.map(s => s.id));
+  const streets = new Set(pages.map(s => street(String(s.address || '').split(',')[0])));
   const all = json('all-schools.json').schools;
-  const s = all.find(x => !have.has(x.id) && !/^(nebinger|meredith|coppin)$/.test(x.id));
+  const s = all.find(x => !have.has(x.id) && !streets.has(street(x.address)) && !/^(nebinger|meredith|coppin)$/.test(x.id));
   if (!s) throw new Failure('every school on the city list is covered');
   return s.id;
 }
