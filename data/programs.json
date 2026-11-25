@@ -16111,7 +16111,7 @@
     "schools": {
       "penn-alexander": {
         "relation": "onsite",
-        "checked": "2026-11-16"
+        "checked": "2026-11-25"
       }
     },
     "clubs": [
@@ -16184,6 +16184,14 @@
         "tags": [
           "movement"
         ]
+      },
+      {
+        "name": "ASAP",
+        "what": "Named among the school’s community partners; the site doesn’t say what ASAP runs at the school",
+        "tags": [
+          "games"
+        ],
+        "roster": false
       }
     ]
   },
@@ -24341,6 +24349,164 @@
       {
         "name": "Sean’s Helping Hands",
         "what": "Named as a community partner",
+        "tags": [],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "fell-partners",
+    "name": "School partners",
+    "what": "Partners D. Newlin Fell School names on its own site: ASAP Philly, the After-school Activities Program",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "partners",
+      "ASAP",
+      "chess",
+      "Scrabble",
+      "Fell"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-8260",
+    "email": "",
+    "website": "https://fell.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-8260)."
+    },
+    "note": "Fell’s own site lists ASAP Philly (After-school Activities Program) among its community partners, and names Fell students among ASAP’s chess and Scrabble tournament winners. It doesn’t say when ASAP’s clubs meet at Fell; ask the office.",
+    "sources": [
+      {
+        "label": "D. Newlin Fell: community partnerships",
+        "url": "https://fell.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-25",
+    "schools": {
+      "fell": {
+        "relation": "onsite",
+        "checked": "2026-11-25"
+      }
+    },
+    "clubs": [
+      {
+        "name": "ASAP Philly",
+        "what": "After-school Activities Program, named as a community partner; the site also lists ASAP chess and Scrabble tournament winners",
+        "tags": [
+          "games"
+        ],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "pyb-mifflin",
+    "name": "Philadelphia Youth Basketball at Mifflin",
+    "what": "Philadelphia Youth Basketball, which Mifflin names as a partner, with the Wissahickon Boys & Girls Club, in its free on-site care, and on its list of clubs",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "basketball",
+      "sports",
+      "Philadelphia Youth Basketball",
+      "PYB",
+      "Mifflin",
+      "East Falls"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published for PYB. Mifflin’s site gives its on-site after care as 3:39 to 6:00 pm.",
+    "cost": "Not published for PYB. Mifflin’s site says the on-site care is free.",
+    "phone": "215-400-3830",
+    "email": "",
+    "website": "https://www.phillyyouthbasketball.org/",
+    "register": {
+      "how": "school",
+      "note": "Mifflin’s site says a new application for the on-site care is needed each fall and the Boys & Girls Club contacts families when a child is approved. Ask the school office (215-400-3830) about PYB."
+    },
+    "note": "Mifflin’s own site says it partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care, and lists Philadelphia Youth Basketball among its clubs and activities. PYB’s own site doesn’t name Mifflin, so ask the school what PYB runs there and when.",
+    "sources": [
+      {
+        "label": "Mifflin School: before- and after-school care and clubs",
+        "url": "https://mifflin.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-25",
+    "schools": {
+      "mifflin": {
+        "relation": "onsite",
+        "note": "Mifflin’s own site names Philadelphia Youth Basketball as a partner in its on-site care and among its clubs.",
+        "sources": [
+          {
+            "label": "Mifflin School: before- and after-school care and clubs",
+            "url": "https://mifflin.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-25"
+      }
+    }
+  },
+  {
+    "id": "bayard-taylor-partners",
+    "name": "School partners",
+    "what": "Partners Bayard Taylor names on its own site: Taller Puertorriqueño’s Taller Visitenos art program and Girls Inc. of Philadelphia",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "partners",
+      "art",
+      "Taller Puertorriqueño",
+      "Taller Visitenos",
+      "Girls Inc.",
+      "Bayard Taylor"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-3880",
+    "email": "",
+    "website": "https://taylor.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-3880)."
+    },
+    "note": "Bayard Taylor’s own site lists the Taller Visitenos Art Program under arts, music and dance, and Girls Inc. of Philadelphia and Taller Puertorriqueño among its community partners, without saying whether they meet after school. Ask the office.",
+    "sources": [
+      {
+        "label": "Bayard Taylor: arts and community partnerships",
+        "url": "https://taylor.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-25",
+    "schools": {
+      "bayard-taylor": {
+        "relation": "onsite",
+        "checked": "2026-11-25"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Taller Visitenos Art Program",
+        "what": "An art program from Taller Puertorriqueño, listed under arts, music and dance",
+        "tags": [
+          "art"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Girls Inc. of Philadelphia",
+        "what": "Named as a community partner; the site doesn’t say what it runs at the school",
         "tags": [],
         "roster": false
       }

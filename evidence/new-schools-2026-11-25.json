@@ -2811,6 +2811,858 @@
           "how": "browser"
         }
       ]
+    },
+    {
+      "item": "school:penn-alexander",
+      "kind": "update",
+      "listing": "p:penn-alexander-clubs",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "clubs[ASAP].name",
+          "old": null,
+          "new": "ASAP",
+          "source": "https://pennalexander.philasd.org/",
+          "quote": "University City Hospitality Coalition ASAP",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[ASAP].what",
+          "old": null,
+          "new": "Named among the school’s community partners; the site doesn’t say what ASAP runs at the school",
+          "source": "https://pennalexander.philasd.org/",
+          "quote": "University City Hospitality Coalition ASAP",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[ASAP].tags",
+          "old": null,
+          "new": [
+            "games"
+          ],
+          "source": "https://pennalexander.philasd.org/",
+          "quote": "University City Hospitality Coalition ASAP",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[ASAP].roster",
+          "old": null,
+          "new": false,
+          "source": "https://pennalexander.philasd.org/",
+          "quote": "University City Hospitality Coalition ASAP",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:fell",
+      "kind": "new-listing",
+      "listing": "p:fell-partners",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "name",
+          "old": null,
+          "new": "School partners",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "what",
+          "old": null,
+          "new": "Partners D. Newlin Fell School names on its own site: ASAP Philly, the After-school Activities Program",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "types",
+          "old": null,
+          "new": [
+            "clubs"
+          ],
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "keywords",
+          "old": null,
+          "new": [
+            "partners",
+            "ASAP",
+            "chess",
+            "Scrabble",
+            "Fell"
+          ],
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "address",
+          "old": null,
+          "new": "",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "gradeNote",
+          "old": null,
+          "new": "Ask the school",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "hours",
+          "old": null,
+          "new": "Not published; ask the school office",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "cost",
+          "old": null,
+          "new": "Not published",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "phone",
+          "old": null,
+          "new": "215-400-8260",
+          "source": "https://fell.philasd.org/",
+          "quote": "Phone: 215-400-8260",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "email",
+          "old": null,
+          "new": "",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "website",
+          "old": null,
+          "new": "https://fell.philasd.org/",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.how",
+          "old": null,
+          "new": "school",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.note",
+          "old": null,
+          "new": "Ask the school office (215-400-8260).",
+          "source": "https://fell.philasd.org/",
+          "quote": "Phone: 215-400-8260",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "note",
+          "old": null,
+          "new": "Fell’s own site lists ASAP Philly (After-school Activities Program) among its community partners, and names Fell students among ASAP’s chess and Scrabble tournament winners. It doesn’t say when ASAP’s clubs meet at Fell; ask the office.",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://fell.philasd.org/].label",
+          "old": null,
+          "new": "D. Newlin Fell: community partnerships",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://fell.philasd.org/].url",
+          "old": null,
+          "new": "https://fell.philasd.org/",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.fell.relation",
+          "old": null,
+          "new": "onsite",
+          "source": "https://fell.philasd.org/",
+          "quote": "Welcome to D. Newlin Fell School",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[ASAP Philly].name",
+          "old": null,
+          "new": "ASAP Philly",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[ASAP Philly].what",
+          "old": null,
+          "new": "After-school Activities Program, named as a community partner; the site also lists ASAP chess and Scrabble tournament winners",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[ASAP Philly].tags",
+          "old": null,
+          "new": [
+            "games"
+          ],
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[ASAP Philly].roster",
+          "old": null,
+          "new": false,
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:mifflin",
+      "kind": "new-listing",
+      "listing": "p:pyb-mifflin",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "name",
+          "old": null,
+          "new": "Philadelphia Youth Basketball at Mifflin",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "what",
+          "old": null,
+          "new": "Philadelphia Youth Basketball, which Mifflin names as a partner, with the Wissahickon Boys & Girls Club, in its free on-site care, and on its list of clubs",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "types",
+          "old": null,
+          "new": [
+            "movement"
+          ],
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "keywords",
+          "old": null,
+          "new": [
+            "basketball",
+            "sports",
+            "Philadelphia Youth Basketball",
+            "PYB",
+            "Mifflin",
+            "East Falls"
+          ],
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "address",
+          "old": null,
+          "new": "",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "gradeNote",
+          "old": null,
+          "new": "Ask the school",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "hours",
+          "old": null,
+          "new": "Not published for PYB. Mifflin’s site gives its on-site after care as 3:39 to 6:00 pm.",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "After Care: 3:39–6:00 p.m.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "cost",
+          "old": null,
+          "new": "Not published for PYB. Mifflin’s site says the on-site care is free.",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "phone",
+          "old": null,
+          "new": "215-400-3830",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "215-400-3830",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "email",
+          "old": null,
+          "new": "",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "website",
+          "old": null,
+          "new": "https://www.phillyyouthbasketball.org/",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.how",
+          "old": null,
+          "new": "school",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.note",
+          "old": null,
+          "new": "Mifflin’s site says a new application for the on-site care is needed each fall and the Boys & Girls Club contacts families when a child is approved. Ask the school office (215-400-3830) about PYB.",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "215-400-3830",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "note",
+          "old": null,
+          "new": "Mifflin’s own site says it partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care, and lists Philadelphia Youth Basketball among its clubs and activities. PYB’s own site doesn’t name Mifflin, so ask the school what PYB runs there and when.",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://mifflin.philasd.org/].label",
+          "old": null,
+          "new": "Mifflin School: before- and after-school care and clubs",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://mifflin.philasd.org/].url",
+          "old": null,
+          "new": "https://mifflin.philasd.org/",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.mifflin.relation",
+          "old": null,
+          "new": "onsite",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.mifflin.note",
+          "old": null,
+          "new": "Mifflin’s own site names Philadelphia Youth Basketball as a partner in its on-site care and among its clubs.",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.mifflin.sources[https://mifflin.philasd.org/].label",
+          "old": null,
+          "new": "Mifflin School: before- and after-school care and clubs",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.mifflin.sources[https://mifflin.philasd.org/].url",
+          "old": null,
+          "new": "https://mifflin.philasd.org/",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:bayard-taylor",
+      "kind": "new-listing",
+      "listing": "p:bayard-taylor-partners",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "name",
+          "old": null,
+          "new": "School partners",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "what",
+          "old": null,
+          "new": "Partners Bayard Taylor names on its own site: Taller Puertorriqueño’s Taller Visitenos art program and Girls Inc. of Philadelphia",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "types",
+          "old": null,
+          "new": [
+            "clubs"
+          ],
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "keywords",
+          "old": null,
+          "new": [
+            "partners",
+            "art",
+            "Taller Puertorriqueño",
+            "Taller Visitenos",
+            "Girls Inc.",
+            "Bayard Taylor"
+          ],
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "address",
+          "old": null,
+          "new": "",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "gradeNote",
+          "old": null,
+          "new": "Ask the school",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "hours",
+          "old": null,
+          "new": "Not published; ask the school office",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "cost",
+          "old": null,
+          "new": "Not published",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "phone",
+          "old": null,
+          "new": "215-400-3880",
+          "source": "https://taylor.philasd.org/",
+          "quote": "215-400-3880",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "email",
+          "old": null,
+          "new": "",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "website",
+          "old": null,
+          "new": "https://taylor.philasd.org/",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.how",
+          "old": null,
+          "new": "school",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.note",
+          "old": null,
+          "new": "Ask the school office (215-400-3880).",
+          "source": "https://taylor.philasd.org/",
+          "quote": "215-400-3880",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "note",
+          "old": null,
+          "new": "Bayard Taylor’s own site lists the Taller Visitenos Art Program under arts, music and dance, and Girls Inc. of Philadelphia and Taller Puertorriqueño among its community partners, without saying whether they meet after school. Ask the office.",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://taylor.philasd.org/].label",
+          "old": null,
+          "new": "Bayard Taylor: arts and community partnerships",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://taylor.philasd.org/].url",
+          "old": null,
+          "new": "https://taylor.philasd.org/",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.bayard-taylor.relation",
+          "old": null,
+          "new": "onsite",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Welcome to Bayard Taylor School",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Taller Visitenos Art Program].name",
+          "old": null,
+          "new": "Taller Visitenos Art Program",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Taller Visitenos Art Program].what",
+          "old": null,
+          "new": "An art program from Taller Puertorriqueño, listed under arts, music and dance",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Taller Visitenos Art Program].tags",
+          "old": null,
+          "new": [
+            "art"
+          ],
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Taller Visitenos Art Program].roster",
+          "old": null,
+          "new": false,
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Girls Inc. of Philadelphia].name",
+          "old": null,
+          "new": "Girls Inc. of Philadelphia",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Girls Inc. of Philadelphia].what",
+          "old": null,
+          "new": "Named as a community partner; the site doesn’t say what it runs at the school",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Girls Inc. of Philadelphia].tags",
+          "old": null,
+          "new": [],
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Girls Inc. of Philadelphia].roster",
+          "old": null,
+          "new": false,
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:fell",
+      "kind": "update",
+      "listing": "s:fell",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "alsoListed.title",
+          "old": "Also named by Fell",
+          "new": null,
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.intro",
+          "old": "Fell’s own site names these, but we couldn’t confirm them on the program’s own page this time.",
+          "new": null,
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.items",
+          "old": [
+            "ASAP Philly (After-school Activities Program): on Fell’s list of community partners. ASAP’s site turned away our reader, so we couldn’t check which schools it serves. phillyasap.org"
+          ],
+          "new": null,
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:mifflin",
+      "kind": "update",
+      "listing": "s:mifflin",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "alsoListed.title",
+          "old": "Also named by Mifflin",
+          "new": null,
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Oratorical Competition Philadelphia Youth Basketball Scrabble Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.intro",
+          "old": "Mifflin’s own site names these, but we couldn’t confirm them on the program’s own page this time.",
+          "new": null,
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Oratorical Competition Philadelphia Youth Basketball Scrabble Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.items",
+          "old": [
+            "Philadelphia Youth Basketball: on Mifflin’s list of clubs and activities. PYB’s own site doesn’t name the school; its Sixth Man Center is on Wissahickon Avenue, about a mile away. phillyyouthbasketball.org"
+          ],
+          "new": null,
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Oratorical Competition Philadelphia Youth Basketball Scrabble Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:bayard-taylor",
+      "kind": "update",
+      "listing": "s:bayard-taylor",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "alsoListed.intro",
+          "old": "Bayard Taylor’s own site names these, but we couldn’t confirm an after-school program for the school on the program’s own page or in the City’s listings this time.",
+          "new": "Bayard Taylor’s address appears in the City’s listings for a program named for another school, and we couldn’t confirm which school it serves.",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.items",
+          "old": [
+            "Taller Puertorriqueño: the school lists a Taller Visitenos art program under arts, music and dance, without saying whether it meets after school. tallerpr.org",
+            "Girls Inc. of Philadelphia: on the school’s list of community partners. The City’s locator lists Girls Inc. programs elsewhere, not at Bayard Taylor. girlsincphillysnj.org",
+            "Legacy Youth Tennis and Education: the City’s locator lists a free Legacy after-school program “at McClure” at 3698 N Randolph St, which is Bayard Taylor’s address. McClure is a different school, on W Hunting Park Ave, so ask Legacy which school the program serves. legacyyte.org"
+          ],
+          "new": [
+            "Legacy Youth Tennis and Education: the City’s locator lists a free Legacy after-school program “at McClure” at 3698 N Randolph St, which is Bayard Taylor’s address. McClure is a different school, on W Hunting Park Ave, so ask Legacy which school the program serves. legacyyte.org"
+          ],
+          "read": "2026-11-25",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.items",
+          "old": [
+            "Taller Puertorriqueño: the school lists a Taller Visitenos art program under arts, music and dance, without saying whether it meets after school. tallerpr.org",
+            "Girls Inc. of Philadelphia: on the school’s list of community partners. The City’s locator lists Girls Inc. programs elsewhere, not at Bayard Taylor. girlsincphillysnj.org",
+            "Legacy Youth Tennis and Education: the City’s locator lists a free Legacy after-school program “at McClure” at 3698 N Randolph St, which is Bayard Taylor’s address. McClure is a different school, on W Hunting Park Ave, so ask Legacy which school the program serves. legacyyte.org"
+          ],
+          "new": [
+            "Legacy Youth Tennis and Education: the City’s locator lists a free Legacy after-school program “at McClure” at 3698 N Randolph St, which is Bayard Taylor’s address. McClure is a different school, on W Hunting Park Ave, so ask Legacy which school the program serves. legacyyte.org"
+          ],
+          "read": "2026-11-25",
+          "source": "https://www.phila.gov/ost/program-locator/?address=3698+N+Randolph+St&resource=ost_152",
+          "quote": "LEGACYYTE at McClure OST After School Program 26-27 Share Print 3698 N RANDOLPH ST",
+          "how": "browser"
+        }
+      ]
+    },
+    {
+      "item": "school:penn-alexander",
+      "kind": "update",
+      "listing": "s:penn-alexander",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "alsoListed.title",
+          "old": "Also named by Penn Alexander",
+          "new": null,
+          "source": "https://pennalexander.philasd.org/",
+          "quote": "University City Hospitality Coalition ASAP",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.intro",
+          "old": "Penn Alexander’s own site names this among its community partners, and we haven’t confirmed what it runs at the school.",
+          "new": null,
+          "source": "https://pennalexander.philasd.org/",
+          "quote": "University City Hospitality Coalition ASAP",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.items",
+          "old": [
+            "ASAP, listed by the school among its community partners. ASAP’s own site couldn’t be reached today, so we don’t know what it runs at Penn Alexander."
+          ],
+          "new": null,
+          "source": "https://pennalexander.philasd.org/",
+          "quote": "University City Hospitality Coalition ASAP",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
     }
   ]
 }

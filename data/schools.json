@@ -1152,21 +1152,14 @@
     "dismissalNote": "the school’s bell schedule gives a school day of 9:00 am to 3:39 pm, with breakfast from 8:30 am",
     "phone": "215-400-8260",
     "website": "https://fell.philasd.org/",
-    "lastReviewed": "2026-11-14",
+    "lastReviewed": "2026-11-25",
     "added": "2026-11-15",
     "notes": [
       "Greater Philadelphia Community Alliance (GPCA) runs Fell’s after-school program: GPCA’s own page lists Fell among the schools it serves, and Fell names GPCA as a community partner. Girls on the Run also has a team at Fell this fall.",
       "Fell’s page lists clubs, among them art, chess, choir, reading, Scrabble and intramural sports, without saying whether they meet after school. Ask the office which ones run after dismissal.",
       "Fell’s site points to its parent and student handbook for early dismissals. Ask GPCA what it does on half days.",
       "If you know a program that serves Fell and isn’t here, send it in and it goes on this page."
-    ],
-    "alsoListed": {
-      "title": "Also named by Fell",
-      "intro": "Fell’s own site names these, but we couldn’t confirm them on the program’s own page this time.",
-      "items": [
-        "ASAP Philly (After-school Activities Program): on Fell’s list of community partners. ASAP’s site turned away our reader, so we couldn’t check which schools it serves. phillyasap.org"
-      ]
-    }
+    ]
   },
   {
     "id": "locke",
@@ -1273,21 +1266,14 @@
     "dismissalNote": "the school’s bell schedule gives a school day of 9:00 am to 3:39 pm, with breakfast at 8:45 am",
     "phone": "215-400-3830",
     "website": "https://mifflin.philasd.org/",
-    "lastReviewed": "2026-11-14",
+    "lastReviewed": "2026-11-25",
     "added": "2026-11-15",
     "notes": [
       "The Boys & Girls Clubs of Philadelphia list Mifflin as one of their school extension sites, and Mifflin names the Wissahickon Boys and Girls Club among its partners; neither posts the site’s hours. Girls on the Run also has a team at Mifflin this fall.",
       "Mifflin’s page lists clubs, among them anime, chess, debate, LEGO STEM, Scrabble and a spring musical, without saying when they meet. Ask the office which ones run after school.",
       "No City rec center after-school program is listed within a mile of Mifflin.",
       "If you know a program that serves Mifflin and isn’t here, send it in and it goes on this page."
-    ],
-    "alsoListed": {
-      "title": "Also named by Mifflin",
-      "intro": "Mifflin’s own site names these, but we couldn’t confirm them on the program’s own page this time.",
-      "items": [
-        "Philadelphia Youth Basketball: on Mifflin’s list of clubs and activities. PYB’s own site doesn’t name the school; its Sixth Man Center is on Wissahickon Avenue, about a mile away. phillyyouthbasketball.org"
-      ]
-    }
+    ]
   },
   {
     "id": "dunbar",
@@ -1360,7 +1346,7 @@
     "dismissalNote": "the school day is 9:00 am to 3:39 pm, with breakfast for grades 1–5 from 8:30, according to the school’s bell schedule",
     "phone": "215-400-3880",
     "website": "https://taylor.philasd.org/",
-    "lastReviewed": "2026-11-15",
+    "lastReviewed": "2026-11-25",
     "added": "2026-11-15",
     "notes": [
       "Bayard Taylor’s own site names the Boys and Girls Club and Girls on the Run among its community partners, and the Boys & Girls Clubs list the school as one of their school extension sites, open to children enrolled at the school.",
@@ -1370,10 +1356,8 @@
     ],
     "alsoListed": {
       "title": "Also named by Bayard Taylor",
-      "intro": "Bayard Taylor’s own site names these, but we couldn’t confirm an after-school program for the school on the program’s own page or in the City’s listings this time.",
+      "intro": "Bayard Taylor’s address appears in the City’s listings for a program named for another school, and we couldn’t confirm which school it serves.",
       "items": [
-        "Taller Puertorriqueño: the school lists a Taller Visitenos art program under arts, music and dance, without saying whether it meets after school. tallerpr.org",
-        "Girls Inc. of Philadelphia: on the school’s list of community partners. The City’s locator lists Girls Inc. programs elsewhere, not at Bayard Taylor. girlsincphillysnj.org",
         "Legacy Youth Tennis and Education: the City’s locator lists a free Legacy after-school program “at McClure” at 3698 N Randolph St, which is Bayard Taylor’s address. McClure is a different school, on W Hunting Park Ave, so ask Legacy which school the program serves. legacyyte.org"
       ]
     }
@@ -1477,7 +1461,7 @@
     "dismissalNote": "the school day is 8:30 am to 3:09 pm",
     "phone": "215-400-7760",
     "website": "https://pennalexander.philasd.org/",
-    "lastReviewed": "2026-11-16",
+    "lastReviewed": "2026-11-25",
     "added": "2026-11-21",
     "notes": [
       "The School District’s list calls the school Sadie Alexander School; its own site calls it Penn Alexander School.",
@@ -1485,14 +1469,7 @@
       "Penn Alexander’s own clubs run in fall, winter and spring cycles depending on student interest and teacher availability; the school’s site lists them without days or times. Ask the office which are running this season.",
       "The City’s program locator lists no after-school program inside Penn Alexander. The nearest is the University of Pennsylvania’s program inside Lea, about half a mile west; ask there whether it takes children from other schools.",
       "If you know a program that serves Penn Alexander and isn’t here, send it in and it goes on this page."
-    ],
-    "alsoListed": {
-      "title": "Also named by Penn Alexander",
-      "intro": "Penn Alexander’s own site names this among its community partners, and we haven’t confirmed what it runs at the school.",
-      "items": [
-        "ASAP, listed by the school among its community partners. ASAP’s own site couldn’t be reached today, so we don’t know what it runs at Penn Alexander."
-      ]
-    }
+    ]
   },
   {
     "id": "gideon",
