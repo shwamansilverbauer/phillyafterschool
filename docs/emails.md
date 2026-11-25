@@ -295,6 +295,21 @@ Each new account sends one email to the site's contact address (`tell_owner()` a
 before this was added were marked as told. The emails hold nothing about a child, and the privacy page says they
 are sent.
 
+## An email to you for each answer
+
+Each time the site's mailer emails a sender their answer (`queue_reply()` in `src/server/groups-api.php`: "It's on the
+site", "It's already listed", "We couldn't verify this one yet", "We weren't able to add this one", and the reviewer's
+thank-you), a copy goes to the site's contact address (`answer_copy()`): "[Philly After School] Answer sent: <the
+answer's subject>", saying who it went to and the outcome (with the run's reason, such as `not-a-program`), then the
+answer word for word, with a link to `/edit/queue/`. It carries `X-PAS-Kind: answer`, so the mailbox script labels it
+`PAS/Site/Answers` and, while it keeps mail in the inbox (the default, see "The mailbox script"), leaves it there.
+Its framing lines are editable at `/edit/emails/` as "A copy of an answer".
+
+Answers to emails need no copy: the mailbox script sends those from the contact@ account itself, in the email's own
+thread, and brings the thread back to the inbox. `"ownerNotes": { "answerCopies": "off" }` in `site.config.json`
+stops the copies (it is `"on"`); a copy that fails isn't tried again, since the answer itself went. Each copy is one
+more email through Postmark, a few a day.
+
 ## The morning summary
 
 One email to the site's contact address and one notification on the site admins' own devices, each morning, from
@@ -344,10 +359,12 @@ with the shared code in `src/server/mail.php`.
    - *Site notices.* The site's mailer adds a header, `X-PAS-Kind`, to every email it sends to its own address:
      `signup`, `suggestion`, `review`, `claim`, `needs-yes`, `manager-content`, `school-ask`, `summary`, and `copy`
      (a publish from `/edit/`); `school-date`, `idea`, `rush` and `copy-email` for the few the forms and the edit
-     pages send; `contact` for the contact form. The script labels each `PAS/Site/<kind>` and archives it, except
-     `review`, `school-date`, `rush` and `copy-email`, which stay in the inbox with their label because each asks the
-     owner to do something no page shows yet. (Since Phase 6 the review form emails nobody while accounts are on: held
-     reviews are on the Needs-you page.) Older mail, from before
+     pages send; `answer` for the copy of an answer the site emailed (see "An email to you for each answer");
+     `contact` for the contact form. The script labels each `PAS/Site/<kind>` and archives it, except `review`,
+     `school-date`, `rush` and `copy-email`, which stay in the inbox with their label because each asks the owner to do
+     something no page shows yet, and, while mail is kept in the inbox (below), `suggestion`, `idea`, `answer` and
+     `summary`, which show what people sent and what went back. (Since Phase 6 the review form emails nobody while
+     accounts are on: held reviews are on the Needs-you page.) Older mail, from before
      the header, is matched by its subject. A notice is trusted only when Google's own Authentication-Results header
      says it passed DKIM or SPF for the site's domain; one that claims to be the site's and isn't is labeled
      `PAS/Suspicious` and left in the inbox. The contact form's email is a person's message: it is posted like any
@@ -360,15 +377,27 @@ with the shared code in `src/server/mail.php`.
      `PAS/Bounces` and automatic replies (out of office) to `PAS/Auto-replies`, archived; a bounce of an outreach
      email stops that row's sequence.
    - *Mail a person wrote.* Everything left is posted to the site, one signed request per email
-     (`groups/api.php?action=mail_in`), and labeled `PAS/People/Queued` and archived, or `PAS/People/Needs Josh` and
-     kept in the inbox when the site holds it. Mail older than the day `setup` first ran is never posted: it stays
-     where it is, so nobody gets an answer to a months-old email. A message the site refuses for good is labeled
-     `PAS/Suspicious` and left for a person.
+     (`groups/api.php?action=mail_in`), and labeled `PAS/People/Queued`, or `PAS/People/Needs Josh` when the site
+     holds it. Mail older than the day `setup` first ran is never posted: it stays where it is, so nobody gets an
+     answer to a months-old email. A message the site refuses for good is labeled `PAS/Suspicious` and left for a
+     person.
+   - *Kept in the inbox* (the default; the script property `KEEP_IN_INBOX` set to `no` turns it off). Nothing is ever
+     deleted or kept from the owner: every email still arrives in the contact@ mailbox. While this is on, mail a person
+     wrote (emails and the contact form) stays in the inbox under its `PAS/People/…` label, Queued or Needs Josh,
+     along with the suggestion form's notices, feature ideas, the copies of the answers and the morning summary, so
+     the owner sees what came in and what went back without signing in. When the site's answer to an email goes, the
+     thread comes back to the inbox (even one the owner archived), with the answer at the bottom; spam leaves. Because
+     filed threads now stay in the inbox, each run also looks for inbox threads with none of our labels yet
+     (`has:nouserlabels`, 30 at most) beyond the newest 60, so an email the site couldn't take while it was down is
+     still posted later. With `KEEP_IN_INBOX` set to `no`, the script files as it first did: queued mail, those
+     notices and answered threads are archived under their labels (held mail still comes to the inbox).
 2. **Outreach** (below), when it is switched on.
 3. **Replies out.** The script asks the site for replies waiting to go (`action=mail_out`), sends each from
    contact@phillyafterschool.org as a reply in its own thread (a contact-form message gets a new email to its
    Reply-To address), changes the thread labels the site asks for (`PAS/People/Answered`, `PAS/People/Done`,
-   `PAS/Spam`, or back to Needs Josh), and says what went (`action=mail_sent`). A reply handed out and never confirmed
+   `PAS/Spam`, or back to Needs Josh), moves the thread where `labelPlace()` says (held mail and, while mail is kept in
+   the inbox, an answered thread to the inbox; spam out; the rest left where they are, or archived with
+   `KEEP_IN_INBOX` set to `no`), and says what went (`action=mail_sent`). A reply handed out and never confirmed
    is handed out again after 20 minutes, three times at most, and the script remembers the last 400 it sent, so a
    lost confirmation never sends one twice. While the site's address isn't one the account can send from, the site
    hands out nothing.
@@ -431,7 +460,9 @@ emails a week apart). The quarterly email with a listing's numbers waits for the
 **Script properties** (Project Settings > Script properties): `MAIL_SECRET` (made by `makeSecret`), `STARTED` (set by
 `setup`), and for outreach `OUTREACH_ON` (`yes`), `OUTREACH_SHEET_ID`, `OUTREACH_TABS`, `POSTAL_ADDRESS`,
 `OUTREACH_SIGNATURE` (the name it signs with; the site's name if empty). `OUTREACH_CAP`, `OUTREACH_PAUSED` and the
-counts are the script's own. `SITE_URL` points it at another copy of the site (the tests do).
+counts are the script's own. `KEEP_IN_INBOX`: `no` files people's mail, suggestions, ideas, answer copies and the
+summary out of the inbox; anything else, or nothing, keeps them in it. `SITE_URL` points it at another copy of the
+site (the tests do).
 
 **Setting it up,** signed in as the contact@ account:
 
@@ -448,7 +479,8 @@ counts are the script's own. `SITE_URL` points it at another copy of the site (t
 5. For outreach: share the sheet with the contact@ account (edit), set the outreach properties, and set `OUTREACH_ON`
    to `yes` once the wording has had its pass.
 
-**Turning it off.** `stopOutreach` (or `OUTREACH_ON` anything but `yes`) stops outreach. Deleting the trigger (Triggers
+**Turning it off.** `KEEP_IN_INBOX` set to `no` stops keeping mail in the inbox (the labels stay). `stopOutreach`
+(or `OUTREACH_ON` anything but `yes`) stops outreach. Deleting the trigger (Triggers
 in the script's left bar) stops the script; the inbox is then as it was. Deleting `phillyafterschool-mailin.key` from
 the host makes the site refuse the script (the hourly check stops looking at it, and the site's jobs go back to GitHub's
 schedule).

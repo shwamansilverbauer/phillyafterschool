@@ -27,6 +27,35 @@ test('the mailbox script files thirty made-up emails as the rules say: notices, 
   }
 });
 
+test('while KEEP_IN_INBOX is on (the default), suggestions, feature ideas, answer copies and the morning summary stay in the inbox under their labels; the other notices still leave; and an answered thread comes back to the inbox', async () => {
+  const s = pure();
+  const started = Date.now() - 1000;
+  const base = { own: [SITE_ADDRESS], siteDomain: 'phillyafterschool.org', started };
+  const notice = (kind, subject) => {
+    const headers = s.parseHeaders(rawMessage({ from: `Philly After School <${SITE_ADDRESS}>`, subject: '[Philly After School] ' + subject, headers: kind ? { 'X-PAS-Kind': kind } : {}, auth: googleAuth('phillyafterschool.org') }));
+    return { fromAddress: SITE_ADDRESS, fromName: 'Philly After School', subject: '[Philly After School] ' + subject, date: Date.now(), headers, auth: s.parseAuth(headers['authentication-results']) };
+  };
+  const shown = [['suggestion', 'A program that’s missing: Sunny Club (Fell)', 'Suggestions'], ['idea', 'A feature idea', 'Ideas'],
+    ['answer', 'Answer sent: About what you sent to Philly After School: Sunny Club', 'Answers'], ['summary', 'Philly After School this morning: 2 waiting for you', 'Summary'],
+    ['', 'Answer sent: Already on Philly After School: Sunny Club', 'Answers']];
+  for (const [kind, subject, label] of shown) {
+    const on = s.classify(notice(kind, subject), { ...base, show: true }), off = s.classify(notice(kind, subject), { ...base, show: false });
+    eq(on.label, 'PAS/Site/' + label, subject); eq(!!on.inbox, true, subject + ': stays in the inbox while it is on');
+    eq(off.label, 'PAS/Site/' + label); eq(!!off.inbox, false, subject + ': filed away with KEEP_IN_INBOX=no');
+  }
+  for (const [kind, subject] of [['claim', 'Listing claimed: Sunny Club'], ['signup', 'New Parent Account Signup: Dana'], ['manager-content', 'Words to approve: Sunny Club']]) eq(!!s.classify(notice(kind, subject), { ...base, show: true }).inbox, false, subject + ' still leaves');
+  eq(!!s.classify(notice('review', 'Review: Sunny Club (5 stars)'), { ...base, show: false }).inbox, true, 'a review waits in the inbox either way');
+  // Where a thread goes when the site changes its label.
+  eq(s.labelPlace('PAS/People/Needs Josh', true, true), 'inbox'); eq(s.labelPlace('PAS/People/Needs Josh', true, false), 'inbox');
+  eq(s.labelPlace('PAS/People/Answered', false, true), 'inbox', 'the answer that went is seen beside the email');
+  eq(s.labelPlace('PAS/People/Done', false, true), '', 'left where the owner left it'); eq(s.labelPlace('PAS/People/Queued', false, true), '');
+  eq(s.labelPlace('PAS/Spam', false, true), 'archive', 'spam leaves either way');
+  for (const l of ['PAS/People/Answered', 'PAS/People/Done', 'PAS/Spam']) eq(s.labelPlace(l, false, false), 'archive', l + ' with KEEP_IN_INBOX=no');
+  // The property: on unless it says "no".
+  const prop = v => google({ site: null, props: v === null ? {} : { KEEP_IN_INBOX: v } }).script.keepInInbox_();
+  eq(prop(null), true); eq(prop('yes'), true); eq(prop(''), true); eq(prop('No'), false); eq(prop(' no '), false);
+});
+
 test('headers are read whole (folded lines too), and only the Authentication-Results Google put on top counts: a look-alike lower down is ignored', async () => {
   const s = pure();
   const raw = ['Authentication-Results: mx.google.com;', '       dkim=pass header.i=@sunny.example.test header.s=s1;', '       spf=pass (google.com: domain of a@sunny.example.test designates 192.0.2.1) smtp.mailfrom=a@sunny.example.test;', '       dmarc=pass header.from=sunny.example.test',

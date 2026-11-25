@@ -5,12 +5,15 @@
  *
  * Every 10 minutes (a time trigger on run()):
  *   1. sortInbox: the site's own notices (the X-PAS-Kind header the site's mailer adds, or the subject on older mail)
- *      get a PAS/Site label and leave the inbox, apart from the few that ask something of the owner. Mail from GitHub,
- *      Stripe, Postmark, Klaviyo, UptimeRobot, Hostinger and Google gets a PAS/Service label and leaves too, apart from
- *      four kinds kept in the inbox with a star. Anything with a List-Unsubscribe header goes to PAS/Newsletters.
- *      Bounces and automatic replies are labeled and archived. What is left, mail a person wrote, is posted to the site
- *      (groups/api.php?action=mail_in) and labeled PAS/People/Queued, or PAS/People/Needs Josh when the site holds it.
- *      Mail older than the day setup() first ran is never posted: it stays where it is.
+ *      get a PAS/Site label and leave the inbox, apart from the few that ask something of the owner and, while
+ *      KEEP_IN_INBOX is on (the default), the ones that show what people sent and what went back: suggestions, feature
+ *      ideas, copies of the answers and the morning summary. Mail from GitHub, Stripe, Postmark, Klaviyo, UptimeRobot,
+ *      Hostinger and Google gets a PAS/Service label and leaves too, apart from four kinds kept in the inbox with a
+ *      star. Anything with a List-Unsubscribe header goes to PAS/Newsletters. Bounces and automatic replies are
+ *      labeled and archived. What is left, mail a person wrote, is posted to the site (groups/api.php?action=mail_in)
+ *      and labeled PAS/People/Queued, or PAS/People/Needs Josh when the site holds it; while KEEP_IN_INBOX is on it
+ *      stays in the inbox either way, and comes back to the inbox when the site's answer goes. Mail older than the day
+ *      setup() first ran is never posted: it stays where it is.
  *   2. sendOutreach: when switched on, the next outreach emails from the site's address, inside the daily cap.
  *   3. sendReplies: asks the site for replies waiting to go (action=mail_out, which is also the heartbeat), sends each
  *      from the site's address as a reply in its own thread, changes the labels the site asks for, and says what went
@@ -35,15 +38,19 @@
  *   OUTREACH_SIGNATURE   the name the outreach emails are signed with (defaults to the site's name)
  *   OUTREACH_CAP         the daily cap now (starts at 30, raised by 10 a week while replies stay healthy, never
  *                        above 150); OUTREACH_PAUSED is set to "yes" when too many bounce or opt out
+ *   KEEP_IN_INBOX        "no" files people's mail, suggestions, ideas, answer copies and the morning summary out of
+ *                        the inbox (under their labels) as the script first did; anything else, or nothing, keeps
+ *                        them in the inbox so the owner sees what came in and what went back
  *   SITE_URL             only to point the script at another copy of the site (the tests do)
  */
 
 var PAS = {
-  version: '2026-12-1',
+  version: '2026-12-2',
   site: 'https://phillyafterschool.org',
   address: 'contact@phillyafterschool.org',   // the site's address: notices come from it, replies leave from it
   name: 'Philly After School',
   threadsPerRun: 60,          // inbox threads looked at per run, newest first
+  unfiledPerRun: 30,          // and, while mail stays in the inbox, threads with none of our labels yet, further down
   postsPerRun: 25,            // emails posted to the site per run; the rest wait ten minutes
   textMax: 8000,              // characters of an email's text sent, after the quoted history is trimmed
   outreachPerRun: 4,          // outreach emails per run, so a day's cap is spread over the morning
@@ -53,9 +60,13 @@ var PAS = {
   // X-PAS-Kind: the notices that stay in the inbox (each asks the owner to do something no other page shows yet).
   // "contact" is the contact form: a person's message, posted to the site like any other.
   keepInInbox: ['review', 'school-date', 'rush', 'copy-email'],
+  // And, while KEEP_IN_INBOX is on (the default), the notices that show what people sent and what went back to them:
+  // a suggestion, a feature idea, the copy of an answer the site emailed, and the morning summary. They keep their
+  // labels either way; mail a person wrote stays in the inbox too.
+  showInInbox: ['suggestion', 'idea', 'answer', 'summary'],
   noticeLabels: { signup: 'Sign-ups', suggestion: 'Suggestions', review: 'Reviews', claim: 'Claims', 'needs-yes': 'Needs a yes',
     'manager-content': 'Manager content', 'school-ask': 'School asks', 'school-date': 'School dates', idea: 'Ideas', copy: 'Copy',
-    'copy-email': 'Copy', rush: 'Queue', summary: 'Summary' },
+    'copy-email': 'Copy', rush: 'Queue', summary: 'Summary', answer: 'Answers' },
   // Older mail, from before the header: the site's subjects, after "[Philly After School] ".
   subjects: [
     [/^New (Parent Account|Program Manager) Signup\b|^New parent accounts yesterday\b/, 'signup'],
@@ -64,7 +75,7 @@ var PAS = {
     [/^(Words|An offer line|Social links|Instagram posts|A Kids’ Playground pin|A photo|A logo) to approve:|^Proposed change:/, 'manager-content'],
     [/^Review:/, 'review'], [/^Contact:/, 'contact'], [/^A date at a school\b/, 'school-date'], [/^A feature idea\b/, 'idea'],
     [/^A school to add\b/, 'school-ask'], [/^(A program that’s missing|A camp that’s missing|An update to a listing)\b/, 'suggestion'],
-    [/^Copy published\b/, 'copy'], [/^Copy edits\b/, 'copy-email'], [/^Rush:/, 'rush'],
+    [/^Copy published\b/, 'copy'], [/^Copy edits\b/, 'copy-email'], [/^Rush:/, 'rush'], [/^Answer sent:/, 'answer'],
   ],
   // The services, by the base domain of the sender, and which of their emails stay in the inbox with a star.
   services: {
@@ -105,6 +116,13 @@ function step_(report, what, fn) {
 function sortInbox(report) {
   var box = mailbox_();
   var threads = GmailApp.search('in:inbox', 0, PAS.threadsPerRun);
+  // With mail kept in the inbox, the newest 60 can all be threads already filed. Unfiled ones further down (an email
+  // the site couldn't take while it was down, say) have no label of ours yet: look for those too.
+  if (box.ctx.show) {
+    var have = {};
+    threads.forEach(function (x) { have[x.getId()] = true; });
+    GmailApp.search('in:inbox has:nouserlabels', 0, PAS.unfiledPerRun).forEach(function (x) { if (!have[x.getId()]) threads.push(x); });
+  }
   var posted = 0;
   for (var t = 0; t < threads.length; t++) {
     var thread = threads[t], msgs = thread.getMessages();
@@ -167,7 +185,7 @@ function handlePerson_(m, c, box, report) {
     return null;
   }
   if (hit) { hit.mark('Replied'); box.outreachCount('replied'); }
-  return { label: r.label || 'PAS/People/Queued', inbox: r.state === 'held' };
+  return { label: r.label || 'PAS/People/Queued', inbox: r.state === 'held' || box.ctx.show };
 }
 
 // ----- 3. replies, labels and the heartbeat -----
@@ -177,7 +195,7 @@ function sendReplies(report) {
   var r = api_('mail_out', { beat: beat }, true);
   var done = { sent: [], failed: [], labeled: [] };
   var sentIds = ring_('sent', 400);
-  var from = fromOption_(), own = ownAddresses_();
+  var from = fromOption_(), own = ownAddresses_(), show = keepInInbox_();
   (r.replies || []).forEach(function (x) {
     if (sentIds.has(String(x.id))) { done.sent.push(x.id); return; }   // it went last time; the site never heard
     try {
@@ -206,7 +224,8 @@ function sendReplies(report) {
       if (!thread) { done.labeled.push({ id: x.id, label: x.label }); return; }   // gone: nothing to label
       thread.getLabels().forEach(function (l) { if (PAS.peopleLabels.indexOf(l.getName()) >= 0 && l.getName() !== x.label) thread.removeLabel(l); });
       thread.addLabel(label_(x.label));
-      if (x.inbox) thread.moveToInbox(); else thread.moveToArchive();
+      var where = labelPlace(x.label, !!x.inbox, show);
+      if (where === 'inbox') thread.moveToInbox(); else if (where === 'archive') thread.moveToArchive();
       done.labeled.push({ id: x.id, label: x.label });
     } catch (e) { report.errors.push('a label: ' + String(e.message || e).slice(0, 120)); }
   });
@@ -353,7 +372,8 @@ function stopOutreach() { props_().setProperty('OUTREACH_ON', 'no'); Logger.log(
 // ===================================================================================================================
 
 /** How to file one email. m: { fromAddress, fromName, replyTo, subject, date (ms), headers (lower-case name => [values]),
- *  auth (parseAuth) }. ctx: { own: [addresses], siteDomain, started (ms) }. Gives { action, label, inbox, star, via, kind }:
+ *  auth (parseAuth) }. ctx: { own: [addresses], siteDomain, started (ms), show (KEEP_IN_INBOX on) }. Gives { action, label,
+ *  inbox, star, via, kind }:
  *  action is notice, service, bounce, auto, bulk, person, own (ours, left alone), old (before setup, left alone) or
  *  suspicious (claims to be ours and isn't: labeled, left in the inbox). */
 function classify(m, ctx) {
@@ -368,7 +388,7 @@ function classify(m, ctx) {
     if (kind === 'contact') return { action: 'person', via: 'form', kind: kind };
     var name = PAS.noticeLabels[kind];
     if (!name) return { action: 'own', label: '', inbox: true };
-    return { action: 'notice', kind: kind, label: 'PAS/Site/' + name, inbox: PAS.keepInInbox.indexOf(kind) >= 0 };
+    return { action: 'notice', kind: kind, label: 'PAS/Site/' + name, inbox: PAS.keepInInbox.indexOf(kind) >= 0 || (!!ctx.show && PAS.showInInbox.indexOf(kind) >= 0) };
   }
   if (/^(mailer-daemon|postmaster)@/.test(from) || /report-type="?delivery-status/i.test(first(h['content-type']) || '') ||
       /^(Delivery Status Notification|Undeliver(able|ed)|Mail delivery failed|Returned mail|Delivery has failed|Failure Notice)\b/i.test(subject)) {
@@ -387,6 +407,15 @@ function classify(m, ctx) {
   if (h['list-unsubscribe']) return { action: 'bulk', label: 'PAS/Newsletters', inbox: false };
   if (ctx.started && m.date && m.date < ctx.started) return { action: 'old', label: '', inbox: true };
   return { action: 'person', via: 'mail' };
+}
+/** Where a thread goes when the site changes its label: 'inbox', 'archive', or '' (left where it is). Held mail comes
+ *  to the inbox. While mail stays in the inbox (show), an answered thread comes back to it, so the answer that went is
+ *  seen next to what the person wrote; spam leaves; the rest stay where the owner left them. Without show, everything
+ *  but held mail leaves. */
+function labelPlace(label, held, show) {
+  if (held) return 'inbox';
+  if (!show || label === 'PAS/Spam') return 'archive';
+  return label === 'PAS/People/Answered' ? 'inbox' : '';
 }
 /** The notice kind of an older email from the site, by its subject ('' when it isn't one of the site's). */
 function subjectKind(subject) {
@@ -528,6 +557,9 @@ function signature(action, body, nowSec, nonce, secret) {
 // ===================================================================================================================
 
 function props_() { return PropertiesService.getScriptProperties(); }
+/** Whether people's mail, suggestions, ideas, answer copies and the summary stay in the inbox: yes unless KEEP_IN_INBOX
+ *  says "no". */
+function keepInInbox_() { return String(props_().getProperty('KEEP_IN_INBOX') || '').trim().toLowerCase() !== 'no'; }
 function siteUrl_() { return (props_().getProperty('SITE_URL') || PAS.site).replace(/\/+$/, ''); }
 function ymd_(d) { return Utilities.formatDate(d, PAS.timeZone, 'yyyy-MM-dd'); }
 /** A request to the site's API. Signed with the shared secret, except push_run, which anyone may ask for. */
@@ -584,7 +616,7 @@ function ring_(key, max) {
  *  when an email or a bounce might belong to one). */
 function mailbox_() {
   var p = props_();
-  var box = { seen: ring_('seen', 4000), ctx: { own: ownAddresses_(), siteDomain: domainOf(PAS.address), started: Number(p.getProperty('STARTED')) || Date.now() }, outreach: null };
+  var box = { seen: ring_('seen', 4000), ctx: { own: ownAddresses_(), siteDomain: domainOf(PAS.address), started: Number(p.getProperty('STARTED')) || Date.now(), show: keepInInbox_() }, outreach: null };
   box.outreachFor = function (thread, from) { if (!box.outreach) box.outreach = outreachIndex_(); return box.outreach.find(thread, from); };
   box.outreachCount = function (what) { outreachDay_(ymd_(new Date()), what, 1); };
   return box;
