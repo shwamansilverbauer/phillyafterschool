@@ -113,11 +113,21 @@ test('outcomes: each sender is emailed once in the site’s own words, nothing a
   eq(r.told.sent, 3, 'needs-info, declined and duplicate are answered now');
   // needs-info: the site's words, and what would help.
   const m1 = await mail.waitFor(who('need'), /About what you sent/);
-  includes(m1.TextBody, 'We couldn’t confirm this yet'); includes(m1.TextBody, names.need); includes(m1.TextBody, 'a link to the page on the program’s own website');
+  includes(m1.TextBody, 'We couldn’t verify this one yet'); includes(m1.TextBody, `Thanks so much for sending ${names.need}!`); includes(m1.TextBody, 'didn’t pass our automated approver');
+  includes(m1.TextBody, 'a link to the page on the program’s own website'); includes(m1.TextBody, 'contact@phillyafterschool.org', 'where to write');
   includes(m1.TextBody, '/suggest/'); excludes(m1.TextBody, 'bad@evil.example'); excludes(m1.HtmlBody, 'bad@evil.example');
   // declined: the rule in a sentence.
   const m2 = await mail.waitFor(who('no'), /About what you sent/);
-  includes(m2.TextBody, 'We can’t list this one'); includes(m2.TextBody, 'kindergarten to 8th grade'); excludes(m2.TextBody, 'IGNORE');
+  includes(m2.TextBody, 'We weren’t able to add this one'); includes(m2.TextBody, 'Unfortunately, we weren’t able to verify that it’s an after-school program, class or camp');
+  includes(m2.TextBody, 'kindergarten to 8th grade'); includes(m2.TextBody, 'didn’t pass our automated approver');
+  includes(m2.TextBody, 'Please reach out to contact@phillyafterschool.org if you’d like the program to be added'); excludes(m2.TextBody, 'IGNORE');
+  // A copy of each answer comes to the site's own address, filed by the mailbox script as "answer": who it went to,
+  // the outcome, and the answer word for word.
+  const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const c2 = await mail.waitFor('contact@phillyafterschool.org', new RegExp('Answer sent: About what you sent to Philly After School: ' + esc(names.no)));
+  eq(((c2.Headers || []).find(h => h.Name === 'X-PAS-Kind') || {}).Value, 'answer');
+  includes(c2.TextBody, `sent this answer to ${who('no')}`); includes(c2.TextBody, 'Outcome: Not added (not-a-program)'); includes(c2.TextBody, m2.TextBody.split('\n\n')[1]);
+  for (const k of ['need', 'dup']) ok(mail.to('contact@phillyafterschool.org').some(m => /^\[Philly After School\] Answer sent:/.test(m.Subject) && m.TextBody.includes(`to ${who(k)}`)), `a copy of the ${k} answer`);
   // duplicate: it's already there, with the link.
   const m3 = await mail.waitFor(who('dup'), /Already on/);
   includes(m3.TextBody, 'It’s already listed'); includes(m3.TextBody, '/programs/test-listing-premium/');
@@ -138,6 +148,7 @@ test('outcomes: each sender is emailed once in the site’s own words, nothing a
   github.ops.put(`outcomes/weekly-${t}.json`, JSON.stringify({ ...outcome, tokens: 1 }));
   await run(api);
   eq(mail.to(who('need')).length, 1, 'once'); eq(mail.to(who('no')).length, 1); eq(mail.to(who('dup')).length, 1);
+  eq(mail.to('contact@phillyafterschool.org').filter(m => /Answer sent:/.test(m.Subject) && m.TextBody.includes(`to ${who('no')}`)).length, 1, 'and one copy');
 
   // #41 merged half an hour ago: “it’s on the site”, to the parent and to the manager, and the proposal is settled.
   // #42 merged a minute ago: not yet, the site is still publishing. #43 closed without a merge: held, nobody told.

@@ -72,8 +72,8 @@ export function google({ site, me = 'mailbox@schoolsoutwhatnow.example', alias =
   }
   const GmailApp = {
     search: (q, start = 0, max = 100) => {
-      if (q !== 'in:inbox') throw new Error('the stand-in only knows in:inbox');
-      return [...threads.values()].filter(t => t.messages.some(id => messages.get(id).inbox))
+      if (q !== 'in:inbox' && q !== 'in:inbox has:nouserlabels') throw new Error('the stand-in only knows in:inbox, with or without has:nouserlabels');
+      return [...threads.values()].filter(t => t.messages.some(id => messages.get(id).inbox) && (q === 'in:inbox' || t.labels.size === 0))
         .sort((a, b) => messages.get(b.messages.at(-1)).date - messages.get(a.messages.at(-1)).date).slice(start, start + max).map(threadObj);
     },
     getMessageById: id => (messages.has(id) ? msgObj(messages.get(id)) : null),

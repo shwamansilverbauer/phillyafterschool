@@ -170,7 +170,7 @@ test('the runs answer mail with fixed replies, sent in the email’s own thread 
   out = await mailOut(site);
   const to = addr => out.replies.find(x => x.to === addr);
   ok(to(`claim${t}@example.test`), 'the claim question is answered'); includes(to(`claim${t}@example.test`).text, '/managers/');
-  ok(to(`fix${t}@example.test`), 'the parent hears we couldn’t confirm it'); includes(to(`fix${t}@example.test`).text, 'couldn’t confirm'); includes(to(`fix${t}@example.test`).text, 'Thanks for sending what you sent', 'an email is never named by its domain');
+  ok(to(`fix${t}@example.test`), 'the parent hears we couldn’t verify it yet'); includes(to(`fix${t}@example.test`).text, 'weren’t able to verify it on the program’s own website yet'); includes(to(`fix${t}@example.test`).text, 'Thanks so much for writing to us!', 'an email is never named by its domain'); includes(to(`fix${t}@example.test`).text, 'contact@phillyafterschool.org');
   excludes(JSON.stringify(out.replies), 'IGNORE ME');
   ok(!to(`junk${t}@example.test`), 'no reply to spam'); eq(site.sql(`SELECT state, label_want FROM mail_in WHERE id = ${junk.id}`)[0].label_want, 'PAS/Spam');
   ok(!to(`upd${t}@phillyafterschool.org`), '“thanks, updated” waits for the pull request to merge');
@@ -208,10 +208,10 @@ test('the site’s own notices carry X-PAS-Kind for the mailbox script to file t
   eq(kind(await mail.waitFor(parent, /About what you sent/)), '');
 });
 
-test('the mailbox script itself, against the site: notices and services filed, a person’s email posted and labeled, old mail left alone, a reply sent in its thread, the heartbeat in the health answer and the morning summary, and push_run called', async ({ api, site, mail }) => {
+test('the mailbox script itself, against the site (with KEEP_IN_INBOX=no): notices and services filed, a person’s email posted and labeled, old mail left alone, a reply sent in its thread, the heartbeat in the health answer and the morning summary, and push_run called', async ({ api, site, mail }) => {
   withKeys(site);
   const t = Date.now().toString(36);
-  const g = google({ site, props: { MAIL_SECRET: KEY, SITE_URL: site.base, STARTED: String(Date.now() - 3600e3) } });
+  const g = google({ site, props: { MAIL_SECRET: KEY, SITE_URL: site.base, STARTED: String(Date.now() - 3600e3), KEEP_IN_INBOX: 'no' } });
   const notice = g.add({ from: `Philly After School <${SITE_ADDRESS}>`, subject: `[Philly After School] Listing claimed: Box ${t}`, headers: { 'X-PAS-Kind': 'claim' }, auth: googleAuth('phillyafterschool.org') });
   const review = g.add({ from: `Philly After School <${SITE_ADDRESS}>`, subject: `[Philly After School] Review: Box ${t} (5 stars)`, headers: { 'X-PAS-Kind': 'review' }, auth: googleAuth('phillyafterschool.org') });
   const issue = g.add({ from: 'GitHub <notifications@github.com>', subject: `[x/y] Site check: something needs a look ${t}`, auth: googleAuth('github.com') });
@@ -258,6 +258,43 @@ test('the mailbox script itself, against the site: notices and services filed, a
   matches(sum.TextBody, /\d+ emails from people came in: \d+ held for you/); matches(sum.TextBody, /\d+ repl(y|ies) went out from the site’s address/);
   includes(sum.TextBody, 'The mailbox script last checked in'); includes(sum.TextBody, 'emails sent from the mailbox');
   eq(((sum.Headers || []).find(h => h.Name === 'X-PAS-Kind') || {}).Value, 'summary');
+});
+
+test('with mail kept in the inbox (the default): a person’s email is posted and stays in the inbox under its label, suggestions and answer copies stay too, the other notices still leave, an answered thread the owner archived comes back with the answer, and an unfiled email further down is still found', async ({ site }) => {
+  withKeys(site);
+  const t = Date.now().toString(36);
+  const g = google({ site, props: { MAIL_SECRET: KEY, SITE_URL: site.base, STARTED: String(Date.now() - 7200e3) } });
+  const auth = googleAuth('phillyafterschool.org');
+  const notice = (kind, subject, date = Date.now()) => g.add({ from: `Philly After School <${SITE_ADDRESS}>`, subject: `[Philly After School] ${subject}`, headers: { 'X-PAS-Kind': kind }, auth, date });
+  const claim = notice('claim', `Listing claimed: Inbox Box ${t}`);
+  const suggestion = notice('suggestion', `A program that’s missing: Inbox Club ${t} (Fell)`);
+  const copy = notice('answer', `Answer sent: About what you sent to Philly After School: Inbox Club ${t}`);
+  const person = g.add({ from: `Kai Lu <kai${t}@example.test>`, subject: `A question ${t}`, text: `Is there pickup at Fell? (${t})`, auth: googleAuth('example.test') });
+  const press = g.add({ from: `Dee Writer <dee${t}@paper.example.test>`, subject: `Story ${t}`, text: 'I’m a reporter writing a story about camps.', auth: googleAuth('paper.example.test') });
+  g.script.run();
+  eq(JSON.stringify(g.logs.filter(l => /error/i.test(l))), '[]');
+  includes(g.labelsOf(claim.thread), 'PAS/Site/Claims'); ok(!g.inInbox(claim.thread), 'a claim notice still leaves the inbox');
+  includes(g.labelsOf(suggestion.thread), 'PAS/Site/Suggestions'); ok(g.inInbox(suggestion.thread), 'a suggestion stays in the inbox');
+  includes(g.labelsOf(copy.thread), 'PAS/Site/Answers'); ok(g.inInbox(copy.thread), 'the copy of an answer stays in the inbox');
+  includes(g.labelsOf(person.thread), 'PAS/People/Queued'); ok(g.inInbox(person.thread), 'a person’s email stays in the inbox, labeled Queued');
+  eq(site.sql(`SELECT state FROM mail_in WHERE gid = '${person.id}'`)[0].state, 'queued', 'and still reached the site');
+  includes(g.labelsOf(press.thread), 'PAS/People/Needs Josh'); ok(g.inInbox(press.thread));
+  // The owner reads the held one and archives it; the answer from the Needs-you page goes in its thread and brings
+  // the thread back to the inbox, so the answer is seen.
+  g.script.GmailApp.getThreadById(press.thread).moveToArchive();
+  ok(!g.inInbox(press.thread));
+  const pressRow = site.sql(`SELECT id FROM mail_in WHERE gid = '${press.id}'`)[0];
+  const { get, post, csrf } = pages(site);
+  await post('needs/', { csrf: csrf(await get('needs/')), do: 'mail_send', mail: String(pressRow.id), text: `Thanks for writing (${t}).` });
+  g.script.run();
+  ok(g.sent.some(x => x.kind === 'reply' && x.thread === press.thread && x.text.includes(`Thanks for writing (${t})`)), 'the reply went in its thread');
+  includes(g.labelsOf(press.thread), 'PAS/People/Answered'); ok(g.inInbox(press.thread), 'the answered thread is back in the inbox');
+  // The newest 60 in the inbox are all filed already: an email further down, unfiled, is still found and posted.
+  const late = g.add({ from: `Lin Ho <lin${t}@example.test>`, subject: `Older question ${t}`, text: `Hello (${t})`, auth: googleAuth('example.test'), date: Date.now() - 3600e3 });
+  for (let i = 0; i < 61; i++) notice('suggestion', `A program that’s missing: Filler ${i} ${t}`, Date.now() + i);
+  g.script.run(); g.script.run();
+  includes(g.labelsOf(late.thread), 'PAS/People/Queued', 'found below the newest 60');
+  eq(site.sql(`SELECT COUNT(*) AS n FROM mail_in WHERE gid = '${late.id}'`)[0].n, 1, 'and posted once');
 });
 
 test('the outreach sender: only when switched on, with a postal address, inside its hours and its cap; the reply version for an address not at the website; a “stop” reply opts out and is never posted', async ({ site }) => {

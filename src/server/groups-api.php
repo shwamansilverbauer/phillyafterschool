@@ -2129,8 +2129,33 @@ function queue_tell(): array {
 function queue_reply(array $x): bool {
   global $CFG;
   list($subject, $head, $lines, $button, $url, $why) = queue_reply_parts($x);
+  $subject = $subject !== '' ? $subject : (string) $CFG['siteName'];
   $text = ($head !== '' ? $head . "\n\n" : '') . implode("\n\n", $lines) . ($button !== '' ? "\n\n" . $button . ': ' . $url : '') . "\n\n" . $why;
-  return send_mail((string) $x['email'], $subject !== '' ? $subject : (string) $CFG['siteName'], $text, email_html($head, paras($lines), $button, $url, $why));
+  $ok = send_mail((string) $x['email'], $subject, $text, email_html($head, paras($lines), $button, $url, $why));
+  if ($ok) answer_copy($x, $subject, $text);
+  return $ok;
+}
+// A copy of each answer the site's mailer sent a sender, to the site's own address (X-PAS-Kind: answer), so the owner
+// sees in the inbox what went out without signing in. Answers to emails need none: the mailbox script sends those from
+// the contact@ account itself, in the email's own thread. "ownerNotes": { "answerCopies": "off" } in site.config.json
+// stops them. A copy that fails isn't tried again: the answer itself went.
+function answer_copies_on(): bool { global $CFG; return !empty($CFG['from']) && !(isset($CFG['ownerNotes']['answerCopies']) && $CFG['ownerNotes']['answerCopies'] === 'off'); }
+function answer_copy(array $x, string $subject, string $text): void {
+  global $CFG;
+  if (!answer_copies_on() || strcasecmp((string) $x['email'], (string) $CFG['from']) === 0) return;
+  $out = (string) $x['outcome'];
+  $outcome = array('published' => 'On the site', 'duplicate' => 'Already listed', 'no-change' => 'Already listed', 'needs-info' => 'Couldn’t verify yet', 'declined' => 'Not added', 'answered' => 'Answered');
+  $v = array('site' => $CFG['siteName'], 'email' => (string) $x['email'], 'subject' => $subject,
+    'outcome' => (isset($outcome[$out]) ? $outcome[$out] : $out) . ((string) $x['reason'] !== '' ? ' (' . $x['reason'] . ')' : ''));
+  /*EMAIL A copy of an answer (to the site's own address, each time the site emails someone an answer)*/
+  $subj = t(__T("Answer sent: {subject}"), $v);
+  $head = t(__T("{site} sent this answer to {email}"), $v);
+  $what = t(__T("Outcome: {outcome}"), $v);
+  $foot = t(__T("You get a copy of every answer the site emails, so you can see what went out without signing in."), $v);
+  $button = 'Open the queue'; $url = $CFG['siteUrl'] . '/edit/queue/';
+  $body = implode("\n\n", array_filter(array($head, $what, '—————', $text, $button . ': ' . $url, $foot), function ($s) { return $s !== ''; }));
+  $html = email_html($head, paras(array($what)) . '<div style="margin:16px 0 0;padding:14px 16px;border-left:3px solid #96C9FF;background:#F4F8FD;white-space:pre-line">' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</div>', $button, $url, $foot);
+  send_mail((string) $CFG['from'], '[' . $CFG['siteName'] . '] ' . ($subj !== '' ? $subj : $subject), $body, $html, '', 'answer');
 }
 // The parts of that answer: subject, heading, lines, button and its address, the last line.
 function queue_reply_parts(array $x): array {
@@ -2138,7 +2163,7 @@ function queue_reply_parts(array $x): array {
   $l = listings();
   $key = (string) $x['listing'];
   $known = $key !== '' && isset($l[$key]);
-  $v = array('site' => $CFG['siteName']);
+  $v = array('site' => $CFG['siteName'], 'contact' => (string) $CFG['from']);
   /*EMAIL The last line of every answer to a suggestion or a proposed change*/
   $why = t(__T("You get this because you sent something to {site}. It’s the only email about it."), $v);
   $what = $known ? listing_plain($key) : ($x['kind'] === 'mail' ? '' : queue_one((string) $x['what'], 80));   // an email's item is named by its domain only
@@ -2172,26 +2197,27 @@ function queue_reply_parts(array $x): array {
     $lines[] = t(__T("Thanks for sending {what}. It’s already on {site}, as the program’s own website has it."), $v);
     $button = t(__T("See the listing"), $v); $url = $listingUrl;
   } elseif ($out === 'needs-info') {
-    /*EMAIL We couldn’t confirm it yet (to whoever sent a suggestion or a proposed change)*/
+    /*EMAIL We couldn’t verify it yet (to whoever sent a suggestion or a proposed change)*/
     $subject = t(__T("About what you sent to {site}: {what}"), $v);
-    $head = t(__T("We couldn’t confirm this yet"), $v);
-    $lines[] = t(__T("Thanks for sending {what}. We couldn’t confirm it on the program’s own website yet, so it isn’t on {site}."), $v);
-    if ($x['reason'] === 'need-website') $lines[] = t(__T("What would help: the address of the program’s own website."), $v);
-    elseif ($x['reason'] === 'need-school') $lines[] = t(__T("What would help: which school the program serves or picks up from, as its own website says."), $v);
-    else $lines[] = t(__T("What would help: a link to the page on the program’s own website that shows it."), $v);
-    $lines[] = t(__T("Reply to this email with it, or send it again."), $v);
+    $head = t(__T("We couldn’t verify this one yet"), $v);
+    $lines[] = $what !== '' ? t(__T("Thanks so much for sending {what}!"), $v) : t(__T("Thanks so much for writing to us!"), $v);
+    $lines[] = t(__T("Unfortunately, we weren’t able to verify it on the program’s own website yet, so it didn’t pass our automated approver."), $v);
+    if ($x['reason'] === 'need-website') $lines[] = t(__T("It would really help to have the address of the program’s own website."), $v);
+    elseif ($x['reason'] === 'need-school') $lines[] = t(__T("It would really help to know which school the program serves or picks up from, as its own website says."), $v);
+    else $lines[] = t(__T("It would really help to have a link to the page on the program’s own website that shows it."), $v);
+    $lines[] = t(__T("Just reply to this email with it, or send it again, and we’ll take another look. You can always reach us at {contact} too."), $v);
     $button = t(__T("Send it again"), $v); $url = $again;
   } else {
-    /*EMAIL We can’t list this one (to whoever sent a suggestion or a proposed change)*/
+    /*EMAIL We weren’t able to add this one (to whoever sent a suggestion or a proposed change)*/
     $subject = t(__T("About what you sent to {site}: {what}"), $v);
-    $head = t(__T("We can’t list this one"), $v);
-    $lines[] = t(__T("Thanks for sending {what}. We can’t put it on {site}."), $v);
-    if ($x['reason'] === 'not-a-program') $lines[] = t(__T("We list programs for children in kindergarten to 8th grade, and this isn’t one."), $v);
-    elseif ($x['reason'] === 'outside') $lines[] = t(__T("We list programs that serve Philadelphia schools and families, and this one is outside the city."), $v);
-    elseif ($x['reason'] === 'no-own-site') $lines[] = t(__T("We list a program only when its own website shows what we publish, and we couldn’t find that."), $v);
-    elseif ($x['reason'] === 'closed') $lines[] = t(__T("The program’s own website says it isn’t running."), $v);
-    else $lines[] = t(__T("It doesn’t meet the rules for a listing on {site}."), $v);
-    $lines[] = t(__T("If that looks wrong, reply to this email and tell us where the program’s own website shows it."), $v);
+    $head = t(__T("We weren’t able to add this one"), $v);
+    $lines[] = $what !== '' ? t(__T("Thanks so much for sending {what}!"), $v) : t(__T("Thanks so much for writing to us!"), $v);
+    if ($x['reason'] === 'not-a-program') $lines[] = t(__T("Unfortunately, we weren’t able to verify that it’s an after-school program, class or camp for kids in kindergarten to 8th grade, so it didn’t pass our automated approver."), $v);
+    elseif ($x['reason'] === 'outside') $lines[] = t(__T("Unfortunately, it looks like it’s outside Philadelphia, and we only list programs that serve Philly schools and families, so it didn’t pass our automated approver."), $v);
+    elseif ($x['reason'] === 'no-own-site') $lines[] = t(__T("Unfortunately, we weren’t able to verify it on the program’s own website, so it didn’t pass our automated approver."), $v);
+    elseif ($x['reason'] === 'closed') $lines[] = t(__T("Unfortunately, the program’s own website says it isn’t running right now, so it didn’t pass our automated approver."), $v);
+    else $lines[] = t(__T("Unfortunately, it didn’t pass our automated approver."), $v);
+    $lines[] = t(__T("Please reach out to {contact} if you’d like the program to be added, or just reply to this email, and we’ll take another look."), $v);
   }
   $lines = array_values(array_filter($lines, function ($s) { return $s !== ''; }));
   return array($subject, $head, $lines, $button, $url, $why);
