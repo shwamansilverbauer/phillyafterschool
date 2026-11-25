@@ -22252,6 +22252,12 @@
         "distance": "about a fifth of a mile southeast, on 27th St",
         "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the playground.",
         "checked": "2026-11-23"
+      },
+      "peirce": {
+        "relation": "nearby",
+        "distance": "about a third of a mile northwest, on 27th St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the playground.",
+        "checked": "2026-11-25"
       }
     }
   },
@@ -23785,5 +23791,981 @@
         "checked": "2026-11-24"
       }
     }
+  },
+  {
+    "id": "sunrise-bregy",
+    "name": "Sunrise of Philadelphia at Bregy",
+    "what": "After-school program inside Bregy from Sunrise of Philadelphia, which Bregy names as its Out-of-School Time provider",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "Sunrise",
+      "OST",
+      "homework help",
+      "Bregy",
+      "South Philadelphia",
+      "Packer Park",
+      "childcare"
+    ],
+    "address": "1700 Bigler St",
+    "grades": null,
+    "gradeNote": "For Bregy students; ask the school which grades",
+    "hours": "3:40 to 6:00 pm, Monday to Friday, according to Bregy’s own site.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Not published for Bregy. Sunrise says its after-school programs are free at all of its sites, but its list of sites doesn’t name Bregy, so ask the school.",
+    "phone": "215-400-8210",
+    "email": "",
+    "website": "https://www.sunriseofphila.org/school-year",
+    "register": {
+      "how": "school",
+      "note": "Bregy’s site says enrollment needs an application from a parent or guardian. Ask the school office (215-400-8210) for it."
+    },
+    "note": "Bregy’s own site says the Sunrise program is its Out-of-School Time provider, in person Monday to Friday from 3:40 to 6:00 pm, with summer programming too. Sunrise’s own list of sites doesn’t name Bregy and the City’s program locator doesn’t list Sunrise at Bregy this year, so ask the school how to sign up and whether it costs anything.",
+    "sources": [
+      {
+        "label": "F. Amedee Bregy: after-school and summer programs",
+        "url": "https://bregy.philasd.org/"
+      },
+      {
+        "label": "Sunrise of Philadelphia: school-year program",
+        "url": "https://www.sunriseofphila.org/school-year"
+      }
+    ],
+    "lastVerified": "2026-11-25",
+    "schools": {
+      "bregy": {
+        "relation": "onsite",
+        "note": "Bregy’s own site names the Sunrise program as its Out-of-School Time provider.",
+        "sources": [
+          {
+            "label": "F. Amedee Bregy: after-school and summer programs",
+            "url": "https://bregy.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-25"
+      }
+    }
+  },
+  {
+    "id": "bregy-clubs",
+    "name": "School clubs and partners",
+    "what": "Clubs, teams and partners F. Amedee Bregy School names on its own site: Math 24, knitting, tutoring, lacrosse, football and Jr. STEM Academy",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "Math 24",
+      "knitting",
+      "tutoring",
+      "lacrosse",
+      "football",
+      "STEM",
+      "library",
+      "Bregy"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-8210",
+    "email": "",
+    "website": "https://bregy.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-8210)."
+    },
+    "note": "Bregy’s own site lists these clubs, sports and community partners without days, times or grades (intramurals are for K–5 and the Middle Grades Conference for 6–8). It says the National Elementary and Junior Honor Society are forthcoming. Ask the office what meets after school.",
+    "sources": [
+      {
+        "label": "F. Amedee Bregy: programs, clubs and partners",
+        "url": "https://bregy.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-25",
+    "schools": {
+      "bregy": {
+        "relation": "onsite",
+        "checked": "2026-11-25"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Math 24 Club",
+        "what": "A math club",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Knitting Club",
+        "what": "A knitting club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Tutorial Club",
+        "what": "Tutoring",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Safeties",
+        "what": "Student safety patrol",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "Lacrosse",
+        "what": "A lacrosse team; the site names Eyekonz with it",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Football",
+        "what": "A football team",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Elementary intramural sports",
+        "what": "Sports fundamentals and team-building",
+        "tags": [
+          "movement"
+        ],
+        "grades": "K-5"
+      },
+      {
+        "name": "Middle Grades Conference",
+        "what": "Interscholastic sports",
+        "tags": [
+          "movement"
+        ],
+        "grades": "6-8"
+      },
+      {
+        "name": "Community College of Philadelphia Jr. STEM Academy",
+        "what": "Named as a community partner",
+        "tags": [
+          "stem"
+        ],
+        "roster": false
+      },
+      {
+        "name": "UNICO",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "Free Library of Philadelphia, Donatucci Branch",
+        "what": "Named as a community partner",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "PAWS",
+        "what": "Named as a community partner; the site also mentions a Philadelphia Animal Welfare Society project",
+        "tags": [],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "ymca-hartranft",
+    "name": "YMCA Out of School Time at Hartranft",
+    "what": "Free after care inside Hartranft from the Greater Philadelphia YMCA: homework help, STEM, literacy, art, fitness and social-emotional learning",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "STEM",
+      "art",
+      "YMCA",
+      "Y",
+      "OST",
+      "Hartranft",
+      "North Philadelphia"
+    ],
+    "address": "720 W Cumberland St",
+    "grades": "K-8",
+    "gradeNote": "The YMCA lists John F. Hartranft School for kindergarten to 8th grade",
+    "hours": "From the end of the school day to 5:30 pm, according to the YMCA’s page.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Free. The YMCA says the program is offered at no charge at the schools it lists.",
+    "price": "free",
+    "phone": "215-608-5823",
+    "email": "",
+    "website": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
+    "register": {
+      "how": "online",
+      "url": "https://gpy.tfaforms.net/134",
+      "label": "Apply",
+      "note": "The YMCA’s page links this application. Applying doesn’t guarantee a place: the YMCA confirms enrollment afterwards."
+    },
+    "note": "The YMCA’s page lists John F. Hartranft School among the District schools where it runs its free, City-funded after-school program. The City’s program data also has the YMCA at Hartranft this school year, but the City’s locator page doesn’t show that entry. Hartranft’s own site doesn’t mention the YMCA, so ask the school office too.",
+    "sources": [
+      {
+        "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+        "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+      }
+    ],
+    "lastVerified": "2026-11-25",
+    "schools": {
+      "hartranft": {
+        "relation": "onsite",
+        "note": "The Greater Philadelphia YMCA’s own page lists John F. Hartranft School as one of its funded after-school sites, for kindergarten to 8th grade.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+          }
+        ],
+        "checked": "2026-11-25"
+      }
+    }
+  },
+  {
+    "id": "hartranft-clubs",
+    "name": "School clubs and teams",
+    "what": "Clubs and teams John F. Hartranft School names on its own site: a Hispanic club, Mighty Writers, dance, band and strings, art, music, basketball and volleyball",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "Mighty Writers",
+      "writing",
+      "dance",
+      "band",
+      "strings",
+      "art",
+      "music",
+      "basketball",
+      "volleyball",
+      "tutoring",
+      "Hartranft"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-7090",
+    "email": "",
+    "website": "https://hartranft.philasd.org/about-us/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-7090)."
+    },
+    "note": "Hartranft’s About Us page lists these as its extracurricular activities, without days, times or grades. Ask the office what meets after school this year.",
+    "sources": [
+      {
+        "label": "John F. Hartranft: About Us",
+        "url": "https://hartranft.philasd.org/about-us/"
+      }
+    ],
+    "lastVerified": "2026-11-25",
+    "schools": {
+      "hartranft": {
+        "relation": "onsite",
+        "checked": "2026-11-25"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Hispanic Club",
+        "what": "A Hispanic culture club",
+        "tags": []
+      },
+      {
+        "name": "Mighty Writers",
+        "what": "Writing with Mighty Writers, named among the school’s activities",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Girls’ Club (GEMS)",
+        "what": "A girls’ club",
+        "tags": []
+      },
+      {
+        "name": "Gentlemen’s Club",
+        "what": "A boys’ club",
+        "tags": []
+      },
+      {
+        "name": "Dance Club",
+        "what": "Dance",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Boys Basketball Team",
+        "what": "Basketball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Girls Volleyball Team",
+        "what": "Volleyball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Band and Strings",
+        "what": "Band and string instruments",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Art Club",
+        "what": "Art",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Panther Press",
+        "what": "The school newspaper",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Music Club",
+        "what": "Music",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Student Voices",
+        "what": "A student voice group",
+        "tags": []
+      },
+      {
+        "name": "Math and reading clubs and tutoring",
+        "what": "Math and reading help",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "what": "Student government",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "Saturday PSSA Prep Academy",
+        "what": "Saturday test preparation",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "launch-philly-peirce",
+    "name": "Launch Philly at Peirce",
+    "what": "Free before and after care inside Peirce from Launch Philly (Communities In Schools), the school’s Extended Day, Extended Year program, with meals",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "before care",
+      "free",
+      "meals",
+      "Launch Philly",
+      "Communities In Schools",
+      "Launch of Philadelphia",
+      "Extended Day Extended Year",
+      "EDEY",
+      "OST",
+      "Peirce",
+      "North Philadelphia"
+    ],
+    "address": "2300 W Cambria St",
+    "grades": "K-5",
+    "gradeNote": "The City’s locator lists kindergarten to 5th grade",
+    "hours": "3:30 to 6:00 pm, Monday to Friday, September 8, 2026 to June 9, 2027, according to the City’s program locator. Peirce’s site says there is free before-school care too.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free, with meals, according to the City’s program locator.",
+    "price": "free",
+    "phone": "267-246-5240",
+    "email": "",
+    "website": "https://launchphilly.org/",
+    "register": {
+      "how": "phone",
+      "note": "The City’s locator says registration is required, from September 8, 2026 to June 9, 2027. Peirce’s site says each part (before and after care, break camps, summer) needs its own sign-up. Call the program at 267-246-5240 or ask the school."
+    },
+    "note": "Peirce’s own site says it is an Extended Day, Extended Year school with free before- and after-school care, winter and spring break camps and six weeks of summer camp. The City’s locator lists Launch Philly (Communities In Schools of Philadelphia) running it at Peirce, with meals and no transportation. Launch Philly’s own site couldn’t be read automatically, so ask the program about activities.",
+    "sources": [
+      {
+        "label": "City program locator: Launch Philly at T.M. Peirce",
+        "url": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56"
+      },
+      {
+        "label": "Thomas M. Peirce: Extended Day, Extended Year",
+        "url": "https://tmpeirce.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-25",
+    "schools": {
+      "peirce": {
+        "relation": "onsite",
+        "note": "The City’s locator lists Launch Philly at Peirce this school year, and Peirce’s own site says it is an Extended Day, Extended Year school with free before- and after-school care.",
+        "sources": [
+          {
+            "label": "City program locator: Launch Philly at T.M. Peirce",
+            "url": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56"
+          },
+          {
+            "label": "Thomas M. Peirce: Extended Day, Extended Year",
+            "url": "https://tmpeirce.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-25"
+      }
+    }
+  },
+  {
+    "id": "peirce-clubs",
+    "name": "School clubs and partners",
+    "what": "Clubs, teams and partners Thomas M. Peirce School names on its own site: Building Stars STEAM, step, cheer, basketball, STARS and Steamworks",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "STEAM",
+      "step team",
+      "cheer",
+      "basketball",
+      "Steamworks",
+      "STARS",
+      "Peirce"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-7020",
+    "email": "",
+    "website": "https://tmpeirce.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-7020)."
+    },
+    "note": "Peirce’s own site lists these clubs and community partners without days, times or grades. Ask the office what meets after school.",
+    "sources": [
+      {
+        "label": "Thomas M. Peirce: clubs and community partnerships",
+        "url": "https://tmpeirce.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-25",
+    "schools": {
+      "peirce": {
+        "relation": "onsite",
+        "checked": "2026-11-25"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Building Stars STEAM",
+        "what": "A STEAM club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Step Team",
+        "what": "Step",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Cheer/STEP",
+        "what": "Cheer and step",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Basketball",
+        "what": "Basketball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "STARS",
+        "what": "Named as a community partner; the site doesn’t say what it runs",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "Steamworks",
+        "what": "Named as a community partner",
+        "tags": [
+          "stem"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Free Library of Philadelphia",
+        "what": "Named as a community partner",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "sunrise-barry",
+    "name": "Sunrise of Philadelphia at Barry",
+    "what": "Free after-school program inside Barry, with small-group academic help, a snack, STEM and social-emotional activities",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "Sunrise",
+      "homework help",
+      "Barry",
+      "West Philadelphia",
+      "childcare"
+    ],
+    "address": "5900 Race St",
+    "grades": "K-8",
+    "gradeNote": "For Barry students",
+    "hours": "3:30 to 5:45 pm, Monday to Friday, September 1, 2026 to June 8, 2027, according to the City’s program locator.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:45 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "445-221-2336",
+    "email": "",
+    "website": "https://www.sunriseofphila.org/school-year",
+    "register": {
+      "how": "online",
+      "url": "https://www.sunriseofphila.org/services-8",
+      "note": "Sunrise’s enrollment page has its K–8 application; choose Barry. The City’s locator says the program is only open to Barry students and registration is open until June 1, 2027."
+    },
+    "note": "Sunrise’s own page lists Barry Elementary School among its sites, at 5900 Race St, with the phone number used here, and says its after-school programs are free at all of its sites. The City’s locator lists it for kindergarten to 8th grade, with a healthy snack and no transportation.",
+    "sources": [
+      {
+        "label": "Sunrise of Philadelphia: school-year program and sites",
+        "url": "https://www.sunriseofphila.org/school-year"
+      },
+      {
+        "label": "Sunrise enrollment",
+        "url": "https://www.sunriseofphila.org/services-8"
+      },
+      {
+        "label": "City program locator: Sunrise @ Barry",
+        "url": "https://www.phila.gov/ost/program-locator/?address=5900+Race+St&resource=ost_244"
+      }
+    ],
+    "lastVerified": "2026-11-25",
+    "schools": {
+      "barry": {
+        "relation": "onsite",
+        "note": "Sunrise’s own list of sites names Barry Elementary School, and the City’s locator lists Sunrise at Barry this school year.",
+        "sources": [
+          {
+            "label": "Sunrise of Philadelphia: school-year program and sites",
+            "url": "https://www.sunriseofphila.org/school-year"
+          },
+          {
+            "label": "City program locator: Sunrise @ Barry",
+            "url": "https://www.phila.gov/ost/program-locator/?address=5900+Race+St&resource=ost_244"
+          }
+        ],
+        "checked": "2026-11-25"
+      }
+    }
+  },
+  {
+    "id": "barry-clubs",
+    "name": "School clubs and partners",
+    "what": "Clubs and partners John Barry School names on its own site: homework club, flag football, basketball, chess, running, gardening, Power Up and youth football",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "homework club",
+      "flag football",
+      "basketball",
+      "chess",
+      "running",
+      "gardening",
+      "tutoring",
+      "mentoring",
+      "Big Brothers Big Sisters",
+      "WePAC",
+      "football",
+      "Barry"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-7640",
+    "email": "",
+    "website": "https://barry.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-7640)."
+    },
+    "note": "Barry’s own site lists these clubs and community partners without days, times or grades. The homework club meets early in the morning. Ask the office what meets after school.",
+    "sources": [
+      {
+        "label": "John Barry: clubs and community partners",
+        "url": "https://barry.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-25",
+    "schools": {
+      "barry": {
+        "relation": "onsite",
+        "checked": "2026-11-25"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Early Morning Homework Club",
+        "what": "Homework help before school",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Girls Flag Football",
+        "what": "Flag football for girls",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Intramural Basketball",
+        "what": "Basketball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Chess Club",
+        "what": "Chess",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Run Club",
+        "what": "Running",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Tutoring",
+        "what": "Tutoring",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Gardening",
+        "what": "Gardening",
+        "tags": [
+          "nature"
+        ]
+      },
+      {
+        "name": "Power Up/Big Brothers Big Sisters",
+        "what": "Mentoring, named as a community partner",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "WePAC",
+        "what": "Named as a community partner",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Eat Right Philadelphia",
+        "what": "A nutrition program, named as a community partner",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "West Philly Panthers youth football",
+        "what": "Youth football, named as a community partner",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Zone 6 West Philly youth football",
+        "what": "Youth football, named as a community partner",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "methodist-services-welsh",
+    "name": "Methodist Services after school at Welsh",
+    "what": "Free after-school program inside Welsh from Methodist Services: homework help, arts, sports, STEM and youth leadership",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework help",
+      "Methodist Services",
+      "MSHN",
+      "OST",
+      "Welsh",
+      "North Philadelphia"
+    ],
+    "address": "2331 N 4th St",
+    "grades": "K-8",
+    "gradeNote": "The City’s locator lists kindergarten to 8th grade",
+    "hours": "3:30 to 6:00 pm, Monday to Friday, September 11, 2026 to June 9, 2027, according to the City’s program locator.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free, according to the City’s program locator.",
+    "price": "free",
+    "phone": "215-877-1925",
+    "email": "",
+    "website": "https://mshn.org/service/education/",
+    "register": {
+      "how": "phone",
+      "note": "The City’s locator says registration is required, from August 10, 2026 to June 9, 2027. Methodist Services gives 215-877-1925 ext. 114 for its Out of School Time programs."
+    },
+    "note": "The City’s locator lists Methodist Services at John Welsh Elementary this school year, with a healthy snack and no transportation. Methodist Services’ own site describes its after-school care for ages 5 to 12 but doesn’t list its school sites, so ask it about Welsh.",
+    "sources": [
+      {
+        "label": "City program locator: Methodist Services at Welsh",
+        "url": "https://www.phila.gov/ost/program-locator/?address=2331+N+4th+St&resource=ost_168"
+      },
+      {
+        "label": "Methodist Services: Out of School Time",
+        "url": "https://mshn.org/service/education/"
+      }
+    ],
+    "lastVerified": "2026-11-25",
+    "schools": {
+      "welsh": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists Methodist Services’ after-school program at John Welsh Elementary this school year.",
+        "sources": [
+          {
+            "label": "City program locator: Methodist Services at Welsh",
+            "url": "https://www.phila.gov/ost/program-locator/?address=2331+N+4th+St&resource=ost_168"
+          }
+        ],
+        "checked": "2026-11-25"
+      }
+    }
+  },
+  {
+    "id": "welsh-partners",
+    "name": "School partners",
+    "what": "Partners John Welsh School names on its own site that work with children: Phila ASAP, Taller Puertorriqueño’s art program, Philly Beatz, Kensington Soccer Club and others",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "partners",
+      "chess",
+      "ASAP",
+      "art",
+      "Taller Puertorriqueño",
+      "music",
+      "Philly Beatz",
+      "soccer",
+      "mindfulness",
+      "Welsh"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-7130",
+    "email": "",
+    "website": "https://welsh.philasd.org/community-partnership/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-7130)."
+    },
+    "note": "Welsh’s own site lists these among its community partnerships, without saying what each runs, when, or for which grades. Ask the office which meet after school.",
+    "sources": [
+      {
+        "label": "John Welsh: community partnerships",
+        "url": "https://welsh.philasd.org/community-partnership/"
+      }
+    ],
+    "lastVerified": "2026-11-25",
+    "schools": {
+      "welsh": {
+        "relation": "onsite",
+        "checked": "2026-11-25"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Phila ASAP",
+        "what": "Named as a community partner",
+        "tags": [
+          "games"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Taller Puertorriqueño Art Program",
+        "what": "An art program, named as a community partner",
+        "tags": [
+          "art"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Philly Beatz",
+        "what": "Named as a community partner",
+        "tags": [
+          "music"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Mindfulness through Movement",
+        "what": "Named as a community partner",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Kensington Soccer Club",
+        "what": "Soccer, named as a community partner",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Traveling Tree House",
+        "what": "Named as a community partner",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "Global Citizen",
+        "what": "Named as a community partner",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "C.A.D.E Kids",
+        "what": "Named as a community partner",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "Al Maun (AMP)",
+        "what": "Named as a community partner",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "APM",
+        "what": "Named as a community partner",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "Sean’s Helping Hands",
+        "what": "Named as a community partner",
+        "tags": [],
+        "roster": false
+      }
+    ]
   }
 ]

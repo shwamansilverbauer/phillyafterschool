@@ -3722,5 +3722,134 @@
       "The school’s site has an after-school section that points to the City’s program locator, and its community partnerships section is empty.",
       "If you know a program that serves A.S. Jenks and isn’t here, send it in and it goes on this page."
     ]
+  },
+  {
+    "id": "bregy",
+    "name": "F. Amedee Bregy School",
+    "shortName": "Bregy",
+    "aliases": [
+      "F. Amedee Bregy",
+      "Amedee Bregy",
+      "Bregy Elementary",
+      "Bregy Elementary School",
+      "Bregy School"
+    ],
+    "address": "1700 Bigler St, Philadelphia, PA 19145",
+    "neighborhood": "Girard Estates",
+    "grades": "PK-8",
+    "dismissal": "3:39 pm",
+    "dismissalNote": "the school’s site gives the school day as 9:00 am to 3:39 pm, with breakfast from 8:45 am; on half days school ends at 12:39 pm",
+    "phone": "215-400-8210",
+    "website": "https://bregy.philasd.org/",
+    "lastReviewed": "2026-11-25",
+    "added": "2026-11-25",
+    "notes": [
+      "Bregy’s own site says the Sunrise program is its after-school (Out-of-School Time) provider, Monday to Friday from 3:40 to 6:00 pm, and that families apply for a place. It has a listing here. Sunrise’s own list of its sites doesn’t name Bregy, so ask the school office how to apply.",
+      "The site also names its clubs and teams (Math 24, knitting, tutoring, safeties, lacrosse, football and intramurals) and its community partners (Community College of Philadelphia’s Jr. STEM Academy, UNICO, the Donatucci branch of the Free Library and PAWS). They are listed here as school clubs and partners. Its violin and band lessons are part of the school day.",
+      "Half days end at 12:39 pm. Ask Sunrise whether it runs on half days.",
+      "If you know a program that serves Bregy and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "hartranft",
+    "name": "John F. Hartranft School",
+    "shortName": "Hartranft",
+    "aliases": [
+      "John F. Hartranft",
+      "John Hartranft",
+      "Hartranft Elementary",
+      "Hartranft School"
+    ],
+    "address": "720 W Cumberland St, Philadelphia, PA 19133",
+    "neighborhood": "North Philadelphia",
+    "grades": "K-8",
+    "dismissalNote": "the school’s site doesn’t post a bell schedule; ask the office",
+    "phone": "215-400-7090",
+    "website": "https://hartranft.philasd.org/",
+    "lastReviewed": "2026-11-25",
+    "added": "2026-11-25",
+    "notes": [
+      "The Greater Philadelphia YMCA lists John F. Hartranft School among the District schools where it runs its free, City-funded after-school program, for kindergarten to 8th grade, until 5:30 pm. It has a listing here.",
+      "Hartranft’s own site lists its clubs and teams, among them a Hispanic club, Mighty Writers, a girls’ club, dance, basketball, volleyball, band and strings, art, music and tutoring, and a Saturday PSSA prep academy. They are listed here as school clubs; the site doesn’t give days or times, so ask the office.",
+      "If you know a program that serves Hartranft and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "peirce",
+    "name": "Thomas M. Peirce School",
+    "shortName": "Peirce",
+    "aliases": [
+      "Thomas M. Peirce",
+      "T.M. Peirce",
+      "T.M Peirce",
+      "TM Peirce",
+      "Peirce Elementary",
+      "Peirce School"
+    ],
+    "address": "2300 W Cambria St, Philadelphia, PA 19132",
+    "neighborhood": "North Philadelphia",
+    "grades": "PK-5",
+    "dismissal": "3:24 pm",
+    "dismissalNote": "the school’s site gives the school day as 8:45 am to 3:24 pm, with breakfast from 8:15 am",
+    "phone": "215-400-7020",
+    "website": "https://tmpeirce.philasd.org/",
+    "lastReviewed": "2026-11-25",
+    "added": "2026-11-25",
+    "notes": [
+      "Peirce is an Extended Day, Extended Year school: its site says the program offers free before- and after-school care, winter and spring break camps and summer camp, with a separate sign-up for each. The City’s program locator lists Launch Philly (Communities In Schools) running it at Peirce this school year, 3:30 to 6:00 pm. It has a listing here.",
+      "The site also names its clubs and teams (Building Stars STEAM, step team, cheer and step, basketball) and two partners that work with children (STARS and Steamworks). They are listed here as school clubs and partners.",
+      "If you know a program that serves Peirce and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "barry",
+    "name": "John Barry School",
+    "shortName": "Barry",
+    "aliases": [
+      "Commodore John Barry",
+      "John Barry",
+      "Barry Elementary",
+      "Barry Elementary School",
+      "John Barry Elementary"
+    ],
+    "address": "5900 Race St, Philadelphia, PA 19139",
+    "neighborhood": "West Philadelphia",
+    "grades": "PK-8",
+    "dismissal": "3:30 pm",
+    "dismissalNote": "the school’s site gives the school day as 9:30 am to 3:30 pm, with breakfast from 8:35 am",
+    "phone": "215-400-7640",
+    "website": "https://barry.philasd.org/",
+    "lastReviewed": "2026-11-25",
+    "added": "2026-11-25",
+    "notes": [
+      "Sunrise of Philadelphia runs a free after-school program inside Barry. Sunrise’s own page lists Barry Elementary among its sites, and the City’s program locator gives 3:30 to 5:45 pm this school year. It has a listing here.",
+      "Barry’s own site names its clubs (an early-morning homework club, girls’ flag football, intramural basketball, chess, a run club, tutoring and gardening) and partners that work with children, including Big Brothers Big Sisters’ Power Up, WePAC and two youth football teams. They are listed here as school clubs and partners.",
+      "If you know a program that serves Barry and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "welsh",
+    "name": "John Welsh School",
+    "shortName": "Welsh",
+    "aliases": [
+      "John Welsh",
+      "Welsh Elementary",
+      "Welsh School",
+      "John Welsh Elementary"
+    ],
+    "address": "2331 N 4th St, Philadelphia, PA 19133",
+    "neighborhood": "North Philadelphia",
+    "grades": "K-8",
+    "dismissal": "3:39 pm",
+    "dismissalNote": "the school’s site gives the school day as 9:00 am to 3:39 pm",
+    "phone": "215-400-7130",
+    "website": "https://welsh.philasd.org/",
+    "lastReviewed": "2026-11-25",
+    "added": "2026-11-25",
+    "notes": [
+      "The City’s program locator lists Methodist Services’ free after-school program at Welsh this school year, Monday to Friday from 3:30 to 6:00 pm, for kindergarten to 8th grade. It has a listing here.",
+      "Welsh’s own site names its community partners. Those that work with children, such as Phila ASAP, Taller Puertorriqueño’s art program, Philly Beatz and Kensington Soccer Club, are listed here as school partners; the site doesn’t say which run after school, so ask the office.",
+      "If you know a program that serves Welsh and isn’t here, send it in and it goes on this page."
+    ]
   }
 ]
