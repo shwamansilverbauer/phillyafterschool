@@ -242,7 +242,7 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
       $db->prepare('UPDATE claims SET status = ?, decided = ? WHERE id = ?')->execute(array($to, time(), $id));
       $n = $name($c['listing']);
       if ($to === 'ok') tell($c['email'], 'Your claim on ' . $n . ' is approved', 'Hi ' . $c['first'] . ",\n\nYour claim on “" . $n . '” at ' . $SITE . ' is approved. The listing now shows as claimed, and you can send changes to it here:' . "\n" . $SITE_URL . '/managers/');
-      else tell($c['email'], 'About your claim on ' . $n, 'Hi ' . $c['first'] . ",\n\nWe couldn’t confirm your claim on “" . $n . '” at ' . $SITE . ', so it has been ' . ($do === 'claim_remove' ? 'removed' : 'declined') . '. If that looks wrong, reply to this email and tell us how you’re connected to the program.');
+      else tell($c['email'], 'About your claim on ' . $n, 'Hi ' . $c['first'] . ",\n\nThanks so much for claiming “" . $n . '” on ' . $SITE . '! Unfortunately, we weren’t able to confirm that you run it, so the claim has been ' . ($do === 'claim_remove' ? 'removed' : 'declined') . ' for now.' . "\n\n" . 'If we got this wrong, please reach out to ' . $FROM . ' or just reply to this email, tell us how you’re connected to the program, and we’ll take another look.');
       $msg = $to === 'ok' ? 'Approved, and they’ve been told.' : 'Done, and they’ve been told.';
     }
   } elseif ($ok && in_array($do, array('edit_done', 'edit_no'), true)) {
@@ -251,7 +251,7 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
       $db->prepare('UPDATE edits SET status = ?, decided = ? WHERE id = ?')->execute(array($do === 'edit_done' ? 'done' : 'declined', time(), $id));
       $n = $name($x['listing']);
       if ($do === 'edit_done') tell($x['email'], 'Your change to ' . $n . ' is published', 'Hi ' . $x['first'] . ",\n\nThe change you sent for “" . $n . '” is on the site now. Have a look, and send another if anything is off:' . "\n" . $SITE_URL . '/managers/');
-      else tell($x['email'], 'About the change you sent for ' . $n, 'Hi ' . $x['first'] . ",\n\nWe weren’t able to make the change you sent for “" . $n . '”, usually because we couldn’t find it on the program’s own website. Reply to this email if you’d like to talk it through.');
+      else tell($x['email'], 'About the change you sent for ' . $n, 'Hi ' . $x['first'] . ",\n\nThanks so much for sending a change for “" . $n . '”! Unfortunately, we weren’t able to make it this time, usually because we couldn’t find it on the program’s own website.' . "\n\n" . 'Please reach out to ' . $FROM . ' or just reply to this email if you’d like to talk it through. We’re happy to help.');
       $msg = $do === 'edit_done' ? 'Marked published, and they’ve been told.' : 'Declined, and they’ve been told.';
     }
   }
