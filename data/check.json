@@ -1,12 +1,12 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. docs/listings.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 404,
-    "pagesNeedingABrowser": 71,
+    "pages": 411,
+    "pagesNeedingABrowser": 74,
     "pagesNeedingAPerson": 21,
-    "links": 386,
-    "pickupLinks": 134,
-    "pickupOnAStoredList": 113,
+    "links": 392,
+    "pickupLinks": 135,
+    "pickupOnAStoredList": 114,
     "pickupFromAThirdPartyList": 0,
     "pickupOnItsOwnSource": 21,
     "pickupWithNothingBehindIt": 0,
@@ -3056,6 +3056,31 @@
       "checked": "2026-11-23"
     },
     {
+      "program": "as-jenks-clubs",
+      "school": "as-jenks",
+      "relation": "onsite",
+      "checked": "2026-11-24"
+    },
+    {
+      "program": "beehive-at-bok",
+      "school": "as-jenks",
+      "relation": "pickup",
+      "checked": "2026-11-24",
+      "basis": "list",
+      "list": {
+        "where": "Beehive @ Bok, 2026-2027",
+        "read": "2026-11-10",
+        "how": "browser",
+        "by": "provider"
+      }
+    },
+    {
+      "program": "cyba-basketball",
+      "school": "dick",
+      "relation": "onsite",
+      "checked": "2026-11-24"
+    },
+    {
       "program": "dick-partners",
       "school": "dick",
       "relation": "onsite",
@@ -3064,6 +3089,12 @@
     {
       "program": "dobson-clubs",
       "school": "dobson",
+      "relation": "onsite",
+      "checked": "2026-11-24"
+    },
+    {
+      "program": "fitzpatrick-clubs",
+      "school": "fitzpatrick",
       "relation": "onsite",
       "checked": "2026-11-24"
     },
@@ -3081,6 +3112,12 @@
       "basis": "own-source"
     },
     {
+      "program": "pyn-fitzpatrick",
+      "school": "fitzpatrick",
+      "relation": "onsite",
+      "checked": "2026-11-24"
+    },
+    {
       "program": "roxy-after-school",
       "school": "shawmont",
       "relation": "pickup",
@@ -3096,6 +3133,12 @@
     {
       "program": "shawmont-clubs",
       "school": "shawmont",
+      "relation": "onsite",
+      "checked": "2026-11-24"
+    },
+    {
+      "program": "ymca-base-fitzpatrick",
+      "school": "fitzpatrick",
       "relation": "onsite",
       "checked": "2026-11-24"
     }
@@ -3521,6 +3564,15 @@
       "lists": []
     },
     {
+      "url": "https://ct.caseworthy.net/portal/default.aspx?CustomerID=PYN",
+      "how": "fetch",
+      "programs": [
+        "pyn-conwell",
+        "pyn-fitzpatrick"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://docs.google.com/document/d/1PJFZfaEZrqXjfG9UttnCSmhLACeUdSQRAVIw7VmdG2c",
       "how": "fetch",
       "programs": [
@@ -3562,6 +3614,15 @@
       "programs": [
         "girls-on-the-run",
         "gpca-fell"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://fitzpatrick.philasd.org/community-partnerships/",
+      "how": "fetch",
+      "programs": [
+        "ymca-base-fitzpatrick",
+        "pyn-fitzpatrick"
       ],
       "lists": []
     },
@@ -3875,6 +3936,15 @@
       "lists": []
     },
     {
+      "url": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+      "how": "fetch",
+      "programs": [
+        "christian-street-ymca",
+        "ymca-base-fitzpatrick"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.phillykidzinitiative.com/",
       "how": "fetch",
       "programs": [
@@ -3889,6 +3959,15 @@
       "programs": [
         "philly-kidz-greenberg",
         "philly-kidz-anne-frank"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.pyninc.org/aimafterschool",
+      "how": "fetch",
+      "programs": [
+        "pyn-conwell",
+        "pyn-fitzpatrick"
       ],
       "lists": []
     },
@@ -3956,6 +4035,14 @@
       "how": "fetch",
       "programs": [
         "arden-drama-school"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://asjenks.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "as-jenks-clubs"
       ],
       "lists": []
     },
@@ -4226,10 +4313,29 @@
       "lists": []
     },
     {
-      "url": "https://ct.caseworthy.net/portal/default.aspx?CustomerID=PYN",
-      "how": "fetch",
+      "url": "https://cybabasketball.org/",
+      "how": "browser",
+      "why": "The pages are built in the browser: a plain fetch on 2026-11-24 returned none of the program text.",
       "programs": [
-        "pyn-conwell"
+        "cyba-basketball"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program",
+      "how": "browser",
+      "why": "The pages are built in the browser: a plain fetch on 2026-11-24 returned none of the program text.",
+      "programs": [
+        "cyba-basketball"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://cybabasketball.org/reg",
+      "how": "browser",
+      "why": "The pages are built in the browser: a plain fetch on 2026-11-24 returned none of the program text.",
+      "programs": [
+        "cyba-basketball"
       ],
       "lists": []
     },
@@ -4246,6 +4352,14 @@
       "how": "fetch",
       "programs": [
         "byers-after-school"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit",
+      "how": "fetch",
+      "programs": [
+        "as-jenks-clubs"
       ],
       "lists": []
     },
@@ -4358,6 +4472,14 @@
       "how": "fetch",
       "programs": [
         "fitness-alive-south-philly"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+      "how": "fetch",
+      "programs": [
+        "fitzpatrick-clubs"
       ],
       "lists": []
     },
@@ -6504,14 +6626,6 @@
       "lists": []
     },
     {
-      "url": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
-      "how": "fetch",
-      "programs": [
-        "christian-street-ymca"
-      ],
-      "lists": []
-    },
-    {
       "url": "https://www.philaymca.org/child-care/school-age-care-programs/full-day-school-age-care/",
       "how": "fetch",
       "programs": [
@@ -6630,14 +6744,6 @@
       "how": "fetch",
       "programs": [
         "playarts-afterschool"
-      ],
-      "lists": []
-    },
-    {
-      "url": "https://www.pyninc.org/aimafterschool",
-      "how": "fetch",
-      "programs": [
-        "pyn-conwell"
       ],
       "lists": []
     },

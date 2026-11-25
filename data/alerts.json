@@ -338,8 +338,16 @@
       "name": "Shawmont"
     },
     {
+      "id": "fitzpatrick",
+      "name": "Fitzpatrick"
+    },
+    {
       "id": "dick",
       "name": "William Dick"
+    },
+    {
+      "id": "as-jenks",
+      "name": "A.S. Jenks"
     }
   ],
   "programs": [
@@ -2177,6 +2185,27 @@
       ]
     },
     {
+      "id": "ymca-base-fitzpatrick",
+      "name": "YMCA Before & After School Enrichment at Fitzpatrick",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "pyn-fitzpatrick",
+      "name": "PYN AIM Afterschool at Fitzpatrick",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "fitzpatrick-clubs",
+      "name": "School clubs at Fitzpatrick",
+      "parts": [
+        "after"
+      ]
+    },
+    {
       "id": "launch-philly-dick",
       "name": "Launch Philly Creative Kids at William Dick",
       "parts": [
@@ -2186,6 +2215,20 @@
     {
       "id": "dick-partners",
       "name": "School partners at William Dick",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "as-jenks-clubs",
+      "name": "School clubs at A.S. Jenks",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "cyba-basketball",
+      "name": "CYBA Free After School Sports Program at William Dick",
       "parts": [
         "after"
       ]
@@ -2497,6 +2540,23 @@
       "button": "See the page"
     },
     {
+      "id": "added-as-jenks",
+      "kind": "added",
+      "date": "2026-11-24",
+      "sendOn": "2026-11-24",
+      "expires": "2026-11-26",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "abram-s-jenks-school"
+      ],
+      "when": "New",
+      "title": "A.S. Jenks now has a page",
+      "text": "You asked to be told. 2 programs are listed for A.S. Jenks so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/as-jenks/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
       "id": "added-dick",
       "kind": "added",
       "date": "2026-11-24",
@@ -2509,7 +2569,7 @@
       ],
       "when": "New",
       "title": "William Dick now has a page",
-      "text": "You asked to be told. 2 programs are listed for William Dick so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "text": "You asked to be told. 3 programs are listed for William Dick so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/dick/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },
@@ -2528,6 +2588,23 @@
       "title": "Dobson now has a page",
       "text": "You asked to be told. 2 programs are listed for Dobson so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/dobson/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-fitzpatrick",
+      "kind": "added",
+      "date": "2026-11-24",
+      "sendOn": "2026-11-24",
+      "expires": "2026-11-26",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "a-l-fitzpatrick-school"
+      ],
+      "when": "New",
+      "title": "Fitzpatrick now has a page",
+      "text": "You asked to be told. 3 programs are listed for Fitzpatrick so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/fitzpatrick/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },
     {
@@ -3163,6 +3240,38 @@
       "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
       "url": "https://phillyafterschool.org/anne-frank/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Anne Frank’s week"
+    },
+    {
+      "id": "week-as-jenks-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "as-jenks"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at A.S. Jenks",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/as-jenks/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See A.S. Jenks’s week"
     },
     {
       "id": "week-bache-martin-2026-11-23",
@@ -3999,6 +4108,38 @@
       "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
       "url": "https://phillyafterschool.org/fell/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
       "button": "See Fell’s week"
+    },
+    {
+      "id": "week-fitzpatrick-2026-11-23",
+      "kind": "week",
+      "date": "2026-11-27",
+      "sendOn": "2026-11-22",
+      "expires": "2026-11-25",
+      "schools": [],
+      "programs": [],
+      "weeks": [
+        "fitzpatrick"
+      ],
+      "when": "Week of November 23",
+      "title": "This week at Fitzpatrick",
+      "text": "Wednesday: No school: Staff professional development. Thursday: No school: Thanksgiving recess. Friday: No school: Thanksgiving recess.",
+      "lines": [
+        {
+          "when": "Wednesday",
+          "what": "No school: Staff professional development"
+        },
+        {
+          "when": "Thursday",
+          "what": "No school: Thanksgiving recess"
+        },
+        {
+          "when": "Friday",
+          "what": "No school: Thanksgiving recess"
+        }
+      ],
+      "first": "Wednesday: no school, Staff professional development; Thursday: no school, Thanksgiving recess",
+      "url": "https://phillyafterschool.org/fitzpatrick/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
+      "button": "See Fitzpatrick’s week"
     },
     {
       "id": "week-gamp-2026-11-23",

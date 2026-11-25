@@ -4464,6 +4464,18 @@
           }
         ],
         "checked": "2026-11-10"
+      },
+      "as-jenks": {
+        "relation": "pickup",
+        "distance": "about two-thirds of a mile southwest of Bok",
+        "note": "Beehive’s list for Bok names “Jenks”, Monday to Friday, for pre-K to 3rd grade. Every other school on that list is in South Philadelphia, so this is read as A.S. Jenks; ask Beehive to confirm.",
+        "sources": [
+          {
+            "label": "Beehive After Care",
+            "url": "https://www.beehiveatbok.com/afterschool-and-summer-programs"
+          }
+        ],
+        "checked": "2026-11-24"
       }
     },
     "pickupLists": [
@@ -24294,6 +24306,298 @@
     ]
   },
   {
+    "id": "ymca-base-fitzpatrick",
+    "name": "YMCA Before & After School Enrichment at Fitzpatrick",
+    "what": "Paid after care inside Fitzpatrick from the Greater Philadelphia YMCA, for kindergarten to 4th grade",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "YMCA",
+      "Y",
+      "BASE",
+      "Fitzpatrick",
+      "Far Northeast",
+      "Millbrook"
+    ],
+    "address": "11061 Knights Rd",
+    "grades": "K-4",
+    "gradeNote": "The YMCA lists A.L. Fitzpatrick Elementary for kindergarten to 4th grade only",
+    "hours": "From the end of the school day to 6:00 pm, according to the YMCA’s page. Before care is only at the Christian Street YMCA.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Not published. The YMCA registers families for a package covering the whole year of care and any registration fees.",
+    "price": "paid",
+    "phone": "",
+    "email": "",
+    "website": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+    "register": {
+      "how": "online",
+      "url": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/",
+      "label": "Register",
+      "note": "The YMCA’s page says you register online for a package covering the entire year."
+    },
+    "note": "The YMCA’s page lists A.L. Fitzpatrick Elementary among its Philadelphia before and after school sites, for kindergarten to 4th grade only, and Fitzpatrick’s own site names the YMCA as a partner for grades K to 4. The price isn’t posted, so ask the YMCA.",
+    "sources": [
+      {
+        "label": "Greater Philadelphia YMCA: Before and After School",
+        "url": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/"
+      },
+      {
+        "label": "A. L. Fitzpatrick: community partnerships",
+        "url": "https://fitzpatrick.philasd.org/community-partnerships/"
+      }
+    ],
+    "lastVerified": "2026-11-24",
+    "schools": {
+      "fitzpatrick": {
+        "relation": "onsite",
+        "note": "The YMCA’s own page lists A.L. Fitzpatrick Elementary (kindergarten to 4th grade only), and Fitzpatrick’s community partners page names the YMCA for grades K to 4.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Before and After School",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/before-and-after-school/"
+          },
+          {
+            "label": "A. L. Fitzpatrick: community partnerships",
+            "url": "https://fitzpatrick.philasd.org/community-partnerships/"
+          }
+        ],
+        "checked": "2026-11-24"
+      }
+    }
+  },
+  {
+    "id": "pyn-fitzpatrick",
+    "name": "PYN AIM Afterschool at Fitzpatrick",
+    "what": "An after-school program for Fitzpatrick’s middle schoolers run by the Philadelphia Youth Network",
+    "types": [
+      "aftercare",
+      "academics"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "middle school",
+      "PYN",
+      "Philadelphia Youth Network",
+      "AIM",
+      "Fitzpatrick",
+      "Far Northeast",
+      "Millbrook"
+    ],
+    "address": "11061 Knights Rd",
+    "grades": "5-8",
+    "gradeNote": "Middle school; Fitzpatrick’s site names PYN for grades 5 to 8",
+    "hours": "Not published; ask PYN",
+    "cost": "Not published",
+    "phone": "267-502-3800",
+    "email": "afterschool@pyninc.org",
+    "website": "https://www.pyninc.org/aimafterschool",
+    "register": {
+      "how": "online",
+      "url": "https://ct.caseworthy.net/portal/default.aspx?CustomerID=PYN",
+      "label": "Enroll",
+      "note": "PYN says enrollment is open all year and that youth must be enrolled at one of its participating schools."
+    },
+    "note": "PYN’s own page lists A. L. Fitzpatrick School among its 2026–27 program locations, and Fitzpatrick’s community partners page names PYN for grades 5 to 8. PYN’s page doesn’t give days, hours or a price, so ask.",
+    "sources": [
+      {
+        "label": "PYN after school",
+        "url": "https://www.pyninc.org/aimafterschool"
+      },
+      {
+        "label": "A. L. Fitzpatrick: community partnerships",
+        "url": "https://fitzpatrick.philasd.org/community-partnerships/"
+      }
+    ],
+    "lastVerified": "2026-11-24",
+    "schools": {
+      "fitzpatrick": {
+        "relation": "onsite",
+        "note": "PYN’s own page lists A. L. Fitzpatrick School among its 2026–27 sites, and Fitzpatrick’s community partners page names PYN for grades 5 to 8.",
+        "sources": [
+          {
+            "label": "PYN after school",
+            "url": "https://www.pyninc.org/aimafterschool"
+          },
+          {
+            "label": "A. L. Fitzpatrick: community partnerships",
+            "url": "https://fitzpatrick.philasd.org/community-partnerships/"
+          }
+        ],
+        "checked": "2026-11-24"
+      }
+    }
+  },
+  {
+    "id": "fitzpatrick-clubs",
+    "name": "School clubs",
+    "what": "Clubs and middle-school sports A. L. Fitzpatrick lists for 2026–2027: chess, guitar, yoga, Girls on the Run, gardening, soccer and more",
+    "types": [
+      "clubs",
+      "movement",
+      "art",
+      "stem",
+      "games",
+      "nature",
+      "music"
+    ],
+    "keywords": [
+      "clubs",
+      "chess",
+      "guitar",
+      "yoga",
+      "Girls on the Run",
+      "gardening",
+      "tech",
+      "painting",
+      "crafts",
+      "basketball",
+      "soccer",
+      "track",
+      "Fitzpatrick"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-3060",
+    "email": "",
+    "website": "https://fitzpatrick.philasd.org/extracurricular-programs/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-3060)."
+    },
+    "note": "Fitzpatrick’s own site lists these as its 2026–2027 clubs and middle school intramural sports, without days or times. Ask the office which meet after dismissal.",
+    "sources": [
+      {
+        "label": "A. L. Fitzpatrick: extracurricular programs",
+        "url": "https://fitzpatrick.philasd.org/extracurricular-programs/"
+      }
+    ],
+    "lastVerified": "2026-11-24",
+    "schools": {
+      "fitzpatrick": {
+        "relation": "onsite",
+        "checked": "2026-11-24"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Basketball Skills Training Club",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Yoga",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Yearbook",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Crafting Club",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Tech Club",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Chess",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Painting Techniques",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Girls on the Run",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Gardening Club",
+        "tags": [
+          "nature"
+        ]
+      },
+      {
+        "name": "Middle School Student Council",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Guitar Club",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "PBIS",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "grades": "6-8",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Track and Field",
+        "grades": "6-8",
+        "tags": [
+          "movement"
+        ]
+      }
+    ],
+    "offers": [
+      "Basketball Skills Training Club",
+      "Yoga",
+      "Yearbook",
+      "Crafting Club",
+      "Tech Club",
+      "Chess",
+      "Painting Techniques",
+      "Girls on the Run",
+      "Gardening Club",
+      "Middle School Student Council",
+      "Guitar Club",
+      "PBIS",
+      "Soccer",
+      "Track and Field"
+    ]
+  },
+  {
     "id": "launch-philly-dick",
     "name": "Launch Philly Creative Kids at William Dick",
     "what": "Free after-school program inside William Dick from Launch Philly’s Creative Kids, for kindergarten to 8th grade, with meals",
@@ -24414,5 +24718,155 @@
       }
     ],
     "offers": []
+  },
+  {
+    "id": "as-jenks-clubs",
+    "name": "School clubs",
+    "what": "Clubs A.S. Jenks names in its 2026–2027 handbook: chess, drama, student leadership and safety patrol",
+    "types": [
+      "clubs",
+      "games",
+      "theater"
+    ],
+    "keywords": [
+      "clubs",
+      "chess",
+      "drama",
+      "student government",
+      "student council",
+      "safety patrol",
+      "Jenks",
+      "A.S. Jenks"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Varies by club; many are for older grades. Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-8240",
+    "email": "",
+    "website": "https://asjenks.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-8240)."
+    },
+    "note": "The school’s 2026–2027 handbook says clubs meet before, during or after school, mostly starting in October, and that three late pickups from an after-school club end a student’s place in it. It doesn’t say which clubs meet after school, or when.",
+    "sources": [
+      {
+        "label": "A.S. Jenks: parent and student handbook, 2026–2027",
+        "url": "https://docs.google.com/document/d/1mTqS--LMxKYhidAw-fix56ZbysiZ8ck1k9geIuVOATQ/edit"
+      },
+      {
+        "label": "Abram S. Jenks School",
+        "url": "https://asjenks.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-24",
+    "schools": {
+      "as-jenks": {
+        "relation": "onsite",
+        "checked": "2026-11-24"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Chess",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Drama",
+        "tags": [
+          "theater"
+        ]
+      },
+      {
+        "name": "Student Activity Leaders",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Safety Patrol",
+        "tags": [
+          "clubs"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Student Government",
+        "tags": [
+          "clubs"
+        ]
+      },
+      {
+        "name": "Student Council",
+        "tags": [
+          "clubs"
+        ]
+      }
+    ],
+    "offers": [
+      "Chess",
+      "Drama",
+      "Student Activity Leaders",
+      "Student Government",
+      "Student Council"
+    ]
+  },
+  {
+    "id": "cyba-basketball",
+    "name": "CYBA Free After School Sports Program",
+    "what": "Free after-school basketball training, scrimmages and character development from the Christian Youth Basketball Association, for ages 8 to 17",
+    "types": [
+      "movement"
+    ],
+    "keywords": [
+      "basketball",
+      "sports",
+      "after school",
+      "free",
+      "CYBA",
+      "Christian Youth Basketball Association",
+      "character development",
+      "William Dick"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ages 8 to 17",
+    "hours": "Not published; ask CYBA",
+    "cost": "Free, according to CYBA’s page.",
+    "price": "free",
+    "phone": "215-915-4243",
+    "email": "",
+    "website": "https://cybabasketball.org/",
+    "register": {
+      "how": "online",
+      "url": "https://cybabasketball.org/reg",
+      "label": "Register",
+      "note": "CYBA’s page says to register online and select your location."
+    },
+    "note": "CYBA’s page lists William Dick, Edmonds, Lamberton and McCloskey public schools as its after-school locations, without days or times. It is a faith-based program: CYBA says it uses the Bible for its character development. Ask which days it meets at each school.",
+    "sources": [
+      {
+        "label": "CYBA: After School Sports Program",
+        "url": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program"
+      }
+    ],
+    "lastVerified": "2026-11-24",
+    "schools": {
+      "dick": {
+        "relation": "onsite",
+        "note": "CYBA’s own page lists William Dick Public School as a location for its free after-school program. It doesn’t give days or times.",
+        "sources": [
+          {
+            "label": "CYBA: After School Sports Program",
+            "url": "https://cybabasketball.org/https-sportsbase.com-playercontact_onboarding-1785804687249x792176309611003900-program"
+          }
+        ],
+        "checked": "2026-11-24"
+      }
+    }
   }
 ]
