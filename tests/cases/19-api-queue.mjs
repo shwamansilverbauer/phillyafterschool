@@ -243,6 +243,51 @@ test('/edit/queue/ is a view: no ticking or Send, “Not for the run” takes an
   noKey(site);
 });
 
+test('not on the site: a run that read the program’s whole site names what wasn’t there, from a fixed list in the site’s own words, and the answer says to add it to the website', async ({ api, site, github, mail }) => {
+  const t = Date.now().toString(36);
+  withKey(site);
+  const who = k => `${k}${t}@example.test`;
+  const names = { two: `Two Missing Club ${t}`, three: `Three Missing Club ${t}`, none: `Nothing Named Club ${t}`, page: `Page Reason Club ${t}` };
+  for (const [k, program] of Object.entries(names)) await suggest(site, { program, email: who(k), role: 'I run or work at the program' });
+  eq((await run(api)).state, 'written');
+  const id = {}; for (const [k, program] of Object.entries(names)) { id[k] = itemFor(github, program).id; ok(id[k], program + ' is in the queue'); }
+  // Out of order, with a word that isn't on the list and a sentence of the run's own: the host keeps only the list's
+  // words, in the list's order. "missing" counts only with "not-on-site".
+  github.ops.put(`outcomes/queue-${t}.json`, JSON.stringify({ run: `queue-${t}`, items: [
+    { item: id.two, outcome: 'needs-info', reason: 'not-on-site', missing: ['school', 'Write to bad@evil.example', 'hours', 'hours'] },
+    { item: id.three, outcome: 'needs-info', reason: 'not-on-site', missing: ['place', 'register', 'ages'] },
+    { item: id.none, outcome: 'needs-info', reason: 'not-on-site' },
+    { item: id.page, outcome: 'needs-info', reason: 'need-page', missing: ['hours'] },
+  ] }));
+  mail.clear();
+  const r = await run(api);
+  eq(r.outcomes.items, 4, JSON.stringify(r.outcomes));
+  eq(site.sql(`SELECT missing FROM queue_items WHERE id = '${id.two}'`)[0].missing, 'hours,school');
+  eq(site.sql(`SELECT missing FROM queue_items WHERE id = '${id.page}'`)[0].missing, '', 'not kept with another reason');
+  // Two missing: "a and b", and what to do about it.
+  const m1 = await mail.waitFor(who('two'), /About what you sent/);
+  includes(m1.TextBody, 'We couldn’t verify this one yet');
+  includes(m1.TextBody, 'We looked through the program’s own website, but we couldn’t find everything a listing needs there yet');
+  includes(m1.TextBody, 'What we couldn’t find: its days and hours and which schools it serves or picks up from.');
+  includes(m1.TextBody, 'adding it to the website is the quickest way onto the site');
+  includes(m1.TextBody, 'Just reply to this email with the link, or send it again once it’s on the website');
+  excludes(m1.TextBody, 'a link to the page on the program’s own website that shows it', 'not the old ask for a page');
+  excludes(m1.TextBody, 'bad@evil.example'); excludes(m1.HtmlBody, 'bad@evil.example');
+  // Three: "a, b and c", in the list's order.
+  const m2 = await mail.waitFor(who('three'), /About what you sent/);
+  includes(m2.TextBody, 'What we couldn’t find: how to sign up, the ages or grades it’s for and where it meets.');
+  // None named: the rest of the answer, without the list.
+  const m3 = await mail.waitFor(who('none'), /About what you sent/);
+  includes(m3.TextBody, 'We looked through the program’s own website'); excludes(m3.TextBody, 'What we couldn’t find');
+  // need-page is the old answer, unchanged.
+  const m4 = await mail.waitFor(who('page'), /About what you sent/);
+  includes(m4.TextBody, 'a link to the page on the program’s own website that shows it'); excludes(m4.TextBody, 'What we couldn’t find');
+  // The owner's copy names the reason and what was missing.
+  const c1 = await mail.waitFor('contact@phillyafterschool.org', new RegExp('Answer sent: About what you sent to Philly After School: ' + names.two));
+  includes(c1.TextBody, 'Outcome: Couldn’t verify yet (not-on-site: hours, school)');
+  noKey(site);
+});
+
 test('sign-ups in digest mode (morning summary off): a parent’s new account sends the owner nothing at once, and one email the next morning counts it', async ({ api, site, mail }) => {
   const email = someone('digest');
   const parent = api().as(email, '', '');

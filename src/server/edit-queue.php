@@ -123,7 +123,7 @@ function state_line($x) {
   if ($r['state'] === 'held') return $r['reason'] === 'pr-closed' ? 'Held: its pull request was closed without a merge' : 'Held for you';
   if ($r['state'] === 'waiting') return ($r['outcome'] === 'held' ? 'Held in a pull request' : 'Published') . ' once the pull request is merged';
   $o = isset($OUTCOME[$r['outcome']]) ? $OUTCOME[$r['outcome']] : (string) $r['outcome'];
-  return $o . ($r['reason'] !== '' ? ' (' . $r['reason'] . ')' : '');
+  return $o . ($r['reason'] !== '' ? ' (' . $r['reason'] . (isset($r['missing']) && (string) $r['missing'] !== '' ? ': ' . str_replace(',', ', ', (string) $r['missing']) : '') . ')' : '');
 }
 function told_line($r) {
   if (!isset($r['email']) || $r['email'] === '') return '';   // the owner's own note, or nobody to answer

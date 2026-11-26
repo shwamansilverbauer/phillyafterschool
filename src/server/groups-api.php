@@ -1961,7 +1961,11 @@ function signup_digest(string $today, int $hour, bool $force = false): array {
 // the file) is pasted in here from src/server/queue.php.
 /*QUEUE*/
 const QUEUE_OUTCOMES = array('published', 'held', 'declined', 'duplicate', 'needs-info', 'no-change', 'failed', 'answered', 'spam');
-const QUEUE_REASONS = array('need-page', 'need-website', 'need-school', 'not-a-program', 'outside', 'no-own-site', 'closed');
+const QUEUE_REASONS = array('need-page', 'need-website', 'need-school', 'not-a-program', 'outside', 'no-own-site', 'closed', 'not-on-site');
+// "needs-info" with "not-on-site": the run read the program's own site and these facts were on none of its pages. The
+// run gives the words; the answer names each in the site's own words (queue_missing_words), so the person who runs the
+// program knows what to add to its website.
+const QUEUE_MISSING = array('hours', 'school', 'register', 'ages', 'place', 'weeks');
 // A run that couldn't finish (scaling plan, Phase 4) says so in its outcome file with "failed": one of these words, the
 // step it stopped at. The morning summary names it in the site's own words; the run's own message is in the Claude app.
 const QUEUE_RUN_FAILS = array('setup', 'queue', 'build', 'tests', 'gate', 'push', 'pull-request', 'outcomes', 'time', 'other');
@@ -2048,6 +2052,9 @@ function queue_apply(array $doc): array {
     // "It's on the site" because the clean pull request merged.
     $pr = isset($x['pr']) && is_int($x['pr']) && $x['pr'] > 0 ? $x['pr'] : ($out === 'published' ? $prAll : 0);
     $reason = isset($x['reason']) && is_string($x['reason']) && in_array($x['reason'], QUEUE_REASONS, true) ? $x['reason'] : '';
+    // What the program's site didn't give, for "not-on-site" only: words from QUEUE_MISSING, in the list's own order.
+    $given = $out === 'needs-info' && $reason === 'not-on-site' && isset($x['missing']) && is_array($x['missing']) ? array_slice($x['missing'], 0, 20) : array();
+    $missing = implode(',', array_values(array_filter(QUEUE_MISSING, function ($m) use ($given) { return in_array($m, $given, true); })));
     // An email from a person can also be answered with a fixed reply, or settled as spam. Neither fits any other item.
     $mail = $id[0] === 'm';
     // A review ("v…", Phase 6) is published in a pull request, held for the owner, or declined; nothing else fits one.
@@ -2060,7 +2067,7 @@ function queue_apply(array $doc): array {
     // failed: back in the queue for the next run. published or held: waits for its pull request to be merged (or for
     // the owner, with none). The rest are settled now and answered.
     $state = $out === 'failed' ? 'open' : (($out === 'published' || $out === 'held') ? ($pr ? 'waiting' : 'held') : 'closed');
-    q("UPDATE queue_items SET state = ?, outcome = ?, reason = ?, reply = ?, run = ?, pr = ?, decided = ?, listing = CASE WHEN ? != '' THEN ? ELSE listing END WHERE id = ?", array($state, $out, $reason, $reply, $run, $pr, now(), $listing, $listing, $id));
+    q("UPDATE queue_items SET state = ?, outcome = ?, reason = ?, missing = ?, reply = ?, run = ?, pr = ?, decided = ?, listing = CASE WHEN ? != '' THEN ? ELSE listing END WHERE id = ?", array($state, $out, $reason, $missing, $reply, $run, $pr, now(), $listing, $listing, $id));
     if ($state === 'closed') queue_settle_proposal($id, $out);
     if ($mail) mail_after_outcome((int) substr($id, 1), $out, $state);
     if ($review) review_after_outcome($id, $out, $state, $pr);
@@ -2146,7 +2153,7 @@ function answer_copy(array $x, string $subject, string $text): void {
   $out = (string) $x['outcome'];
   $outcome = array('published' => 'On the site', 'duplicate' => 'Already listed', 'no-change' => 'Already listed', 'needs-info' => 'Couldn’t verify yet', 'declined' => 'Not added', 'answered' => 'Answered');
   $v = array('site' => $CFG['siteName'], 'email' => (string) $x['email'], 'subject' => $subject,
-    'outcome' => (isset($outcome[$out]) ? $outcome[$out] : $out) . ((string) $x['reason'] !== '' ? ' (' . $x['reason'] . ')' : ''));
+    'outcome' => (isset($outcome[$out]) ? $outcome[$out] : $out) . ((string) $x['reason'] !== '' ? ' (' . $x['reason'] . (isset($x['missing']) && (string) $x['missing'] !== '' ? ': ' . str_replace(',', ', ', (string) $x['missing']) : '') . ')' : ''));
   /*EMAIL A copy of an answer (to the site's own address, each time the site emails someone an answer)*/
   $subj = t(__T("Answer sent: {subject}"), $v);
   $head = t(__T("{site} sent this answer to {email}"), $v);
@@ -2156,6 +2163,16 @@ function answer_copy(array $x, string $subject, string $text): void {
   $body = implode("\n\n", array_filter(array($head, $what, '—————', $text, $button . ': ' . $url, $foot), function ($s) { return $s !== ''; }));
   $html = email_html($head, paras(array($what)) . '<div style="margin:16px 0 0;padding:14px 16px;border-left:3px solid #96C9FF;background:#F4F8FD;white-space:pre-line">' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</div>', $button, $url, $foot);
   send_mail((string) $CFG['from'], '[' . $CFG['siteName'] . '] ' . ($subj !== '' ? $subj : $subject), $body, $html, '', 'answer');
+}
+// The facts a "not-on-site" answer names, in the site's own words and QUEUE_MISSING's order: "a", "a and b",
+// "a, b and c". '' when none was given (the answer then says only that a listing needs more than the site shows).
+function queue_missing_words(string $missing, array $words): string {
+  $got = explode(',', $missing);
+  $say = array();
+  foreach (QUEUE_MISSING as $m) if (in_array($m, $got, true) && isset($words[$m]) && $words[$m] !== '') $say[] = $words[$m];
+  if (count($say) < 2) return implode('', $say);
+  $last = array_pop($say);
+  return implode(', ', $say) . ' and ' . $last;
 }
 // The parts of that answer: subject, heading, lines, button and its address, the last line.
 function queue_reply_parts(array $x): array {
@@ -2201,11 +2218,23 @@ function queue_reply_parts(array $x): array {
     $subject = t(__T("About what you sent to {site}: {what}"), $v);
     $head = t(__T("We couldn’t verify this one yet"), $v);
     $lines[] = $what !== '' ? t(__T("Thanks so much for sending {what}!"), $v) : t(__T("Thanks so much for writing to us!"), $v);
-    $lines[] = t(__T("Unfortunately, we weren’t able to verify it on the program’s own website yet, so it didn’t pass our automated approver."), $v);
-    if ($x['reason'] === 'need-website') $lines[] = t(__T("It would really help to have the address of the program’s own website."), $v);
-    elseif ($x['reason'] === 'need-school') $lines[] = t(__T("It would really help to know which school the program serves or picks up from, as its own website says."), $v);
-    else $lines[] = t(__T("It would really help to have a link to the page on the program’s own website that shows it."), $v);
-    $lines[] = t(__T("Just reply to this email with it, or send it again, and we’ll take another look. You can always reach us at {contact} too."), $v);
+    if ($x['reason'] === 'not-on-site') {
+      // The run read the program's whole site and these weren't on it: named in the site's own words, never the run's.
+      $words = array('hours' => t(__T("its days and hours"), $v), 'school' => t(__T("which schools it serves or picks up from"), $v),
+        'register' => t(__T("how to sign up"), $v), 'ages' => t(__T("the ages or grades it’s for"), $v),
+        'place' => t(__T("where it meets"), $v), 'weeks' => t(__T("its weeks or price"), $v));
+      $v['missing'] = queue_missing_words(isset($x['missing']) ? (string) $x['missing'] : '', $words);
+      $lines[] = t(__T("We looked through the program’s own website, but we couldn’t find everything a listing needs there yet, so it didn’t pass our automated approver."), $v);
+      if ($v['missing'] !== '') $lines[] = t(__T("What we couldn’t find: {missing}."), $v);
+      $lines[] = t(__T("If it’s on the website and we missed it, a link to that page would really help. If it isn’t there yet, adding it to the website is the quickest way onto the site."), $v);
+      $lines[] = t(__T("Just reply to this email with the link, or send it again once it’s on the website, and we’ll take another look. You can always reach us at {contact} too."), $v);
+    } else {
+      $lines[] = t(__T("Unfortunately, we weren’t able to verify it on the program’s own website yet, so it didn’t pass our automated approver."), $v);
+      if ($x['reason'] === 'need-website') $lines[] = t(__T("It would really help to have the address of the program’s own website."), $v);
+      elseif ($x['reason'] === 'need-school') $lines[] = t(__T("It would really help to know which school the program serves or picks up from, as its own website says."), $v);
+      else $lines[] = t(__T("It would really help to have a link to the page on the program’s own website that shows it."), $v);
+      $lines[] = t(__T("Just reply to this email with it, or send it again, and we’ll take another look. You can always reach us at {contact} too."), $v);
+    }
     $button = t(__T("Send it again"), $v); $url = $again;
   } else {
     /*EMAIL We weren’t able to add this one (to whoever sent a suggestion or a proposed change)*/
