@@ -613,18 +613,6 @@
       "checked": "2026-11-01"
     },
     {
-      "program": "imagine-that-philly",
-      "school": "coppin",
-      "relation": "onsite",
-      "checked": "2026-11-01"
-    },
-    {
-      "program": "imagine-that-philly",
-      "school": "nebinger",
-      "relation": "onsite",
-      "checked": "2026-11-01"
-    },
-    {
       "program": "kids-on-12th",
       "school": "coppin",
       "relation": "pickup",
@@ -3141,6 +3129,18 @@
       "school": "fitzpatrick",
       "relation": "onsite",
       "checked": "2026-11-24"
+    },
+    {
+      "program": "imagine-that-philly",
+      "school": "coppin",
+      "relation": "onsite",
+      "checked": "2026-11-25"
+    },
+    {
+      "program": "imagine-that-philly",
+      "school": "nebinger",
+      "relation": "onsite",
+      "checked": "2026-11-25"
     }
   ],
   "pages": [
@@ -7321,7 +7321,7 @@
         "schools.*.address"
       ],
       "says": "Old Pine Community Center and The Neighborhub are the same building after a rebrand, at 401 Lombard St; Fall II starts November 2, 2026, registration is open, and families can join whenever there is space, with the fee pro-rated.",
-      "daysAgo": 37,
+      "daysAgo": 38,
       "stale": false
     },
     {
@@ -7336,7 +7336,7 @@
         "daysNote"
       ],
       "says": "After-school care is $250 a month for full time, 4 or more days a week, or $175 a month for part time, 3 days a week, with a snack included.",
-      "daysAgo": 21,
+      "daysAgo": 22,
       "stale": false
     },
     {
@@ -7357,7 +7357,7 @@
         "schools.meredith"
       ],
       "says": "Homework Club is Everland’s Monday aftercare, run with Prep Academy Tutors, for 2nd to 4th graders at Meredith only: staff pick up from Meredith and walk the group to Everland, children do homework in small groups with certified teachers and then have organized downtime, parents pick up from Everland between 5:45 and 6:00 pm, 1:1 tutoring during the club is $65 per 40-minute session, and the 2027 semester is 17 Mondays from January 4 to June 7, ending with a showcase.",
-      "daysAgo": 16,
+      "daysAgo": 17,
       "stale": false
     },
     {
@@ -7372,7 +7372,7 @@
         "rate"
       ],
       "says": "The base cost of Homework Club for the 2027 semester is $1,190, which works out to $70 per 3-hour session over its 17 Mondays.",
-      "daysAgo": 16,
+      "daysAgo": 17,
       "stale": false
     },
     {
@@ -7394,7 +7394,7 @@
         "schools.childs"
       ],
       "says": "Makom is aftercare and a day camp, at 2401 Washington Ave, Unit C1. Aftercare runs 4 to 6 pm, five days a week, with days that differ by age group; K–5 starts at $280 a month for Fridays only and grades 6 and 7 at $746 a month for 3 days, with tuition assistance. Day camps are for ages 4 and up. It does not pick up at Nebinger or Coppin (it needs at least four children from a school to pick up there); at Independence Charter it picks up for early dismissal on Wednesdays, and at Childs it has a special early Friday pickup for pre-K children. It also picks up at The Philadelphia School, and runs summer camp.",
-      "daysAgo": 14,
+      "daysAgo": 15,
       "stale": false
     },
     {
@@ -7411,7 +7411,26 @@
         "note"
       ],
       "says": "Enrollment is open. Dandelion After School runs 3 to 6 pm and costs $165 a month for each weekday enrolled, and tuition includes certain day-off camps. It is a self-directed space with cooking, group games, park trips, arts and crafts, messy science and building projects, and each child decides how to spend their afternoon.",
-      "daysAgo": 13,
+      "daysAgo": 14,
+      "stale": false
+    },
+    {
+      "program": "imagine-that-philly",
+      "name": "Imagine That Philly",
+      "on": "2026-11-25",
+      "by": "program manager",
+      "how": "proposed from its claim",
+      "fields": [
+        "grades",
+        "register.nextTerm",
+        "cost",
+        "days",
+        "hours",
+        "pickupBy",
+        "schools"
+      ],
+      "says": "Dates: After school enrollment for K-5 students at Coppin and K-2 students at Nebinger open in March for the upcoming school year.  There is a non-refundable deposit due by June 1 for newly enrolled students or July 1 for return students.  The deposit is applied to September's tuition and then renewal is on the 1st of each month after that. Cost: PT at $175/mo for 3 set days or FT at $250/mo for 4+ days Days and hours: Monday to Friday, dismissal to 5:45pm.  We operate on the SDP closure schedule. Other: We operate on-site for students who attend Fanny Jackson Coppin or George W Nebinger. In addition, we offer a 6 week summer camp at either SDP school location.",
+      "daysAgo": 1,
       "stale": false
     }
   ],
