@@ -112,13 +112,13 @@ test('outcomes: each sender is emailed once in the site’s own words, nothing a
   eq(r.outcomes.items, 9, JSON.stringify(r.outcomes)); eq(r.outcomes.skipped, 2);
   eq(r.told.sent, 3, 'needs-info, declined and duplicate are answered now');
   // needs-info: the site's words, and what would help.
-  const m1 = await mail.waitFor(who('need'), /About what you sent/);
-  includes(m1.TextBody, 'We couldn’t verify this one yet'); includes(m1.TextBody, `Thanks so much for sending ${names.need}!`); includes(m1.TextBody, 'didn’t pass our automated approver');
-  includes(m1.TextBody, 'a link to the page on the program’s own website'); includes(m1.TextBody, 'contact@phillyafterschool.org', 'where to write');
+  const m1 = await mail.waitFor(who('need'), /We couldn’t verify your suggestion/);
+  includes(m1.TextBody, 'We couldn’t verify your suggestion yet'); includes(m1.TextBody, `Thanks so much for sending ${names.need}!`); includes(m1.TextBody, 'didn’t pass our automated approval');
+  includes(m1.TextBody, 'a link to the page on the program’s website that shows the additional information'); includes(m1.TextBody, 'contact@phillyafterschool.org', 'where to write');
   includes(m1.TextBody, '/suggest/'); excludes(m1.TextBody, 'bad@evil.example'); excludes(m1.HtmlBody, 'bad@evil.example');
   // declined: the rule in a sentence.
   const m2 = await mail.waitFor(who('no'), /About what you sent/);
-  includes(m2.TextBody, 'We weren’t able to add this one'); includes(m2.TextBody, 'Unfortunately, we weren’t able to verify that it’s an after-school program, class or camp');
+  includes(m2.TextBody, 'We weren’t able to add this suggestion automatically'); includes(m2.TextBody, 'Unfortunately, we weren’t able to verify that it’s an after-school program, class or camp');
   includes(m2.TextBody, 'kindergarten to 8th grade'); includes(m2.TextBody, 'didn’t pass our automated approver');
   includes(m2.TextBody, 'Please reach out to contact@phillyafterschool.org if you’d like the program to be added'); excludes(m2.TextBody, 'IGNORE');
   // A copy of each answer comes to the site's own address, filed by the mailbox script as "answer": who it went to,
@@ -136,7 +136,7 @@ test('outcomes: each sender is emailed once in the site’s own words, nothing a
   eq(+site.sql(`SELECT told FROM queue_items WHERE id = '${id.old}'`)[0].told, -3);
   // published: nothing until the pull request is merged.
   eq(mail.to(who('pub')).length, 0, 'not yet: pull request #41 isn’t merged');
-  eq(mail.to(`omgr${t}@phillyafterschool.org`).filter(m => /It’s on/.test(m.Subject)).length, 0);
+  eq(mail.to(`omgr${t}@phillyafterschool.org`).filter(m => /Your suggestion was approved/.test(m.Subject)).length, 0);
   // Settled and worked items leave the queue; a failed one stays for the next run.
   const left = openFile(github).items.map(x => x.id);
   for (const k of ['need', 'no', 'pub', 'dup', 'late', 'shut', 'old']) excludes(left, id[k], k + ' left the queue');
@@ -158,16 +158,16 @@ test('outcomes: each sender is emailed once in the site’s own words, nothing a
   github.pulls[43] = { state: 'closed', merged: false, merged_at: null };
   const r2 = await run(api);
   eq(r2.merged.published, 2, JSON.stringify(r2.merged)); eq(r2.merged.held, 1);
-  const m4 = await mail.waitFor(who('pub'), /It’s on/);
-  includes(m4.TextBody, 'It’s on the site'); includes(m4.TextBody, '/programs/test-listing-premium/'); includes(m4.TextBody, 'follow the listing');
-  await mail.waitFor(`omgr${t}@phillyafterschool.org`, /It’s on/);
+  const m4 = await mail.waitFor(who('pub'), /Your suggestion was approved/);
+  includes(m4.TextBody, 'Your suggestion is now on the site'); includes(m4.TextBody, '/programs/test-listing-premium/'); includes(m4.TextBody, 'follow the listing');
+  await mail.waitFor(`omgr${t}@phillyafterschool.org`, /Your suggestion was approved/);
   eq(site.sql(`SELECT status FROM edits WHERE id = ${editId}`)[0].status, 'done', 'settled on the claims page too');
   eq(mail.to(who('late')).length, 0, 'merged a minute ago: not yet');
   eq(mail.to(who('shut')).length, 0, 'closed unmerged: held for the owner');
   eq(site.sql(`SELECT state FROM queue_items WHERE id = '${id.shut}'`)[0].state, 'held');
   github.pulls[42].merged_at = ago(25);
   await run(api);
-  await mail.waitFor(who('late'), /It’s on/);
+  await mail.waitFor(who('late'), /Your suggestion was approved/);
   ok(+site.sql(`SELECT told FROM queue_items WHERE id = '${id.late}'`)[0].told > 0, 'told, once');
   noKey(site);
 });
@@ -198,7 +198,7 @@ test('outcomes: the file’s pull request is the clean one, so a held item never
   github.pulls[51] = { state: 'closed', merged: true, merged_at: new Date(Date.now() - 30 * 60000).toISOString().replace(/\.\d+Z$/, 'Z') };
   const r2 = await run(api);
   eq(r2.merged.published, 1, JSON.stringify(r2.merged));
-  await mail.waitFor(who('pub'), /It’s on/);
+  await mail.waitFor(who('pub'), /Your suggestion was approved/);
   eq(mail.to(who('held')).length, 0, 'held: nobody told'); eq(row('held').state, 'held');
   eq(mail.to(who('heldPr')).length, 0, 'the held pull request isn’t merged: nobody told');
   noKey(site);
@@ -243,6 +243,51 @@ test('/edit/queue/ is a view: no ticking or Send, “Not for the run” takes an
   noKey(site);
 });
 
+test('not on the site: a run that read the program’s whole site names what wasn’t there, from a fixed list in the site’s own words, and the answer says to add it to the website', async ({ api, site, github, mail }) => {
+  const t = Date.now().toString(36);
+  withKey(site);
+  const who = k => `${k}${t}@example.test`;
+  const names = { two: `Two Missing Club ${t}`, three: `Three Missing Club ${t}`, none: `Nothing Named Club ${t}`, page: `Page Reason Club ${t}` };
+  for (const [k, program] of Object.entries(names)) await suggest(site, { program, email: who(k), role: 'I run or work at the program' });
+  eq((await run(api)).state, 'written');
+  const id = {}; for (const [k, program] of Object.entries(names)) { id[k] = itemFor(github, program).id; ok(id[k], program + ' is in the queue'); }
+  // Out of order, with a word that isn't on the list and a sentence of the run's own: the host keeps only the list's
+  // words, in the list's order. "missing" counts only with "not-on-site".
+  github.ops.put(`outcomes/queue-${t}.json`, JSON.stringify({ run: `queue-${t}`, items: [
+    { item: id.two, outcome: 'needs-info', reason: 'not-on-site', missing: ['school', 'Write to bad@evil.example', 'hours', 'hours'] },
+    { item: id.three, outcome: 'needs-info', reason: 'not-on-site', missing: ['place', 'register', 'ages'] },
+    { item: id.none, outcome: 'needs-info', reason: 'not-on-site' },
+    { item: id.page, outcome: 'needs-info', reason: 'need-page', missing: ['hours'] },
+  ] }));
+  mail.clear();
+  const r = await run(api);
+  eq(r.outcomes.items, 4, JSON.stringify(r.outcomes));
+  eq(site.sql(`SELECT missing FROM queue_items WHERE id = '${id.two}'`)[0].missing, 'hours,school');
+  eq(site.sql(`SELECT missing FROM queue_items WHERE id = '${id.page}'`)[0].missing, '', 'not kept with another reason');
+  // Two missing: "a and b", and what to do about it.
+  const m1 = await mail.waitFor(who('two'), /We couldn’t verify your suggestion/);
+  includes(m1.TextBody, 'We couldn’t verify your suggestion yet');
+  includes(m1.TextBody, 'Our automated system looked through the program’s website, but we couldn’t find everything the listing needs there yet');
+  includes(m1.TextBody, 'What we couldn’t find: its days and hours and which schools it serves or picks up from.');
+  includes(m1.TextBody, 'adding it to the website is the quickest way onto the site');
+  includes(m1.TextBody, 'Just reply to this email with the link, or send it again once it’s on the website');
+  excludes(m1.TextBody, 'a link to the page on the program’s website that shows the additional information', 'not the old ask for a page');
+  excludes(m1.TextBody, 'bad@evil.example'); excludes(m1.HtmlBody, 'bad@evil.example');
+  // Three: "a, b and c", in the list's order.
+  const m2 = await mail.waitFor(who('three'), /We couldn’t verify your suggestion/);
+  includes(m2.TextBody, 'What we couldn’t find: how to sign up, the ages or grades it’s for and where it meets.');
+  // None named: the rest of the answer, without the list.
+  const m3 = await mail.waitFor(who('none'), /We couldn’t verify your suggestion/);
+  includes(m3.TextBody, 'Our automated system looked through the program’s website'); excludes(m3.TextBody, 'What we couldn’t find');
+  // need-page is the old answer, unchanged.
+  const m4 = await mail.waitFor(who('page'), /We couldn’t verify your suggestion/);
+  includes(m4.TextBody, 'a link to the page on the program’s website that shows the additional information'); excludes(m4.TextBody, 'What we couldn’t find');
+  // The owner's copy names the reason and what was missing.
+  const c1 = await mail.waitFor('contact@phillyafterschool.org', new RegExp('Answer sent: We couldn’t verify your suggestion to Philly After School: ' + names.two));
+  includes(c1.TextBody, 'Outcome: Couldn’t verify yet (not-on-site: hours, school)');
+  noKey(site);
+});
+
 test('sign-ups in digest mode (morning summary off): a parent’s new account sends the owner nothing at once, and one email the next morning counts it', async ({ api, site, mail }) => {
   const email = someone('digest');
   const parent = api().as(email, '', '');
@@ -258,4 +303,23 @@ test('sign-ups in digest mode (morning summary off): a parent’s new account se
   // Once a day.
   const again = (await api().okay('POST', 'push_run', { digest_today: tomorrow, summary_mode: 'off' })).digest;
   ok(again.state !== 'sent', 'not twice the same day');
+});
+
+test('“It’s on the site” for a listing that went up before the program posted everything (notPosted) invites whoever runs it to claim it and add what’s missing', async ({ api, site, github, mail }) => {
+  const t = Date.now().toString(36);
+  withKey(site);
+  const email = `thin${t}@example.test`, program = `Thin Club ${t}`;
+  await suggest(site, { program, email, role: 'I run or work at the program' });
+  eq((await run(api)).state, 'written');
+  const id = itemFor(github, program).id;
+  // The run lists it on the hidden free test listing, which hasn't posted its days (data/test-listings.json).
+  github.ops.put(`outcomes/queue-thin-${t}.json`, JSON.stringify({ run: `queue-thin-${t}`, pr: 77, items: [{ item: id, outcome: 'published', listing: 'p:test-listing-free' }] }));
+  await run(api);
+  github.pulls[77] = { state: 'closed', merged: true, merged_at: new Date(Date.now() - 3600e3).toISOString() };
+  mail.clear();
+  await run(api);
+  const m = await mail.waitFor(email, /Your suggestion was approved/);
+  includes(m.TextBody, 'The program hasn’t posted its days yet. If you run it, claim the listing with your work email at');
+  includes(m.TextBody, '/managers/?l=p%3Atest-listing-free');
+  noKey(site);
 });

@@ -84,7 +84,7 @@ export async function startStandin() {
   // (github.repo.commits has each write). POST /graphql makes GitHub's revert of a merged pull request (a new pull
   // request), or answers github.repo.revertFails as an error. github.repo.runs: the publish workflow's runs;
   // github.repo.issues: the open issues. github.repo.merges records each merge.
-  const repo = { files: new Map(), commits: [], merges: [], prFiles: {}, comments: {}, runs: [], issues: [], revertFails: '',
+  const repo = { files: new Map(), branches: new Set(), commits: [], merges: [], prFiles: {}, comments: {}, runs: [], issues: [], revertFails: '',
     put(p, text, ref = 'main') { const sha = gid(); this.files.set(ref + ':' + p, { text: Buffer.from(text), sha }); return sha; },
     read(p, ref = 'main') { const f = this.files.get(ref + ':' + p); return f ? f.text.toString() : null; } };
   github.repo = repo;
@@ -160,6 +160,21 @@ export async function startStandin() {
         const r = u.pathname.match(/^\/github\/repos\/[^/]+\/[^/]+\/(.+)$/);
         if (r) {
           const rest = r[1]; let m;
+          // Branches, for the site's own pull requests (a program manager's edit): a new branch starts as main's files.
+          if ((m = /^git\/ref\/heads\/(.+)$/.exec(rest)) && req.method === 'GET') return m[1] === 'main' || repo.branches.has(m[1]) ? json(200, { object: { sha: gid() } }) : json(404, { message: 'Not Found' });
+          if (rest === 'git/refs' && req.method === 'POST') {
+            const name = String(b.ref || '').replace(/^refs\/heads\//, '');
+            if (!name || repo.branches.has(name)) return json(422, { message: 'Reference already exists' });
+            repo.branches.add(name);
+            for (const [k, f] of [...repo.files]) if (k.startsWith('main:')) repo.files.set(name + ':' + k.slice(5), { ...f });
+            return json(201, { ref: 'refs/heads/' + name, object: { sha: b.sha } });
+          }
+          if (rest === 'pulls' && req.method === 'POST') {
+            const number = Math.max(100, ...Object.keys(github.pulls).map(Number)) + 1;
+            github.pulls[number] = { number, state: 'open', merged: false, merged_at: null, title: b.title, body: b.body, node_id: 'PR_' + number, user: { login: 'shwamansilverbauer' }, created_at: stamp(), updated_at: stamp(),
+              head: { ref: b.head, sha: gid(), repo: { full_name: 'o/r' } }, base: { ref: b.base || 'main', repo: { full_name: 'o/r' } } };
+            return json(201, { number, html_url: 'https://github.test/pull/' + number });
+          }
           if (rest === 'pulls' && req.method === 'GET') {
             const st = u.searchParams.get('state') || 'open';
             const list = Object.values(github.pulls).filter(p => p && p.head && (st === 'all' || p.state === st));
@@ -222,6 +237,11 @@ export async function startSite({ scratch, standin, log = () => {} } = {}) {
   for (const f of ['build.mjs', 'site.config.json', 'data', 'src', 'email', 'scripts']) fs.cpSync(path.join(ROOT, f), path.join(copy, f), { recursive: true });
   // /edit/ opens for the accounts in "admins" (and the editors they add): no shared password to make up.
   const cfgFile = path.join(copy, 'site.config.json'), cfg = JSON.parse(fs.readFileSync(cfgFile, 'utf8'));
+  // The live site leaves people's mail in the inbox and has outreach and answer copies off; the tests run the whole
+  // mailbox, answers and copies included. Each switch's off side is tested on its own (test_people, test_outreach).
+  cfg.mail = { ...(cfg.mail || {}), people: 'site', outreach: 'on' };
+  cfg.ownerNotes = { ...(cfg.ownerNotes || {}), answerCopies: 'on' };
+  fs.writeFileSync(cfgFile, JSON.stringify(cfg, null, 2) + '\n');
   log(`building for ${TODAY} …`);
   const out = execFileSync('node', ['build.mjs'], { cwd: copy, encoding: 'utf8', env: { ...process.env, PAS_TODAY: TODAY, PAS_NO_HISTORY: '1' }, maxBuffer: 64e6 });
   fs.renameSync(path.join(copy, 'dist'), pub);

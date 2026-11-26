@@ -43,6 +43,9 @@ function queue_schema(PDO $db): void {
   // Added with the mailbox (Phase 5): the fixed answer a run chose for an email from a person.
   $cols = array(); foreach ($db->query('PRAGMA table_info(queue_items)')->fetchAll(PDO::FETCH_ASSOC) as $c) $cols[] = $c['name'];
   if (!in_array('reply', $cols, true)) $db->exec("ALTER TABLE queue_items ADD COLUMN reply TEXT NOT NULL DEFAULT ''");
+  // Added November 2026: for "needs-info" with "not-on-site", what the program's own site didn't give (words from
+  // QUEUE_MISSING, joined by commas), so the answer can name it.
+  if (!in_array('missing', $cols, true)) $db->exec("ALTER TABLE queue_items ADD COLUMN missing TEXT NOT NULL DEFAULT ''");
   $db->exec("CREATE TABLE IF NOT EXISTS queue_runs (file TEXT PRIMARY KEY, sha TEXT NOT NULL, read INTEGER NOT NULL, items INTEGER NOT NULL DEFAULT 0, tokens INTEGER NOT NULL DEFAULT 0)");
   // Added with Phase 4: the run's name, and the step a run that couldn't finish stopped at.
   $cols = array(); foreach ($db->query('PRAGMA table_info(queue_runs)')->fetchAll(PDO::FETCH_ASSOC) as $c) $cols[] = $c['name'];
@@ -198,7 +201,9 @@ function queue_collect(array $ctx): array {
   $state = queue_state($ctx['root']);
   // Reviews (Phase 6) are registered like the rest, so each reviewer can be thanked once their review is on the site.
   $reviews = function_exists('queue_reviews') ? queue_reviews($db, (string) $ctx['secret'], $ctx['names'], isset($ctx['fresh']) ? (string) $ctx['fresh'] : 'hold', time()) : array();
-  $all = array_merge(queue_notes($state), queue_proposals($db, $ctx['names']), $suggestions, queue_mail($db, (string) $ctx['secret']), $reviews);
+  // Mail people wrote is the runs' only while the site answers it ("mail": { "people": "site" }); kept in the inbox, it is the owner's.
+  $mail = isset($ctx['mail']) && $ctx['mail'] === 'inbox' ? array() : queue_mail($db, (string) $ctx['secret']);
+  $all = array_merge(queue_notes($state), queue_proposals($db, $ctx['names']), $suggestions, $mail, $reviews);
   foreach ($all as &$x) foreach (array('program', 'website', 'details', 'school', 'listing', 'pickup', 'campType', 'sentBy', 'email') as $k) if (!isset($x[$k])) $x[$k] = '';
   unset($x);
   usort($all, function ($a, $b) { return strcmp($b['when'], $a['when']) ?: strcmp($a['id'], $b['id']); });
@@ -220,7 +225,7 @@ function queue_collect(array $ctx): array {
   }
   $open = array();
   foreach ($all as &$x) {
-    $x['row'] = isset($rows[$x['id']]) ? $rows[$x['id']] : array('state' => 'open', 'outcome' => '', 'told' => 0, 'pr' => 0, 'decided' => 0, 'reason' => '');
+    $x['row'] = isset($rows[$x['id']]) ? $rows[$x['id']] : array('state' => 'open', 'outcome' => '', 'told' => 0, 'pr' => 0, 'decided' => 0, 'reason' => '', 'missing' => '');
     $st = isset($state['items'][$x['id']]) && is_array($state['items'][$x['id']]) ? $state['items'][$x['id']] : array();
     if (!empty($st['dropped'])) $x['row']['state'] = 'dropped';
     if ($x['row']['state'] !== 'open') continue;

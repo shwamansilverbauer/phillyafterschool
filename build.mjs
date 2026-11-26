@@ -39,6 +39,12 @@ const REL = {
   nearby: { pill: 'Nearby, no pickup', title: 'Nearby, no pickup found', blurb: 'Close to the school, but you or your child would need to get there. Best suited to older children or as a second stop.' },
 };
 const HOW = ['online', 'phone', 'contact', 'school', 'none'];
+// What a provider hasn't posted yet (docs/listings.md, "Edit a listing"): a listing can go up on the minimum (it's real,
+// it runs something for school-age kids, where it is, how to reach it) and say plainly what it doesn't know. The
+// program's managers fill these in once they claim it; the monthly check fills them in when the site posts them.
+const NOT_POSTED = ['days', 'hours', 'cost', 'grades', 'pickup'];
+const NOT_POSTED_LINE = 'Not posted yet, ask the program';
+const notPosted = (p, f) => Array.isArray(p.notPosted) && p.notPosted.includes(f);
 // Program types: what a family is shopping for. Each has a color and a small icon, used on filters and roster cards.
 // A program can have several; the first one listed in data/programs.json is the one its roster card wears.
 const TYPES = [
@@ -204,7 +210,9 @@ for (const p of programs) {
   for (const s of p.sources || []) if (!isUrl(s.url)) errors.push(`${at}: source "${s.label}" needs an https URL`);
   // A listing with no school is allowed only for a place that runs day camps and nothing on a weekday afternoon.
   if (!p.schools) p.schools = {};
-  if (!Object.keys(p.schools).length && !p.daysOff && !p.weekend) errors.push(`${at}: not linked to any school (only a listing with "daysOff" or "weekend" may leave "schools" empty)`);
+  if (p.notPosted !== undefined && (!Array.isArray(p.notPosted) || !p.notPosted.length || p.notPosted.some(f => !NOT_POSTED.includes(f)) || new Set(p.notPosted).size !== p.notPosted.length)) errors.push(`${at}: notPosted lists what the provider hasn't posted yet, each once, from: ${NOT_POSTED.join(', ')}`);
+  if (!Object.keys(p.schools).length && !p.daysOff && !p.weekend && !p.notPosted) errors.push(`${at}: not linked to any school (only a listing with "daysOff", "weekend" or "notPosted" may leave "schools" empty)`);
+  if (!Object.keys(p.schools).length && p.notPosted && !p.daysOff && !p.weekend && !p.neighborhoods?.length) errors.push(`${at}: a listing with no school needs "neighborhoods", so it shows on its neighborhood page`);
   if (p.weekend !== undefined) {   // Saturday or Sunday classes
     const w = p.weekend;
     if (!w || typeof w.summary !== 'string' || !w.summary.trim()) errors.push(`${at}: weekend needs a summary`);
@@ -950,7 +958,7 @@ const hoods = (() => {
   const m = new Map();
   const at = n => { const k = hoodSlug(n); if (!m.has(k)) m.set(k, { id: k, name: n, schools: [], programs: [] }); return m.get(k); };
   for (const s of schools) for (const n of schoolHoods(s)) at(n).schools.push(s);
-  for (const p of programs) if (Object.keys(p.schools || {}).length) for (const n of programHoods(p)) at(n).programs.push(p);
+  for (const p of programs) if (Object.keys(p.schools || {}).length || p.notPosted) for (const n of programHoods(p)) at(n).programs.push(p);
   return [...m.values()].sort((a, b) => (b.schools.length + b.programs.length) - (a.schools.length + a.programs.length) || a.name.localeCompare(b.name));
 })();
 const hoodPath = h => `neighborhoods/${h.id}/`;
@@ -1061,7 +1069,9 @@ const freeOnlyFor = p => kindsOf(p.price).includes('free') ? [] : schools.filter
 const schoolRun = p => p.types.includes('clubs');
 // A day-camp-only listing: it runs camps when school is closed but nothing on a weekday afternoon, so it is linked to
 // no school. It gets its own page and a place on the day-camp page, and stays off every after-school list.
-const campOnly = p => !Object.keys(p.schools).length;
+// A listing that went up on the minimum (notPosted) and isn't near a covered school yet is still an after-school listing:
+// it shows on its neighborhood page, the A to Z list, the type pages and the map, and joins a school page later.
+const campOnly = p => !Object.keys(p.schools).length && !p.notPosted;
 // A school's clubs, by the kind of program each one is. Used to mention them next to the citywide lists.
 const clubGrades = c => c.gradeNote || (c._grades == null ? '' : c._grades.length === 1 ? (c._grades[0] === 'K' ? 'Kindergarten' : c._grades[0] === 'PK' ? 'Pre-K' : 'Grade ' + c._grades[0]) : c._grades.length === GRADES.length - 1 && c._grades[0] === 'K' ? 'All grades' : `Grades ${c._grades[0]}–${c._grades[c._grades.length - 1]}`);
 const clubsOfType = (p, typeId) => (p.clubs || []).filter(c => c.roster !== false && (c.tags || []).includes(typeId));
@@ -1274,7 +1284,7 @@ function card(p, school) {
       <ul>${reviewItems(revs)}</ul></details>
     <a href="${reviewUrl}" data-track="review">Write a review</a>${more}`
     : `<span>No reviews yet.</span> <a href="${reviewUrl}" data-track="review">Write the first one</a>${more}`;
-  const rows = [['Where', esc(where)], ['Hours', esc(p.hours)], ['Days', esc(daysLine(p))], ['Pick up by', esc(p.pickupBy || '')], ['Cost', esc(l.cost || p.cost)], ['Days off', p.daysOff ? `Runs a camp or full day when school is closed. <a href="${link(dayCampsPath, 1)}#${esc(p.id)}">Dates and details</a>` : ''], ['Register', registerText(p)], ['Next term', esc(r.nextTerm || '') + datesHtml(p, 1)], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
+  const rows = [['Where', esc(where)], ['Hours', notPosted(p, 'hours') ? T(NOT_POSTED_LINE) : esc(p.hours)], ['Days', notPosted(p, 'days') ? T(NOT_POSTED_LINE) : esc(daysLine(p))], ['Pick up by', esc(p.pickupBy || '')], ['Cost', notPosted(p, 'cost') && !l.cost ? T(NOT_POSTED_LINE) : esc(l.cost || p.cost)], ['Days off', p.daysOff ? `Runs a camp or full day when school is closed. <a href="${link(dayCampsPath, 1)}#${esc(p.id)}">Dates and details</a>` : ''], ['Register', registerText(p)], ['Next term', esc(r.nextTerm || '') + datesHtml(p, 1)], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
     .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
   const flag = [p.note, l.note].filter(Boolean).join(' ');
   const fix = correctionHref(`Correction: ${p.name} (${school.shortName})`);
@@ -1681,7 +1691,7 @@ function programPage(p) {
   const clubsDetailed = !!p.clubs && p.clubs.some(c => c.days || c.time || c.what);   // a bare list of names stays a line of text
   const kinds = partsOf(p);
   const camp = campOnly(p), tied = campOf(p);
-  const rows = [[p.clubs ? 'Clubs' : 'Classes', clubsDetailed ? '' : fold(esc((p.offers || []).join(', ')))], ['Hours', fold(esc(p.hours))], ['Days', esc(daysLine(p))], ['Cost', fold(esc(p.cost))], ['Register', fold(registerText(p))], ['Next term', fold(esc(r.nextTerm || ''), datesHtml(p, D))], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
+  const rows = [[p.clubs ? 'Clubs' : 'Classes', clubsDetailed ? '' : fold(esc((p.offers || []).join(', ')))], ['Hours', notPosted(p, 'hours') ? T(NOT_POSTED_LINE) : fold(esc(p.hours))], ['Days', notPosted(p, 'days') ? T(NOT_POSTED_LINE) : esc(daysLine(p))], ['Cost', notPosted(p, 'cost') ? T(NOT_POSTED_LINE) : fold(esc(p.cost))], ['Register', fold(registerText(p))], ['Next term', fold(esc(r.nextTerm || ''), datesHtml(p, D))], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
     .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
   const schoolRows = served.map(s => {
     const l = p.schools[s.id];
@@ -1775,7 +1785,7 @@ ${p.clubs.map(c => `      <article class="club">
   ${offSection}
   ${summerSection}
   <section class="section">
-    ${listingTools('p:' + p.id, fullName(p), D, 'program')}
+    ${listingTools('p:' + p.id, fullName(p), D, 'program', p.notPosted)}
   </section>
   ${premiumSlot('p:' + p.id, fullName(p), D)}
   ${camp ? `<section class="section" id="schools" data-jump-to="Schools">
@@ -2035,7 +2045,7 @@ const milesPill = m => `<span class="pill mi-pill">${m < 0.1 ? 'Under 0.1 mi' : 
 const nearbyFor = x => {
   const at = [x.lat, x.lng];
   return {
-    after: nearTo(at, programs.filter(p => Object.keys(p.schools || {}).length && !schoolRun(p)), p => placesOf(p), 1),
+    after: nearTo(at, programs.filter(p => (Object.keys(p.schools || {}).length || p.notPosted) && !schoolRun(p)), p => placesOf(p), 1),
     weekend: nearTo(at, weekendPrograms, p => placesOf(p), 2).slice(0, 8),
     camps: nearTo(at, summerCamps, c => coordsOf(c.address), 2).slice(0, 8),
   };
@@ -3811,16 +3821,26 @@ const asksFor = p => [
   ...staleTold(p).map(t => ({ id: 'told-' + t.on, q: `On ${longDate(t.on)} you told us: “${t.says}” Is that still right? If anything has changed, reply to this email or propose a change from your listing’s tools, and the listing will be updated.` })),
 ];
 const claimListings = () => Object.fromEntries([
-  ...testListings.map(p => ['p:' + p.id, { n: p.name, d: p.claimDomain, m: 'match', h: 1 }]),
-  ...programs.map(p => ['p:' + p.id, { n: fullName(p), d: baseDomain(p.website), m: claimMode(baseDomain(p.website), !!p.clubs), ...(reviewsFor(p.id).length ? { r: reviewsFor(p.id).length } : {}), ...(upcomingDates(p).length ? { u: 1 } : {}), ...(asksFor(p).length ? { a: asksFor(p) } : {}), ...(/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(p.email || '') ? { e: p.email } : {}) }]),   // r:published reviews, u: a sign-up date still to come (for the emails to its managers), e: the address its website publishes (for a claim by code)
+  ...testListings.map(p => ['p:' + p.id, { n: p.name, d: p.claimDomain, m: 'match', h: 1, f: listingFields(p), ...(p.notPosted ? { np: p.notPosted } : {}) }]),
+  ...programs.map(p => ['p:' + p.id, { n: fullName(p), d: baseDomain(p.website), m: claimMode(baseDomain(p.website), !!p.clubs), ...(reviewsFor(p.id).length ? { r: reviewsFor(p.id).length } : {}), ...(upcomingDates(p).length ? { u: 1 } : {}), ...(asksFor(p).length ? { a: asksFor(p) } : {}), ...(/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(p.email || '') ? { e: p.email } : {}), ...(p.notPosted ? { np: p.notPosted } : {}), f: listingFields(p) }]),   // r:published reviews, u: a sign-up date still to come (for the emails to its managers), e: the address its website publishes (for a claim by code)
   ...summerCamps.map(c => ['c:' + c.id, { n: c.name + ' (summer camp)', d: baseDomain(c.website), m: claimMode(baseDomain(c.website)) }]),
 ]);
+// What a manager can set from the fields in its listing tools, as the listing has it now (src/server/groups-api.php,
+// "listing_fields"): days, hours, pick up by, cost, grades, and which schools it picks up from or runs at.
+function listingFields(p) {
+  return { days: p.days || null, hours: notPosted(p, 'hours') ? '' : p.hours, pickupBy: p.pickupBy || '', cost: notPosted(p, 'cost') ? '' : p.cost, grades: p.grades || null,
+    schools: Object.fromEntries(Object.entries(p.schools || {}).map(([sid, l]) => [sid, l.relation])) };
+}
 // Under a listing: suggest an update (anyone), and claim it (whoever runs it).
 // The box at the end of a listing for the people who run it: claim it (free, with a work email), or suggest an
 // update. Once the site says the listing is claimed (site.js asks), the box says so instead and keeps the update link.
-const listingTools = (key, name, depth, noun) => GROUPS ? `<div class="listing-tools claim-cta" data-claim-cta="${esc(key)}">
+// A listing that went up on the minimum (notPosted) says what isn't posted yet, and that claiming it is how to add it.
+const NOT_POSTED_WORDS = { days: 'days', hours: 'hours', cost: 'prices', grades: 'grades', pickup: 'pickup schools' };
+const notPostedWords = list => { const w = (list || []).map(f => NOT_POSTED_WORDS[f]).filter(Boolean); return w.length < 2 ? w.join('') : w.slice(0, -1).join(', ') + ' and ' + w[w.length - 1]; };
+const listingTools = (key, name, depth, noun, missing) => GROUPS ? `<div class="listing-tools claim-cta" data-claim-cta="${esc(key)}">
       <div class="claim-cta-say">
-        <b class="claim-cta-h when-free">${noun === 'camp' ? T(`Run this camp?`) : T(`Run this program?`)}</b><b class="claim-cta-h when-claimed">${T(`Claimed by the people who run it`)}</b>
+        <b class="claim-cta-h when-free">${noun === 'camp' ? T(`Run this camp?`) : T(`Run this program?`)}</b><b class="claim-cta-h when-claimed">${T(`Claimed by the people who run it`)}</b>${missing && missing.length ? `
+        <p class="when-free claim-np">${T(`Its {what} aren’t posted yet. Claim it to add them yourself.`, { what: notPostedWords(missing) })}</p>` : ''}
         <p class="when-free">${T(`Claim this listing, free, with your work email: keep its dates, costs and hours right yourself, say whether there’s space, and get its numbers each month.`)}</p>
         <p class="when-claimed">${T(`Updates come from them. Spotted something off?`)} ${T(`Also run it?`)} <a href="${link('managers/', depth)}?l=${encodeURIComponent(key)}">${T(`Claim it with your work email too.`)}</a></p>
       </div>
@@ -4356,12 +4376,52 @@ ${gets.map(([k, h, p], i) => `      <div class="pm-get"><span class="pm-get-ic" 
 }
 
 // The owner's review page for claims and the changes directors propose, behind the same sign-in as the edit page.
+// The emails the claims page sends, listed at /edit/emails/ with the site's others (emailCopy): each sentence goes into
+// the page as a PHP string, with any edit applied. {first}, {name}, {site} and {contact} are filled in when it sends.
+const CLAIM_EMAILS = {
+  ok: 'Your claim is approved (sent from the claims page)',
+  no: 'About your claim, when you decline it or take it away (sent from the claims page)',
+  given: 'You now manage a listing (sent when you give one by hand on the claims page)',
+  done: 'Your change is published (sent from the claims page)',
+  notMade: 'About the change you sent (sent from the claims page)',
+  premium: 'A premium listing (sent when you make one premium on the claims page)',
+};
+// The reasons a decline can give, in the order the claims page and the Needs-you page offer them ("other" is typed).
+const CLAIM_REASONS = [
+  ['addr', 'Their address isn’t at the program’s website', 'The email address you claimed with isn’t at the program’s own website, and we couldn’t confirm you work there another way.'],
+  ['said-no', 'The program said no', 'We checked with the program, and they told us you don’t manage this listing.'],
+  ['no-reach', 'We couldn’t reach the program', 'We couldn’t reach the program to confirm that you work with them.'],
+  ['managed', 'The program already manages it', 'The program already manages this listing, and asked us not to add anyone else.'],
+];
+const claimWhyOptions = () => `<option value="">Why? It goes in the email</option>${CLAIM_REASONS.map(([k, label]) => `<option value="${k}">${esc(label)}</option>`).join('')}<option value="other">Other: type it</option>`;
+function claimWords() {
+  const pq = t => `'` + String(t).replace(/\\/g, '\\\\').replace(/'/g, `\\'`) + `'`;
+  const w = (k, t) => pq(emailCopy(CLAIM_EMAILS[k], t));
+  const hi = Object.keys(CLAIM_EMAILS).map(k => w(k, 'Hi {first},'))[0];   // the greeting, listed in each
+  return {
+    hi,
+    ok: { subject: w('ok', 'Your claim on {name} is approved'), line: w('ok', 'Your claim on “{name}” at {site} is approved. The listing now shows as claimed, and you can send changes to it here:') },
+    no: { subject: w('no', 'About your claim on {name}'),
+      declined: w('no', 'Thanks so much for claiming “{name}” on {site}! Unfortunately, we weren’t able to confirm that you run it, so the claim has been declined for now.'),
+      removed: w('no', 'Thanks so much for claiming “{name}” on {site}! Unfortunately, we weren’t able to confirm that you run it, so the claim has been removed for now.'),
+      again: w('no', 'If we got this wrong, please reach out to {contact} or just reply to this email, tell us how you’re connected to the program, and we’ll take another look.') },
+    reasons: Object.fromEntries(CLAIM_REASONS.map(([k, , t]) => [k, w('no', t)])),
+    given: { subject: w('given', 'You now manage {name} on {site}'), line: w('given', 'We’ve given your account the listing “{name}” on {site}. It now shows as claimed. Sign in with this email address to send changes to it, say whether there’s space and see its numbers:') },
+    done: { subject: w('done', 'Your change to {name} is published'), line: w('done', 'The change you sent for “{name}” is on the site now. Have a look, and send another if anything is off:') },
+    notMade: { subject: w('notMade', 'About the change you sent for {name}'), line: w('notMade', 'Thanks so much for sending a change for “{name}”! Unfortunately, we weren’t able to make it this time.'),
+      again: w('notMade', 'Please reach out to {contact} or just reply to this email if you’d like to talk it through. We’re happy to help.') },
+    premium: { subject: w('premium', '{name} now has a premium listing'), line: w('premium', '“{name}” on {site} now has the premium tools: up to six photos and a logo, a section in your own words, an offer or event line, a button parents can use to send you a question, fuller numbers, and a flyer to print. You’ll find them under your listing here:') },
+  };
+}
 function editClaimsPhp() {
+  const W = claimWords();
   const hero = `    <h1>Claims and proposed changes</h1>
     <p class="lede">Who has claimed which listing, the claims waiting for your yes, and the changes program managers have asked for.</p>`;
   const e = v => `<?php echo htmlspecialchars(${v}, ENT_QUOTES, 'UTF-8'); ?>`;
   const act = (does, label, cls = 'btn') => `<button class="${cls}" type="submit" name="do" value="${does}">${label}</button>`;
   const form = (idVar, buttons) => `<form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="${e('$csrf')}"><input type="hidden" name="id" value="<?php echo (int) ${idVar}; ?>">${buttons}</form>`;
+  // Declining or taking a claim away says why: a reason from the list, or the owner's own words.
+  const declineForm = (idVar, does, label) => `<form method="post" action="./" class="actions decline-why"><input type="hidden" name="csrf" value="${e('$csrf')}"><input type="hidden" name="id" value="<?php echo (int) ${idVar}; ?>"><select name="why" required aria-label="Why">${claimWhyOptions()}</select><input type="text" name="why_text" maxlength="300" placeholder="Your own words, if Other" aria-label="Your own words">${act(does, label)}</form>`;
   const body = `<div class="prose stats">
 <?php if ($said !== '') { ?><p class="flag">${e('$said')}</p><?php } ?>
 <?php if (!$have) { ?>
@@ -4372,7 +4432,8 @@ function editClaimsPhp() {
   <?php foreach ($pending as $c) { ?><div class="panel">
     <h3>${e('$name($c["listing"])')}</h3>
     <p>${e('$c["first"] . " " . $c["last"]')} &lt;${e('$c["email"]')}&gt; asked on ${e('$day($c["created"])')}. Their address is at <b>${e('$c["domain"]')}</b>, the same as the listing’s website, but that address is shared.</p>
-    ${form('$c["id"]', act('claim_ok', 'Approve the claim', 'btn primary') + act('claim_no', 'Decline'))}
+    ${form('$c["id"]', act('claim_ok', 'Approve the claim', 'btn primary'))}
+    ${declineForm('$c["id"]', 'claim_no', 'Decline')}
   </div><?php } ?>
 
   <h2>Changes program managers have proposed (<?php echo count($edits); ?> new)</h2>
@@ -4419,7 +4480,7 @@ ${GROUPS.premium !== 'off' ? `  <h2>Words, offer lines, pins and social links wa
   <?php if (!$claims) { ?><p class="hint">None yet.</p><?php } else { ?>${GROUPS.premium !== 'off' ? `
   <p class="hint">${GROUPS.premium === 'preview' ? 'Premium is being tried out: when you make a listing premium, its manager gets the premium tools, and what they add shows on the listing only to them (after you approve it). Nobody else sees it until premium is switched on for the site.' : 'Premium is on: a premium listing’s photos, own words, offer line, social links, Instagram posts and question button show to everyone, after you approve what the manager sends.'}</p>` : ''}
   <div class="stat-scroll"><table class="stat-table wrap"><thead><tr><th scope="col">Listing</th><th scope="col">Who</th><th scope="col">Since</th>${GROUPS.premium !== 'off' ? '<th scope="col">Premium</th>' : ''}<th scope="col"></th></tr></thead><tbody>
-  <?php foreach ($claims as $c) { ?><tr><th scope="row">${e('$name($c["listing"])')}</th><td>${e('$c["first"] . " " . $c["last"]')}<br><span class="hint">${e('$c["email"]')}<?php if (isset($c["domain"]) && $c["domain"] === 'by hand') { ?> · given by hand<?php } ?></span></td><td>${e('$day($c["created"])')}</td>${GROUPS.premium !== 'off' ? `<td><?php if (in_array($c["listing"], $ALWAYS, true)) { ?><b>Premium</b><br><span class="hint">always: a test listing</span><?php } elseif (isset($premium[$c["listing"]])) { ?><b>Premium</b><br><span class="hint">since ${e('$day($premium[$c["listing"]])')}</span>${form('$c["id"]', act('premium_off', 'Turn off'))}<?php } else { ?><?php if (isset($asks[(int) $c["id"]])) { ?><b>Signed up: <?php echo $asks[(int) $c["id"]]["plan"] === 'year' ? 'yearly' : 'monthly'; ?></b><br><span class="hint">${e('$day($asks[(int) $c["id"]]["created"])')}</span><?php } ?>${form('$c["id"]', act('premium_on', 'Make it premium'))}<?php } ?></td>` : ''}<td>${form('$c["id"]', act('claim_remove', 'Take the claim away'))}</td></tr><?php } ?>
+  <?php foreach ($claims as $c) { ?><tr><th scope="row">${e('$name($c["listing"])')}</th><td>${e('$c["first"] . " " . $c["last"]')}<br><span class="hint">${e('$c["email"]')}<?php if (isset($c["domain"]) && $c["domain"] === 'by hand') { ?> · given by hand<?php } ?></span></td><td>${e('$day($c["created"])')}</td>${GROUPS.premium !== 'off' ? `<td><?php if (in_array($c["listing"], $ALWAYS, true)) { ?><b>Premium</b><br><span class="hint">always: a test listing</span><?php } elseif (isset($premium[$c["listing"]])) { ?><b>Premium</b><br><span class="hint">since ${e('$day($premium[$c["listing"]])')}</span>${form('$c["id"]', act('premium_off', 'Turn off'))}<?php } else { ?><?php if (isset($asks[(int) $c["id"]])) { ?><b>Signed up: <?php echo $asks[(int) $c["id"]]["plan"] === 'year' ? 'yearly' : 'monthly'; ?></b><br><span class="hint">${e('$day($asks[(int) $c["id"]]["created"])')}</span><?php } ?>${form('$c["id"]', act('premium_on', 'Make it premium'))}<?php } ?></td>` : ''}<td>${declineForm('$c["id"]', 'claim_remove', 'Take the claim away')}</td></tr><?php } ?>
   </tbody></table></div>
   <?php } ?>
   <h2 id="grant">Give a listing to an account by hand</h2>
@@ -4484,6 +4545,10 @@ function tell($to, $subject, $text) {
   if (pas_postmark($SITE, $FROM, $to, $subject, $text . "\\n\\n" . $SITE, '', $FROM) >= 0) return;
   @mail($to, '=?UTF-8?B?' . base64_encode($subject) . '?=', $text . "\\n\\n" . $SITE, implode("\\r\\n", array('From: ' . $SITE . ' <' . $FROM . '>', 'Reply-To: ' . $FROM, 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=UTF-8')));
 }
+// The emails' words, as edited at /edit/emails/: {words} filled in, and an emptied sentence left out.
+$fill = function ($s, $v) { $m = array(); foreach ($v as $k => $x) $m['{' . $k . '}'] = (string) $x; return strtr($s, $m); };
+$paras = function ($p) { return implode("\\n\\n", array_values(array_filter($p, function ($x) { return trim($x) !== ''; }))); };
+$REASONS = array(${Object.entries(W.reasons).map(([k, v]) => `'${k}' => ${v}`).join(', ')});
 if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
   $ok = isset($_POST['csrf']) && is_string($_POST['csrf']) && hash_equals($csrf, $_POST['csrf']);
   $do = isset($_POST['do']) && is_string($_POST['do']) ? $_POST['do'] : '';
@@ -4505,19 +4570,26 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
         else $db->prepare("INSERT INTO claims (user_id, listing, status, domain, created, decided) VALUES (?, ?, 'ok', 'by hand', ?, ?)")->execute(array($u['id'], $key, time(), time()));
         try { $db->prepare('UPDATE users SET told = 2 WHERE id = ?')->execute(array($u['id'])); } catch (Exception $e) { /* a database from before that column */ }
         $n = $name($key);
-        tell($u['email'], 'You now manage ' . $n . ' on ' . $SITE, 'Hi ' . $u['first'] . ",\\n\\nWe’ve given your account the listing “" . $n . '” on ' . $SITE . '. It now shows as claimed. Sign in with this email address to send changes to it, say whether there’s space and see its numbers:' . "\\n" . $SITE_URL . '/managers/');
+        $vv = array('name' => $n, 'site' => $SITE, 'first' => $u['first']);
+        tell($u['email'], $fill(${W.given.subject}, $vv), $paras(array($fill(${W.hi}, $vv), $fill(${W.given.line}, $vv) . "\\n" . $SITE_URL . '/managers/')));
         $msg = 'Done. ' . $u['first'] . ' ' . $u['last'] . ' now holds ' . $n . ', and they’ve been told.';
       }
     }
   }
+  // A decline says why, in the words below (editable at /edit/emails/) or the owner's own.
+  $whyKey = isset($_POST['why']) && is_string($_POST['why']) ? $_POST['why'] : '';
+  $whyOwn = trim(preg_replace('/[\\x00-\\x1F\\x7F]+/u', ' ', isset($_POST['why_text']) && is_string($_POST['why_text']) ? mb_substr($_POST['why_text'], 0, 300) : '') ?? '');
+  $why = $whyKey === 'other' ? $whyOwn : (isset($REASONS[$whyKey]) ? $REASONS[$whyKey] : '');
+  if ($ok && in_array($do, array('claim_no', 'claim_remove'), true) && $why === '') { $ok = false; $msg = $whyKey === 'other' ? 'Type the reason in your own words, then decline again.' : 'Pick a reason first: it goes in the email to them.'; }
   if ($ok && in_array($do, array('claim_ok', 'claim_no', 'claim_remove'), true)) {
     $st = $db->prepare('SELECT c.id, c.listing, c.status, u.email, u.first FROM claims c JOIN users u ON u.id = c.user_id WHERE c.id = ?'); $st->execute(array($id)); $c = $st->fetch();
     if ($c) {
       $to = $do === 'claim_ok' ? 'ok' : 'declined';
       $db->prepare('UPDATE claims SET status = ?, decided = ? WHERE id = ?')->execute(array($to, time(), $id));
       $n = $name($c['listing']);
-      if ($to === 'ok') tell($c['email'], 'Your claim on ' . $n . ' is approved', 'Hi ' . $c['first'] . ",\\n\\nYour claim on “" . $n . '” at ' . $SITE . ' is approved. The listing now shows as claimed, and you can send changes to it here:' . "\\n" . $SITE_URL . '/managers/');
-      else tell($c['email'], 'About your claim on ' . $n, 'Hi ' . $c['first'] . ",\\n\\nThanks so much for claiming “" . $n . '” on ' . $SITE . '! Unfortunately, we weren’t able to confirm that you run it, so the claim has been ' . ($do === 'claim_remove' ? 'removed' : 'declined') . ' for now.' . "\\n\\n" . 'If we got this wrong, please reach out to ' . $FROM . ' or just reply to this email, tell us how you’re connected to the program, and we’ll take another look.');
+      $vv = array('name' => $n, 'site' => $SITE, 'first' => $c['first'], 'contact' => $FROM);
+      if ($to === 'ok') tell($c['email'], $fill(${W.ok.subject}, $vv), $paras(array($fill(${W.hi}, $vv), $fill(${W.ok.line}, $vv) . "\\n" . $SITE_URL . '/managers/')));
+      else tell($c['email'], $fill(${W.no.subject}, $vv), $paras(array($fill(${W.hi}, $vv), trim($fill($do === 'claim_remove' ? ${W.no.removed} : ${W.no.declined}, $vv) . ' ' . $why), $fill(${W.no.again}, $vv))));
       $msg = $to === 'ok' ? 'Approved, and they’ve been told.' : 'Done, and they’ve been told.';
     }
   } elseif ($ok && in_array($do, array('edit_done', 'edit_no'), true)) {
@@ -4525,8 +4597,9 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($x) {
       $db->prepare('UPDATE edits SET status = ?, decided = ? WHERE id = ?')->execute(array($do === 'edit_done' ? 'done' : 'declined', time(), $id));
       $n = $name($x['listing']);
-      if ($do === 'edit_done') tell($x['email'], 'Your change to ' . $n . ' is published', 'Hi ' . $x['first'] . ",\\n\\nThe change you sent for “" . $n . '” is on the site now. Have a look, and send another if anything is off:' . "\\n" . $SITE_URL . '/managers/');
-      else tell($x['email'], 'About the change you sent for ' . $n, 'Hi ' . $x['first'] . ",\\n\\nThanks so much for sending a change for “" . $n . '”! Unfortunately, we weren’t able to make it this time, usually because we couldn’t find it on the program’s own website.' . "\\n\\n" . 'Please reach out to ' . $FROM . ' or just reply to this email if you’d like to talk it through. We’re happy to help.');
+      $vv = array('name' => $n, 'site' => $SITE, 'first' => $x['first'], 'contact' => $FROM);
+      if ($do === 'edit_done') tell($x['email'], $fill(${W.done.subject}, $vv), $paras(array($fill(${W.hi}, $vv), $fill(${W.done.line}, $vv) . "\\n" . $SITE_URL . '/managers/')));
+      else tell($x['email'], $fill(${W.notMade.subject}, $vv), $paras(array($fill(${W.hi}, $vv), $fill(${W.notMade.line}, $vv), $fill(${W.notMade.again}, $vv))));
       $msg = $do === 'edit_done' ? 'Marked published, and they’ve been told.' : 'Declined, and they’ve been told.';
     }
   }
@@ -4547,15 +4620,14 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
             catch (Exception $e) { $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE listing = ? AND status = 'ok' AND id != ?")->execute(array(time(), $x['listing'], $id)); }
           }
           $db->prepare("UPDATE photos SET status = 'ok', decided = ? WHERE id = ?")->execute(array(time(), $id));
-          $seen = $isPrem && $PREMIUM === 'preview' ? ' For now only you can see it there, while premium listings are being tried out.' : '';
-          tell($x['email'], 'Your ' . $kind . ' for ' . $n . ' is on the site', 'Hi ' . $x['first'] . ",\n\nThe " . $kind . " you sent for “" . $n . '” is on the listing now.' . $seen . ' You can replace or remove it here:' . "\n" . $SITE_URL . '/managers/');
-          $msg = 'Published, and they’ve been told.';
+          // no email: the manager sees it on the listing and in their listing tools
+          $msg = 'Published. No email goes to the manager: it shows in their listing tools.';
         } else {
           $was = $x['status'];
           $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE id = ?")->execute(array(time(), $id));
           @unlink($photoFile($id));
-          tell($x['email'], 'About the photo you sent for ' . $n, 'Hi ' . $x['first'] . ",\n\nWe " . ($was === 'ok' ? 'have taken down' : 'weren’t able to use') . ' the photo you sent for “' . $n . '”. You’re welcome to send another: a clear picture of the space or an activity works best, with permission from the families of any children in it. Reply to this email with any questions.');
-          $msg = $was === 'ok' ? 'Taken down, and they’ve been told.' : 'Declined, and they’ve been told.';
+          // no email: the photo just doesn't show on the listing
+          $msg = $was === 'ok' ? 'Taken down.' : 'Declined.';
         }
       }
     } catch (Exception $e) { /* a database from before photos: nothing to do */ }
@@ -4568,7 +4640,8 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $n = $name($c['listing']);
         if ($do === 'premium_on') {
           $db->prepare('INSERT OR IGNORE INTO premium (listing, since) VALUES (?, ?)')->execute(array($c['listing'], time()));
-          tell($c['email'], $n . ' now has a premium listing', 'Hi ' . $c['first'] . ",\n\n“" . $n . '” on ' . $SITE . ' now has the premium tools: up to six photos and a logo, a section in your own words, an offer or event line, a button parents can use to send you a question, fuller numbers, and a flyer to print.' . ($PREMIUM === 'preview' ? ' We’re still trying these out, so for now what you add shows on your listing only to you.' : '') . ' You’ll find them under your listing here:' . "\n" . $SITE_URL . '/managers/');
+          $vv = array('name' => $n, 'site' => $SITE, 'first' => $c['first']);
+          tell($c['email'], $fill(${W.premium.subject}, $vv), $paras(array($fill(${W.hi}, $vv), $fill(${W.premium.line}, $vv) . "\n" . $SITE_URL . '/managers/')));
           $msg = 'It’s premium now, and its manager has been told.';
         } else {
           $db->prepare('DELETE FROM premium WHERE listing = ?')->execute(array($c['listing']));
@@ -4585,13 +4658,13 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($do === 'extra_ok') {
           $db->prepare("DELETE FROM extras WHERE listing = ? AND kind = ? AND status = 'ok' AND id != ?")->execute(array($x['listing'], $x['kind'], $id));   // the newer one takes its place
           $db->prepare("UPDATE extras SET status = 'ok', decided = ? WHERE id = ?")->execute(array(time(), $id));
-          tell($x['email'], 'Your ' . $what . ' for ' . $n . ' ' . $are . ' on the site', 'Hi ' . $x['first'] . ",\n\nThe " . $what . ' you ' . ($are === 'are' ? 'sent' : 'wrote') . ' for “' . $n . '” ' . $are . ' on the listing now.' . ($PREMIUM === 'preview' ? ' For now only you can see it there, while premium listings are being tried out.' : '') . ' You can change it or take it down here:' . "\n" . $SITE_URL . '/managers/');
-          $msg = 'Published, and they’ve been told.';
+          // no email: the manager sees it on the listing and in their listing tools
+          $msg = 'Published. No email goes to the manager: it shows in their listing tools.';
         } else {
           $was = $x['status'];
           $db->prepare("UPDATE extras SET status = 'declined', decided = ? WHERE id = ?")->execute(array(time(), $id));
-          tell($x['email'], 'About the ' . $what . ' for ' . $n, 'Hi ' . $x['first'] . ",\n\nWe " . ($was === 'ok' ? 'have taken down' : 'weren’t able to publish') . ' the ' . $what . ' you ' . ($are === 'are' ? 'sent' : 'wrote') . ' for “' . $n . '”. ' . ($x['kind'] === 'pin' ? 'A pin’s name should be the program’s name or a short, kid-friendly title, with no prices, offers or web addresses.' : ($x['kind'] === 'social' ? 'Social links should go to the program’s own accounts.' : ($x['kind'] === 'posts' ? 'Instagram posts should be public posts from the program’s own account that are fine for families to see on the site.' : 'It should describe the program in plain words, with no prices that differ from the listing and no claims about other programs.'))) . ' You’re welcome to send another, or reply to this email with any questions.');
-          $msg = $was === 'ok' ? 'Taken down, and they’ve been told.' : 'Declined, and they’ve been told.';
+          // no email: their listing tools say it wasn't published, and what it should be
+          $msg = $was === 'ok' ? 'Taken down.' : 'Declined.';
         }
       }
     } catch (Exception $e) { /* a database from before premium: nothing to do */ }
@@ -4659,7 +4732,7 @@ function groupPage() {
 // The server side: one file, copied from src/server with the few settings it needs.
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
-  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, repo: /^[\w.-]+\/[\w.-]+$/.test(cfg.repo || '') ? cfg.repo : '', backupRepo: /^[\w.-]+\/[\w.-]+$/.test(cfg.backupRepo || '') ? cfg.backupRepo : '', opsRepo: OPS_REPO, ownerNotes: OWNER_NOTES, autopilot: AP_CONF, queueReplies: cfg.queueReplies !== false, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])), acts: KIDS_ACTS.map(a => a.id), citySchools: Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`])), moderation: MODERATION, claimByCode: CLAIM_BY_CODE, reviewNewAccount: REVIEW_NEW_ACCOUNT });
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, repo: /^[\w.-]+\/[\w.-]+$/.test(cfg.repo || '') ? cfg.repo : '', backupRepo: /^[\w.-]+\/[\w.-]+$/.test(cfg.backupRepo || '') ? cfg.backupRepo : '', opsRepo: OPS_REPO, ownerNotes: OWNER_NOTES, autopilot: AP_CONF, queueReplies: cfg.queueReplies !== false, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])), acts: KIDS_ACTS.map(a => a.id), citySchools: Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`])), managerFields: cfg.groups?.managerFields === 'review' ? 'review' : 'publish', moderation: MODERATION, claimByCode: CLAIM_BY_CODE, reviewNewAccount: REVIEW_NEW_ACCOUNT, peopleMail: PEOPLE_MAIL, outreach: OUTREACH });
   const src = phpCopy(fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8'));
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   if (!src.includes('/*MAILER*/')) throw new Error('src/server/groups-api.php has lost its /*MAILER*/ marker');
@@ -4690,6 +4763,12 @@ const OPS_REPO = /^[\w.-]+\/[\w.-]+$/.test(cfg.opsRepo || '') ? cfg.opsRepo : ''
 // whether the morning summary goes out ("summary": "on"), which then carries the sign-up digest's counts too; and
 // whether a copy of each answer the site emails a sender comes here too ("answerCopies", on unless it says "off").
 const OWNER_NOTES = { parentSignup: cfg.ownerNotes && cfg.ownerNotes.parentSignup === 'digest' ? 'digest' : 'each', summary: cfg.ownerNotes && cfg.ownerNotes.summary === 'on' ? 'on' : 'off', answerCopies: cfg.ownerNotes && cfg.ownerNotes.answerCopies === 'off' ? 'off' : 'on' };
+// Who answers mail people write to contact@ ("inbox": the owner, in Gmail; "site": the queue run), and whether the
+// mailbox script sends outreach: "mail" in site.config.json.
+const PEOPLE_MAIL = cfg.mail && cfg.mail.people === 'site' ? 'site' : 'inbox';
+const OUTREACH = cfg.mail && cfg.mail.outreach === 'on' ? 'on' : 'off';
+// Emails switched off there stay off /edit/emails/; their sentences keep any edit, for when they're switched back on.
+const emailHidden = name => (PEOPLE_MAIL === 'inbox' && /^Mailbox/.test(name)) || (OUTREACH === 'off' && /^Outreach:/.test(name)) || (OWNER_NOTES.answerCopies === 'off' && /^A copy of an answer/.test(name));
 // The wording of the emails the server sends is written in src/server/groups-api.php as __T("…"), with {words} filled
 // in at send time by its t() helper. The build turns each into a PHP string with any edit from data/copy.json applied
 // (an emptied sentence becomes ''), and registers it like a page sentence, so it can be edited at /edit/emails/.
@@ -4708,7 +4787,7 @@ function phpCopy(src) {
     const id = copyId(original);
     copyRegistry.set(id, original);
     const mark = emailAt(at);
-    if (mark) { if (!byName.has(mark.name)) { byName.set(mark.name, []); EMAILS.push({ name: mark.name, sentences: byName.get(mark.name) }); } byName.get(mark.name).push(original); }
+    if (mark && !emailHidden(mark.name)) { if (!byName.has(mark.name)) { byName.set(mark.name, []); EMAILS.push({ name: mark.name, sentences: byName.get(mark.name) }); } byName.get(mark.name).push(original); }
     return quote(isRemoved(id) ? '' : (typeof copyEdits[id]?.now === 'string' ? copyEdits[id].now : original));
   });
   const left = (out.match(/__T\(/g) || []).length;
@@ -4730,7 +4809,7 @@ function boardPage() {
     weekendPath: link(weekendPath, 1),
     weekend: Object.fromEntries(programs.filter(p => p.weekend).map(p => [p.id, { name: p.name, hood: programHoods(p)[0] || '', type: p.types[0], days: p.weekend.days, times: p.weekend.times || null, path: link(programPath(p), 1) }])),
     programs: Object.fromEntries(programs.filter(p => !campOnly(p)).map(p => [p.id, {
-      name: p.name, hours: p.hours, pickupBy: p.pickupBy || '', offers: p.offers || [], type: p.types[0], no: order.indexOf(p.id) + 1,
+      name: p.name, hours: notPosted(p, 'hours') ? NOT_POSTED_LINE : p.hours, pickupBy: p.pickupBy || '', offers: p.offers || [], type: p.types[0], no: order.indexOf(p.id) + 1, np: p.notPosted || null,
       days: p.days || null, offerDays: p.offerDays || null, rate: p.rate || null, types: p.types, grades: p._grades, kw: (p.keywords || []).map(k => k.toLowerCase()), cls: p._cls || null,
       path: link(programPath(p), 1), q: [p.name, ...(p.offers || []), ...(p.keywords || []), ...p.types.map(t => TYPE[t].label), ...programHoods(p), ...schools.filter(s => p.schools[s.id]).map(s => s.shortName)].join(' ').toLowerCase(),
       hoods: programHoods(p), free: p.price === 'free',
@@ -5677,6 +5756,7 @@ $SITE_URL = ${JSON.stringify(cfg.siteUrl)};
 $REPO = ${JSON.stringify(cfg.repo || '')};
 $OPS = ${JSON.stringify(OPS_REPO)};
 $REVIEW_FRESH = ${JSON.stringify(REVIEW_NEW_ACCOUNT)};
+$PEOPLE_MAIL = ${JSON.stringify(PEOPLE_MAIL)};
 $NAMES = json_decode('${names}', true);
 $CITY = json_decode('${city}', true);`;
   const logic = src.replace('/*MAILER*/', () => mailerPhp()).replace('/*CONFIG*/', () => config).replace('/*AUTH*/', () => editAuthPhp()).replace('/*GH*/', () => ghPhp()).replace('/*QUEUE*/', () => queuePhp()).replace('/*MAIL*/', () => mailPhp()).replace('/*CONTENT*/', () => contentPhp());
@@ -5760,7 +5840,7 @@ $REPO = ${JSON.stringify(/^[\w.-]+\/[\w.-]+$/.test(cfg.repo || '') ? cfg.repo : 
 $AP = json_decode('${php(AP_CONF)}', true);
 $LABELS = json_decode('${php(labels)}', true);
 $SCHOOLS = json_decode('${php(Object.fromEntries(schools.map(s => [s.id, s.shortName])))}', true);`;
-  const page = layout({ title, description, pathName, depth: 2, current: null, hero, body, noindex: true, quiet: true });
+  const page = layout({ title, description, pathName, depth: 2, current: null, hero, body: body.split('<!--CLAIM-WHY-->').join(claimWhyOptions()), noindex: true, quiet: true });
   return logic.replace('/*CONFIG*/', () => config).replace('/*AUTH*/', () => editAuthPhp()).replace('/*GH*/', () => ghPhp()).replace('/*AUTOPILOT*/', () => autopilotPhp()).replace('/*MAIL*/', () => mailPhp()).replace('/*CONTENT*/', () => contentPhp()) + '\n' + page;
 }
 const editNeedsPhp = () => editAutopilotPage('src/server/edit-needs.php', { title: 'Needs you', description: 'Everything waiting for the owner’s say.', pathName: 'edit/needs/' });

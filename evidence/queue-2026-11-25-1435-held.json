@@ -1,0 +1,36 @@
+{
+  "run": "queue-2026-11-25-1435-held",
+  "items": [
+    {
+      "item": "e3",
+      "kind": "told",
+      "listing": "p:imagine-that-philly",
+      "outcome": "held",
+      "fields": [
+        {
+          "path": "told[2026-11-25]",
+          "old": null,
+          "new": {
+            "on": "2026-11-25",
+            "by": "program manager",
+            "how": "proposed from its claim",
+            "fields": [
+              "grades",
+              "register.nextTerm",
+              "cost",
+              "days",
+              "hours",
+              "pickupBy",
+              "schools"
+            ],
+            "says": "Dates: After school enrollment for K-5 students at Coppin and K-2 students at Nebinger open in March for the upcoming school year.  There is a non-refundable deposit due by June 1 for newly enrolled students or July 1 for return students.  The deposit is applied to September's tuition and then renewal is on the 1st of each month after that. Cost: PT at $175/mo for 3 set days or FT at $250/mo for 4+ days Days and hours: Monday to Friday, dismissal to 5:45pm.  We operate on the SDP closure schedule. Other: We operate on-site for students who attend Fanny Jackson Coppin or George W Nebinger. In addition, we offer a 6 week summer camp at either SDP school location."
+          },
+          "source": "https://imaginethatphilly.org/",
+          "quote": "",
+          "read": "2026-11-25",
+          "how": "person"
+        }
+      ]
+    }
+  ]
+}

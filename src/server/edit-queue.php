@@ -44,7 +44,7 @@ function host_secret() {
 }
 function queue_page_ctx() {
   global $ROOT, $NAMES, $CITY, $OPS, $SITE_URL, $REVIEW_FRESH;
-  return array('root' => $ROOT, 'db' => edit_db(), 'names' => $NAMES, 'city' => $CITY, 'secret' => host_secret(), 'gh' => 'gh', 'ops' => $OPS, 'site' => $SITE_URL, 'fresh' => $REVIEW_FRESH);
+  return array('root' => $ROOT, 'db' => edit_db(), 'names' => $NAMES, 'city' => $CITY, 'secret' => host_secret(), 'gh' => 'gh', 'ops' => $OPS, 'site' => $SITE_URL, 'fresh' => $REVIEW_FRESH, 'mail' => $PEOPLE_MAIL);
 }
 // Who asked for each school from an account, for this page only, so the owner can write to them when the school goes
 // up. Read from the log next to the public folder; never written to the queue.
@@ -123,7 +123,7 @@ function state_line($x) {
   if ($r['state'] === 'held') return $r['reason'] === 'pr-closed' ? 'Held: its pull request was closed without a merge' : 'Held for you';
   if ($r['state'] === 'waiting') return ($r['outcome'] === 'held' ? 'Held in a pull request' : 'Published') . ' once the pull request is merged';
   $o = isset($OUTCOME[$r['outcome']]) ? $OUTCOME[$r['outcome']] : (string) $r['outcome'];
-  return $o . ($r['reason'] !== '' ? ' (' . $r['reason'] . ')' : '');
+  return $o . ($r['reason'] !== '' ? ' (' . $r['reason'] . (isset($r['missing']) && (string) $r['missing'] !== '' ? ': ' . str_replace(',', ', ', (string) $r['missing']) : '') . ')' : '');
 }
 function told_line($r) {
   if (!isset($r['email']) || $r['email'] === '') return '';   // the owner's own note, or nobody to answer

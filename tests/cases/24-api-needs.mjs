@@ -190,14 +190,26 @@ test('held items from the accounts database: a claim waits on the Needs-you page
   includes(h, 'Claims waiting for your yes'); includes(h, who);
   const id = site.sql(`SELECT c.id FROM claims c JOIN users u ON u.id = c.user_id WHERE u.email = '${who}'`)[0].id;
   const cc = /action="\.\.\/claims\/"[^>]*><input type="hidden" name="csrf" value="([0-9a-f]{64})"/.exec(h)[1];
-  const r = await post('claims/', { csrf: cc, back: 'needs', id, do: 'claim_no' });
+  // Declining says why: without a reason nothing is decided.
+  includes(h, '<option value="said-no">The program said no</option>');
+  const none = await post('claims/', { csrf: cc, back: 'needs', id, do: 'claim_no' });
+  includes(none.said, 'Pick a reason first'); eq(site.sql(`SELECT status FROM claims WHERE id = ${id}`)[0].status, 'pending', 'nothing decided without a reason');
+  const r = await post('claims/', { csrf: cc, back: 'needs', id, do: 'claim_no', why: 'said-no' });
   includes(r.location, '../needs/?said='); includes(r.said, 'they’ve been told');
-  await mail.waitFor(who, /About your claim/);
+  const no = await mail.waitFor(who, /About your claim/);
+  includes(no.TextBody, 'Hi Dana,'); includes(no.TextBody, 'so the claim has been declined for now. We checked with the program, and they told us you don’t manage this listing.');
+  includes(no.TextBody, 'If we got this wrong, please reach out to contact@phillyafterschool.org');
   h = await get('needs/');
   excludes(h, who, 'decided: off the page');
   // Pressed on the claims page itself, it stays there.
   const r2 = await post('claims/', { csrf: cc, id, do: 'claim_ok' });
   ok(r2.location.startsWith('./?said='), r2.location);
+  includes((await mail.waitFor(who, /is approved/)).TextBody, 'is approved. The listing now shows as claimed, and you can send changes to it here:\nhttps://phillyafterschool.org/managers/');
+  // Taken away later, in the owner's own words.
+  mail.clear();
+  const r4 = await post('claims/', { csrf: cc, id, do: 'claim_remove', why: 'other', why_text: 'The program asked us to take it down.' });
+  ok(r4.location.startsWith('./?said='), r4.location);
+  includes((await mail.waitFor(who, /About your claim/)).TextBody, 'so the claim has been removed for now. The program asked us to take it down.');
   // "Not for the run" on an item a run held goes through the queue page and back here too.
   const qc = /name="csrf" value="([0-9a-f]{64})"/.exec(await get('queue/'))[1];
   const r3 = await post('queue/', { csrf: qc, back: 'needs', do: 'drop:s0a1b2c3d4e' });

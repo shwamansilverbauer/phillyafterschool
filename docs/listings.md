@@ -27,7 +27,21 @@ Fields worth knowing:
 - `register.nextTerm`: optional. When sign-ups open for the next term, semester or school year, in a sentence with dates. Leave it out when the provider doesn't say.
 - `register.dates`: optional list of `{ "date": "YYYY-MM-DD", "label": "..." }` for registration openings and deadlines. Each upcoming one gets "Add to calendar" links on the card; past dates drop off by themselves.
 - `note`: the yellow caution box. Use it for anything unconfirmed.
+- `notPosted`: what the provider hasn't posted yet, from `days`, `hours`, `cost`, `grades` and `pickup` (each once).
+  Since November 25, 2026 a program goes on the site on a minimum: its own site shows it's real (the gate's new-listing
+  check), that it runs something for school-age kids, a street address and a way to reach it. Whatever else it hasn't
+  posted is listed here, never guessed. A thin listing writes `"hours": "Not posted yet; ask the program"` and `"cost":
+  "Not posted yet"` (the gate's `notPosted.lines` in `scripts/gate.config.json`, which need no quote), and `"grades":
+  null`. Its card and page show "Not posted yet, ask the program" for each, its page's claim box says what isn't posted
+  and that claiming it is how to add it, Build your week labels it "Days not posted, check with the program" instead of
+  showing it as open every day, and the "Your suggestion is now on the site" email invites whoever runs it to claim it. A word leaves the
+  list when the monthly check finds the fact on the provider's site, or when a manager sets it from the listing tools
+  (see "Program managers' own fields" in `docs/program-managers.md`).
 - `schools`: one entry per school the program serves. Leave it as `{}` only for a listing with `daysOff` or `weekend` that runs nothing on a weekday afternoon (a theater with Saturday classes and holiday camps, say). That listing gets its own page and a card on the day-camp page, and stays off every school page, the A to Z list, the type and neighborhood pages and the roster.
+  A thin listing (`notPosted`) is linked `nearby` to each covered school within about half a mile, with the note
+  "Doesn't say it picks up." When none is that close it may leave `schools` as `{}` too, with `neighborhoods` set: unlike
+  a day-camp listing it stays an after-school listing, on its neighborhood page, the A to Z list, the type pages, the
+  map and the roster, and joins a school page once a school near it goes up.
   Otherwise:
   - `relation`: `onsite`, `pickup` or `nearby`. Use `pickup` only when a source names the school.
   - `note`: a caution that applies to that school only.
@@ -237,7 +251,12 @@ only appends to and never emails from.
   lists the items not yet answered in any outcome file (an item answered `failed` counts as not answered), oldest
   first, at most 15 (the gate's limit for a queue run; the rest wait for the next run), and prints "Nothing to do."
   when there are none, which ends the run. It checks each item against the provider's own site under the monthly
-  check's rules, answers emails with the site's fixed replies, and opens a pull request named
+  check's rules: the whole site, not only the address someone sent (since November 25, 2026; "READING A PROVIDER'S
+  SITE" in its prompt): the home page and its menus, then the pages that point at the item (after school, camp,
+  rates, schedule, registration, FAQ and the like, PDFs on the site included), in a browser when a menu is built by
+  script, at most 12 pages an item, each fact cited from the page that states it. When the site doesn't have what a
+  listing needs, it answers `not-on-site` with what was missing, and the sender is told what to add. It answers
+  emails with the site's fixed replies, and opens a pull request named
   `queue-<date>-<time>` (Philadelphia time). "Run now" on the task runs it any day; Rush on `/edit/queue/` reminds
   the owner to. While the switch is `shadow`, it also tries a smaller model on its first pass (sorting the items) and
   reports in its pull request how often the two agreed, for the owner to decide whether the smaller model can take it.
@@ -251,7 +270,9 @@ only appends to and never emails from.
 
 **Cost.** The running budget assumed in the scaling plan holds only if the queue run is cheap when idle (it reads two
 small folders and stops) and no run reads the big files whole (`CLAUDE.md` and the prompts point each run at the
-sections it needs). If usage climbs, the first cut is the queue run's 12:41 pass. The tokens each run reports in its
+sections it needs). Reading a provider's whole site costs more than one page: up to 12 pages for an item the first
+link doesn't settle, so a busy queue costs more than it did. If usage climbs, the first cut is the queue run's 12:41
+pass. The tokens each run reports in its
 outcome file add up in the morning summary's cost line.
 
 `scripts/linkcheck.mjs` sweeps every outside address in the data files (programs, camps, schools, the district
@@ -309,8 +330,11 @@ reaches the public repository. (Until November 2026 the owner ticked items on `/
   at, one of `setup`, `queue`, `build`, `tests`, `gate`, `push`, `pull-request`, `outcomes`, `time` or `other`
   (`QUEUE_RUN_FAILS`); the morning summary names the run and the step in the site's own words, and anything else the
   file says is ignored. `outcome` is one of `published`, `held`, `declined`,
-  `duplicate`, `needs-info`, `no-change` or `failed`; `reason`, for `needs-info` and `declined`, one of `need-page`,
-  `need-website`, `need-school`, `not-a-program`, `outside`, `no-own-site` or `closed`; `pr` on an item overrides
+  `duplicate`, `needs-info`, `no-change` or `failed`; `reason`, for `needs-info` and `declined`, one of `not-on-site`,
+  `need-page`, `need-website`, `need-school`, `not-a-program`, `outside`, `no-own-site` or `closed`; `missing`, for
+  `needs-info` with `not-on-site` only, a list of the facts no page of the program's own site gave, from `hours`,
+  `school`, `register`, `ages`, `place` and `weeks` (`QUEUE_MISSING`; anything else is dropped, and the host keeps
+  them in `queue_items.missing`); `pr` on an item overrides
   the file's, and only a `published` item takes the file's (a `held` item waits on a pull request only when it names
   one itself); `tokens` is how many model tokens the run used, if it knows. An email (`m…`) can also be `answered`,
   with `reply` one of `how-to-claim`, `delete-account`, `stop-emails` or `add-school`, or `spam` (settled with no
@@ -338,18 +362,23 @@ reaches the public repository. (Until November 2026 the owner ticked items on `/
   item back in the queue for the next run. A settled or worked item leaves `queue/open.json`. A manager's proposed
   change that a run settles is marked published or declined on `/edit/claims/` too.
 - **The sender hears once.** When an item is settled, its sender gets one email in the site's own words (editable
-  at `/edit/emails/`, see "The emails" in `docs/emails.md`): published ("It's on the site", the listing's link, and
-  an invitation to save their school or follow the listing), duplicate and no-change ("It's already listed", with
-  the link), needs-info ("We couldn't verify this one yet", and what would help, by `reason`), declined ("We weren't
-  able to add this one", with the rule in a sentence, by `reason`). The two that turn something down are written to be
-  warm: a thank-you, why it "didn't pass our automated approver" (the site never says a person checked it), and the
-  site's address to write to if they'd like it added. Held and failed send nothing. The run picks the outcome and
-  the reason; the host writes the words, so no sentence a run wrote is ever emailed to anyone. A copy of each answer
-  the site's mailer sends comes to the site's own address too (see "An email to you for each answer" in
-  `docs/emails.md`). An email's answer
-  goes from the site's address as a reply in its own thread, sent by the mailbox script, not by the site's mailer: the
-  same words, or the fixed reply the run chose ("Thanks, it's updated" waits for the merge like "It's on the site").
-  An email a run holds goes to the Needs-you page with its message and a draft. At most 30 answers go
+  at `/edit/emails/`, see "The emails" in `docs/emails.md`): published ("Your suggestion is now on the site", the
+  listing's link, and an invitation to save their school or follow the listing), duplicate and no-change ("It's
+  already listed", with the link), needs-info ("We couldn't verify your suggestion yet", and what would help, by
+  `reason`: for `not-on-site`, that our automated system looked through the program's website and couldn't find
+  everything the listing needs, then what wasn't there in the site's own words, from `missing`, such as "its days and
+  hours and which schools it serves or picks up from", and that adding it to the website is the quickest way onto the
+  site), declined ("We weren't able to add this suggestion automatically", with the rule in a sentence, by `reason`).
+  The two that turn something down are written to be warm: a thank-you, why it didn't pass "our automated approval"
+  or "approver" (the site never says a person checked it), and the site's address to write to if they'd like it
+  added. Held and failed send nothing. The run picks the outcome and the reason; the host writes the words, so no
+  sentence a run wrote is ever emailed to anyone. A copy of each answer can come to the site's own address too (off on
+  the live site; see "An email to you for each answer" in `docs/emails.md`). Mail people write to contact@ stays in
+  the inbox for the owner on the live site (`"mail": { "people": "inbox" }`, see "The mailbox script" in
+  `docs/emails.md`), so it never reaches the queue. With `"people": "site"`, an email's answer goes from the site's
+  address as a reply in its own thread, sent by the mailbox script, not by the site's mailer: the same words, or the
+  fixed reply the run chose ("Thanks, it's updated" waits for the merge like a published suggestion). An email a run
+  holds goes to the Needs-you page with its message and a draft. At most 30 answers go
   in one run, a failed send is tried on the next two, and `queue_items.told` records when each went.
   `"queueReplies": false` in `site.config.json` stops the answers (items still settle). What came in before the
   private queue began (the day it first ran, `queue_since` in the accounts database's `meta`) is worked like the
@@ -437,8 +466,9 @@ and new values filled in, for the run to add the source, quote and how.
 ### What the gate checks
 
 `.github/workflows/autopilot.yml` runs on every pull request whose branch starts with `queue-`, `new-schools-`,
-`weekly-` or `monthly-check-`, from this repository (never a fork) and from the account the runs use. Anything else is
-left alone. It runs the workflow file and the gate as they are on `main`: GitHub's test merge of the pull request is
+`weekly-`, `monthly-check-` or `manager-edit-` (`branches` in `scripts/gate.config.json`), from this repository (never a
+fork) and from the account the runs use. Anything else is left alone, so a code pull request is never named with one of
+those starts: the gate would take it for a run's and comment. It runs the workflow file and the gate as they are on `main`: GitHub's test merge of the pull request is
 fetched as git objects and only the allowlisted data files are copied out of it, next to `main`'s code. Nothing else
 from the pull request is run. Then `scripts/gate.mjs`:
 
@@ -451,7 +481,18 @@ from the pull request is run. Then `scripts/gate.mjs`:
    pre-read does), finds the quote on the page with spaces and punctuation ignored, then finds the new numbers,
    times, prices and dates inside the quote. A page only a person can read, a PDF, or a Google Drive file can't be
    re-read, so its change waits. New links must open, or be linked from the page read, or be where the old link now
-   leads. A new email address must be on the page.
+   leads. A new email address must be on the page. What a thin listing says it doesn't know needs no quote: a
+   `notPosted` entry, and an `hours` or `cost` that is exactly one of `notPosted.lines` in `scripts/gate.config.json`
+   ("Not posted yet; ask the program", "Not posted yet", and the five-schools run's "Not published" lines).
+   **A program manager's own edit** (a `manager-edit-` pull request the site opens from the listing tools, see
+   "Program managers' own fields" in `docs/program-managers.md`) carries an evidence item of kind `told` with the
+   site's `edit` id. The gate passes it with no quote only when every record in the listing comes from that one edit,
+   only `days`, `hours`, `pickupBy`, `cost`, `grades`, `gradeNote`, `schools` (links added as pickup, or nearby turned
+   into pickup, nothing removed), `told` (one entry added, "by" "program manager", "how" "from its listing tools") and
+   `notPosted` change, and the site answers yes to `groups/api.php?action=told_check&id=…&listing=…&sum=…` (`toldLines()`:
+   the values the edit sets, one per line): the edit is real, its claim was made with an address at the program's own
+   website and still stands, and these are its values. Otherwise it is held for Josh, as every other new `told` entry
+   is.
 5. **The hold list,** below.
    **Reviews** (Phase 6) are checked their own way. A new entry in `data/reviews.json` must carry the site's own id
    (`r:<id>` is its key), the fields an entry has and no others, a program and a school the site lists, 1 to 5 stars,
@@ -524,7 +565,7 @@ arrive with those phases.
 | New listing | The site is a bare payment or sign-up page, or doesn't read as a children's program |
 | Pickup and on-site links | No quote names the school, a school has dropped off a provider's pickup list, or a school link is removed |
 | Closing | A program or camp reads as closed. A run never removes one |
-| What a program told us | A field the program told us would change to what its site says (it becomes a question to its managers instead), a `told` entry is added (the gate can't see the message until Phase 2), or an `asks` question is added (until the gate can tell claimed listings apart) |
+| What a program told us | A field the program told us would change to what its site says (it becomes a question to its managers instead), a `told` entry is added that the site doesn't confirm as a manager's own edit from a claim made with an address at the program's website (`told_check`; a run's proposals and emails always wait), or an `asks` question is added (until the gate can tell claimed listings apart) |
 | Prices and hours | A price moves by more than 40 percent, flips between free and paid, or a closing time moves by more than an hour |
 | Dates emailed to parents | The date is past or more than 12 months out, the quote gives no year and the date is more than 120 days away, the quote holds two dates for one label, or the change moves or removes a date that may already have been emailed (`register.dates`, `daysOff.dates`, a camp's `dates`, a school's `dates`) |
 | Notes emailed to parents | An `updates` note or a school's date title isn't built from an approved template (`noteTemplates` in `scripts/gate.config.json`), or a school date was sent in by a parent |

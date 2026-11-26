@@ -6,7 +6,7 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import { test, ok, eq, includes, excludes, matches, someone } from '../lib/harness.mjs';
+import { test, ok, eq, deepEq, includes, excludes, matches, someone } from '../lib/harness.mjs';
 import { google, googleAuth, SITE_ADDRESS } from '../lib/gas.mjs';
 
 const KEY = crypto.randomBytes(24).toString('hex');   // the shared secret for this run, made here
@@ -170,7 +170,7 @@ test('the runs answer mail with fixed replies, sent in the email’s own thread 
   out = await mailOut(site);
   const to = addr => out.replies.find(x => x.to === addr);
   ok(to(`claim${t}@example.test`), 'the claim question is answered'); includes(to(`claim${t}@example.test`).text, '/managers/');
-  ok(to(`fix${t}@example.test`), 'the parent hears we couldn’t verify it yet'); includes(to(`fix${t}@example.test`).text, 'weren’t able to verify it on the program’s own website yet'); includes(to(`fix${t}@example.test`).text, 'Thanks so much for writing to us!', 'an email is never named by its domain'); includes(to(`fix${t}@example.test`).text, 'contact@phillyafterschool.org');
+  ok(to(`fix${t}@example.test`), 'the parent hears we couldn’t verify it yet'); includes(to(`fix${t}@example.test`).text, 'Our automated system couldn’t verify it on the program’s website yet'); includes(to(`fix${t}@example.test`).text, 'Thanks so much for writing to us!', 'an email is never named by its domain'); includes(to(`fix${t}@example.test`).text, 'contact@phillyafterschool.org');
   excludes(JSON.stringify(out.replies), 'IGNORE ME');
   ok(!to(`junk${t}@example.test`), 'no reply to spam'); eq(site.sql(`SELECT state, label_want FROM mail_in WHERE id = ${junk.id}`)[0].label_want, 'PAS/Spam');
   ok(!to(`upd${t}@phillyafterschool.org`), '“thanks, updated” waits for the pull request to merge');
@@ -343,4 +343,21 @@ test('the outreach sender: only when switched on, with a postal address, inside 
   eq(info.outreach.on, true); eq(info.outreach.cap, 30);
   const today = Object.values(info.outreach.days).at(-1);
   eq(today.sent, 2); eq(today.optout, 1); eq(today.replied, 1);
+});
+
+test('the live settings: a person’s email stays in the contact@ inbox for the owner (the site keeps none of it and no run answers it, and the morning summary counts it), and outreach hands the script no wording', async ({ site, api }) => {
+  withKeys(site);
+  const before = site.sql('SELECT COUNT(*) AS n FROM mail_in')[0].n;
+  const kept = n => (site.sql(`SELECT COALESCE(SUM(n), 0) AS n FROM tally WHERE k = 'mail_kept'`)[0] || { n: 0 }).n;
+  const had = kept();
+  const r = await signed(site, 'mail_in', { ...email({ subject: 'Please call me back' }), test_people: 'inbox' });
+  ok(r.body && r.body.ok, r.text);
+  eq(r.body.kept, true); eq(r.body.state, 'held', 'the script keeps it in the inbox'); eq(r.body.label, 'PAS/People/Needs Josh');
+  eq(site.sql('SELECT COUNT(*) AS n FROM mail_in')[0].n, before, 'nothing of it is stored');
+  eq(kept(), had + 1, 'counted for the morning summary');
+  const off = await signed(site, 'outreach_copy', { test_outreach: 'off' });
+  ok(off.body && off.body.ok, off.text); eq(off.body.off, true); deepEq(off.body.sequences, {}, 'no wording: the script sends nothing');
+  const on = await signed(site, 'outreach_copy', {});
+  ok(on.body.sequences.claim.length === 2, 'switched on, as in the tests: the wording is there');
+  noMailKey(site);
 });

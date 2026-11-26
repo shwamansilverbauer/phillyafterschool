@@ -45,7 +45,7 @@
  */
 
 var PAS = {
-  version: '2026-12-2',
+  version: '2026-12-3',
   site: 'https://phillyafterschool.org',
   address: 'contact@phillyafterschool.org',   // the site's address: notices come from it, replies leave from it
   name: 'Philly After School',
@@ -244,6 +244,7 @@ function sendOutreach(report) {
   var room = Math.min(PAS.outreachPerRun, state.cap - state.today);
   if (room <= 0) return;
   var copy = api_('outreach_copy', {}, true);
+  if (copy.off) { report.outreach.waiting = 'switched off on the site'; return; }   // "mail": { "outreach": "on" } in site.config.json turns it back on
   var book = SpreadsheetApp.openById(p.getProperty('OUTREACH_SHEET_ID'));
   var tabs = parseTabs(p.getProperty('OUTREACH_TABS') || 'Programs=claim');
   var fill = { signature: p.getProperty('OUTREACH_SIGNATURE') || PAS.name, postal: p.getProperty('POSTAL_ADDRESS') || '' };

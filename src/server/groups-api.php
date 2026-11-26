@@ -51,6 +51,7 @@ const MAX_SOLO = 12;        // "share this week with one person" lists one accou
 const MAX_WEEKS = 6;        // children's weeks one profile can hold
 const MAX_CLAIMS = 12;      // listings one account can claim
 const MAX_CLAIMANTS = 5;    // accounts that can hold a claim on one listing
+const CLAIM_CODE_HOURS = 2;   // how long a code sent to a listing's own address works
 const SPACE_DAYS = 30;      // how long "spots open", "waitlist" or "full" stays up before the manager has to say it again
 const HIT_KINDS = array('view', 'site', 'signup', 'email', 'plan', 'ask');   // what is counted for a listing, a number a day ("ask" only by the server, when a question is sent)
 const PUSH_SUBS = 8;         // devices one account can get notifications on
@@ -216,6 +217,13 @@ function db(): PDO {
     // claimant asked the owner to check (scaling plan, Phase 6).
     $ccols = array(); foreach ($db->query('PRAGMA table_info(claims)') as $c) $ccols[] = $c['name'];
     if (!in_array('via', $ccols, true)) $db->exec("ALTER TABLE claims ADD COLUMN via TEXT NOT NULL DEFAULT ''");
+    // A manager's edit from the fields in its listing tools ("listing_fields", November 2026): kind "fields", what it
+    // sets (JSON), the sum the gate asks about (told_sum), and the pull request it went in. Free-text updates stay "".
+    $ecols = array(); foreach ($db->query('PRAGMA table_info(edits)') as $c) $ecols[] = $c['name'];
+    if (!in_array('kind', $ecols, true)) $db->exec("ALTER TABLE edits ADD COLUMN kind TEXT NOT NULL DEFAULT ''");
+    if (!in_array('fields', $ecols, true)) $db->exec("ALTER TABLE edits ADD COLUMN fields TEXT NOT NULL DEFAULT ''");
+    if (!in_array('sum', $ecols, true)) $db->exec("ALTER TABLE edits ADD COLUMN sum TEXT NOT NULL DEFAULT ''");
+    if (!in_array('pr', $ecols, true)) $db->exec("ALTER TABLE edits ADD COLUMN pr INTEGER NOT NULL DEFAULT 0");
     if (!$hadTally) {   // start the daily counts from what is already here
       $day = "strftime('%Y-%m-%d', created, 'unixepoch', '-4 hours')";
       $db->exec("INSERT OR IGNORE INTO tally (k, day, n) SELECT 'account', $day, COUNT(*) FROM users GROUP BY 2");
@@ -1174,7 +1182,7 @@ function send_invite(array $u, array $g, string $gname, string $to): bool {
     $what = t(__T("{from} shared “{group}” with you on {site}: the after-school programs their child goes to each day."), $v);
     $how = t(__T("To see it, open this link and sign in with this email address ({email}):"), $v);
     $ifCode = t(__T("If it asks for a code:"), $v);
-    $only = t(__T("It only opens for this address, and it shows a first name and programs. If you don’t know {name}, ignore this email."), $v);
+    $only = t(__T("The calendar will only open for this email."), $v);
     $text = $what . "\n\n" . $how . "\n$url\n\n" . $ifCode . " $code\n\n" . $only . "\n";
     $html = email_html(t(__T("{name} shared “{group}” with you"), $v),
       paras(array(t(__T("{from} shared the after-school programs their child goes to each day."), $v)), 'margin:0 0 10px')
@@ -1276,7 +1284,7 @@ function send_coparent_invite(array $u, string $to): bool {
   /*EMAIL An invitation to share everything, from a co-parent*/
   $what = t(__T("{from} invited you to share everything on {site}: the weeks, days off and summer plans, the kids list and the calendar, between your two accounts. Either of you can change them, from any device."), $v);
   $how = t(__T("To accept, open this link and sign in with this email address ({email}), then look under Plans & sharing:"), $v);
-  $only = t(__T("It only works for this address. If you don’t know {name}, ignore this email: nothing is shared unless you accept."), $v);
+  $only = t(__T("It only works for this email address. If you don’t know {name}, ignore this email: nothing is shared unless you accept."), $v);
   $text = $what . "
 
 " . $how . "
@@ -1657,10 +1665,18 @@ function claim_out(array $c): array {
   foreach (q('SELECT id, body, link, status, created FROM edits WHERE claim_id = ? ORDER BY id DESC LIMIT 20', array($c['id'])) as $e) {
     $edits[] = array('id' => (int) $e['id'], 'body' => $e['body'], 'link' => $e['link'], 'status' => $e['status'], 'created' => (int) $e['created']);
   }
+  // The fields a manager can set itself (listing_fields): what the listing says now, what it hasn't posted, whether an
+  // edit goes live by itself (a claim made with an address at the program's own website), and the schools to pick.
+  $fields = null;
+  if ($c['status'] === 'ok' && isset($l[$c['listing']]['f']) && is_array($l[$c['listing']]['f'])) {
+    $full = row('SELECT status, via, domain FROM claims WHERE id = ?', array($c['id']));
+    $fields = array('now' => $l[$c['listing']]['f'], 'np' => isset($l[$c['listing']]['np']) ? $l[$c['listing']]['np'] : array(),
+      'live' => $full && claim_by_domain($full, $l[$c['listing']]) && manager_fields_mode() === 'publish', 'schools' => school_names());
+  }
   $ph = row("SELECT id, status, alt FROM photos WHERE claim_id = ? AND kind = 'photo' AND status != 'declined' ORDER BY id DESC LIMIT 1", array($c['id']));
   $live = photo_live($c['listing']);
   $asked = premium_mode() !== 'off' ? row('SELECT plan, created FROM premium_asks WHERE claim_id = ?', array($c['id'])) : null;
-  return array('listing' => $c['listing'], 'asked' => $asked ? array('plan' => $asked['plan'], 't' => (int) $asked['created']) : null, 'name' => isset($l[$c['listing']]) ? $l[$c['listing']]['n'] : 'A listing no longer on the site', 'status' => $c['status'], 'via' => isset($c['via']) ? (string) $c['via'] : '', 'gone' => !isset($l[$c['listing']]), 'edits' => $edits,
+  return array('fields' => $fields, 'listing' => $c['listing'], 'asked' => $asked ? array('plan' => $asked['plan'], 't' => (int) $asked['created']) : null, 'name' => isset($l[$c['listing']]) ? $l[$c['listing']]['n'] : 'A listing no longer on the site', 'status' => $c['status'], 'via' => isset($c['via']) ? (string) $c['via'] : '', 'gone' => !isset($l[$c['listing']]), 'edits' => $edits,
     'photo' => $ph ? array('status' => $ph['status'], 'alt' => $ph['alt']) : null, 'photoLive' => $live ? (int) $live['id'] : 0, 'space' => space_of($c['listing']),
     'stats' => $c['status'] === 'ok' && isset($l[$c['listing']]) ? stats_of($c['listing']) : null,
     'premium' => $c['status'] === 'ok' && isset($l[$c['listing']]) && is_premium($c['listing']) ? premium_out($c['listing']) : null);
@@ -1675,6 +1691,130 @@ function photo_live(string $key): ?array {
   return row("SELECT p.id, p.alt FROM photos p JOIN claims c ON c.id = p.claim_id WHERE p.listing = ? AND p.kind = 'photo' AND p.status = 'ok' AND c.status = 'ok' ORDER BY p.id DESC LIMIT 1", array($key));
 }
 function photo_file(int $id): string { return data_dir() . '/photos/' . $id . '.jpg'; }
+// ---------- a manager's own fields: days, hours, cost, grades, the schools it picks up from ----------
+// In its listing tools a manager can set these itself (listing_fields). From a claim made with an address at the
+// program's own website (claim_by_domain), the site writes the change straight into data/programs.json on a branch of
+// its own (manager-edit-<listing>-<edit>), with a "told" entry in the program's words and an evidence item naming the
+// edit, and opens a pull request through the GitHub key. The autopilot gate asks this site (told_check) whether the edit
+// is real, still backed by such a claim, and carries those very values (told_sum); then it needs no quote, and with the
+// switch on it publishes at the next hourly merge. The manager is emailed when it's on the site, like any queue item.
+// Any other claim (by code, or one the owner approved by hand), a price with words the rules catch, "managerFields":
+// "review" under "groups" in site.config.json, or a host without the key: the edit goes to the private queue as a
+// proposal, as a free-text update does, and the run and Josh handle it.
+const LF_DAYS = array('mon', 'tue', 'wed', 'thu', 'fri');
+const LF_NOTE = 'The program itself says it picks up here.';
+function manager_fields_mode(): string { global $CFG; return isset($CFG['managerFields']) && $CFG['managerFields'] === 'review' ? 'review' : 'publish'; }
+// A claim that stands because the claimant's address is at the listing's own website: not by code, not by hand.
+function claim_by_domain(array $c, array $l): bool {
+  return (string) $c['status'] === 'ok' && (string) ($c['via'] ?? '') === '' && isset($l['m'], $l['d']) && $l['m'] === 'match'
+    && (string) $l['d'] !== '' && hash_equals((string) $l['d'], (string) ($c['domain'] ?? ''));
+}
+// "18:30" (a time box's value) as the site writes times: "6:30 pm".
+function lf_time(string $hm): string {
+  if (!preg_match('/^([01]?\d|2[0-3]):([0-5]\d)$/', $hm, $m)) return '';
+  $h = (int) $m[1];
+  return ($h % 12 === 0 ? 12 : $h % 12) . ':' . $m[2] . ' ' . ($h >= 12 ? 'pm' : 'am');
+}
+function lf_day_names(array $days): string {
+  $n = array('mon' => 'Monday', 'tue' => 'Tuesday', 'wed' => 'Wednesday', 'thu' => 'Thursday', 'fri' => 'Friday');
+  if (count($days) === 5) return 'Monday to Friday';
+  $w = array_map(function ($d) use ($n) { return $n[$d]; }, $days);
+  return count($w) < 2 ? implode('', $w) : implode(', ', array_slice($w, 0, -1)) . ' and ' . $w[count($w) - 1];
+}
+// The values an edit sets, one per line, from what it wrote (path, old, new): the gate words them the same way from the
+// evidence (toldLines in scripts/gate.mjs), so no JSON spelling can differ.
+function told_sum(int $id, string $key, array $recs): string {
+  $v = function ($p) use ($recs) { foreach ($recs as $r) if ($r[0] === $p) return $r[2]; return null; };
+  $s = function ($x) { return $x === null ? '' : (is_array($x) ? implode(',', array_map('strval', $x)) : (string) $x); };
+  $pick = array();
+  foreach ($recs as $r) {
+    if ($r[0] !== 'schools' || !is_object($r[2])) continue;
+    foreach (get_object_vars($r[2]) as $sid => $lk) {
+      $was = is_object($r[1]) && isset($r[1]->$sid) && is_object($r[1]->$sid) && isset($r[1]->$sid->relation) ? $r[1]->$sid->relation : '';
+      if (is_object($lk) && isset($lk->relation) && $lk->relation === 'pickup' && $was !== 'pickup') $pick[] = (string) $sid;
+    }
+  }
+  sort($pick, SORT_STRING);
+  return hash('sha256', implode("\n", array((string) $id, $key, $s($v('days')), $s($v('hours')), $s($v('pickupBy')), $s($v('cost')), $s($v('grades')), implode(',', $pick))));
+}
+// Writes an edit into one program record (objects, as json_decode gives them, so {} stays {}). Gives the records the
+// evidence carries: array(path, old, new) for each field that changed.
+function lf_apply(object $p, array $vals, string $says, string $today): array {
+  $copy = function ($v) { return $v === null ? null : json_decode(json_encode($v, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)); };
+  $keys = array('days', 'hours', 'pickupBy', 'cost', 'grades', 'gradeNote', 'schools', 'told', 'notPosted');
+  $old = array(); foreach ($keys as $k) $old[$k] = property_exists($p, $k) ? $copy($p->$k) : null;
+  $fields = array(); $drop = array();
+  if (isset($vals['days'])) { $p->days = $vals['days']; $fields[] = 'days'; $drop[] = 'days'; }
+  if (isset($vals['hours'])) { $p->hours = $vals['hours']; $fields[] = 'hours'; $drop[] = 'hours'; }
+  if (isset($vals['pickupBy'])) { $p->pickupBy = $vals['pickupBy']; $fields[] = 'pickupBy'; }
+  if (isset($vals['cost'])) { $p->cost = $vals['cost']; $fields[] = 'cost'; $drop[] = 'cost'; }
+  if (isset($vals['grades'])) { $p->grades = $vals['grades']; unset($p->gradeNote); $fields[] = 'grades'; $drop[] = 'grades'; }
+  if (!empty($vals['pick'])) {
+    if (!isset($p->schools) || !is_object($p->schools)) $p->schools = new stdClass();
+    foreach ($vals['pick'] as $sid) {
+      if (isset($p->schools->$sid) && is_object($p->schools->$sid)) { $p->schools->$sid->relation = 'pickup'; $p->schools->$sid->note = LF_NOTE; }
+      else $p->schools->$sid = (object) array('relation' => 'pickup', 'note' => LF_NOTE);
+      $fields[] = 'schools.' . $sid . '.relation';
+    }
+    $drop[] = 'pickup';
+  }
+  $told = property_exists($p, 'told') && is_array($p->told) ? $p->told : array();
+  $told[] = (object) array('on' => $today, 'by' => 'program manager', 'how' => 'from its listing tools', 'fields' => $fields, 'says' => $says);
+  $p->told = $told;
+  if (property_exists($p, 'notPosted') && is_array($p->notPosted)) {
+    $left = array_values(array_diff($p->notPosted, $drop));
+    if ($left) $p->notPosted = $left; else unset($p->notPosted);
+  }
+  $recs = array();
+  foreach ($keys as $k) {
+    $now = property_exists($p, $k) ? $copy($p->$k) : null;
+    if (json_encode($now) !== json_encode($old[$k])) $recs[] = array($k, $old[$k], $now);
+  }
+  return $recs;
+}
+// JSON as the repository keeps it: two spaces, unescaped (the same as JSON.stringify(v, null, 2)).
+function repo_json($v): string {
+  $o = json_encode($v, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS);
+  return preg_replace_callback('/^( +)/m', function ($m) { return str_repeat(' ', intdiv(strlen($m[1]), 2)); }, (string) $o) . "\n";
+}
+// The pull request for one edit. Gives array(pull request number, sum), or array(0, '') when it couldn't be made (the
+// edit then goes to the queue instead).
+function lf_publish(int $eid, string $key, array $vals, string $says): array {
+  global $CFG;
+  $repo = isset($CFG['repo']) ? (string) $CFG['repo'] : '';
+  if ($repo === '' || offsite_token() === '' || !function_exists('curl_init')) return array(0, '');
+  $id = substr($key, 2);
+  $branch = 'manager-edit-' . $id . '-' . $eid;
+  $base = '/repos/' . $repo;
+  list($c, $r) = offsite_gh('GET', $base . '/git/ref/heads/main');
+  if ($c !== 200 || !is_array($r) || !isset($r['object']['sha'])) return array(0, '');
+  list($c, $r) = offsite_gh('POST', $base . '/git/refs', array('ref' => 'refs/heads/' . $branch, 'sha' => (string) $r['object']['sha']));
+  if ($c !== 201) return array(0, '');
+  list($c, $f) = offsite_gh('GET', $base . '/contents/data/programs.json?ref=' . rawurlencode($branch));
+  if ($c !== 200 || !is_array($f) || !isset($f['content'], $f['sha'])) return array(0, '');
+  $all = json_decode((string) base64_decode(str_replace("\n", '', (string) $f['content'])));
+  if (!is_array($all)) return array(0, '');
+  $prog = null;
+  foreach ($all as $p) if (is_object($p) && isset($p->id) && $p->id === $id) { $prog = $p; break; }
+  if (!$prog) return array(0, '');
+  $today = (new DateTime('now', new DateTimeZone('America/New_York')))->format('Y-m-d');
+  $recs = lf_apply($prog, $vals, $says, $today);
+  $name = isset($prog->name) ? (string) $prog->name : $id;
+  list($c) = offsite_gh('PUT', $base . '/contents/data/programs.json', array('message' => 'A program manager updated ' . $name . ' from its listing tools', 'content' => base64_encode(repo_json($all)), 'sha' => (string) $f['sha'], 'branch' => $branch));
+  if ($c !== 200 && $c !== 201) return array(0, '');
+  $site = isset($prog->website) ? (string) $prog->website : (string) $CFG['siteUrl'];
+  $ev = array('run' => $branch, 'items' => array(array('item' => 'e' . $eid, 'kind' => 'told', 'outcome' => 'published', 'listing' => $key, 'edit' => $eid,
+    'fields' => array_map(function ($x) use ($site, $today) { return array('path' => $x[0], 'old' => $x[1], 'new' => $x[2], 'source' => $site, 'quote' => '', 'read' => $today, 'how' => 'person'); }, $recs))));
+  list($c) = offsite_gh('PUT', $base . '/contents/evidence/' . $branch . '.json', array('message' => 'Evidence: a program manager’s update to ' . $name, 'content' => base64_encode(repo_json($ev)), 'branch' => $branch));
+  if ($c !== 200 && $c !== 201) return array(0, '');
+  $body = "A program manager updated **" . $name . "** from its listing tools on " . $CFG['siteName'] . ".\n\n"
+    . "What they set, in their words: " . $says . "\n\n"
+    . "The claim behind it was made with an email address at the program's own website, so the change carries a \"told\" entry (\"from the program itself\") and needs no quote. The autopilot gate asks the site to confirm the edit before it passes it. With the switch on, it publishes at the next hourly merge; in shadow mode, merge it by hand.\n\n"
+    . "Nothing here came from a parent, and no one's name or email address is in it.";
+  list($c, $pr) = offsite_gh('POST', $base . '/pulls', array('title' => 'Program manager’s update: ' . $name, 'head' => $branch, 'base' => 'main', 'body' => $body));
+  if ($c !== 201 || !is_array($pr) || !isset($pr['number'])) return array(0, '');
+  return array((int) $pr['number'], told_sum($eid, $key, $recs));
+}
 function my_claims(int $uid): array {
   $out = array();
   foreach (q("SELECT id, listing, status, via FROM claims WHERE user_id = ? ORDER BY id", array($uid)) as $c) $out[] = claim_out($c);
@@ -1801,10 +1941,9 @@ function mgr_run(string $today, array $opts = array()): array {
     $v = array('site' => $GLOBALS['CFG']['siteName'], 'listing' => $name, 'n' => $newRv[$k]);
     /*EMAIL A new review of your listing (to the people who run a listing)*/
     $line = $many ? t(__T("{n} new reviews of {listing} were published on {site}."), $v) : t(__T("A new review of {listing} was published on {site}."), $v);
-    $more = t(__T("Reviews are read before they go up, and the people who run a listing have no say over them. If one gets a fact wrong, reply to this email."), $v);
     $subject = $many ? t(__T("New reviews of {listing}"), $v) : t(__T("A new review of {listing}"), $v);
     $button = $many ? t(__T("Read the reviews"), $v) : t(__T("Read the review"), $v);
-    if (mgr_send($uid, $p['email'], $subject, $line . "\n\n" . $more, paras(array($line), 'margin:0 0 12px') . paras(array($more)), $button, listing_url($k) . '#reviews')) { $sent['review']++; bump('mgr_review'); }
+    if (mgr_send($uid, $p['email'], $subject, $line, paras(array($line)), $button, listing_url($k) . '#reviews')) { $sent['review']++; bump('mgr_review'); }
   }
 
   // 2. The month's numbers, the first morning of a new month.
@@ -1961,7 +2100,11 @@ function signup_digest(string $today, int $hour, bool $force = false): array {
 // the file) is pasted in here from src/server/queue.php.
 /*QUEUE*/
 const QUEUE_OUTCOMES = array('published', 'held', 'declined', 'duplicate', 'needs-info', 'no-change', 'failed', 'answered', 'spam');
-const QUEUE_REASONS = array('need-page', 'need-website', 'need-school', 'not-a-program', 'outside', 'no-own-site', 'closed');
+const QUEUE_REASONS = array('need-page', 'need-website', 'need-school', 'not-a-program', 'outside', 'no-own-site', 'closed', 'not-on-site');
+// "needs-info" with "not-on-site": the run read the program's own site and these facts were on none of its pages. The
+// run gives the words; the answer names each in the site's own words (queue_missing_words), so the person who runs the
+// program knows what to add to its website.
+const QUEUE_MISSING = array('hours', 'school', 'register', 'ages', 'place', 'weeks');
 // A run that couldn't finish (scaling plan, Phase 4) says so in its outcome file with "failed": one of these words, the
 // step it stopped at. The morning summary names it in the site's own words; the run's own message is in the Claude app.
 const QUEUE_RUN_FAILS = array('setup', 'queue', 'build', 'tests', 'gate', 'push', 'pull-request', 'outcomes', 'time', 'other');
@@ -1978,7 +2121,7 @@ function queue_ctx(): array {
   $names = array(); foreach (listings() as $k => $l) $names[$k] = isset($l['n']) ? (string) $l['n'] : (string) $k;
   return array('root' => dirname((string) $_SERVER['DOCUMENT_ROOT']), 'db' => db(), 'names' => $names,
     'city' => isset($CFG['citySchools']) && is_array($CFG['citySchools']) ? $CFG['citySchools'] : array(),
-    'secret' => secret(), 'gh' => 'offsite_gh', 'ops' => ops_repo(), 'site' => (string) $CFG['siteUrl'], 'fresh' => review_fresh_mode());
+    'secret' => secret(), 'gh' => 'offsite_gh', 'ops' => ops_repo(), 'site' => (string) $CFG['siteUrl'], 'fresh' => review_fresh_mode(), 'mail' => people_mail());
 }
 // The hourly work: read the runs' answers, see which worked items have gone live, answer their senders, then write the
 // queue if it changed. At most once in 50 minutes, whoever asks (the tests can ask for it now).
@@ -2048,6 +2191,9 @@ function queue_apply(array $doc): array {
     // "It's on the site" because the clean pull request merged.
     $pr = isset($x['pr']) && is_int($x['pr']) && $x['pr'] > 0 ? $x['pr'] : ($out === 'published' ? $prAll : 0);
     $reason = isset($x['reason']) && is_string($x['reason']) && in_array($x['reason'], QUEUE_REASONS, true) ? $x['reason'] : '';
+    // What the program's site didn't give, for "not-on-site" only: words from QUEUE_MISSING, in the list's own order.
+    $given = $out === 'needs-info' && $reason === 'not-on-site' && isset($x['missing']) && is_array($x['missing']) ? array_slice($x['missing'], 0, 20) : array();
+    $missing = implode(',', array_values(array_filter(QUEUE_MISSING, function ($m) use ($given) { return in_array($m, $given, true); })));
     // An email from a person can also be answered with a fixed reply, or settled as spam. Neither fits any other item.
     $mail = $id[0] === 'm';
     // A review ("v…", Phase 6) is published in a pull request, held for the owner, or declined; nothing else fits one.
@@ -2060,7 +2206,7 @@ function queue_apply(array $doc): array {
     // failed: back in the queue for the next run. published or held: waits for its pull request to be merged (or for
     // the owner, with none). The rest are settled now and answered.
     $state = $out === 'failed' ? 'open' : (($out === 'published' || $out === 'held') ? ($pr ? 'waiting' : 'held') : 'closed');
-    q("UPDATE queue_items SET state = ?, outcome = ?, reason = ?, reply = ?, run = ?, pr = ?, decided = ?, listing = CASE WHEN ? != '' THEN ? ELSE listing END WHERE id = ?", array($state, $out, $reason, $reply, $run, $pr, now(), $listing, $listing, $id));
+    q("UPDATE queue_items SET state = ?, outcome = ?, reason = ?, missing = ?, reply = ?, run = ?, pr = ?, decided = ?, listing = CASE WHEN ? != '' THEN ? ELSE listing END WHERE id = ?", array($state, $out, $reason, $missing, $reply, $run, $pr, now(), $listing, $listing, $id));
     if ($state === 'closed') queue_settle_proposal($id, $out);
     if ($mail) mail_after_outcome((int) substr($id, 1), $out, $state);
     if ($review) review_after_outcome($id, $out, $state, $pr);
@@ -2079,7 +2225,7 @@ function review_after_outcome(string $id, string $out, string $state, int $pr): 
 function queue_settle_proposal(string $id, string $outcome): void {
   if ($id === '' || $id[0] !== 'e') return;
   $to = $outcome === 'declined' ? 'declined' : (in_array($outcome, array('published', 'duplicate', 'no-change'), true) ? 'done' : '');
-  if ($to !== '') q("UPDATE edits SET status = ?, decided = ? WHERE id = ? AND status = 'new'", array($to, now(), (int) substr($id, 1)));
+  if ($to !== '') q("UPDATE edits SET status = ?, decided = ? WHERE id = ? AND status IN ('new', 'pr')", array($to, now(), (int) substr($id, 1)));
 }
 // Worked items whose pull request has been merged (and had time to publish) are published; a pull request closed
 // without a merge leaves its items held for the owner.
@@ -2119,6 +2265,8 @@ function queue_tell(): array {
     // A reviewer hears only when the review is on the site: a thank-you with the link. Nothing for the other answers.
     if (substr((string) $x['id'], 0, 1) === 'v' && $x['outcome'] !== 'published') { q('UPDATE queue_items SET told = -6 WHERE id = ?', array($x['id'])); continue; }
     if ($off) { q('UPDATE queue_items SET told = -2 WHERE id = ?', array($x['id'])); if ($mail) mail_set_state(db(), (int) substr((string) $x['id'], 1), 'closed'); $res['off']++; continue; }
+    // An email from before the mail was kept in the inbox: the owner answers it, not the site.
+    if ($mail && people_mail() === 'inbox') { q('UPDATE queue_items SET told = -2 WHERE id = ?', array($x['id'])); mail_set_state(db(), (int) substr((string) $x['id'], 1), 'held', 'run'); $res['off']++; continue; }
     if ($mail ? mail_answer($x) : queue_reply($x)) { q('UPDATE queue_items SET told = ? WHERE id = ?', array(now(), $x['id'])); $res['sent']++; bump('queue_reply'); }
     else { q('UPDATE queue_items SET tries = tries + 1, told = CASE WHEN tries + 1 >= 3 THEN -1 ELSE 0 END WHERE id = ?', array($x['id'])); $res['failed']++; }
   }
@@ -2130,7 +2278,7 @@ function queue_reply(array $x): bool {
   global $CFG;
   list($subject, $head, $lines, $button, $url, $why) = queue_reply_parts($x);
   $subject = $subject !== '' ? $subject : (string) $CFG['siteName'];
-  $text = ($head !== '' ? $head . "\n\n" : '') . implode("\n\n", $lines) . ($button !== '' ? "\n\n" . $button . ': ' . $url : '') . "\n\n" . $why;
+  $text = ($head !== '' ? $head . "\n\n" : '') . implode("\n\n", $lines) . ($button !== '' ? "\n\n" . $button . ': ' . $url : '') . ($why !== '' ? "\n\n" . $why : '');
   $ok = send_mail((string) $x['email'], $subject, $text, email_html($head, paras($lines), $button, $url, $why));
   if ($ok) answer_copy($x, $subject, $text);
   return $ok;
@@ -2146,7 +2294,7 @@ function answer_copy(array $x, string $subject, string $text): void {
   $out = (string) $x['outcome'];
   $outcome = array('published' => 'On the site', 'duplicate' => 'Already listed', 'no-change' => 'Already listed', 'needs-info' => 'Couldn’t verify yet', 'declined' => 'Not added', 'answered' => 'Answered');
   $v = array('site' => $CFG['siteName'], 'email' => (string) $x['email'], 'subject' => $subject,
-    'outcome' => (isset($outcome[$out]) ? $outcome[$out] : $out) . ((string) $x['reason'] !== '' ? ' (' . $x['reason'] . ')' : ''));
+    'outcome' => (isset($outcome[$out]) ? $outcome[$out] : $out) . ((string) $x['reason'] !== '' ? ' (' . $x['reason'] . (isset($x['missing']) && (string) $x['missing'] !== '' ? ': ' . str_replace(',', ', ', (string) $x['missing']) : '') . ')' : ''));
   /*EMAIL A copy of an answer (to the site's own address, each time the site emails someone an answer)*/
   $subj = t(__T("Answer sent: {subject}"), $v);
   $head = t(__T("{site} sent this answer to {email}"), $v);
@@ -2157,6 +2305,16 @@ function answer_copy(array $x, string $subject, string $text): void {
   $html = email_html($head, paras(array($what)) . '<div style="margin:16px 0 0;padding:14px 16px;border-left:3px solid #96C9FF;background:#F4F8FD;white-space:pre-line">' . htmlspecialchars($text, ENT_QUOTES, 'UTF-8') . '</div>', $button, $url, $foot);
   send_mail((string) $CFG['from'], '[' . $CFG['siteName'] . '] ' . ($subj !== '' ? $subj : $subject), $body, $html, '', 'answer');
 }
+// The facts a "not-on-site" answer names, in the site's own words and QUEUE_MISSING's order: "a", "a and b",
+// "a, b and c". '' when none was given (the answer then says only that a listing needs more than the site shows).
+function queue_missing_words(string $missing, array $words): string {
+  $got = explode(',', $missing);
+  $say = array();
+  foreach (QUEUE_MISSING as $m) if (in_array($m, $got, true) && isset($words[$m]) && $words[$m] !== '') $say[] = $words[$m];
+  if (count($say) < 2) return implode('', $say);
+  $last = array_pop($say);
+  return implode(', ', $say) . ' and ' . $last;
+}
 // The parts of that answer: subject, heading, lines, button and its address, the last line.
 function queue_reply_parts(array $x): array {
   global $CFG;
@@ -2164,31 +2322,46 @@ function queue_reply_parts(array $x): array {
   $key = (string) $x['listing'];
   $known = $key !== '' && isset($l[$key]);
   $v = array('site' => $CFG['siteName'], 'contact' => (string) $CFG['from']);
-  /*EMAIL The last line of every answer to a suggestion or a proposed change*/
-  $why = t(__T("You get this because you sent something to {site}. It’s the only email about it."), $v);
+  $why = '';   // no small print under these answers
   $what = $known ? listing_plain($key) : ($x['kind'] === 'mail' ? '' : queue_one((string) $x['what'], 80));   // an email's item is named by its domain only
+  /*EMAIL Every answer to a suggestion or a proposed change: the words for what was sent, when it has no name*/
   $v['what'] = $what !== '' ? $what : t(__T("what you sent"), $v);
   $listingUrl = preg_match('/^[pc]:[a-z0-9-]{1,80}$/', $key) ? listing_url($key) : $CFG['siteUrl'] . '/';
   if ($x['kind'] === 'review') {   // a review on the site (Phase 6): the only answer a reviewer gets
     /*EMAIL Thanks for your review: it’s on the site*/
     $subject = t(__T("Your review of {what} is on {site}"), $v);
     $head = t(__T("Thanks for your review"), $v);
-    $lines = array(t(__T("Your review of {what} is on {site} now, where the next family choosing a program will see it."), $v),
-      t(__T("It shows your first name and your child’s school, never your email address. If you want it changed or taken down, reply to this email."), $v));
+    $lines = array(t(__T("Your review of {what} is on {site} now!"), $v),
+      t(__T("If you want it changed or taken down, reply to this email."), $v));
     $button = t(__T("See your review"), $v);
-    $why = t(__T("You get this because you wrote a review on {site}. It’s the only email about it."), $v);
     return array($subject, $head, array_values(array_filter($lines, function ($s) { return $s !== ''; })), $button, preg_replace('/#.*$/', '', $listingUrl) . '#reviews', $why);
   }
   // "Send it again" opens the form the way the site's own buttons do: on the listing for an update, as a camp for a camp.
   $again = $x['kind'] === 'proposal' ? $CFG['siteUrl'] . '/managers/' : $CFG['siteUrl'] . '/suggest/' . ($x['kind'] === 'update' && $known ? '?kind=correction&fix=' . rawurlencode($key) : ($x['kind'] === 'camp' ? '?kind=camp' : ''));
   $out = $x['outcome'] === 'no-change' ? 'duplicate' : (string) $x['outcome'];
   $lines = array(); $button = ''; $url = '';
-  if ($out === 'published') {
-    /*EMAIL It’s on the site (to whoever sent a suggestion or a proposed change)*/
-    $subject = t(__T("It’s on {site}: {what}"), $v);
-    $head = t(__T("It’s on the site"), $v);
-    $lines[] = t(__T("Thanks for sending {what}. We checked it against the program’s own website, and it’s on {site} now."), $v);
+  if ($out === 'published' && (string) ($x['run'] ?? '') === 'listing-tools') {
+    /*EMAIL Your update is live (to a program manager who set its listing’s days, hours or price itself)*/
+    $subject = t(__T("Your update is live on {site}: {what}"), $v);
+    $head = t(__T("Your update is live"), $v);
+    $lines[] = t(__T("The changes that you made for {what} are posted on {site} now, marked as coming from the program manager."), $v);
+    $lines[] = t(__T("Change it again any time from your listing tools. We’ll check against your site every few months to ask if it’s still up to date."), $v);
+    $button = t(__T("See the listing"), $v); $url = $listingUrl;
+  } elseif ($out === 'published') {
+    /*EMAIL Your suggestion is now on the site (to whoever sent a suggestion or a proposed change)*/
+    $subject = t(__T("Your suggestion was approved and is now on {site}: {what}"), $v);
+    $head = t(__T("Your suggestion is now on the site"), $v);
+    $lines[] = t(__T("Thanks for sending {what}. Our automated system checked it against the program’s website, and we were able to verify the information. It’s now on {site}."), $v);
     $lines[] = t(__T("Save your school on the site to hear about new programs and days off there, or follow the listing to get its sign-up dates."), $v);
+    // A listing that went up on the minimum (notPosted): whoever runs it can fill in the rest by claiming it.
+    $np = $known && isset($l[$key]['np']) && is_array($l[$key]['np']) ? $l[$key]['np'] : array();
+    if ($np) {
+      $w = array('days' => 'days', 'hours' => 'hours', 'cost' => 'prices', 'grades' => 'grades', 'pickup' => 'pickup schools');
+      $say = array_values(array_filter(array_map(function ($f) use ($w) { return $w[$f] ?? ''; }, $np)));
+      $v['missing'] = count($say) < 2 ? implode('', $say) : implode(', ', array_slice($say, 0, -1)) . ' and ' . $say[count($say) - 1];
+      $v['claim'] = $CFG['siteUrl'] . '/managers/?l=' . rawurlencode($key);
+      $lines[] = t(__T("The program hasn’t posted its {missing} yet. If you run it, claim the listing with your work email at {claim} and add them yourself."), $v);
+    }
     $button = t(__T("See the listing"), $v); $url = $listingUrl;
   } elseif ($out === 'duplicate') {
     /*EMAIL It’s already listed (to whoever sent a suggestion or a proposed change)*/
@@ -2197,24 +2370,36 @@ function queue_reply_parts(array $x): array {
     $lines[] = t(__T("Thanks for sending {what}. It’s already on {site}, as the program’s own website has it."), $v);
     $button = t(__T("See the listing"), $v); $url = $listingUrl;
   } elseif ($out === 'needs-info') {
-    /*EMAIL We couldn’t verify it yet (to whoever sent a suggestion or a proposed change)*/
-    $subject = t(__T("About what you sent to {site}: {what}"), $v);
-    $head = t(__T("We couldn’t verify this one yet"), $v);
+    /*EMAIL We couldn’t verify your suggestion yet (to whoever sent a suggestion or a proposed change)*/
+    $subject = t(__T("We couldn’t verify your suggestion to {site}: {what}"), $v);
+    $head = t(__T("We couldn’t verify your suggestion yet"), $v);
     $lines[] = $what !== '' ? t(__T("Thanks so much for sending {what}!"), $v) : t(__T("Thanks so much for writing to us!"), $v);
-    $lines[] = t(__T("Unfortunately, we weren’t able to verify it on the program’s own website yet, so it didn’t pass our automated approver."), $v);
-    if ($x['reason'] === 'need-website') $lines[] = t(__T("It would really help to have the address of the program’s own website."), $v);
-    elseif ($x['reason'] === 'need-school') $lines[] = t(__T("It would really help to know which school the program serves or picks up from, as its own website says."), $v);
-    else $lines[] = t(__T("It would really help to have a link to the page on the program’s own website that shows it."), $v);
-    $lines[] = t(__T("Just reply to this email with it, or send it again, and we’ll take another look. You can always reach us at {contact} too."), $v);
+    if ($x['reason'] === 'not-on-site') {
+      // The run read the program's whole site and these weren't on it: named in the site's own words, never the run's.
+      $words = array('hours' => t(__T("its days and hours"), $v), 'school' => t(__T("which schools it serves or picks up from"), $v),
+        'register' => t(__T("how to sign up"), $v), 'ages' => t(__T("the ages or grades it’s for"), $v),
+        'place' => t(__T("where it meets"), $v), 'weeks' => t(__T("its weeks or price"), $v));
+      $v['missing'] = queue_missing_words(isset($x['missing']) ? (string) $x['missing'] : '', $words);
+      $lines[] = t(__T("Our automated system looked through the program’s website, but we couldn’t find everything the listing needs there yet, so it didn’t pass our automated approval."), $v);
+      if ($v['missing'] !== '') $lines[] = t(__T("What we couldn’t find: {missing}."), $v);
+      $lines[] = t(__T("If it’s on the website and we missed it, a link to that page would really help. If it isn’t there yet, adding it to the website is the quickest way onto the site."), $v);
+      $lines[] = t(__T("Just reply to this email with the link, or send it again once it’s on the website, and we’ll take another look. You can always reach us at {contact} too."), $v);
+    } else {
+      $lines[] = t(__T("Our automated system couldn’t verify it on the program’s website yet, so it didn’t pass our automated approval."), $v);
+      if ($x['reason'] === 'need-website') $lines[] = t(__T("It would really help to have the address of the program’s own website."), $v);
+      elseif ($x['reason'] === 'need-school') $lines[] = t(__T("It would really help to know which school the program serves or picks up from, as its own website says."), $v);
+      else $lines[] = t(__T("It would really help to have a link to the page on the program’s website that shows the additional information."), $v);
+      $lines[] = t(__T("Just reply to this email with a page that references the information missing, or send the url again, and we’ll take another look. You can always reach us at {contact} too."), $v);
+    }
     $button = t(__T("Send it again"), $v); $url = $again;
   } else {
-    /*EMAIL We weren’t able to add this one (to whoever sent a suggestion or a proposed change)*/
+    /*EMAIL We weren’t able to add this suggestion automatically (to whoever sent a suggestion or a proposed change)*/
     $subject = t(__T("About what you sent to {site}: {what}"), $v);
-    $head = t(__T("We weren’t able to add this one"), $v);
+    $head = t(__T("We weren’t able to add this suggestion automatically"), $v);
     $lines[] = $what !== '' ? t(__T("Thanks so much for sending {what}!"), $v) : t(__T("Thanks so much for writing to us!"), $v);
     if ($x['reason'] === 'not-a-program') $lines[] = t(__T("Unfortunately, we weren’t able to verify that it’s an after-school program, class or camp for kids in kindergarten to 8th grade, so it didn’t pass our automated approver."), $v);
     elseif ($x['reason'] === 'outside') $lines[] = t(__T("Unfortunately, it looks like it’s outside Philadelphia, and we only list programs that serve Philly schools and families, so it didn’t pass our automated approver."), $v);
-    elseif ($x['reason'] === 'no-own-site') $lines[] = t(__T("Unfortunately, we weren’t able to verify it on the program’s own website, so it didn’t pass our automated approver."), $v);
+    elseif ($x['reason'] === 'no-own-site') $lines[] = t(__T("Unfortunately, we couldn’t find a website of the program’s own, so it didn’t pass our automated approver."), $v);
     elseif ($x['reason'] === 'closed') $lines[] = t(__T("Unfortunately, the program’s own website says it isn’t running right now, so it didn’t pass our automated approver."), $v);
     else $lines[] = t(__T("Unfortunately, it didn’t pass our automated approver."), $v);
     $lines[] = t(__T("Please reach out to {contact} if you’d like the program to be added, or just reply to this email, and we’ll take another look."), $v);
@@ -2233,6 +2418,21 @@ function queue_reply_parts(array $x): array {
 // the mailbox is off. The shared half (the tables, sealing, the hold list, the signature) is pasted in from
 // src/server/mail.php.
 /*MAIL*/
+// Who answers mail people write to the site's address. "inbox" (the default, and "mail": { "people": "inbox" } in
+// site.config.json): it stays in the contact@ inbox for the owner, the site keeps none of it and no run answers it.
+// "site": it is posted here, held or queued, and the queue run answers it, as below.
+function people_mail(array $in = array()): string {
+  global $CFG;
+  if ((string) getenv('PAS_TEST_PUSH') !== '' && isset($in['test_people']) && in_array($in['test_people'], array('site', 'inbox'), true)) return (string) $in['test_people'];   // the tests only
+  return isset($CFG['peopleMail']) && $CFG['peopleMail'] === 'site' ? 'site' : 'inbox';
+}
+// The mailbox script's outreach: "off" (the default) hands it no wording, so it sends nothing; "on" with
+// "mail": { "outreach": "on" } in site.config.json.
+function outreach_mode(array $in = array()): string {
+  global $CFG;
+  if ((string) getenv('PAS_TEST_PUSH') !== '' && isset($in['test_outreach']) && in_array($in['test_outreach'], array('on', 'off'), true)) return (string) $in['test_outreach'];   // the tests only
+  return isset($CFG['outreach']) && $CFG['outreach'] === 'on' ? 'on' : 'off';
+}
 const MAIL_IN_AN_HOUR = 200;       // emails taken in an hour at most: a script stuck in a loop can't fill the database
 const MAIL_OUT_A_CALL = 20;        // replies handed to the script per call
 const MAIL_RETRY_AFTER = 1200;     // seconds before a reply handed out but never confirmed is handed out again
@@ -2323,7 +2523,7 @@ function mail_store(array $in): array {
 function mail_draft(string $hold, string $fromName): string {
   global $CFG;
   $v = array('site' => $CFG['siteName'], 'first' => mail_first_name($fromName));
-  /*EMAIL A held email’s starting draft (the owner edits it on the Needs-you page before it goes)*/
+  /*EMAIL Mailbox: a held email’s starting draft (the owner edits it on the Needs-you page before it goes)*/
   $hi = $v['first'] !== '' ? t(__T("Hi {first},"), $v) : t(__T("Hello,"), $v);
   if ($hold === 'legal') $line = t(__T("Thank you for your message. We’re reading it carefully and will reply in writing."), $v);
   elseif ($hold === 'safety') $line = t(__T("Thank you for telling us. We take this seriously, and we’re looking into it now."), $v);
@@ -2362,30 +2562,30 @@ function mail_answer_text(array $x): string {
   $site = (string) $CFG['siteUrl'];
   $reply = isset($x['reply']) ? (string) $x['reply'] : '';
   $l = listings(); $key = (string) $x['listing'];
-  /*EMAIL Thanks, it’s updated (a reply to a program that wrote to the site from its own address)*/
+  /*EMAIL Mailbox reply: thanks, it’s updated (to a program that wrote to the site from its own address)*/
   $v = array('site' => $CFG['siteName'], 'what' => $key !== '' && isset($l[$key]) ? listing_plain($key) : t(__T("your listing"), array()));
   $lines = array(); $button = ''; $url = '';
   if ($reply === 'thanks-updated' && $x['outcome'] === 'published') {
     $lines[] = t(__T("Thanks for letting us know. We’ve updated {what} on {site} with what you told us."), $v);
     $button = t(__T("See the listing"), $v); $url = preg_match('/^[pc]:[a-z0-9-]{1,80}$/', $key) ? listing_url($key) : $site . '/';
   } elseif ($reply === 'how-to-claim') {
-    /*EMAIL How to claim a listing (a reply to an email that asks)*/
+    /*EMAIL Mailbox reply: how to claim a listing (to an email that asks)*/
     $lines[] = t(__T("Thanks for writing. Claiming a listing on {site} is free and takes a minute."), $v);
     $lines[] = t(__T("Sign in on the page for program managers with an email address at your program’s website, find your program and claim it. If you run more than one listing with us, one button claims them all."), $v);
     $lines[] = t(__T("If your email address isn’t at your program’s website, reply and tell us, and we’ll help."), $v);
     $button = t(__T("Claim your listing"), $v); $url = $site . '/managers/';
   } elseif ($reply === 'delete-account') {
-    /*EMAIL How to delete an account (a reply to an email that asks)*/
+    /*EMAIL Mailbox reply: how to delete an account (to an email that asks)*/
     $lines[] = t(__T("You can delete your account yourself, at any time."), $v);
     $lines[] = t(__T("Sign in on {site}, open your account page and choose “Delete my account”. Your plans and everything kept with the account go at once."), $v);
     $button = t(__T("Open your account"), $v); $url = $site . '/account/';
   } elseif ($reply === 'stop-emails') {
-    /*EMAIL How to stop the emails (a reply to an email that asks)*/
+    /*EMAIL Mailbox reply: how to stop the emails (to an email that asks)*/
     $lines[] = t(__T("Every email from {site} has a link at the bottom that stops it."), $v);
     $lines[] = t(__T("To stop them all at once, sign in, open your account page and turn them off under “Emails and notifications”."), $v);
     $button = t(__T("Open your account"), $v); $url = $site . '/account/';
   } elseif ($reply === 'add-school') {
-    /*EMAIL How to ask for a school (a reply to an email that asks)*/
+    /*EMAIL Mailbox reply: how to ask for a school (to an email that asks)*/
     $lines[] = t(__T("Thanks for asking. Find your school in the school finder on {site} and tap “Ask for this school”."), $v);
     $lines[] = t(__T("The more families ask, the sooner a school is added, and we email everyone who asked when its page goes up."), $v);
     $button = t(__T("Find your school"), $v); $url = $site . '/schools/';
@@ -2393,7 +2593,7 @@ function mail_answer_text(array $x): string {
     list(, $head, $lines, $button, $url, $why) = queue_reply_parts($x);
     $lines = array_merge($head !== '' ? array($head) : array(), $lines);
   }
-  /*EMAIL The last lines of every reply from the mailbox*/
+  /*EMAIL Mailbox reply: the last lines of every reply*/
   $sign = t(__T("Best wishes,"), $v);
   $lines = array_values(array_filter($lines, function ($s) { return $s !== ''; }));
   if (!$lines) return '';
@@ -2566,10 +2766,8 @@ function content_apply(array $doc, string $mode, array &$res): int {
   }
   return $did;
 }
-// Publishes a manager's words, offer, pin, photo or logo the way the review page's Publish button does, and tells the
-// manager who sent it, in the site's own words (editable at /edit/emails/).
+// Publishes a manager's words, offer, pin, photo or logo the way the review page's Publish button does.
 function content_publish(bool $photo, array $row): void {
-  global $CFG;
   $id = (int) $row['id']; $key = (string) $row['listing'];
   if ($photo) {
     $kind = (string) $row['kind'] === 'logo' ? 'logo' : 'photo';
@@ -2587,20 +2785,7 @@ function content_publish(bool $photo, array $row): void {
     q("UPDATE extras SET status = 'ok', decided = ? WHERE id = ?", array(now(), $id));
     bump('extra_auto');
   }
-  $u = row('SELECT email, first FROM users WHERE id = ?', array((int) $row['user_id']));
-  if (!$u) return;
-  $l = listings();
-  /*EMAIL Something a manager added is on the listing (published by the autopilot)*/
-  $v = array('site' => $CFG['siteName'], 'name' => isset($l[$key]) ? (string) $l[$key]['n'] : $key, 'first' => (string) $u['first']);
-  $nouns = array('words' => t(__T("section in your own words"), $v), 'offer' => t(__T("offer line"), $v), 'pin' => t(__T("Kids’ Playground pin"), $v), 'photo' => t(__T("photo"), $v), 'logo' => t(__T("logo"), $v));
-  $v['what'] = isset($nouns[$kind]) ? $nouns[$kind] : $kind;
-  $head = t(__T("It’s on your listing"), $v);
-  $lines = array(t(__T("The {what} you sent for {name} passed the site’s checks and is on the listing now."), $v));
-  if (premium_mode() === 'preview') $lines[] = t(__T("For now only you can see it there, while premium listings are being tried out."), $v);
-  $button = t(__T("Change it or take it down"), $v); $url = $CFG['siteUrl'] . '/managers/';
-  $why = t(__T("You get this because you manage {name} on {site}."), $v);
-  $lines = array_values(array_filter($lines, function ($s) { return $s !== ''; }));
-  send_mail((string) $u['email'], t(__T("Your {what} for {name} is on {site}"), $v), implode("\n\n", $lines) . "\n\n" . $button . ': ' . $url . "\n\n" . $why, email_html($head, paras($lines), $button, $url, $why));
+  // No email: the manager sees it on the listing, and in their listing tools as “On your listing”.
 }
 
 // ---------- the morning summary, and the pushes that can't wait (scaling plan, Phase 3) ----------
@@ -2725,6 +2910,8 @@ function owner_summary(string $today, string $clock, bool $force = false): array
   $in = $num('SELECT COUNT(*) FROM mail_in WHERE created >= ? AND created < ?', array($start, $end));
   $inHeld = $num("SELECT COUNT(*) FROM mail_in WHERE created >= ? AND created < ? AND hold != ''", array($start, $end));
   if ($in) $lines[] = array(t(__T("{n} emails from people came in: {held} held for you, the rest went to the queue."), $v + array('n' => $in, 'held' => $inHeld)), $inHeld ? $site . '/edit/needs/#mail' : '');
+  $kept = $num("SELECT COALESCE(SUM(n), 0) FROM tally WHERE k = 'mail_kept' AND day = ?", array($ydayIso));
+  if ($kept) $lines[] = array(t(__T("{n} emails from people came in. They’re in your inbox, for you to answer."), $v + array('n' => $kept)), '');
   $replied = $num("SELECT COUNT(*) FROM mail_out WHERE state = 'sent' AND sent >= ? AND sent < ?", array($start, $end));
   if ($replied) $lines[] = array(t(__T("{n} replies went out from the site’s address."), $v + array('n' => $replied)), '');
   $stuck = $num("SELECT COUNT(*) FROM mail_out WHERE state = 'failed' AND created >= ?", array($weekStart));
@@ -3610,6 +3797,22 @@ switch ($method . ' ' . $action) {
     out(array('ok' => true, 'known' => true, 'match' => $match, 'clean' => $clean));
   }
 
+  // Is this a manager's own edit from its listing tools, still backed by a claim made with an address at the program's
+  // own website, carrying these values? Asked by the autopilot gate (askTold in scripts/gate.mjs) about a manager-edit-
+  // pull request. Answers yes or no and nothing else: no names, no addresses.
+  case 'GET told_check': {
+    $id = isset($_GET['id']) && is_string($_GET['id']) && ctype_digit($_GET['id']) ? (int) $_GET['id'] : 0;
+    $key = isset($_GET['listing']) && is_string($_GET['listing']) ? $_GET['listing'] : '';
+    $sum = isset($_GET['sum']) && is_string($_GET['sum']) ? strtolower($_GET['sum']) : '';
+    if (too_many('toldcheck:' . who(), 240, 3600)) fail('slow', 'Too many questions. Try again in an hour.', 429);
+    note('toldcheck:' . who());
+    if ($id < 1 || !preg_match('/^p:[a-z0-9-]{1,80}$/', $key) || !preg_match('/^[0-9a-f]{64}$/', $sum)) fail('bad', 'That request was not understood.');
+    $e = row('SELECT e.listing, e.sum, e.kind, c.status, c.via, c.domain FROM edits e JOIN claims c ON c.id = e.claim_id WHERE e.id = ?', array($id));
+    if (!$e || $e['kind'] !== 'fields' || $e['listing'] !== $key) out(array('ok' => true, 'known' => false, 'match' => false, 'verified' => false));
+    $l = listings();
+    out(array('ok' => true, 'known' => true, 'match' => (string) $e['sum'] !== '' && hash_equals((string) $e['sum'], $sum), 'verified' => isset($l[$key]) && claim_by_domain($e, $l[$key])));
+  }
+
   // One waiting photo or logo, for a research run to look at (Phase 6): the queue carries a link signed with the host's
   // key, which works for 24 to 30 hours. Nothing else shows a waiting photo to anyone not signed in as its manager.
   case 'GET photo_look': {
@@ -3658,14 +3861,14 @@ switch ($method . ' ' . $action) {
     $req = b64(random_bytes(18));
     $code = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
     q('DELETE FROM logins WHERE next = ? AND used = 0', array('claim:' . $cid));   // only the newest code works
-    q('INSERT INTO logins (email, token_hash, req_hash, code_hash, next, expires) VALUES (?, ?, ?, ?, ?, ?)', array($to, h(b64(random_bytes(32))), h($req), h($req . ':' . $code), 'claim:' . $cid, now() + 24 * 3600));
+    q('INSERT INTO logins (email, token_hash, req_hash, code_hash, next, expires) VALUES (?, ?, ?, ?, ?, ?)', array($to, h(b64(random_bytes(32))), h($req), h($req . ':' . $code), 'claim:' . $cid, now() + CLAIM_CODE_HOURS * 3600));
     $shown = substr($code, 0, 3) . ' ' . substr($code, 3);
     /*EMAIL Code to claim a listing, sent to the address the listing’s website publishes*/
-    $v = array('site' => $CFG['siteName'], 'code' => $shown, 'name' => (string) $l[$key]['n'], 'who' => trim($u['first'] . ' ' . $u['last']), 'email' => (string) $u['email'], 'contact' => $CFG['from']);
+    $v = array('site' => $CFG['siteName'], 'code' => $shown, 'name' => (string) $l[$key]['n'], 'who' => trim($u['first'] . ' ' . $u['last']), 'email' => (string) $u['email'], 'contact' => $CFG['from'], 'hours' => CLAIM_CODE_HOURS);
     $heading = t(__T("A code to manage {name} on {site}"), $v);
-    $asked = t(__T("{who} ({email}) asked to manage the listing for {name} on {site}, the free directory of after-school programs in Philadelphia. We sent this code here because this is the address your website lists."), $v);
-    $give = t(__T("If {who} works with you, give them this code. It works for 24 hours:"), $v);
-    $not = t(__T("If you don’t know them, ignore this email: nothing changes without the code. Questions: {contact}."), $v);
+    $asked = t(__T("{who} ({email}) asked to manage the listing for {name} on {site}, the free directory of after-school programs and camps in Philadelphia. We sent this code here because this is the address your website lists."), $v);
+    $give = t(__T("If {who} works with you, give them this code. It works for {hours} hours:"), $v);
+    $not = t(__T("If you don’t know them, ignore this email: nothing changes without the code."), $v);
     $text = $heading . "
 
 " . $asked . "
@@ -3721,6 +3924,9 @@ switch ($method . ' ' . $action) {
   // One email a person wrote. The answer says how it was sorted and the label for its thread.
   case 'POST mail_in': {
     mail_auth('mail_in');
+    // Mail kept in the inbox (the default): nothing of it is stored and nothing answers it. The script files it as
+    // waiting for the owner and leaves it in the inbox; the morning summary counts it.
+    if (people_mail($in) === 'inbox') { bump('mail_kept'); out(array('ok' => true, 'kept' => true, 'state' => 'held', 'label' => MAIL_LABELS['held'])); }
     out(mail_store($in));
   }
   // The script's heartbeat, and what it should do now: the replies waiting to go (each handed out, then confirmed with
@@ -3765,6 +3971,7 @@ switch ($method . ' ' . $action) {
   // The outreach sender's wording and the listings already claimed.
   case 'POST outreach_copy': {
     mail_auth('outreach_copy');
+    if (outreach_mode($in) !== 'on') out(array('ok' => true, 'off' => true, 'sequences' => new stdClass(), 'claimed' => array(), 'site' => (string) $CFG['siteName'], 'siteUrl' => (string) $CFG['siteUrl']));
     out(array('ok' => true) + outreach_copy());
   }
 
@@ -4096,6 +4303,77 @@ switch ($method . ' ' . $action) {
     $name = isset($l[$key]) ? $l[$key]['n'] : $key;
     tell_owner('Proposed change: ' . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who has claimed “' . $name . '” (' . $key . '), proposes:' . "\n\n" . $body . ($link !== '' ? "\n\nLink: " . $link : '') . "\n\nNothing on the site has changed. Mark it published or declined on the review page.", 'claims', 'manager-content');
     out(array('ok' => true, 'claims' => my_claims($u['id'])));
+  }
+
+  // ----- a manager sets its own days, hours, cost, grades and pickup schools (see "a manager's own fields") -----
+  case 'POST listing_fields': {
+    $u = need_user();
+    $key = str($in, 'listing', 90);
+    $c = row("SELECT id, status, via, domain FROM claims WHERE user_id = ? AND listing = ? AND status = 'ok'", array($u['id'], $key));
+    if (!$c) fail('claim', 'You can change the listing once your claim on it stands.', 403);
+    $l = listings();
+    if (!preg_match('/^p:[a-z0-9-]{1,80}$/', $key) || !isset($l[$key]['f']) || !is_array($l[$key]['f'])) fail('listing', 'This listing doesn’t have these fields. Send the change as an update below instead.');
+    $cur = $l[$key]['f'];
+    $vals = array(); $says = array(); $review = false;
+    if (isset($in['days']) && is_array($in['days']) && $in['days']) {
+      $d = array_values(array_intersect(LF_DAYS, array_map('strval', $in['days'])));
+      if (!$d) fail('days', 'Pick the days it runs.');
+      if ($d !== (isset($cur['days']) && is_array($cur['days']) ? array_values($cur['days']) : null)) { $vals['days'] = $d; $says[] = 'Days: ' . lf_day_names($d) . '.'; }
+    }
+    $from = str($in, 'from', 10); $to = str($in, 'to', 10);
+    if ($from !== '' || $to !== '') {
+      $end = lf_time($to);
+      if ($end === '') fail('to', 'Give the time it ends.');
+      $start = $from === 'dismissal' ? 'Dismissal' : lf_time($from);
+      if ($start === '') fail('from', 'Give the time it starts, or pick school dismissal.');
+      $hours = $start . ' to ' . $end;
+      if ($hours !== (string) ($cur['hours'] ?? '')) { $vals['hours'] = $hours; $says[] = 'Hours: ' . $hours . '.'; }
+      if ($end !== (string) ($cur['pickupBy'] ?? '')) $vals['pickupBy'] = $end;
+    }
+    $cost = str($in, 'cost', 200);
+    if ($cost !== '') {
+      $holds = content_text_holds($cost, mod_cfg(), mod_private(), 'content');
+      if (in_array('link', $holds, true) || in_array('contact', $holds, true)) fail('cost', 'Keep the price line to the price: no links, emails or phone numbers.');
+      if ($holds) $review = true;   // anything else the rules catch goes to a person first
+      if ($cost !== (string) ($cur['cost'] ?? '')) { $vals['cost'] = $cost; $says[] = 'Cost: ' . rtrim($cost, '.') . '.'; }
+    }
+    $gf = str($in, 'gradeFrom', 3); $gt = str($in, 'gradeTo', 3);
+    if ($gf !== '' || $gt !== '') {
+      global $CFG;
+      $order = isset($CFG['grades']) && is_array($CFG['grades']) ? array_values($CFG['grades']) : array();
+      $a = array_search($gf, $order, true); $b = array_search($gt === '' ? $gf : $gt, $order, true);
+      if ($a === false || $b === false || $a > $b) fail('grades', 'Pick the youngest and oldest grade it takes.');
+      $g = $a === $b ? $order[$a] : $order[$a] . '-' . $order[$b];
+      if ($g !== (string) ($cur['grades'] ?? '')) { $vals['grades'] = $g; $says[] = 'Grades: ' . ($a === $b ? $order[$a] : $order[$a] . ' to ' . $order[$b]) . '.'; }
+    }
+    if (isset($in['pickup']) && is_array($in['pickup'])) {
+      $names = school_names(); $now = isset($cur['schools']) && is_array($cur['schools']) ? $cur['schools'] : array();
+      $pick = array();
+      foreach (array_slice($in['pickup'], 0, 40) as $sid) if (is_string($sid) && isset($names[$sid]) && !in_array($now[$sid] ?? '', array('pickup', 'onsite'), true)) $pick[] = $sid;
+      $pick = array_values(array_unique($pick)); sort($pick, SORT_STRING);
+      if ($pick) { $vals['pick'] = $pick; $says[] = 'Picks up at: ' . implode(', ', array_map(function ($x) use ($names) { return $names[$x]; }, $pick)) . '.'; }
+    }
+    if (!$vals) fail('same', 'That’s what the listing says already. Change a field, then send it.');
+    if (too_many('fields:' . $u['id'], 6, 86400)) fail('slow', 'That’s a lot of changes for one day. Try again tomorrow.', 429);
+    note('fields:' . $u['id']);
+    $sayText = implode(' ', $says);
+    q("INSERT INTO edits (claim_id, listing, body, link, status, created, kind, fields) VALUES (?, ?, ?, '', 'sending', ?, 'fields', ?)", array($c['id'], $key, $sayText, now(), json_encode($vals, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)));
+    $eid = (int) db()->lastInsertId();
+    $pr = 0; $sum = '';
+    if (!$review && manager_fields_mode() === 'publish' && claim_by_domain($c, $l[$key])) list($pr, $sum) = lf_publish($eid, $key, $vals, $sayText);
+    $name = $l[$key]['n'];
+    if ($pr > 0) {
+      q("UPDATE edits SET status = 'pr', pr = ?, sum = ? WHERE id = ?", array($pr, $sum, $eid));
+      // The manager hears "It's on the site" once the pull request is merged, the way every queue item's sender does.
+      q("INSERT OR REPLACE INTO queue_items (id, kind, email, listing, what, seen, state, outcome, run, pr, decided, told) VALUES (?, 'proposal', ?, ?, ?, ?, 'waiting', 'published', 'listing-tools', ?, ?, 0)", array('e' . $eid, $u['email'], $key, $name, now(), $pr, now()));
+      bump('fields_live');
+      tell_owner('A manager’s update goes live: ' . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who claimed “' . $name . '” with an address at its website, set from the listing tools:' . "\n\n" . $sayText . "\n\nIt is in pull request #" . $pr . ', which the autopilot gate checks: with the switch on it publishes at the next hourly merge; in shadow mode, merge it by hand.');
+    } else {
+      q("UPDATE edits SET status = 'new' WHERE id = ?", array($eid));   // the private queue takes it, as a proposal
+      bump('fields_queued');
+      tell_owner('Proposed change: ' . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who has claimed “' . $name . '” (' . $key . '), set from the listing tools:' . "\n\n" . $sayText . "\n\nIt goes to the queue run as a proposed change.");
+    }
+    out(array('ok' => true, 'live' => $pr > 0, 'claims' => my_claims($u['id'])));
   }
 
   // ----- a profile: the school and the weeks someone chose to keep with their account -----

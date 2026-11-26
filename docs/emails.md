@@ -55,15 +55,22 @@ Words in curly braces, like `{school}`, are filled in per page. If a sentence is
 
 The emails the site sends itself (sign-in link and code, the invitations to a group, "someone joined", the monthly
 numbers and the other notes to the people who run a listing, a parent's question passed on, and the answers to
-whoever sent a suggestion or a proposed change once a research run has settled it: "It's on the site", "It's
-already listed", "We couldn't confirm this yet" and "We can't list this one", see "The private queue" in
-`docs/listings.md`; and since Phase 6, "Thanks for your review" once a review is on the site, "It's on your listing"
-to a manager when the autopilot publishes their words, offer, pin, photo or logo, and the code to claim a listing,
-sent to the address its website publishes) are edited the same way. So are the words the mailbox script sends from the site's address (see
-"The mailbox script" below): the fixed replies to mail ("Thanks, it's updated", how to claim a listing, delete an
-account, stop the emails or ask for a school, and the last lines of every reply), the starting draft for a held email,
-and the three outreach sequences (the claim invite, "your school's page is live", the camp sponsor invite) with the
-foot every outreach email carries.
+whoever sent a suggestion or a proposed change once a research run has settled it: "Your suggestion is now on the
+site", "It's already listed", "We couldn't verify your suggestion yet" and "We weren't able to add this suggestion
+automatically", see "The private queue" in `docs/listings.md`; and since Phase 6, "Thanks for your review" once a
+review is on the site, and the code to claim a listing, sent to the address its website publishes) are edited the same
+way. None of the answers carries small print at the bottom. Nothing is emailed when a manager's words, offer, pin,
+photo or logo goes up or is turned down: their listing tools show "On your listing", or that the last one wasn't
+published and what it should be.
+
+So are the words the mailbox script sends from the site's address (see "The mailbox script" below): the fixed replies
+to mail ("Thanks, it's updated", how to claim a listing, delete an account, stop the emails or ask for a school, and
+the last lines of every reply), the starting draft for a held email, and the three outreach sequences (the claim
+invite, "your school's page is live", the camp sponsor invite) with the foot every outreach email carries. While
+people's mail stays in the inbox (`"mail": { "people": "inbox" }`, the live setting) the replies and the draft are left
+off the page, and while outreach is off (`"mail": { "outreach": "off" }`, the live setting) so are the outreach emails;
+so is "A copy of an answer" while `"answerCopies"` is `"off"`. Their sentences keep any edit, for when they are
+switched back on (`emailHidden()` in `build.mjs`).
 `/edit/emails/` is linked from the edit page and needs the same sign-in; it shows every email once, with made-up
 names and numbers in place of the real ones, and each sentence edits like any other. Words in curly braces, such as
 `{site}`, `{code}`, `{listing}` or `{first}`, are filled in when an email goes out, so they stay in the sentence. A
@@ -75,6 +82,13 @@ before an email names it on the page, and the same name used twice joins the sen
 (`phpCopy()` in `build.mjs`) replaces each `__T("…")` with the published wording, or `''` for a removed sentence, and
 stops if any is left unread. The unit words in the monthly numbers ("3 clicks", "2 more families") are not editable;
 the sentences around them are. The emails to the site's own address are not on the page.
+
+The claims page (`/edit/claims/`) sends six plain emails of its own, listed after the server's under names ending "(sent
+from the claims page)": the claim approved; the claim declined or taken away, with the reason the owner picks
+(their address isn't at the program's website, the program said no, the program couldn't be reached, the program
+already manages it, or the owner's own words, all of it required before a decline goes through); the listing given
+by hand; a proposed change published or not made; and a listing made premium. Their sentences go through
+`emailCopy()` (`claimWords()` in `build.mjs`); the Needs-you page's Decline offers the same reasons.
 
 One email the site words but doesn't send itself is there too: "Your school is here", the one to people who asked
 for a school once it has a page. Its heading, intro and reason line, and the item's title, text and button, go
@@ -297,18 +311,22 @@ are sent.
 
 ## An email to you for each answer
 
-Each time the site's mailer emails a sender their answer (`queue_reply()` in `src/server/groups-api.php`: "It's on the
-site", "It's already listed", "We couldn't verify this one yet", "We weren't able to add this one", and the reviewer's
-thank-you), a copy goes to the site's contact address (`answer_copy()`): "[Philly After School] Answer sent: <the
-answer's subject>", saying who it went to and the outcome (with the run's reason, such as `not-a-program`), then the
+Each time the site's mailer emails a sender their answer (`queue_reply()` in `src/server/groups-api.php`: "Your
+suggestion is now on the site", "It's already listed", "We couldn't verify your suggestion yet", "We weren't able to add this suggestion automatically", "Your update is live"
+(to a program manager whose own fields went on the listing; see "Program managers' own fields" in
+`docs/program-managers.md`), and the reviewer's
+thank-you), a copy can go to the site's contact address (`answer_copy()`; off on the live site since November 2026,
+see below): "[Philly After School] Answer sent: <the
+answer's subject>", saying who it went to and the outcome (with the run's reason, such as `not-a-program`, and for
+`not-on-site` what the program's site was missing, such as `not-on-site: hours, school`), then the
 answer word for word, with a link to `/edit/queue/`. It carries `X-PAS-Kind: answer`, so the mailbox script labels it
 `PAS/Site/Answers` and, while it keeps mail in the inbox (the default, see "The mailbox script"), leaves it there.
 Its framing lines are editable at `/edit/emails/` as "A copy of an answer".
 
 Answers to emails need no copy: the mailbox script sends those from the contact@ account itself, in the email's own
 thread, and brings the thread back to the inbox. `"ownerNotes": { "answerCopies": "off" }` in `site.config.json`
-stops the copies (it is `"on"`); a copy that fails isn't tried again, since the answer itself went. Each copy is one
-more email through Postmark, a few a day.
+stops the copies (it is `"off"`: the morning summary counts the answers instead); a copy that fails isn't tried again,
+since the answer itself went. Each copy is one more email through Postmark, a few a day.
 
 ## The morning summary
 
@@ -322,7 +340,8 @@ in `site.config.json` turns it on (it is); `"off"` stops it, and the sign-up dig
   (from its evidence file), the answers emailed to senders, managers' photos and words published, and anything undone.
 - **Waiting for you:** how many things the Needs-you page holds, by kind (held mail included), with its link, and the
   autopilot's mode.
-- **Mail:** emails from people that came in yesterday and how many were held, replies that went from the site's
+- **Mail:** emails from people that came in yesterday (while mail stays in the inbox: how many, left there for you to
+  answer), and when the site handles them how many were held, replies that went from the site's
   address, replies that couldn't be sent this week, and the outreach sender's day (sent against the cap) and week
   (sent, replies, opt-outs, bounces), or that it is paused.
 - **New accounts:** parents and program managers yesterday, parents in the last seven days, and the listings claimed.
@@ -377,8 +396,12 @@ with the shared code in `src/server/mail.php`.
      `PAS/Bounces` and automatic replies (out of office) to `PAS/Auto-replies`, archived; a bounce of an outreach
      email stops that row's sequence.
    - *Mail a person wrote.* Everything left is posted to the site, one signed request per email
-     (`groups/api.php?action=mail_in`), and labeled `PAS/People/Queued`, or `PAS/People/Needs Josh` when the site
-     holds it. Mail older than the day `setup` first ran is never posted: it stays where it is, so nobody gets an
+     (`groups/api.php?action=mail_in`). With `"mail": { "people": "inbox" }` in `site.config.json` (the live setting,
+     and what the site does when the key is missing) the site keeps none of it and nothing answers it: it answers
+     "held", so the script labels it `PAS/People/Needs Josh` and leaves it in the inbox for the owner to answer from
+     Gmail, and the morning summary counts it (`mail_kept`). An email still waiting from before the switch is held
+     for the owner too, never answered. With `"people": "site"` it is labeled `PAS/People/Queued`, or
+     `PAS/People/Needs Josh` when the site holds it, and the runs answer the rest as below. Mail older than the day `setup` first ran is never posted: it stays where it is, so nobody gets an
      answer to a months-old email. A message the site refuses for good is labeled `PAS/Suspicious` and left for a
      person.
    - *Kept in the inbox* (the default; the script property `KEEP_IN_INBOX` set to `no` turns it off). Nothing is ever
@@ -437,7 +460,9 @@ the one Google adds (a sender can add look-alikes lower down, never above it).
 - Replies are fixed templates filled in by the host, or the owner's own words from the Needs-you page. No sentence a
   run writes is ever sent.
 
-**The outreach sender** (`sendOutreach()`, the same script). It reads the tabs named in `OUTREACH_TABS` of the sheet in
+**The outreach sender** (`sendOutreach()`, the same script). Off on the live site: with `"mail": { "outreach": "off" }`
+in `site.config.json` (and when the key is missing) `outreach_copy` hands the script no wording, so it sends nothing
+even with `OUTREACH_ON` set, and says "switched off on the site". `"outreach": "on"` brings it back as below. It reads the tabs named in `OUTREACH_TABS` of the sheet in
 `OUTREACH_SHEET_ID`, starting with "Programs" in the claim-outreach sheet (`Programs=claim`), and sends each row its
 next email from contact@ as plain text. The wording comes from the site (`action=outreach_copy`, editable at
 `/edit/emails/`): the claim invite (day 0, and day 10; a row whose "Can they claim with this email?" starts with "Not"

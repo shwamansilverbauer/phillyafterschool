@@ -19,6 +19,33 @@ clicks to its website, times it was put on a family's plan, and people who asked
   most-opened listings for the owner. There is no public view.
 - The preview copy counts nothing.
 
+## Program managers' own fields
+
+Since November 25, 2026 a manager sets a listing's days, hours, price, grades and the schools it picks up from in its
+listing tools on `/managers/` ("Days, hours and price", above the free-text "Send an update"). Days are Monday to Friday
+boxes, hours a start (or "Starts at school dismissal") and an end time (written as "Dismissal to 6:00 pm" or "3:00 pm to
+6:00 pm", the end also as `pickupBy`), the price one line (no links, emails or phone numbers), grades the youngest and
+oldest, and pickup schools picked from the site's schools (adding only: a school leaves a listing through Josh). Only
+what changed is sent (`listing_fields` in `src/server/groups-api.php`, at most 6 a day).
+
+- **From a claim made with an address at the program's own website** (`claim_by_domain`: not by code, not one Josh
+  approved by hand), the site writes the change into `data/programs.json` on a branch of its own,
+  `manager-edit-<listing>-<edit>`, through the GitHub key: the fields, a `told` entry ("by" "program manager", "how"
+  "from its listing tools", the fields it covers, what they set in their words), and it takes what it covers out of
+  `notPosted`. A pickup school gets a link with the note "The program itself says it picks up here." It writes
+  `evidence/<branch>.json` (one item of kind `told` with the edit's id) and opens a pull request. The autopilot gate
+  confirms the edit with the site (`told_check`, see "What the gate checks" in `docs/listings.md`) and then needs no
+  quote; with the switch `on` it publishes at the next hourly merge, in `shadow` Josh merges it. The edit is also a
+  queue item waiting on that pull request (`e<id>`, run `listing-tools`), so the manager gets "Your update is live" once
+  it's merged and published, and Josh gets an email when it's sent. Nothing a manager typed is in the pull request
+  except the values they set, and no one's name or address.
+- **From any other claim**, a price the text rules catch (other than a link or contact details, which are refused), or
+  with `"managerFields": "review"` under `"groups"` in `site.config.json`: the edit goes to the private queue as a
+  proposal, like a free-text update, and the queue run records it as a `told` entry that waits for Josh. The same
+  happens if the pull request can't be made (no key on the host, GitHub refusing).
+- The program's own word wins after that: the monthly check never changes a field a `told` entry covers, and asks the
+  managers once after 120 days whether it still holds.
+
 ## Is there space
 
 A place with more than one listing (an after-school program and a camp, say) signs in once on `/managers/`, is shown
@@ -199,12 +226,13 @@ changes where a listing appears in a list, and it has no say over reviews.
   face up close and no readable name, a logo when it is plainly a logo). The run writes its word to
   `decisions/<run>.json` in the ops repository (see "The private queue"). With the autopilot on, the site publishes
   what the run passed, after its own text checks and, for a photo, only when the manager ticked that everyone shown
-  agreed, and emails the manager in the site's own words ("It's on your listing", editable on `/edit/emails/`).
+  agreed. Nobody is emailed about it: the manager's listing tools say "On your listing", or, for words, an offer, a
+  pin or links that weren't published, that the last one wasn't and what it should be.
   Anything held waits on `/edit/claims/` and the Needs-you page with the reason. Social links and Instagram posts,
   which are only addresses on those sites (`social_url()`, `post_url()`), go on the listing at once while the
   autopilot is on. With it in shadow or off, everything waits for the owner as before, with the run's word beside
   it, and once it is switched on what a run passed publishes a few an hour. Publish and Decline on `/edit/claims/`
-  work as before and email the manager either way. In `"preview"` those emails say that only they can see it for now.
+  work as before, and email nobody either.
 - **Photos.** Sending a photo needs two ticks: the right to use it, and "Everyone shown, or their parent, has agreed to
   this photo being public" (`consent` in the `photos` table, Phase 6; a logo needs only the first). A photo from
   before that tick waits for the owner. The `photos` table gained a `kind` (`photo` or `logo`). A premium listing keeps up to
@@ -293,7 +321,7 @@ All three are sent by the morning job (`push_run`), never because of something a
   families for a review (none published), or propose an update. A claim less than `MGR_FRESH_DAYS` old is skipped.
 - **A review was published.** The build hands the server each program's count of published reviews (`r` in the
   listings it passes, beside `u`, "has a sign-up date still to come"). When a count goes up, the listing's managers
-  are told, with a link to the reviews. It says they have no say over reviews.
+  are told, with a link to the reviews.
 - **New followers**, at most once a week: how many more families started following the listing in the last seven
   days. A number, never who, and the listing's own managers aren't counted. It is skipped on the morning the
   month's numbers go.

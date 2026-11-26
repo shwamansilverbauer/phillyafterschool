@@ -111,7 +111,7 @@ test('a premium listing’s social links and Instagram posts: sent by its manage
     const id = /name="id" value="(\d+)"/.exec(page.slice(at))[1];
     await fetch(`${ctx.site.base}/edit/claims/`, { method: 'POST', headers: { Cookie: cookie, 'Content-Type': 'application/x-www-form-urlencoded' }, body: form({ csrf, id, do: 'extra_ok' }), redirect: 'manual' });
   }
-  await ctx.mail.waitFor(manager.email, /Your social links for .* are on the site/);
+  ok(!ctx.mail.to(manager.email).some(m => /on the site/.test(m.Subject)), 'no email to the manager: their listing tools show it');
   const after = await manager.okay('GET', 'extras', 'l=' + encodeURIComponent(PREMIUM));
   deepEq(after.social, { ig: 'https://www.instagram.com/test.program/', fb: 'https://www.facebook.com/TestProgram' });
   deepEq(after.posts, ['https://www.instagram.com/p/AAAAA1/', 'https://www.instagram.com/reel/AAAAA2/']);
@@ -163,7 +163,7 @@ test('a premium listing’s pin in Kids’ Playground: sent by its manager, chec
   const csrf = /name="csrf" value="([^"]+)"/.exec(page)[1];
   const id = new RegExp('Name: Dance Star[\\s\\S]*?name="id" value="(\\d+)"').exec(page)[1];
   await fetch(`${ctx.site.base}/edit/claims/`, { method: 'POST', headers: { Cookie: cookie, 'Content-Type': 'application/x-www-form-urlencoded' }, body: form({ csrf, id, do: 'extra_ok' }), redirect: 'manual' });
-  await ctx.mail.waitFor(manager.email, /Kids’ Playground pin for/);
+  ok(!ctx.mail.to(manager.email).some(m => /Kids’ Playground pin for/.test(m.Subject)), 'no email to the manager: their listing tools show it');
   // Now the family whose child went there gets it; a family whose child didn't doesn't.
   deepEq((await pat.okay('GET', 'passport')).ppins, [{ k: PREMIUM, n: 'Dance Star', c: 3, i: 'movement' }]);
   const other = ctx.api().as(`fam2${t}@example.test`, 'Bo', 'Fox');
