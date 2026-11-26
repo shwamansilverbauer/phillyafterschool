@@ -2138,10 +2138,18 @@
       pictures('photo', sub('photos', 'Photos (' + shots.length + ' of ' + P.max + ')', 'Your space, an activity, the room at pickup. The newest one sits at the top of your listing and the rest make a gallery. Each is shrunk on your device before it’s sent.'), shots, shots.length < P.max);
       pictures('logo', sub('photos', 'Your logo', 'Shown beside what you write about your program.'), logos.slice(0, 2), true);
       // --- in their own words, and the offer line: text that waits for a look
+      // what a person looks for, said when the last one sent wasn't published (no email is sent about it)
+      var NOT_USED = {
+        words: 'It should describe the program in plain words, with no prices that differ from the listing and no claims about other programs.',
+        offer: 'It should describe the program in plain words, with no prices that differ from the listing and no claims about other programs.',
+        pin: 'A pin’s name should be the program’s name or a short, kid-friendly title, with no prices, offers or web addresses.',
+        social: 'Social links should go to the program’s own accounts.',
+        posts: 'Instagram posts should be public posts from the program’s own account that are fine for families to see on the site.'
+      };
       var texts = function (kind, part, t, make) {
         if (t.live) part.appendChild(el('p', 'claim-status ok', kind === 'pin' ? 'In Kids’ Playground' : 'On your listing' + (kind === 'offer' && t.liveUntil ? ' until ' + when2(t.liveUntil) : '')));
         if (t['new']) part.appendChild(el('p', 'claim-status pending', t.live ? 'A newer version is waiting to be approved' : 'Waiting to be approved'));
-        if (t.declined && !t['new']) part.appendChild(el('p', 'claim-status declined', 'The last one you sent wasn’t published. We emailed you about it.'));
+        if (t.declined && !t['new']) part.appendChild(el('p', 'claim-status declined', 'The last one you sent wasn’t published. ' + (NOT_USED[kind] || '') + ' Send another, or reply to any email from us with a question.'));
         var f = el('form', 'g-form pm-form'), inputs = make(f, t);
         var st = el('p', 'g-status'); st.setAttribute('aria-live', 'polite'); f.appendChild(st);
         var acts = el('div', 'actions'), go = el('button', 'btn primary', t.live || t['new'] ? 'Send the new version' : 'Send it for a look'); go.type = 'submit'; acts.appendChild(go);
@@ -2444,7 +2452,7 @@
               if (!d.ok) { status.textContent = d.message; status.className = 'g-status bad'; if (d.error === 'no-email') send.hidden = true; return; }
               pushStep('code_sent');
               box.textContent = '';
-              box.appendChild(el('p', 'hint', 'We sent a 6-digit code to ' + d.to + ', the address ' + l.name + '’s website shows. Ask whoever reads that inbox for it, then type it here. It works for 24 hours.'));
+              box.appendChild(el('p', 'hint', 'We sent a 6-digit code to ' + d.to + ', the address ' + l.name + '’s website shows. Ask whoever reads that inbox for it, then type it here. It works for 2 hours.'));
               var f = el('form', 'g-form'), code = field(f, 'cc-' + l.key.replace(/[^a-z0-9]/g, '-'), 'The code', 'input', { type: 'text', inputMode: 'numeric', autocomplete: 'one-time-code', maxLength: 7 });
               var st2 = el('p', 'g-status'); st2.setAttribute('aria-live', 'polite'); f.appendChild(st2);
               var a2 = el('div', 'actions'), go = el('button', 'btn primary', 'Claim it'); go.type = 'submit'; a2.appendChild(go); f.appendChild(a2);

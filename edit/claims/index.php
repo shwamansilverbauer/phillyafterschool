@@ -209,6 +209,10 @@ function tell($to, $subject, $text) {
   if (pas_postmark($SITE, $FROM, $to, $subject, $text . "\n\n" . $SITE, '', $FROM) >= 0) return;
   @mail($to, '=?UTF-8?B?' . base64_encode($subject) . '?=', $text . "\n\n" . $SITE, implode("\r\n", array('From: ' . $SITE . ' <' . $FROM . '>', 'Reply-To: ' . $FROM, 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=UTF-8')));
 }
+// The emails' words, as edited at /edit/emails/: {words} filled in, and an emptied sentence left out.
+$fill = function ($s, $v) { $m = array(); foreach ($v as $k => $x) $m['{' . $k . '}'] = (string) $x; return strtr($s, $m); };
+$paras = function ($p) { return implode("\n\n", array_values(array_filter($p, function ($x) { return trim($x) !== ''; }))); };
+$REASONS = array('addr' => 'The email address you claimed with isn’t at the program’s own website, and we couldn’t confirm you work there another way.', 'said-no' => 'We checked with the program, and they told us you don’t manage this listing.', 'no-reach' => 'We couldn’t reach the program to confirm that you work with them.', 'managed' => 'The program already manages this listing, and asked us not to add anyone else.');
 if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
   $ok = isset($_POST['csrf']) && is_string($_POST['csrf']) && hash_equals($csrf, $_POST['csrf']);
   $do = isset($_POST['do']) && is_string($_POST['do']) ? $_POST['do'] : '';
@@ -230,19 +234,26 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
         else $db->prepare("INSERT INTO claims (user_id, listing, status, domain, created, decided) VALUES (?, ?, 'ok', 'by hand', ?, ?)")->execute(array($u['id'], $key, time(), time()));
         try { $db->prepare('UPDATE users SET told = 2 WHERE id = ?')->execute(array($u['id'])); } catch (Exception $e) { /* a database from before that column */ }
         $n = $name($key);
-        tell($u['email'], 'You now manage ' . $n . ' on ' . $SITE, 'Hi ' . $u['first'] . ",\n\nWe’ve given your account the listing “" . $n . '” on ' . $SITE . '. It now shows as claimed. Sign in with this email address to send changes to it, say whether there’s space and see its numbers:' . "\n" . $SITE_URL . '/managers/');
+        $vv = array('name' => $n, 'site' => $SITE, 'first' => $u['first']);
+        tell($u['email'], $fill('You now manage {name} on {site}', $vv), $paras(array($fill('Hi {first},', $vv), $fill('We’ve given your account the listing “{name}” on {site}. It now shows as claimed. Sign in with this email address to send changes to it, say whether there’s space and see its numbers:', $vv) . "\n" . $SITE_URL . '/managers/')));
         $msg = 'Done. ' . $u['first'] . ' ' . $u['last'] . ' now holds ' . $n . ', and they’ve been told.';
       }
     }
   }
+  // A decline says why, in the words below (editable at /edit/emails/) or the owner's own.
+  $whyKey = isset($_POST['why']) && is_string($_POST['why']) ? $_POST['why'] : '';
+  $whyOwn = trim(preg_replace('/[\x00-\x1F\x7F]+/u', ' ', isset($_POST['why_text']) && is_string($_POST['why_text']) ? mb_substr($_POST['why_text'], 0, 300) : '') ?? '');
+  $why = $whyKey === 'other' ? $whyOwn : (isset($REASONS[$whyKey]) ? $REASONS[$whyKey] : '');
+  if ($ok && in_array($do, array('claim_no', 'claim_remove'), true) && $why === '') { $ok = false; $msg = $whyKey === 'other' ? 'Type the reason in your own words, then decline again.' : 'Pick a reason first: it goes in the email to them.'; }
   if ($ok && in_array($do, array('claim_ok', 'claim_no', 'claim_remove'), true)) {
     $st = $db->prepare('SELECT c.id, c.listing, c.status, u.email, u.first FROM claims c JOIN users u ON u.id = c.user_id WHERE c.id = ?'); $st->execute(array($id)); $c = $st->fetch();
     if ($c) {
       $to = $do === 'claim_ok' ? 'ok' : 'declined';
       $db->prepare('UPDATE claims SET status = ?, decided = ? WHERE id = ?')->execute(array($to, time(), $id));
       $n = $name($c['listing']);
-      if ($to === 'ok') tell($c['email'], 'Your claim on ' . $n . ' is approved', 'Hi ' . $c['first'] . ",\n\nYour claim on “" . $n . '” at ' . $SITE . ' is approved. The listing now shows as claimed, and you can send changes to it here:' . "\n" . $SITE_URL . '/managers/');
-      else tell($c['email'], 'About your claim on ' . $n, 'Hi ' . $c['first'] . ",\n\nThanks so much for claiming “" . $n . '” on ' . $SITE . '! Unfortunately, we weren’t able to confirm that you run it, so the claim has been ' . ($do === 'claim_remove' ? 'removed' : 'declined') . ' for now.' . "\n\n" . 'If we got this wrong, please reach out to ' . $FROM . ' or just reply to this email, tell us how you’re connected to the program, and we’ll take another look.');
+      $vv = array('name' => $n, 'site' => $SITE, 'first' => $c['first'], 'contact' => $FROM);
+      if ($to === 'ok') tell($c['email'], $fill('Your claim on {name} is approved', $vv), $paras(array($fill('Hi {first},', $vv), $fill('Your claim on “{name}” at {site} is approved. The listing now shows as claimed, and you can send changes to it here:', $vv) . "\n" . $SITE_URL . '/managers/')));
+      else tell($c['email'], $fill('About your claim on {name}', $vv), $paras(array($fill('Hi {first},', $vv), trim($fill($do === 'claim_remove' ? 'Thanks so much for claiming “{name}” on {site}! Unfortunately, we weren’t able to confirm that you run it, so the claim has been removed for now.' : 'Thanks so much for claiming “{name}” on {site}! Unfortunately, we weren’t able to confirm that you run it, so the claim has been declined for now.', $vv) . ' ' . $why), $fill('If we got this wrong, please reach out to {contact} or just reply to this email, tell us how you’re connected to the program, and we’ll take another look.', $vv))));
       $msg = $to === 'ok' ? 'Approved, and they’ve been told.' : 'Done, and they’ve been told.';
     }
   } elseif ($ok && in_array($do, array('edit_done', 'edit_no'), true)) {
@@ -250,8 +261,9 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($x) {
       $db->prepare('UPDATE edits SET status = ?, decided = ? WHERE id = ?')->execute(array($do === 'edit_done' ? 'done' : 'declined', time(), $id));
       $n = $name($x['listing']);
-      if ($do === 'edit_done') tell($x['email'], 'Your change to ' . $n . ' is published', 'Hi ' . $x['first'] . ",\n\nThe change you sent for “" . $n . '” is on the site now. Have a look, and send another if anything is off:' . "\n" . $SITE_URL . '/managers/');
-      else tell($x['email'], 'About the change you sent for ' . $n, 'Hi ' . $x['first'] . ",\n\nThanks so much for sending a change for “" . $n . '”! Unfortunately, we weren’t able to make it this time, usually because we couldn’t find it on the program’s own website.' . "\n\n" . 'Please reach out to ' . $FROM . ' or just reply to this email if you’d like to talk it through. We’re happy to help.');
+      $vv = array('name' => $n, 'site' => $SITE, 'first' => $x['first'], 'contact' => $FROM);
+      if ($do === 'edit_done') tell($x['email'], $fill('Your change to {name} is published', $vv), $paras(array($fill('Hi {first},', $vv), $fill('The change you sent for “{name}” is on the site now. Have a look, and send another if anything is off:', $vv) . "\n" . $SITE_URL . '/managers/')));
+      else tell($x['email'], $fill('About the change you sent for {name}', $vv), $paras(array($fill('Hi {first},', $vv), $fill('Thanks so much for sending a change for “{name}”! Unfortunately, we weren’t able to make it this time.', $vv), $fill('Please reach out to {contact} or just reply to this email if you’d like to talk it through. We’re happy to help.', $vv))));
       $msg = $do === 'edit_done' ? 'Marked published, and they’ve been told.' : 'Declined, and they’ve been told.';
     }
   }
@@ -272,20 +284,14 @@ if ($have && $_SERVER['REQUEST_METHOD'] === 'POST') {
             catch (Exception $e) { $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE listing = ? AND status = 'ok' AND id != ?")->execute(array(time(), $x['listing'], $id)); }
           }
           $db->prepare("UPDATE photos SET status = 'ok', decided = ? WHERE id = ?")->execute(array(time(), $id));
-          $seen = $isPrem && $PREMIUM === 'preview' ? ' For now only you can see it there, while premium listings are being tried out.' : '';
-          tell($x['email'], 'Your ' . $kind . ' for ' . $n . ' is on the site', 'Hi ' . $x['first'] . ",
-
-The " . $kind . " you sent for “" . $n . '” is on the listing now.' . $seen . ' You can replace or remove it here:' . "
-" . $SITE_URL . '/managers/');
-          $msg = 'Published, and they’ve been told.';
+          // no email: the manager sees it on the listing and in their listing tools
+          $msg = 'Published. No email goes to the manager: it shows in their listing tools.';
         } else {
           $was = $x['status'];
           $db->prepare("UPDATE photos SET status = 'declined', decided = ? WHERE id = ?")->execute(array(time(), $id));
           @unlink($photoFile($id));
-          tell($x['email'], 'About the photo you sent for ' . $n, 'Hi ' . $x['first'] . ",
-
-We " . ($was === 'ok' ? 'have taken down' : 'weren’t able to use') . ' the photo you sent for “' . $n . '”. You’re welcome to send another: a clear picture of the space or an activity works best, with permission from the families of any children in it. Reply to this email with any questions.');
-          $msg = $was === 'ok' ? 'Taken down, and they’ve been told.' : 'Declined, and they’ve been told.';
+          // no email: the photo just doesn't show on the listing
+          $msg = $was === 'ok' ? 'Taken down.' : 'Declined.';
         }
       }
     } catch (Exception $e) { /* a database from before photos: nothing to do */ }
@@ -298,10 +304,9 @@ We " . ($was === 'ok' ? 'have taken down' : 'weren’t able to use') . ' the pho
         $n = $name($c['listing']);
         if ($do === 'premium_on') {
           $db->prepare('INSERT OR IGNORE INTO premium (listing, since) VALUES (?, ?)')->execute(array($c['listing'], time()));
-          tell($c['email'], $n . ' now has a premium listing', 'Hi ' . $c['first'] . ",
-
-“" . $n . '” on ' . $SITE . ' now has the premium tools: up to six photos and a logo, a section in your own words, an offer or event line, a button parents can use to send you a question, fuller numbers, and a flyer to print.' . ($PREMIUM === 'preview' ? ' We’re still trying these out, so for now what you add shows on your listing only to you.' : '') . ' You’ll find them under your listing here:' . "
-" . $SITE_URL . '/managers/');
+          $vv = array('name' => $n, 'site' => $SITE, 'first' => $c['first']);
+          tell($c['email'], $fill('{name} now has a premium listing', $vv), $paras(array($fill('Hi {first},', $vv), $fill('“{name}” on {site} now has the premium tools: up to six photos and a logo, a section in your own words, an offer or event line, a button parents can use to send you a question, fuller numbers, and a flyer to print. You’ll find them under your listing here:', $vv) . "
+" . $SITE_URL . '/managers/')));
           $msg = 'It’s premium now, and its manager has been told.';
         } else {
           $db->prepare('DELETE FROM premium WHERE listing = ?')->execute(array($c['listing']));
@@ -318,18 +323,13 @@ We " . ($was === 'ok' ? 'have taken down' : 'weren’t able to use') . ' the pho
         if ($do === 'extra_ok') {
           $db->prepare("DELETE FROM extras WHERE listing = ? AND kind = ? AND status = 'ok' AND id != ?")->execute(array($x['listing'], $x['kind'], $id));   // the newer one takes its place
           $db->prepare("UPDATE extras SET status = 'ok', decided = ? WHERE id = ?")->execute(array(time(), $id));
-          tell($x['email'], 'Your ' . $what . ' for ' . $n . ' ' . $are . ' on the site', 'Hi ' . $x['first'] . ",
-
-The " . $what . ' you ' . ($are === 'are' ? 'sent' : 'wrote') . ' for “' . $n . '” ' . $are . ' on the listing now.' . ($PREMIUM === 'preview' ? ' For now only you can see it there, while premium listings are being tried out.' : '') . ' You can change it or take it down here:' . "
-" . $SITE_URL . '/managers/');
-          $msg = 'Published, and they’ve been told.';
+          // no email: the manager sees it on the listing and in their listing tools
+          $msg = 'Published. No email goes to the manager: it shows in their listing tools.';
         } else {
           $was = $x['status'];
           $db->prepare("UPDATE extras SET status = 'declined', decided = ? WHERE id = ?")->execute(array(time(), $id));
-          tell($x['email'], 'About the ' . $what . ' for ' . $n, 'Hi ' . $x['first'] . ",
-
-We " . ($was === 'ok' ? 'have taken down' : 'weren’t able to publish') . ' the ' . $what . ' you ' . ($are === 'are' ? 'sent' : 'wrote') . ' for “' . $n . '”. ' . ($x['kind'] === 'pin' ? 'A pin’s name should be the program’s name or a short, kid-friendly title, with no prices, offers or web addresses.' : ($x['kind'] === 'social' ? 'Social links should go to the program’s own accounts.' : ($x['kind'] === 'posts' ? 'Instagram posts should be public posts from the program’s own account that are fine for families to see on the site.' : 'It should describe the program in plain words, with no prices that differ from the listing and no claims about other programs.'))) . ' You’re welcome to send another, or reply to this email with any questions.');
-          $msg = $was === 'ok' ? 'Taken down, and they’ve been told.' : 'Declined, and they’ve been told.';
+          // no email: their listing tools say it wasn't published, and what it should be
+          $msg = $was === 'ok' ? 'Taken down.' : 'Declined.';
         }
       }
     } catch (Exception $e) { /* a database from before premium: nothing to do */ }
@@ -415,7 +415,8 @@ if ($have) {
   <?php foreach ($pending as $c) { ?><div class="panel">
     <h3><?php echo htmlspecialchars($name($c["listing"]), ENT_QUOTES, 'UTF-8'); ?></h3>
     <p><?php echo htmlspecialchars($c["first"] . " " . $c["last"], ENT_QUOTES, 'UTF-8'); ?> &lt;<?php echo htmlspecialchars($c["email"], ENT_QUOTES, 'UTF-8'); ?>&gt; asked on <?php echo htmlspecialchars($day($c["created"]), ENT_QUOTES, 'UTF-8'); ?>. Their address is at <b><?php echo htmlspecialchars($c["domain"], ENT_QUOTES, 'UTF-8'); ?></b>, the same as the listing’s website, but that address is shared.</p>
-    <form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn primary" type="submit" name="do" value="claim_ok">Approve the claim</button><button class="btn" type="submit" name="do" value="claim_no">Decline</button></form>
+    <form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn primary" type="submit" name="do" value="claim_ok">Approve the claim</button></form>
+    <form method="post" action="./" class="actions decline-why"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><select name="why" required aria-label="Why"><option value="">Why? It goes in the email</option><option value="addr">Their address isn’t at the program’s website</option><option value="said-no">The program said no</option><option value="no-reach">We couldn’t reach the program</option><option value="managed">The program already manages it</option><option value="other">Other: type it</option></select><input type="text" name="why_text" maxlength="300" placeholder="Your own words, if Other" aria-label="Your own words"><button class="btn" type="submit" name="do" value="claim_no">Decline</button></form>
   </div><?php } ?>
 
   <h2>Changes program managers have proposed (<?php echo count($edits); ?> new)</h2>
@@ -462,7 +463,7 @@ Link: <?php echo htmlspecialchars($x["link"], ENT_QUOTES, 'UTF-8'); ?><?php } ?>
   <?php if (!$claims) { ?><p class="hint">None yet.</p><?php } else { ?>
   <p class="hint">Premium is on: a premium listing’s photos, own words, offer line, social links, Instagram posts and question button show to everyone, after you approve what the manager sends.</p>
   <div class="stat-scroll"><table class="stat-table wrap"><thead><tr><th scope="col">Listing</th><th scope="col">Who</th><th scope="col">Since</th><th scope="col">Premium</th><th scope="col"></th></tr></thead><tbody>
-  <?php foreach ($claims as $c) { ?><tr><th scope="row"><?php echo htmlspecialchars($name($c["listing"]), ENT_QUOTES, 'UTF-8'); ?></th><td><?php echo htmlspecialchars($c["first"] . " " . $c["last"], ENT_QUOTES, 'UTF-8'); ?><br><span class="hint"><?php echo htmlspecialchars($c["email"], ENT_QUOTES, 'UTF-8'); ?><?php if (isset($c["domain"]) && $c["domain"] === 'by hand') { ?> · given by hand<?php } ?></span></td><td><?php echo htmlspecialchars($day($c["created"]), ENT_QUOTES, 'UTF-8'); ?></td><td><?php if (in_array($c["listing"], $ALWAYS, true)) { ?><b>Premium</b><br><span class="hint">always: a test listing</span><?php } elseif (isset($premium[$c["listing"]])) { ?><b>Premium</b><br><span class="hint">since <?php echo htmlspecialchars($day($premium[$c["listing"]]), ENT_QUOTES, 'UTF-8'); ?></span><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn" type="submit" name="do" value="premium_off">Turn off</button></form><?php } else { ?><?php if (isset($asks[(int) $c["id"]])) { ?><b>Signed up: <?php echo $asks[(int) $c["id"]]["plan"] === 'year' ? 'yearly' : 'monthly'; ?></b><br><span class="hint"><?php echo htmlspecialchars($day($asks[(int) $c["id"]]["created"]), ENT_QUOTES, 'UTF-8'); ?></span><?php } ?><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn" type="submit" name="do" value="premium_on">Make it premium</button></form><?php } ?></td><td><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn" type="submit" name="do" value="claim_remove">Take the claim away</button></form></td></tr><?php } ?>
+  <?php foreach ($claims as $c) { ?><tr><th scope="row"><?php echo htmlspecialchars($name($c["listing"]), ENT_QUOTES, 'UTF-8'); ?></th><td><?php echo htmlspecialchars($c["first"] . " " . $c["last"], ENT_QUOTES, 'UTF-8'); ?><br><span class="hint"><?php echo htmlspecialchars($c["email"], ENT_QUOTES, 'UTF-8'); ?><?php if (isset($c["domain"]) && $c["domain"] === 'by hand') { ?> · given by hand<?php } ?></span></td><td><?php echo htmlspecialchars($day($c["created"]), ENT_QUOTES, 'UTF-8'); ?></td><td><?php if (in_array($c["listing"], $ALWAYS, true)) { ?><b>Premium</b><br><span class="hint">always: a test listing</span><?php } elseif (isset($premium[$c["listing"]])) { ?><b>Premium</b><br><span class="hint">since <?php echo htmlspecialchars($day($premium[$c["listing"]]), ENT_QUOTES, 'UTF-8'); ?></span><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn" type="submit" name="do" value="premium_off">Turn off</button></form><?php } else { ?><?php if (isset($asks[(int) $c["id"]])) { ?><b>Signed up: <?php echo $asks[(int) $c["id"]]["plan"] === 'year' ? 'yearly' : 'monthly'; ?></b><br><span class="hint"><?php echo htmlspecialchars($day($asks[(int) $c["id"]]["created"]), ENT_QUOTES, 'UTF-8'); ?></span><?php } ?><form method="post" action="./" class="actions"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><button class="btn" type="submit" name="do" value="premium_on">Make it premium</button></form><?php } ?></td><td><form method="post" action="./" class="actions decline-why"><input type="hidden" name="csrf" value="<?php echo htmlspecialchars($csrf, ENT_QUOTES, 'UTF-8'); ?>"><input type="hidden" name="id" value="<?php echo (int) $c["id"]; ?>"><select name="why" required aria-label="Why"><option value="">Why? It goes in the email</option><option value="addr">Their address isn’t at the program’s website</option><option value="said-no">The program said no</option><option value="no-reach">We couldn’t reach the program</option><option value="managed">The program already manages it</option><option value="other">Other: type it</option></select><input type="text" name="why_text" maxlength="300" placeholder="Your own words, if Other" aria-label="Your own words"><button class="btn" type="submit" name="do" value="claim_remove">Take the claim away</button></form></td></tr><?php } ?>
   </tbody></table></div>
   <?php } ?>
   <h2 id="grant">Give a listing to an account by hand</h2>
