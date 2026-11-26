@@ -348,6 +348,18 @@
     {
       "id": "as-jenks",
       "name": "A.S. Jenks"
+    },
+    {
+      "id": "bregy",
+      "name": "Bregy"
+    },
+    {
+      "id": "peirce",
+      "name": "Peirce"
+    },
+    {
+      "id": "welsh",
+      "name": "Welsh"
     }
   ],
   "programs": [
@@ -2232,6 +2244,69 @@
       "parts": [
         "after"
       ]
+    },
+    {
+      "id": "sunrise-bregy",
+      "name": "Sunrise of Philadelphia at Bregy",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "bregy-clubs",
+      "name": "School clubs and partners at Bregy",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "launch-philly-peirce",
+      "name": "Launch Philly at Peirce",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "peirce-clubs",
+      "name": "School clubs and partners at Peirce",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "methodist-services-welsh",
+      "name": "Methodist Services after school at Welsh",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "welsh-partners",
+      "name": "School partners at Welsh",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "fell-partners",
+      "name": "School partners at Fell",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "pyb-mifflin",
+      "name": "Philadelphia Youth Basketball at Mifflin",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "bayard-taylor-partners",
+      "name": "School partners at Bayard Taylor",
+      "parts": [
+        "after"
+      ]
     }
   ],
   "camps": [
@@ -2537,6 +2612,57 @@
       "title": "Shawmont now has a page",
       "text": "You asked to be told. 2 programs are listed for Shawmont so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/shawmont/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-bregy",
+      "kind": "added",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-25",
+      "expires": "2026-11-27",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "f-amedee-bregy-school"
+      ],
+      "when": "New",
+      "title": "Bregy now has a page",
+      "text": "You asked to be told. 2 programs are listed for Bregy so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/bregy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-peirce",
+      "kind": "added",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-25",
+      "expires": "2026-11-27",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "thomas-m-peirce-school"
+      ],
+      "when": "New",
+      "title": "Peirce now has a page",
+      "text": "You asked to be told. 3 programs are listed for Peirce so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/peirce/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-welsh",
+      "kind": "added",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-25",
+      "expires": "2026-11-27",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "john-welsh-school"
+      ],
+      "when": "New",
+      "title": "Welsh now has a page",
+      "text": "You asked to be told. 2 programs are listed for Welsh so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/welsh/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },
     {

@@ -444,6 +444,9 @@ if (!edit_signed_in()) {
     <li><a href="../fitzpatrick/">Fitzpatrick page</a></li>
     <li><a href="../dick/">William Dick page</a></li>
     <li><a href="../as-jenks/">A.S. Jenks page</a></li>
+    <li><a href="../bregy/">Bregy page</a></li>
+    <li><a href="../peirce/">Peirce page</a></li>
+    <li><a href="../welsh/">Welsh page</a></li>
     <li><a href="../types/">Program types</a></li>
     <li><a href="../types/aftercare/">A type page (Aftercare)</a></li>
     <li><a href="../by-day/">By day of the week</a></li>
