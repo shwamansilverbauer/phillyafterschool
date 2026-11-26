@@ -34,7 +34,7 @@ Fields worth knowing:
   "Not posted yet"` (the gate's `notPosted.lines` in `scripts/gate.config.json`, which need no quote), and `"grades":
   null`. Its card and page show "Not posted yet, ask the program" for each, its page's claim box says what isn't posted
   and that claiming it is how to add it, Build your week labels it "Days not posted, check with the program" instead of
-  showing it as open every day, and the "It's on the site" email invites whoever runs it to claim it. A word leaves the
+  showing it as open every day, and the "Your suggestion is now on the site" email invites whoever runs it to claim it. A word leaves the
   list when the monthly check finds the fact on the provider's site, or when a manager sets it from the listing tools
   (see "Program managers' own fields" in `docs/program-managers.md`).
 - `schools`: one entry per school the program serves. Leave it as `{}` only for a listing with `daysOff` or `weekend` that runs nothing on a weekday afternoon (a theater with Saturday classes and holiday camps, say). That listing gets its own page and a card on the day-camp page, and stays off every school page, the A to Z list, the type and neighborhood pages and the roster.
@@ -362,21 +362,23 @@ reaches the public repository. (Until November 2026 the owner ticked items on `/
   item back in the queue for the next run. A settled or worked item leaves `queue/open.json`. A manager's proposed
   change that a run settles is marked published or declined on `/edit/claims/` too.
 - **The sender hears once.** When an item is settled, its sender gets one email in the site's own words (editable
-  at `/edit/emails/`, see "The emails" in `docs/emails.md`): published ("It's on the site", the listing's link, and
-  an invitation to save their school or follow the listing), duplicate and no-change ("It's already listed", with
-  the link), needs-info ("We couldn't verify this one yet", and what would help, by `reason`: for `not-on-site`, that
-we looked through the program's own website and couldn't find everything a listing needs, then what wasn't there in
-the site's own words, from `missing`, such as "its days and hours and which schools it serves or picks up from", and
-that adding it to the website is the quickest way onto the site), declined ("We weren't
-  able to add this one", with the rule in a sentence, by `reason`). The two that turn something down are written to be
-  warm: a thank-you, why it "didn't pass our automated approver" (the site never says a person checked it), and the
-  site's address to write to if they'd like it added. Held and failed send nothing. The run picks the outcome and
-  the reason; the host writes the words, so no sentence a run wrote is ever emailed to anyone. A copy of each answer
-  the site's mailer sends comes to the site's own address too (see "An email to you for each answer" in
-  `docs/emails.md`). An email's answer
-  goes from the site's address as a reply in its own thread, sent by the mailbox script, not by the site's mailer: the
-  same words, or the fixed reply the run chose ("Thanks, it's updated" waits for the merge like "It's on the site").
-  An email a run holds goes to the Needs-you page with its message and a draft. At most 30 answers go
+  at `/edit/emails/`, see "The emails" in `docs/emails.md`): published ("Your suggestion is now on the site", the
+  listing's link, and an invitation to save their school or follow the listing), duplicate and no-change ("It's
+  already listed", with the link), needs-info ("We couldn't verify your suggestion yet", and what would help, by
+  `reason`: for `not-on-site`, that our automated system looked through the program's website and couldn't find
+  everything the listing needs, then what wasn't there in the site's own words, from `missing`, such as "its days and
+  hours and which schools it serves or picks up from", and that adding it to the website is the quickest way onto the
+  site), declined ("We weren't able to add this suggestion automatically", with the rule in a sentence, by `reason`).
+  The two that turn something down are written to be warm: a thank-you, why it didn't pass "our automated approval"
+  or "approver" (the site never says a person checked it), and the site's address to write to if they'd like it
+  added. Held and failed send nothing. The run picks the outcome and the reason; the host writes the words, so no
+  sentence a run wrote is ever emailed to anyone. A copy of each answer can come to the site's own address too (off on
+  the live site; see "An email to you for each answer" in `docs/emails.md`). Mail people write to contact@ stays in
+  the inbox for the owner on the live site (`"mail": { "people": "inbox" }`, see "The mailbox script" in
+  `docs/emails.md`), so it never reaches the queue. With `"people": "site"`, an email's answer goes from the site's
+  address as a reply in its own thread, sent by the mailbox script, not by the site's mailer: the same words, or the
+  fixed reply the run chose ("Thanks, it's updated" waits for the merge like a published suggestion). An email a run
+  holds goes to the Needs-you page with its message and a draft. At most 30 answers go
   in one run, a failed send is tried on the next two, and `queue_items.told` records when each went.
   `"queueReplies": false` in `site.config.json` stops the answers (items still settle). What came in before the
   private queue began (the day it first ran, `queue_since` in the accounts database's `meta`) is worked like the

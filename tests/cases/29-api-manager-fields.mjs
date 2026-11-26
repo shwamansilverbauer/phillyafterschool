@@ -68,8 +68,9 @@ test('a manager’s own fields: from a claim at the program’s own domain they 
   github.pulls[edit.pr] = { ...pr, state: 'closed', merged: true, merged_at: new Date(Date.now() - 3600e3).toISOString() };
   mail.clear();
   await api().okay('POST', 'push_run', { queue_force: true });
-  const m = await mail.waitFor(email, /Your update is on/);
-  includes(m.TextBody, 'Your update is live'); includes(m.TextBody, 'marked as coming from the program itself');
+  const m = await mail.waitFor(email, /Your update is live on/);
+  includes(m.TextBody, 'Your update is live'); includes(m.TextBody, 'marked as coming from the program manager');
+  excludes(m.TextBody, 'It’s the only email about it', 'no small print');
   excludes(m.TextBody, 'We checked it against the program’s own website', 'not the words for a suggestion');
   eq(site.sql(`SELECT status FROM edits WHERE id = ${edit.id}`)[0].status, 'done');
   noKey(site);

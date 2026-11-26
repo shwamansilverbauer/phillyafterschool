@@ -129,7 +129,7 @@ These are the only parts of the site that store anything about a child on the se
   listing's website (a Gmail address, a domain many share) can have a 6-digit code sent to the address the listing's
   own website publishes, which is the listing's `email` field (`e` in what `claimListings()` hands the server). The
   claim waits, marked `code-sent` (`claims.via`), until the code is typed in on `/managers/`; then it stands, with
-  `domain` set to `by code`, and the owner gets a note. The code works for 24 hours and five tries. It waits for the
+  `domain` set to `by code`, and the owner gets a note. The code works for 2 hours and five tries. It waits for the
   owner on the Needs-you page instead when someone at another address already holds the listing, when the code ran out
   untyped, or when the claimant chose "Ask a person to check" (`via` `asked`, also the way in for a listing whose
   website publishes no address). Off until `"claimByCode": true` under `"groups"` in `site.config.json`; while off,
@@ -140,7 +140,8 @@ These are the only parts of the site that store anything about a child on the se
   who). A manager can propose changes to a listing they hold; nothing changes on the site. Each claim and each
   proposed change is emailed to the contact address and listed on `/edit/claims/` (behind the edit sign-in), where
   the owner approves or declines a waiting claim, takes a claim away, and marks a proposed change published or
-  declined; the manager is emailed each time. A proposed change also goes to the research runs through the private
+  declined; the manager is emailed each time. Declining or taking a claim away needs a reason, picked from a list or
+  typed, and the email says it (see "The emails" in `docs/emails.md`). A proposed change also goes to the research runs through the private
   queue (see "The private queue" in `docs/listings.md`); when a run settles it, it is marked there and the manager
   gets that answer instead. To apply a change, edit the listing data as usual (or paste it to
   Claude), then mark it published. One account can hold 12 claims and one listing 5 claimants.

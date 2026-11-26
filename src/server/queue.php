@@ -201,7 +201,9 @@ function queue_collect(array $ctx): array {
   $state = queue_state($ctx['root']);
   // Reviews (Phase 6) are registered like the rest, so each reviewer can be thanked once their review is on the site.
   $reviews = function_exists('queue_reviews') ? queue_reviews($db, (string) $ctx['secret'], $ctx['names'], isset($ctx['fresh']) ? (string) $ctx['fresh'] : 'hold', time()) : array();
-  $all = array_merge(queue_notes($state), queue_proposals($db, $ctx['names']), $suggestions, queue_mail($db, (string) $ctx['secret']), $reviews);
+  // Mail people wrote is the runs' only while the site answers it ("mail": { "people": "site" }); kept in the inbox, it is the owner's.
+  $mail = isset($ctx['mail']) && $ctx['mail'] === 'inbox' ? array() : queue_mail($db, (string) $ctx['secret']);
+  $all = array_merge(queue_notes($state), queue_proposals($db, $ctx['names']), $suggestions, $mail, $reviews);
   foreach ($all as &$x) foreach (array('program', 'website', 'details', 'school', 'listing', 'pickup', 'campType', 'sentBy', 'email') as $k) if (!isset($x[$k])) $x[$k] = '';
   unset($x);
   usort($all, function ($a, $b) { return strcmp($b['when'], $a['when']) ?: strcmp($a['id'], $b['id']); });

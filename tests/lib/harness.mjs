@@ -237,6 +237,11 @@ export async function startSite({ scratch, standin, log = () => {} } = {}) {
   for (const f of ['build.mjs', 'site.config.json', 'data', 'src', 'email', 'scripts']) fs.cpSync(path.join(ROOT, f), path.join(copy, f), { recursive: true });
   // /edit/ opens for the accounts in "admins" (and the editors they add): no shared password to make up.
   const cfgFile = path.join(copy, 'site.config.json'), cfg = JSON.parse(fs.readFileSync(cfgFile, 'utf8'));
+  // The live site leaves people's mail in the inbox and has outreach and answer copies off; the tests run the whole
+  // mailbox, answers and copies included. Each switch's off side is tested on its own (test_people, test_outreach).
+  cfg.mail = { ...(cfg.mail || {}), people: 'site', outreach: 'on' };
+  cfg.ownerNotes = { ...(cfg.ownerNotes || {}), answerCopies: 'on' };
+  fs.writeFileSync(cfgFile, JSON.stringify(cfg, null, 2) + '\n');
   log(`building for ${TODAY} …`);
   const out = execFileSync('node', ['build.mjs'], { cwd: copy, encoding: 'utf8', env: { ...process.env, PAS_TODAY: TODAY, PAS_NO_HISTORY: '1' }, maxBuffer: 64e6 });
   fs.renameSync(path.join(copy, 'dist'), pub);
