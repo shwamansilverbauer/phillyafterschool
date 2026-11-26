@@ -300,7 +300,8 @@ are sent.
 Each time the site's mailer emails a sender their answer (`queue_reply()` in `src/server/groups-api.php`: "It's on the
 site", "It's already listed", "We couldn't verify this one yet", "We weren't able to add this one", and the reviewer's
 thank-you), a copy goes to the site's contact address (`answer_copy()`): "[Philly After School] Answer sent: <the
-answer's subject>", saying who it went to and the outcome (with the run's reason, such as `not-a-program`), then the
+answer's subject>", saying who it went to and the outcome (with the run's reason, such as `not-a-program`, and for
+`not-on-site` what the program's site was missing, such as `not-on-site: hours, school`), then the
 answer word for word, with a link to `/edit/queue/`. It carries `X-PAS-Kind: answer`, so the mailbox script labels it
 `PAS/Site/Answers` and, while it keeps mail in the inbox (the default, see "The mailbox script"), leaves it there.
 Its framing lines are editable at `/edit/emails/` as "A copy of an answer".
