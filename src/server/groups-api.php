@@ -216,6 +216,13 @@ function db(): PDO {
     // claimant asked the owner to check (scaling plan, Phase 6).
     $ccols = array(); foreach ($db->query('PRAGMA table_info(claims)') as $c) $ccols[] = $c['name'];
     if (!in_array('via', $ccols, true)) $db->exec("ALTER TABLE claims ADD COLUMN via TEXT NOT NULL DEFAULT ''");
+    // A manager's edit from the fields in its listing tools ("listing_fields", November 2026): kind "fields", what it
+    // sets (JSON), the sum the gate asks about (told_sum), and the pull request it went in. Free-text updates stay "".
+    $ecols = array(); foreach ($db->query('PRAGMA table_info(edits)') as $c) $ecols[] = $c['name'];
+    if (!in_array('kind', $ecols, true)) $db->exec("ALTER TABLE edits ADD COLUMN kind TEXT NOT NULL DEFAULT ''");
+    if (!in_array('fields', $ecols, true)) $db->exec("ALTER TABLE edits ADD COLUMN fields TEXT NOT NULL DEFAULT ''");
+    if (!in_array('sum', $ecols, true)) $db->exec("ALTER TABLE edits ADD COLUMN sum TEXT NOT NULL DEFAULT ''");
+    if (!in_array('pr', $ecols, true)) $db->exec("ALTER TABLE edits ADD COLUMN pr INTEGER NOT NULL DEFAULT 0");
     if (!$hadTally) {   // start the daily counts from what is already here
       $day = "strftime('%Y-%m-%d', created, 'unixepoch', '-4 hours')";
       $db->exec("INSERT OR IGNORE INTO tally (k, day, n) SELECT 'account', $day, COUNT(*) FROM users GROUP BY 2");
@@ -1657,10 +1664,18 @@ function claim_out(array $c): array {
   foreach (q('SELECT id, body, link, status, created FROM edits WHERE claim_id = ? ORDER BY id DESC LIMIT 20', array($c['id'])) as $e) {
     $edits[] = array('id' => (int) $e['id'], 'body' => $e['body'], 'link' => $e['link'], 'status' => $e['status'], 'created' => (int) $e['created']);
   }
+  // The fields a manager can set itself (listing_fields): what the listing says now, what it hasn't posted, whether an
+  // edit goes live by itself (a claim made with an address at the program's own website), and the schools to pick.
+  $fields = null;
+  if ($c['status'] === 'ok' && isset($l[$c['listing']]['f']) && is_array($l[$c['listing']]['f'])) {
+    $full = row('SELECT status, via, domain FROM claims WHERE id = ?', array($c['id']));
+    $fields = array('now' => $l[$c['listing']]['f'], 'np' => isset($l[$c['listing']]['np']) ? $l[$c['listing']]['np'] : array(),
+      'live' => $full && claim_by_domain($full, $l[$c['listing']]) && manager_fields_mode() === 'publish', 'schools' => school_names());
+  }
   $ph = row("SELECT id, status, alt FROM photos WHERE claim_id = ? AND kind = 'photo' AND status != 'declined' ORDER BY id DESC LIMIT 1", array($c['id']));
   $live = photo_live($c['listing']);
   $asked = premium_mode() !== 'off' ? row('SELECT plan, created FROM premium_asks WHERE claim_id = ?', array($c['id'])) : null;
-  return array('listing' => $c['listing'], 'asked' => $asked ? array('plan' => $asked['plan'], 't' => (int) $asked['created']) : null, 'name' => isset($l[$c['listing']]) ? $l[$c['listing']]['n'] : 'A listing no longer on the site', 'status' => $c['status'], 'via' => isset($c['via']) ? (string) $c['via'] : '', 'gone' => !isset($l[$c['listing']]), 'edits' => $edits,
+  return array('fields' => $fields, 'listing' => $c['listing'], 'asked' => $asked ? array('plan' => $asked['plan'], 't' => (int) $asked['created']) : null, 'name' => isset($l[$c['listing']]) ? $l[$c['listing']]['n'] : 'A listing no longer on the site', 'status' => $c['status'], 'via' => isset($c['via']) ? (string) $c['via'] : '', 'gone' => !isset($l[$c['listing']]), 'edits' => $edits,
     'photo' => $ph ? array('status' => $ph['status'], 'alt' => $ph['alt']) : null, 'photoLive' => $live ? (int) $live['id'] : 0, 'space' => space_of($c['listing']),
     'stats' => $c['status'] === 'ok' && isset($l[$c['listing']]) ? stats_of($c['listing']) : null,
     'premium' => $c['status'] === 'ok' && isset($l[$c['listing']]) && is_premium($c['listing']) ? premium_out($c['listing']) : null);
@@ -1675,6 +1690,130 @@ function photo_live(string $key): ?array {
   return row("SELECT p.id, p.alt FROM photos p JOIN claims c ON c.id = p.claim_id WHERE p.listing = ? AND p.kind = 'photo' AND p.status = 'ok' AND c.status = 'ok' ORDER BY p.id DESC LIMIT 1", array($key));
 }
 function photo_file(int $id): string { return data_dir() . '/photos/' . $id . '.jpg'; }
+// ---------- a manager's own fields: days, hours, cost, grades, the schools it picks up from ----------
+// In its listing tools a manager can set these itself (listing_fields). From a claim made with an address at the
+// program's own website (claim_by_domain), the site writes the change straight into data/programs.json on a branch of
+// its own (manager-edit-<listing>-<edit>), with a "told" entry in the program's words and an evidence item naming the
+// edit, and opens a pull request through the GitHub key. The autopilot gate asks this site (told_check) whether the edit
+// is real, still backed by such a claim, and carries those very values (told_sum); then it needs no quote, and with the
+// switch on it publishes at the next hourly merge. The manager is emailed when it's on the site, like any queue item.
+// Any other claim (by code, or one the owner approved by hand), a price with words the rules catch, "managerFields":
+// "review" under "groups" in site.config.json, or a host without the key: the edit goes to the private queue as a
+// proposal, as a free-text update does, and the run and Josh handle it.
+const LF_DAYS = array('mon', 'tue', 'wed', 'thu', 'fri');
+const LF_NOTE = 'The program itself says it picks up here.';
+function manager_fields_mode(): string { global $CFG; return isset($CFG['managerFields']) && $CFG['managerFields'] === 'review' ? 'review' : 'publish'; }
+// A claim that stands because the claimant's address is at the listing's own website: not by code, not by hand.
+function claim_by_domain(array $c, array $l): bool {
+  return (string) $c['status'] === 'ok' && (string) ($c['via'] ?? '') === '' && isset($l['m'], $l['d']) && $l['m'] === 'match'
+    && (string) $l['d'] !== '' && hash_equals((string) $l['d'], (string) ($c['domain'] ?? ''));
+}
+// "18:30" (a time box's value) as the site writes times: "6:30 pm".
+function lf_time(string $hm): string {
+  if (!preg_match('/^([01]?\d|2[0-3]):([0-5]\d)$/', $hm, $m)) return '';
+  $h = (int) $m[1];
+  return ($h % 12 === 0 ? 12 : $h % 12) . ':' . $m[2] . ' ' . ($h >= 12 ? 'pm' : 'am');
+}
+function lf_day_names(array $days): string {
+  $n = array('mon' => 'Monday', 'tue' => 'Tuesday', 'wed' => 'Wednesday', 'thu' => 'Thursday', 'fri' => 'Friday');
+  if (count($days) === 5) return 'Monday to Friday';
+  $w = array_map(function ($d) use ($n) { return $n[$d]; }, $days);
+  return count($w) < 2 ? implode('', $w) : implode(', ', array_slice($w, 0, -1)) . ' and ' . $w[count($w) - 1];
+}
+// The values an edit sets, one per line, from what it wrote (path, old, new): the gate words them the same way from the
+// evidence (toldLines in scripts/gate.mjs), so no JSON spelling can differ.
+function told_sum(int $id, string $key, array $recs): string {
+  $v = function ($p) use ($recs) { foreach ($recs as $r) if ($r[0] === $p) return $r[2]; return null; };
+  $s = function ($x) { return $x === null ? '' : (is_array($x) ? implode(',', array_map('strval', $x)) : (string) $x); };
+  $pick = array();
+  foreach ($recs as $r) {
+    if ($r[0] !== 'schools' || !is_object($r[2])) continue;
+    foreach (get_object_vars($r[2]) as $sid => $lk) {
+      $was = is_object($r[1]) && isset($r[1]->$sid) && is_object($r[1]->$sid) && isset($r[1]->$sid->relation) ? $r[1]->$sid->relation : '';
+      if (is_object($lk) && isset($lk->relation) && $lk->relation === 'pickup' && $was !== 'pickup') $pick[] = (string) $sid;
+    }
+  }
+  sort($pick, SORT_STRING);
+  return hash('sha256', implode("\n", array((string) $id, $key, $s($v('days')), $s($v('hours')), $s($v('pickupBy')), $s($v('cost')), $s($v('grades')), implode(',', $pick))));
+}
+// Writes an edit into one program record (objects, as json_decode gives them, so {} stays {}). Gives the records the
+// evidence carries: array(path, old, new) for each field that changed.
+function lf_apply(object $p, array $vals, string $says, string $today): array {
+  $copy = function ($v) { return $v === null ? null : json_decode(json_encode($v, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)); };
+  $keys = array('days', 'hours', 'pickupBy', 'cost', 'grades', 'gradeNote', 'schools', 'told', 'notPosted');
+  $old = array(); foreach ($keys as $k) $old[$k] = property_exists($p, $k) ? $copy($p->$k) : null;
+  $fields = array(); $drop = array();
+  if (isset($vals['days'])) { $p->days = $vals['days']; $fields[] = 'days'; $drop[] = 'days'; }
+  if (isset($vals['hours'])) { $p->hours = $vals['hours']; $fields[] = 'hours'; $drop[] = 'hours'; }
+  if (isset($vals['pickupBy'])) { $p->pickupBy = $vals['pickupBy']; $fields[] = 'pickupBy'; }
+  if (isset($vals['cost'])) { $p->cost = $vals['cost']; $fields[] = 'cost'; $drop[] = 'cost'; }
+  if (isset($vals['grades'])) { $p->grades = $vals['grades']; unset($p->gradeNote); $fields[] = 'grades'; $drop[] = 'grades'; }
+  if (!empty($vals['pick'])) {
+    if (!isset($p->schools) || !is_object($p->schools)) $p->schools = new stdClass();
+    foreach ($vals['pick'] as $sid) {
+      if (isset($p->schools->$sid) && is_object($p->schools->$sid)) { $p->schools->$sid->relation = 'pickup'; $p->schools->$sid->note = LF_NOTE; }
+      else $p->schools->$sid = (object) array('relation' => 'pickup', 'note' => LF_NOTE);
+      $fields[] = 'schools.' . $sid . '.relation';
+    }
+    $drop[] = 'pickup';
+  }
+  $told = property_exists($p, 'told') && is_array($p->told) ? $p->told : array();
+  $told[] = (object) array('on' => $today, 'by' => 'program manager', 'how' => 'from its listing tools', 'fields' => $fields, 'says' => $says);
+  $p->told = $told;
+  if (property_exists($p, 'notPosted') && is_array($p->notPosted)) {
+    $left = array_values(array_diff($p->notPosted, $drop));
+    if ($left) $p->notPosted = $left; else unset($p->notPosted);
+  }
+  $recs = array();
+  foreach ($keys as $k) {
+    $now = property_exists($p, $k) ? $copy($p->$k) : null;
+    if (json_encode($now) !== json_encode($old[$k])) $recs[] = array($k, $old[$k], $now);
+  }
+  return $recs;
+}
+// JSON as the repository keeps it: two spaces, unescaped (the same as JSON.stringify(v, null, 2)).
+function repo_json($v): string {
+  $o = json_encode($v, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS);
+  return preg_replace_callback('/^( +)/m', function ($m) { return str_repeat(' ', intdiv(strlen($m[1]), 2)); }, (string) $o) . "\n";
+}
+// The pull request for one edit. Gives array(pull request number, sum), or array(0, '') when it couldn't be made (the
+// edit then goes to the queue instead).
+function lf_publish(int $eid, string $key, array $vals, string $says): array {
+  global $CFG;
+  $repo = isset($CFG['repo']) ? (string) $CFG['repo'] : '';
+  if ($repo === '' || offsite_token() === '' || !function_exists('curl_init')) return array(0, '');
+  $id = substr($key, 2);
+  $branch = 'manager-edit-' . $id . '-' . $eid;
+  $base = '/repos/' . $repo;
+  list($c, $r) = offsite_gh('GET', $base . '/git/ref/heads/main');
+  if ($c !== 200 || !is_array($r) || !isset($r['object']['sha'])) return array(0, '');
+  list($c, $r) = offsite_gh('POST', $base . '/git/refs', array('ref' => 'refs/heads/' . $branch, 'sha' => (string) $r['object']['sha']));
+  if ($c !== 201) return array(0, '');
+  list($c, $f) = offsite_gh('GET', $base . '/contents/data/programs.json?ref=' . rawurlencode($branch));
+  if ($c !== 200 || !is_array($f) || !isset($f['content'], $f['sha'])) return array(0, '');
+  $all = json_decode((string) base64_decode(str_replace("\n", '', (string) $f['content'])));
+  if (!is_array($all)) return array(0, '');
+  $prog = null;
+  foreach ($all as $p) if (is_object($p) && isset($p->id) && $p->id === $id) { $prog = $p; break; }
+  if (!$prog) return array(0, '');
+  $today = (new DateTime('now', new DateTimeZone('America/New_York')))->format('Y-m-d');
+  $recs = lf_apply($prog, $vals, $says, $today);
+  $name = isset($prog->name) ? (string) $prog->name : $id;
+  list($c) = offsite_gh('PUT', $base . '/contents/data/programs.json', array('message' => 'A program manager updated ' . $name . ' from its listing tools', 'content' => base64_encode(repo_json($all)), 'sha' => (string) $f['sha'], 'branch' => $branch));
+  if ($c !== 200 && $c !== 201) return array(0, '');
+  $site = isset($prog->website) ? (string) $prog->website : (string) $CFG['siteUrl'];
+  $ev = array('run' => $branch, 'items' => array(array('item' => 'e' . $eid, 'kind' => 'told', 'outcome' => 'published', 'listing' => $key, 'edit' => $eid,
+    'fields' => array_map(function ($x) use ($site, $today) { return array('path' => $x[0], 'old' => $x[1], 'new' => $x[2], 'source' => $site, 'quote' => '', 'read' => $today, 'how' => 'person'); }, $recs))));
+  list($c) = offsite_gh('PUT', $base . '/contents/evidence/' . $branch . '.json', array('message' => 'Evidence: a program manager’s update to ' . $name, 'content' => base64_encode(repo_json($ev)), 'branch' => $branch));
+  if ($c !== 200 && $c !== 201) return array(0, '');
+  $body = "A program manager updated **" . $name . "** from its listing tools on " . $CFG['siteName'] . ".\n\n"
+    . "What they set, in their words: " . $says . "\n\n"
+    . "The claim behind it was made with an email address at the program's own website, so the change carries a \"told\" entry (\"from the program itself\") and needs no quote. The autopilot gate asks the site to confirm the edit before it passes it. With the switch on, it publishes at the next hourly merge; in shadow mode, merge it by hand.\n\n"
+    . "Nothing here came from a parent, and no one's name or email address is in it.";
+  list($c, $pr) = offsite_gh('POST', $base . '/pulls', array('title' => 'Program manager’s update: ' . $name, 'head' => $branch, 'base' => 'main', 'body' => $body));
+  if ($c !== 201 || !is_array($pr) || !isset($pr['number'])) return array(0, '');
+  return array((int) $pr['number'], told_sum($eid, $key, $recs));
+}
 function my_claims(int $uid): array {
   $out = array();
   foreach (q("SELECT id, listing, status, via FROM claims WHERE user_id = ? ORDER BY id", array($uid)) as $c) $out[] = claim_out($c);
@@ -2086,7 +2225,7 @@ function review_after_outcome(string $id, string $out, string $state, int $pr): 
 function queue_settle_proposal(string $id, string $outcome): void {
   if ($id === '' || $id[0] !== 'e') return;
   $to = $outcome === 'declined' ? 'declined' : (in_array($outcome, array('published', 'duplicate', 'no-change'), true) ? 'done' : '');
-  if ($to !== '') q("UPDATE edits SET status = ?, decided = ? WHERE id = ? AND status = 'new'", array($to, now(), (int) substr($id, 1)));
+  if ($to !== '') q("UPDATE edits SET status = ?, decided = ? WHERE id = ? AND status IN ('new', 'pr')", array($to, now(), (int) substr($id, 1)));
 }
 // Worked items whose pull request has been merged (and had time to publish) are published; a pull request closed
 // without a merge leaves its items held for the owner.
@@ -2200,12 +2339,28 @@ function queue_reply_parts(array $x): array {
   $again = $x['kind'] === 'proposal' ? $CFG['siteUrl'] . '/managers/' : $CFG['siteUrl'] . '/suggest/' . ($x['kind'] === 'update' && $known ? '?kind=correction&fix=' . rawurlencode($key) : ($x['kind'] === 'camp' ? '?kind=camp' : ''));
   $out = $x['outcome'] === 'no-change' ? 'duplicate' : (string) $x['outcome'];
   $lines = array(); $button = ''; $url = '';
-  if ($out === 'published') {
+  if ($out === 'published' && (string) ($x['run'] ?? '') === 'listing-tools') {
+    /*EMAIL Your update is on the site (to a program manager who set its listing’s days, hours or price itself)*/
+    $subject = t(__T("Your update is on {site}: {what}"), $v);
+    $head = t(__T("Your update is live"), $v);
+    $lines[] = t(__T("What you set for {what} is on {site} now, marked as coming from the program itself."), $v);
+    $lines[] = t(__T("Change it again any time from your listing tools. We’ll check in every few months to ask if it still holds."), $v);
+    $button = t(__T("See the listing"), $v); $url = $listingUrl;
+  } elseif ($out === 'published') {
     /*EMAIL It’s on the site (to whoever sent a suggestion or a proposed change)*/
     $subject = t(__T("It’s on {site}: {what}"), $v);
     $head = t(__T("It’s on the site"), $v);
     $lines[] = t(__T("Thanks for sending {what}. We checked it against the program’s own website, and it’s on {site} now."), $v);
     $lines[] = t(__T("Save your school on the site to hear about new programs and days off there, or follow the listing to get its sign-up dates."), $v);
+    // A listing that went up on the minimum (notPosted): whoever runs it can fill in the rest by claiming it.
+    $np = $known && isset($l[$key]['np']) && is_array($l[$key]['np']) ? $l[$key]['np'] : array();
+    if ($np) {
+      $w = array('days' => 'days', 'hours' => 'hours', 'cost' => 'prices', 'grades' => 'grades', 'pickup' => 'pickup schools');
+      $say = array_values(array_filter(array_map(function ($f) use ($w) { return $w[$f] ?? ''; }, $np)));
+      $v['missing'] = count($say) < 2 ? implode('', $say) : implode(', ', array_slice($say, 0, -1)) . ' and ' . $say[count($say) - 1];
+      $v['claim'] = $CFG['siteUrl'] . '/managers/?l=' . rawurlencode($key);
+      $lines[] = t(__T("The program hasn’t posted its {missing} yet. If you run it, claim the listing with your work email at {claim} and add them yourself."), $v);
+    }
     $button = t(__T("See the listing"), $v); $url = $listingUrl;
   } elseif ($out === 'duplicate') {
     /*EMAIL It’s already listed (to whoever sent a suggestion or a proposed change)*/
@@ -3639,6 +3794,22 @@ switch ($method . ' ' . $action) {
     out(array('ok' => true, 'known' => true, 'match' => $match, 'clean' => $clean));
   }
 
+  // Is this a manager's own edit from its listing tools, still backed by a claim made with an address at the program's
+  // own website, carrying these values? Asked by the autopilot gate (askTold in scripts/gate.mjs) about a manager-edit-
+  // pull request. Answers yes or no and nothing else: no names, no addresses.
+  case 'GET told_check': {
+    $id = isset($_GET['id']) && is_string($_GET['id']) && ctype_digit($_GET['id']) ? (int) $_GET['id'] : 0;
+    $key = isset($_GET['listing']) && is_string($_GET['listing']) ? $_GET['listing'] : '';
+    $sum = isset($_GET['sum']) && is_string($_GET['sum']) ? strtolower($_GET['sum']) : '';
+    if (too_many('toldcheck:' . who(), 240, 3600)) fail('slow', 'Too many questions. Try again in an hour.', 429);
+    note('toldcheck:' . who());
+    if ($id < 1 || !preg_match('/^p:[a-z0-9-]{1,80}$/', $key) || !preg_match('/^[0-9a-f]{64}$/', $sum)) fail('bad', 'That request was not understood.');
+    $e = row('SELECT e.listing, e.sum, e.kind, c.status, c.via, c.domain FROM edits e JOIN claims c ON c.id = e.claim_id WHERE e.id = ?', array($id));
+    if (!$e || $e['kind'] !== 'fields' || $e['listing'] !== $key) out(array('ok' => true, 'known' => false, 'match' => false, 'verified' => false));
+    $l = listings();
+    out(array('ok' => true, 'known' => true, 'match' => (string) $e['sum'] !== '' && hash_equals((string) $e['sum'], $sum), 'verified' => isset($l[$key]) && claim_by_domain($e, $l[$key])));
+  }
+
   // One waiting photo or logo, for a research run to look at (Phase 6): the queue carries a link signed with the host's
   // key, which works for 24 to 30 hours. Nothing else shows a waiting photo to anyone not signed in as its manager.
   case 'GET photo_look': {
@@ -4125,6 +4296,77 @@ switch ($method . ' ' . $action) {
     $name = isset($l[$key]) ? $l[$key]['n'] : $key;
     tell_owner('Proposed change: ' . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who has claimed “' . $name . '” (' . $key . '), proposes:' . "\n\n" . $body . ($link !== '' ? "\n\nLink: " . $link : '') . "\n\nNothing on the site has changed. Mark it published or declined on the review page.", 'claims', 'manager-content');
     out(array('ok' => true, 'claims' => my_claims($u['id'])));
+  }
+
+  // ----- a manager sets its own days, hours, cost, grades and pickup schools (see "a manager's own fields") -----
+  case 'POST listing_fields': {
+    $u = need_user();
+    $key = str($in, 'listing', 90);
+    $c = row("SELECT id, status, via, domain FROM claims WHERE user_id = ? AND listing = ? AND status = 'ok'", array($u['id'], $key));
+    if (!$c) fail('claim', 'You can change the listing once your claim on it stands.', 403);
+    $l = listings();
+    if (!preg_match('/^p:[a-z0-9-]{1,80}$/', $key) || !isset($l[$key]['f']) || !is_array($l[$key]['f'])) fail('listing', 'This listing doesn’t have these fields. Send the change as an update below instead.');
+    $cur = $l[$key]['f'];
+    $vals = array(); $says = array(); $review = false;
+    if (isset($in['days']) && is_array($in['days']) && $in['days']) {
+      $d = array_values(array_intersect(LF_DAYS, array_map('strval', $in['days'])));
+      if (!$d) fail('days', 'Pick the days it runs.');
+      if ($d !== (isset($cur['days']) && is_array($cur['days']) ? array_values($cur['days']) : null)) { $vals['days'] = $d; $says[] = 'Days: ' . lf_day_names($d) . '.'; }
+    }
+    $from = str($in, 'from', 10); $to = str($in, 'to', 10);
+    if ($from !== '' || $to !== '') {
+      $end = lf_time($to);
+      if ($end === '') fail('to', 'Give the time it ends.');
+      $start = $from === 'dismissal' ? 'Dismissal' : lf_time($from);
+      if ($start === '') fail('from', 'Give the time it starts, or pick school dismissal.');
+      $hours = $start . ' to ' . $end;
+      if ($hours !== (string) ($cur['hours'] ?? '')) { $vals['hours'] = $hours; $says[] = 'Hours: ' . $hours . '.'; }
+      if ($end !== (string) ($cur['pickupBy'] ?? '')) $vals['pickupBy'] = $end;
+    }
+    $cost = str($in, 'cost', 200);
+    if ($cost !== '') {
+      $holds = content_text_holds($cost, mod_cfg(), mod_private(), 'content');
+      if (in_array('link', $holds, true) || in_array('contact', $holds, true)) fail('cost', 'Keep the price line to the price: no links, emails or phone numbers.');
+      if ($holds) $review = true;   // anything else the rules catch goes to a person first
+      if ($cost !== (string) ($cur['cost'] ?? '')) { $vals['cost'] = $cost; $says[] = 'Cost: ' . rtrim($cost, '.') . '.'; }
+    }
+    $gf = str($in, 'gradeFrom', 3); $gt = str($in, 'gradeTo', 3);
+    if ($gf !== '' || $gt !== '') {
+      global $CFG;
+      $order = isset($CFG['grades']) && is_array($CFG['grades']) ? array_values($CFG['grades']) : array();
+      $a = array_search($gf, $order, true); $b = array_search($gt === '' ? $gf : $gt, $order, true);
+      if ($a === false || $b === false || $a > $b) fail('grades', 'Pick the youngest and oldest grade it takes.');
+      $g = $a === $b ? $order[$a] : $order[$a] . '-' . $order[$b];
+      if ($g !== (string) ($cur['grades'] ?? '')) { $vals['grades'] = $g; $says[] = 'Grades: ' . ($a === $b ? $order[$a] : $order[$a] . ' to ' . $order[$b]) . '.'; }
+    }
+    if (isset($in['pickup']) && is_array($in['pickup'])) {
+      $names = school_names(); $now = isset($cur['schools']) && is_array($cur['schools']) ? $cur['schools'] : array();
+      $pick = array();
+      foreach (array_slice($in['pickup'], 0, 40) as $sid) if (is_string($sid) && isset($names[$sid]) && !in_array($now[$sid] ?? '', array('pickup', 'onsite'), true)) $pick[] = $sid;
+      $pick = array_values(array_unique($pick)); sort($pick, SORT_STRING);
+      if ($pick) { $vals['pick'] = $pick; $says[] = 'Picks up at: ' . implode(', ', array_map(function ($x) use ($names) { return $names[$x]; }, $pick)) . '.'; }
+    }
+    if (!$vals) fail('same', 'That’s what the listing says already. Change a field, then send it.');
+    if (too_many('fields:' . $u['id'], 6, 86400)) fail('slow', 'That’s a lot of changes for one day. Try again tomorrow.', 429);
+    note('fields:' . $u['id']);
+    $sayText = implode(' ', $says);
+    q("INSERT INTO edits (claim_id, listing, body, link, status, created, kind, fields) VALUES (?, ?, ?, '', 'sending', ?, 'fields', ?)", array($c['id'], $key, $sayText, now(), json_encode($vals, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)));
+    $eid = (int) db()->lastInsertId();
+    $pr = 0; $sum = '';
+    if (!$review && manager_fields_mode() === 'publish' && claim_by_domain($c, $l[$key])) list($pr, $sum) = lf_publish($eid, $key, $vals, $sayText);
+    $name = $l[$key]['n'];
+    if ($pr > 0) {
+      q("UPDATE edits SET status = 'pr', pr = ?, sum = ? WHERE id = ?", array($pr, $sum, $eid));
+      // The manager hears "It's on the site" once the pull request is merged, the way every queue item's sender does.
+      q("INSERT OR REPLACE INTO queue_items (id, kind, email, listing, what, seen, state, outcome, run, pr, decided, told) VALUES (?, 'proposal', ?, ?, ?, ?, 'waiting', 'published', 'listing-tools', ?, ?, 0)", array('e' . $eid, $u['email'], $key, $name, now(), $pr, now()));
+      bump('fields_live');
+      tell_owner('A manager’s update goes live: ' . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who claimed “' . $name . '” with an address at its website, set from the listing tools:' . "\n\n" . $sayText . "\n\nIt is in pull request #" . $pr . ', which the autopilot gate checks: with the switch on it publishes at the next hourly merge; in shadow mode, merge it by hand.');
+    } else {
+      q("UPDATE edits SET status = 'new' WHERE id = ?", array($eid));   // the private queue takes it, as a proposal
+      bump('fields_queued');
+      tell_owner('Proposed change: ' . $name, $u['first'] . ' ' . $u['last'] . ' <' . $u['email'] . '>, who has claimed “' . $name . '” (' . $key . '), set from the listing tools:' . "\n\n" . $sayText . "\n\nIt goes to the queue run as a proposed change.");
+    }
+    out(array('ok' => true, 'live' => $pr > 0, 'claims' => my_claims($u['id'])));
   }
 
   // ----- a profile: the school and the weeks someone chose to keep with their account -----

@@ -1,5 +1,6 @@
 # The autopilot gate (scripts/gate.mjs; docs/listings.md, "The autopilot gate"). For each research run's pull request
-# (branches queue-, new-schools-, weekly-, monthly-check-, from the runs' own account), it re-reads every changed
+# (branches queue-, new-schools-, weekly-, monthly-check-, from the runs' own account) and each program manager's edit
+# from its listing tools (manager-edit-, opened by the site through the same account's key), it re-reads every changed
 # value's quote on the provider's own page, builds and tests main's code with the pull request's data, and comments in
 # plain words: what would publish, what is held, and why. data/autopilot.json on main decides what happens next:
 #   "off"     nothing
@@ -63,7 +64,7 @@ jobs:
     if: >-
       (github.event_name == 'workflow_dispatch' && inputs.pr != '') ||
       (github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name == github.repository &&
-       (startsWith(github.head_ref, 'queue-') || startsWith(github.head_ref, 'new-schools-') || startsWith(github.head_ref, 'weekly-') || startsWith(github.head_ref, 'monthly-check-')))
+       (startsWith(github.head_ref, 'queue-') || startsWith(github.head_ref, 'new-schools-') || startsWith(github.head_ref, 'weekly-') || startsWith(github.head_ref, 'monthly-check-') || startsWith(github.head_ref, 'manager-edit-')))
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:

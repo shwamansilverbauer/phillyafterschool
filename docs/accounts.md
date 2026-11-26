@@ -120,7 +120,11 @@ These are the only parts of the site that store anything about a child on the se
   such as School of Rock, Code Ninjas and Brooklyn Robot Foundry), and every school-clubs listing (any listing with
   `clubs`). Add a name to
   `CLAIM_SHARED` when a listing's website turns out to be shared. A personal address (Gmail and the like) can't
-  claim anything this way, because no listing's website is there.
+  claim anything this way, because no listing's website is there. A claim made this way (an address at the listing's
+  own website, `claim_by_domain()` in the API) is also what lets a manager's days, hours, price, grades and pickup
+  schools go on the listing without Josh reading them first ("Program managers' own fields" in
+  `docs/program-managers.md`); a claim by code or one Josh approved by hand still goes through him. Each listing in
+  `claimListings()` also carries `f`, its current fields for the managers page, and `np`, what it hasn't posted.
   **Claims by code** (scaling plan, Phase 6, call 2) are for the rest: a claimant whose address isn't at the
   listing's website (a Gmail address, a domain many share) can have a 6-digit code sent to the address the listing's
   own website publishes, which is the listing's `email` field (`e` in what `claimListings()` hands the server). The

@@ -1,7 +1,7 @@
 {
   "about": "Settings for the autopilot gate (scripts/gate.mjs, docs/listings.md \"The autopilot gate\"). These are starting values: loosen a rule that keeps holding changes Josh approves, tighten one when a merged change has to be undone. Sender and spam thresholds are not here: the repository is public, so they live in a private file on the host (Phase 2).",
 
-  "branches": ["queue-", "new-schools-", "weekly-", "monthly-check-"],
+  "branches": ["queue-", "new-schools-", "weekly-", "monthly-check-", "manager-edit-"],
   "authors": ["shwamansilverbauer"],
   "allow": ["data/programs.json", "data/schools.json", "data/camps.json", "data/geo.json", "data/reading.json", "data/news.json", "data/school-dates.json", "data/reviews.json"],
   "evidenceDir": "evidence/",
@@ -12,7 +12,8 @@
     "queue-": { "listings": 15 },
     "weekly-": { "listings": 15 },
     "new-schools-": { "schools": 6 },
-    "monthly-check-": { "values": 40 }
+    "monthly-check-": { "values": 40 },
+    "manager-edit-": { "listings": 1 }
   },
 
   "quoteMax": 300,
@@ -20,6 +21,7 @@
   "closingMoveMinutes": 60,
   "dates": { "monthsAhead": 12, "noYearDays": 120 },
   "newListing": { "domainYears": 2, "rdap": "https://rdap.org/domain/" },
+  "notPosted": { "about": "What a listing says where the provider hasn't posted hours or a price (notPosted, docs/listings.md). These exact lines need no quote: nothing on a page can be quoted for them.", "lines": ["Not posted yet; ask the program", "Not posted yet", "Not published; ask the school office", "Not published"] },
   "schools": { "minPrograms": 2 },
 
   "cityHosts": ["phila.gov", "phl.carto.com", "opendataphilly.org"],
