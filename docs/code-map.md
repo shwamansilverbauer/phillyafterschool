@@ -61,7 +61,7 @@ Run as `node build.mjs`. Reads `data/` and `src/`, writes the finished site to `
 | 6994–7083 | all programs | `allProgramsPage` 6999, `notFoundPage` 7077 |
 | 7084–7251 | write | `write` 7086 |
 
-## src/server/groups-api.php (4602 lines)
+## src/server/groups-api.php (4631 lines)
 
 The accounts API. `build.mjs` writes it into the site as `groups/api.php`, with its settings filled in. Functions
 first, then the 90 routes, which live in one `switch` on the method and action.
@@ -89,27 +89,27 @@ first, then the 90 routes, which live in one `switch` on the method and action.
 | 1683–1716 | asking for a school that isn't covered yet | `school_ask_on` 1687, `tell_owner` 1712 |
 | 1717–1890 | emails to the people who run a listing | `listing_url` 1724, `listing_plain` 1725, `mgr_holders` 1727, `mgr_send` 1737, `mgr_prompt` 1750, `mgr_plural` 1763, `mgr_numbers` 1765, `mgr_run` 1778 |
 | 1891–1952 | a new account | `owner_note_mode` 1898, `signup_note` 1905, `signup_named` 1917, `signup_catchup` 1924, `signup_digest` 1933 |
-| 1953–2224 | the private queue (scaling plan, Phase 2) | `ops_repo` 1975, `queue_ctx` 1976, `queue_run` 1985, `queue_outcomes` 2001, `queue_apply` 2034, `review_after_outcome` 2073, `queue_settle_proposal` 2079, `queue_merges` 2086, `queue_tell` 2112, `queue_reply` 2129, `answer_copies_on` 2142, `answer_copy` 2143, `queue_reply_parts` 2161 |
-| 2225–2478 | the mailbox (scaling plan, Phase 5) | `mail_key` 2239, `mail_shared_key` 2241, `mail_auth` 2250, `mail_id_str` 2258, `mail_text_in` 2260, `mail_first_name` 2266, `mail_store` 2269, `mail_draft` 2323, `mail_after_outcome` 2340, `mail_answer` 2351, `mail_answer_text` 2360, `mail_beat` 2404, `mail_state` 2420, `outreach_copy` 2434 |
-| 2479–2605 | reviews and what managers add (scaling plan, Phase 6) | `mod_cfg` 2485, `mod_private` 2486, `review_fresh_mode` 2489, `listing_names` 2494, `content_mode` 2497, `claim_code_on` 2504, `mask_email` 2510, `content_decisions` 2515, `content_apply` 2545, `content_publish` 2571 |
-| 2606–2942 | the morning summary, and the pushes that can't wait (scaling plan, Phase 3) | `ap_ctx` 2614, `ap_github_ready` 2621, `summary_on` 2622, `owner_push` 2629, `publish_watch` 2642, `sum_plural` 2665, `sum_when` 2666, `owner_summary` 2668, `sign_in` 2827, `http_get` 2856, `google_email` 2869, `edit_key_state` 2894, `edit_key_out` 2929, `year_end` 2934 |
-| 2943–4602 | the routes: one `case` per request (listed under Routes) | — |
+| 1953–2253 | the private queue (scaling plan, Phase 2) | `ops_repo` 1979, `queue_ctx` 1980, `queue_run` 1989, `queue_outcomes` 2005, `queue_apply` 2038, `review_after_outcome` 2080, `queue_settle_proposal` 2086, `queue_merges` 2093, `queue_tell` 2119, `queue_reply` 2136, `answer_copies_on` 2149, `answer_copy` 2150, `queue_missing_words` 2169, `queue_reply_parts` 2178 |
+| 2254–2507 | the mailbox (scaling plan, Phase 5) | `mail_key` 2268, `mail_shared_key` 2270, `mail_auth` 2279, `mail_id_str` 2287, `mail_text_in` 2289, `mail_first_name` 2295, `mail_store` 2298, `mail_draft` 2352, `mail_after_outcome` 2369, `mail_answer` 2380, `mail_answer_text` 2389, `mail_beat` 2433, `mail_state` 2449, `outreach_copy` 2463 |
+| 2508–2634 | reviews and what managers add (scaling plan, Phase 6) | `mod_cfg` 2514, `mod_private` 2515, `review_fresh_mode` 2518, `listing_names` 2523, `content_mode` 2526, `claim_code_on` 2533, `mask_email` 2539, `content_decisions` 2544, `content_apply` 2574, `content_publish` 2600 |
+| 2635–2971 | the morning summary, and the pushes that can't wait (scaling plan, Phase 3) | `ap_ctx` 2643, `ap_github_ready` 2650, `summary_on` 2651, `owner_push` 2658, `publish_watch` 2671, `sum_plural` 2694, `sum_when` 2695, `owner_summary` 2697, `sign_in` 2856, `http_get` 2885, `google_email` 2898, `edit_key_state` 2923, `edit_key_out` 2958, `year_end` 2963 |
+| 2972–4631 | the routes: one `case` per request (listed under Routes) | — |
 
 ### Routes
 
 | Group | Routes (line) |
 |---|---|
-| one more for a listing | `POST hit` 2948 |
-| is everything working? | `GET health` 2965 |
-| signing in | `POST login_start` 2975, `POST login_finish` 3004, `POST login_google` 3028, `POST email_start` 3039, `POST email_finish` 3066, `GET me` 3101, `GET school_ask` 3109, `POST school_ask` 3115, `POST logout` 3123, `POST logout_all` 3130, `POST set_name` 3138, `POST basics` 3149, `POST phone_save` 3170, `POST hood_save` 3178 |
-| following and favorites | `GET marks` 3188, `POST follow` 3195 |
-| stopping from an email, with no sign-in | `GET stopped` 3209, `POST stop` 3221, `POST unmute` 3252, `POST follow_synced` 3261, `POST follow_clear` 3274, `POST fav` 3280, `POST listed` 3293 |
-| co-parents | `POST coparent_invite` 3302, `POST coparent_resend` 3316, `POST coparent_cancel` 3325, `POST coparent_accept` 3331, `POST coparent_end` 3377, `POST delete_account` 3390 |
-| directors | `GET claimed` 3403, `GET photo` 3420, `GET extras` 3444 |
-| notifications | `GET push_key` 3453, `POST push_on` 3460, `POST push_off` 3478, `POST push_mode` 3488, `POST push_test` 3497, `POST push_run` 3509 |
-| reviews (scaling plan, Phase 6) | `POST review_add` 3554, `GET review_check` 3600, `GET photo_look` 3615 |
-| claims by code (Phase 6, call 2; off until "claimByCode" | `POST claim_code_start` 3636, `POST claim_code_finish` 3682 |
-| the mailbox script (scaling plan, Phase 5) | `POST mail_in` 3722, `POST mail_out` 3729, `POST mail_sent` 3749, `POST outreach_copy` 3766, `POST ask` 3773, `POST extra_save` 3810, `POST extra_drop` 3892, `POST photo_add` 3901, `POST photo_drop` 3948, `GET claims` 3962, `POST mgr_mail` 3968, `POST claim_add` 3978, `POST claim_drop` 4030, `POST premium_ask` 4040, `POST space_set` 4065, `POST edit_add` 4081 |
-| a profile | `GET profile` 4102 |
-| the passport | `GET passport` 4108, `POST passport_save` 4112, `POST passport_reset` 4139, `POST school_save` 4158, `POST grades_save` 4168, `POST ages_save` 4181, `POST kids_save` 4195, `POST week_save` 4222, `POST week_delete` 4241, `POST summer_save` 4256, `POST summer_delete` 4266, `POST daysoff_save` 4273, `POST daysoff_delete` 4283, `POST share_one` 4291 |
-| groups | `POST group_create` 4336, `POST group_peek` 4354, `POST group_join` 4367, `POST invite_add` 4413, `POST invite_remove` 4436, `POST kid_save` 4447, `POST sync` 4477, `POST kid_delete` 4505, `GET group` 4513, `POST member_decide` 4539, `POST group_leave` 4562, `POST group_code` 4573, `POST group_rename` 4582, `POST group_delete` 4592 |
+| one more for a listing | `POST hit` 2977 |
+| is everything working? | `GET health` 2994 |
+| signing in | `POST login_start` 3004, `POST login_finish` 3033, `POST login_google` 3057, `POST email_start` 3068, `POST email_finish` 3095, `GET me` 3130, `GET school_ask` 3138, `POST school_ask` 3144, `POST logout` 3152, `POST logout_all` 3159, `POST set_name` 3167, `POST basics` 3178, `POST phone_save` 3199, `POST hood_save` 3207 |
+| following and favorites | `GET marks` 3217, `POST follow` 3224 |
+| stopping from an email, with no sign-in | `GET stopped` 3238, `POST stop` 3250, `POST unmute` 3281, `POST follow_synced` 3290, `POST follow_clear` 3303, `POST fav` 3309, `POST listed` 3322 |
+| co-parents | `POST coparent_invite` 3331, `POST coparent_resend` 3345, `POST coparent_cancel` 3354, `POST coparent_accept` 3360, `POST coparent_end` 3406, `POST delete_account` 3419 |
+| directors | `GET claimed` 3432, `GET photo` 3449, `GET extras` 3473 |
+| notifications | `GET push_key` 3482, `POST push_on` 3489, `POST push_off` 3507, `POST push_mode` 3517, `POST push_test` 3526, `POST push_run` 3538 |
+| reviews (scaling plan, Phase 6) | `POST review_add` 3583, `GET review_check` 3629, `GET photo_look` 3644 |
+| claims by code (Phase 6, call 2; off until "claimByCode" | `POST claim_code_start` 3665, `POST claim_code_finish` 3711 |
+| the mailbox script (scaling plan, Phase 5) | `POST mail_in` 3751, `POST mail_out` 3758, `POST mail_sent` 3778, `POST outreach_copy` 3795, `POST ask` 3802, `POST extra_save` 3839, `POST extra_drop` 3921, `POST photo_add` 3930, `POST photo_drop` 3977, `GET claims` 3991, `POST mgr_mail` 3997, `POST claim_add` 4007, `POST claim_drop` 4059, `POST premium_ask` 4069, `POST space_set` 4094, `POST edit_add` 4110 |
+| a profile | `GET profile` 4131 |
+| the passport | `GET passport` 4137, `POST passport_save` 4141, `POST passport_reset` 4168, `POST school_save` 4187, `POST grades_save` 4197, `POST ages_save` 4210, `POST kids_save` 4224, `POST week_save` 4251, `POST week_delete` 4270, `POST summer_save` 4285, `POST summer_delete` 4295, `POST daysoff_save` 4302, `POST daysoff_delete` 4312, `POST share_one` 4320 |
+| groups | `POST group_create` 4365, `POST group_peek` 4383, `POST group_join` 4396, `POST invite_add` 4442, `POST invite_remove` 4465, `POST kid_save` 4476, `POST sync` 4506, `POST kid_delete` 4534, `GET group` 4542, `POST member_decide` 4568, `POST group_leave` 4591, `POST group_code` 4602, `POST group_rename` 4611, `POST group_delete` 4621 |
