@@ -1,0 +1,3668 @@
+{
+  "run": "new-schools-2026-11-25",
+  "items": [
+    {
+      "item": "school:peirce",
+      "kind": "link",
+      "listing": "p:shuler-playground",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "schools.peirce.relation",
+          "old": null,
+          "new": "nearby",
+          "source": "https://phl.carto.com/api/v2/sql?format=json&q=select%20public_name%2C%20address%2C%20contact_phone%20from%20ppr_facilities%20where%20id%20in%20%28%2756a8f8267a8cee5e3a25ae54%27%29",
+          "quote": "\"public_name\":\"Shuler Playground\"",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.peirce.distance",
+          "old": null,
+          "new": "about a third of a mile northwest, on 27th St",
+          "source": "https://phl.carto.com/api/v2/sql?format=json&q=select%20public_name%2C%20address%2C%20contact_phone%20from%20ppr_facilities%20where%20id%20in%20%28%2756a8f8267a8cee5e3a25ae54%27%29",
+          "quote": "\"public_name\":\"Shuler Playground\",\"address\":\"{\\\"street\\\": \\\"3000 N 27th St.\\\"",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.peirce.note",
+          "old": null,
+          "new": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the playground.",
+          "source": "https://phl.carto.com/api/v2/sql?format=json&q=select%20public_name%2C%20address%2C%20contact_phone%20from%20ppr_facilities%20where%20id%20in%20%28%2756a8f8267a8cee5e3a25ae54%27%29",
+          "quote": "\"public_name\":\"Shuler Playground\"",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:bregy",
+      "kind": "new-listing",
+      "listing": "p:sunrise-bregy",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "name",
+          "old": null,
+          "new": "Sunrise of Philadelphia at Bregy",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "what",
+          "old": null,
+          "new": "After-school program inside Bregy from Sunrise of Philadelphia, which Bregy names as its Out-of-School Time provider",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "types",
+          "old": null,
+          "new": [
+            "aftercare"
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "keywords",
+          "old": null,
+          "new": [
+            "aftercare",
+            "after school",
+            "Sunrise",
+            "OST",
+            "homework help",
+            "Bregy",
+            "South Philadelphia",
+            "Packer Park",
+            "childcare"
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "address",
+          "old": null,
+          "new": "1700 Bigler St",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Phone: 215-400-8210 Fax: 215-400-8211 Address: 1700 Bigler Street Philadelphia, PA 19145",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "gradeNote",
+          "old": null,
+          "new": "For Bregy students; ask the school which grades",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "hours",
+          "old": null,
+          "new": "3:40 to 6:00 pm, Monday to Friday, according to Bregy’s own site.",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "days",
+          "old": null,
+          "new": [
+            "mon",
+            "tue",
+            "wed",
+            "thu",
+            "fri"
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "pickupBy",
+          "old": null,
+          "new": "6:00 pm",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "cost",
+          "old": null,
+          "new": "Not published for Bregy. Sunrise says its after-school programs are free at all of its sites, but its list of sites doesn’t name Bregy, so ask the school.",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "phone",
+          "old": null,
+          "new": "215-400-8210",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Phone: 215-400-8210 Fax: 215-400-8211 Address: 1700 Bigler Street Philadelphia, PA 19145",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "email",
+          "old": null,
+          "new": "",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "website",
+          "old": null,
+          "new": "https://www.sunriseofphila.org/school-year",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.how",
+          "old": null,
+          "new": "school",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.note",
+          "old": null,
+          "new": "Bregy’s site says enrollment needs an application from a parent or guardian. Ask the school office (215-400-8210) for it.",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Phone: 215-400-8210 Fax: 215-400-8211 Address: 1700 Bigler Street Philadelphia, PA 19145",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "note",
+          "old": null,
+          "new": "Bregy’s own site says the Sunrise program is its Out-of-School Time provider, in person Monday to Friday from 3:40 to 6:00 pm, with summer programming too. Sunrise’s own list of sites doesn’t name Bregy and the City’s program locator doesn’t list Sunrise at Bregy this year, so ask the school how to sign up and whether it costs anything.",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://bregy.philasd.org/].label",
+          "old": null,
+          "new": "F. Amedee Bregy: after-school and summer programs",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://bregy.philasd.org/].url",
+          "old": null,
+          "new": "https://bregy.philasd.org/",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://www.sunriseofphila.org/school-year].label",
+          "old": null,
+          "new": "Sunrise of Philadelphia: school-year program",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://www.sunriseofphila.org/school-year].url",
+          "old": null,
+          "new": "https://www.sunriseofphila.org/school-year",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.bregy.relation",
+          "old": null,
+          "new": "onsite",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.bregy.note",
+          "old": null,
+          "new": "Bregy’s own site names the Sunrise program as its Out-of-School Time provider.",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.bregy.sources[https://bregy.philasd.org/].label",
+          "old": null,
+          "new": "F. Amedee Bregy: after-school and summer programs",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.bregy.sources[https://bregy.philasd.org/].url",
+          "old": null,
+          "new": "https://bregy.philasd.org/",
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:bregy",
+      "kind": "new-listing",
+      "listing": "p:bregy-clubs",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "name",
+          "old": null,
+          "new": "School clubs and partners",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "what",
+          "old": null,
+          "new": "Clubs, teams and partners F. Amedee Bregy School names on its own site: Math 24, knitting, tutoring, lacrosse, football and Jr. STEM Academy",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Math 24 Club Knitting Club Tutorial Club Safeties Forthcoming: National Elementary and Junior Honor Society Sports Participation in sports requires a completed physical form signed by a doctor. Available Sports Lacrosse Football Elementary Intramural Sports",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "types",
+          "old": null,
+          "new": [
+            "clubs"
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "keywords",
+          "old": null,
+          "new": [
+            "clubs",
+            "Math 24",
+            "knitting",
+            "tutoring",
+            "lacrosse",
+            "football",
+            "STEM",
+            "library",
+            "Bregy"
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "Math 24 Club Knitting Club Tutorial Club Safeties Forthcoming: National Elementary and Junior Honor Society Sports Participation in sports requires a completed physical form signed by a doctor. Available Sports Lacrosse Football Elementary Intramural Sports",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "address",
+          "old": null,
+          "new": "",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "gradeNote",
+          "old": null,
+          "new": "Ask the school",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "hours",
+          "old": null,
+          "new": "Not published; ask the school office",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "cost",
+          "old": null,
+          "new": "Not published",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "phone",
+          "old": null,
+          "new": "215-400-8210",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Phone: 215-400-8210 Fax: 215-400-8211",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "email",
+          "old": null,
+          "new": "",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "website",
+          "old": null,
+          "new": "https://bregy.philasd.org/",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.how",
+          "old": null,
+          "new": "school",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.note",
+          "old": null,
+          "new": "Ask the school office (215-400-8210).",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Phone: 215-400-8210 Fax: 215-400-8211",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "note",
+          "old": null,
+          "new": "Bregy’s own site lists these clubs, sports and community partners without days, times or grades (intramurals are for K–5 and the Middle Grades Conference for 6–8). It says the National Elementary and Junior Honor Society are forthcoming. Ask the office what meets after school.",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Elementary Intramural Sports Grades K-5 learn fundamentals, good sportsmanship, and team-building skills. Middle Grades Conference(MGC) Grades 6-8 are taught the benefits of interscholastic athletics",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://bregy.philasd.org/].label",
+          "old": null,
+          "new": "F. Amedee Bregy: programs, clubs and partners",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://bregy.philasd.org/].url",
+          "old": null,
+          "new": "https://bregy.philasd.org/",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.bregy.relation",
+          "old": null,
+          "new": "onsite",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Math 24 Club].name",
+          "old": null,
+          "new": "Math 24 Club",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Math 24 Club Knitting Club Tutorial Club Safeties Forthcoming: National Elementary and Junior Honor Society Sports Participation in sports requires a completed physical form signed by a doctor. Available Sports Lacrosse Football Elementary Intramural Sports",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Math 24 Club].what",
+          "old": null,
+          "new": "A math club",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Math 24 Club].tags",
+          "old": null,
+          "new": [
+            "academics"
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Knitting Club].name",
+          "old": null,
+          "new": "Knitting Club",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Knitting Club].what",
+          "old": null,
+          "new": "A knitting club",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Knitting Club].tags",
+          "old": null,
+          "new": [
+            "art"
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Tutorial Club].name",
+          "old": null,
+          "new": "Tutorial Club",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Tutorial Club].what",
+          "old": null,
+          "new": "Tutoring",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Tutorial Club].tags",
+          "old": null,
+          "new": [
+            "academics"
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Safeties].name",
+          "old": null,
+          "new": "Safeties",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Safeties].what",
+          "old": null,
+          "new": "Student safety patrol",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Safeties].tags",
+          "old": null,
+          "new": [],
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Safeties].roster",
+          "old": null,
+          "new": false,
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Lacrosse].name",
+          "old": null,
+          "new": "Lacrosse",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Lacrosse].what",
+          "old": null,
+          "new": "A lacrosse team; the site names Eyekonz with it",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Lacrosse].tags",
+          "old": null,
+          "new": [
+            "movement"
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Football].name",
+          "old": null,
+          "new": "Football",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Football].what",
+          "old": null,
+          "new": "A football team",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Football].tags",
+          "old": null,
+          "new": [
+            "movement"
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Elementary intramural sports].name",
+          "old": null,
+          "new": "Elementary intramural sports",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Elementary intramural sports].what",
+          "old": null,
+          "new": "Sports fundamentals and team-building",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Elementary intramural sports].tags",
+          "old": null,
+          "new": [
+            "movement"
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Elementary intramural sports].grades",
+          "old": null,
+          "new": "K-5",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Elementary Intramural Sports Grades K-5 learn fundamentals, good sportsmanship, and team-building skills. Middle Grades Conference(MGC) Grades 6-8 are taught the benefits of interscholastic athletics",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Middle Grades Conference].name",
+          "old": null,
+          "new": "Middle Grades Conference",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Middle Grades Conference].what",
+          "old": null,
+          "new": "Interscholastic sports",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Middle Grades Conference].tags",
+          "old": null,
+          "new": [
+            "movement"
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Middle Grades Conference].grades",
+          "old": null,
+          "new": "6-8",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Elementary Intramural Sports Grades K-5 learn fundamentals, good sportsmanship, and team-building skills. Middle Grades Conference(MGC) Grades 6-8 are taught the benefits of interscholastic athletics",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Community College of Philadelphia Jr. STEM Academy].name",
+          "old": null,
+          "new": "Community College of Philadelphia Jr. STEM Academy",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Community College of Philadelphia Jr. STEM Academy].what",
+          "old": null,
+          "new": "Named as a community partner",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Community College of Philadelphia Jr. STEM Academy].tags",
+          "old": null,
+          "new": [
+            "stem"
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Community College of Philadelphia Jr. STEM Academy].roster",
+          "old": null,
+          "new": false,
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[UNICO].name",
+          "old": null,
+          "new": "UNICO",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[UNICO].what",
+          "old": null,
+          "new": "Named as a community partner; the site doesn’t say what it runs",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[UNICO].tags",
+          "old": null,
+          "new": [],
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[UNICO].roster",
+          "old": null,
+          "new": false,
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Free Library of Philadelphia, Donatucci Branch].name",
+          "old": null,
+          "new": "Free Library of Philadelphia, Donatucci Branch",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Free Library of Philadelphia, Donatucci Branch].what",
+          "old": null,
+          "new": "Named as a community partner",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Free Library of Philadelphia, Donatucci Branch].tags",
+          "old": null,
+          "new": [
+            "academics"
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Free Library of Philadelphia, Donatucci Branch].roster",
+          "old": null,
+          "new": false,
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[PAWS].name",
+          "old": null,
+          "new": "PAWS",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[PAWS].what",
+          "old": null,
+          "new": "Named as a community partner; the site also mentions a Philadelphia Animal Welfare Society project",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[PAWS].tags",
+          "old": null,
+          "new": [],
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[PAWS].roster",
+          "old": null,
+          "new": false,
+          "source": "https://bregy.philasd.org/",
+          "quote": "Welcome to F. Amedee Bregy Elementary School!",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:peirce",
+      "kind": "new-listing",
+      "listing": "p:launch-philly-peirce",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "name",
+          "old": null,
+          "new": "Launch Philly at Peirce",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "what",
+          "old": null,
+          "new": "Free before and after care inside Peirce from Launch Philly (Communities In Schools), the school’s Extended Day, Extended Year program, with meals",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "types",
+          "old": null,
+          "new": [
+            "aftercare"
+          ],
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "keywords",
+          "old": null,
+          "new": [
+            "aftercare",
+            "after school",
+            "before care",
+            "free",
+            "meals",
+            "Launch Philly",
+            "Communities In Schools",
+            "Launch of Philadelphia",
+            "Extended Day Extended Year",
+            "EDEY",
+            "OST",
+            "Peirce",
+            "North Philadelphia"
+          ],
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "address",
+          "old": null,
+          "new": "2300 W Cambria St",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "grades",
+          "old": null,
+          "new": "K-5",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "Grades: K, 1, 2, 3, 4, 5 Costs: Free Fee frequency: Term: School Year Services: Transportation: No Transportation Provided Meals: Meals Provided, Healthy snacks provided",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "gradeNote",
+          "old": null,
+          "new": "The City’s locator lists kindergarten to 5th grade",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "Grades: K, 1, 2, 3, 4, 5 Costs: Free Fee frequency: Term: School Year Services: Transportation: No Transportation Provided Meals: Meals Provided, Healthy snacks provided",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "hours",
+          "old": null,
+          "new": "3:30 to 6:00 pm, Monday to Friday, September 8, 2026 to June 9, 2027, according to the City’s program locator. Peirce’s site says there is free before-school care too.",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "Registration: Registration required Registration start: Tuesday, Sep 8, 2026 Registration end: Wednesday, Jun 9, 2027 APPLY NOW Program runs from: Tuesday, Sep 8, 2026 - Wednesday, Jun 9, 2027 Days offered: M, Tu, W, Th, F Time offered: 3:30 PM - 6:00 PM",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "days",
+          "old": null,
+          "new": [
+            "mon",
+            "tue",
+            "wed",
+            "thu",
+            "fri"
+          ],
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "pickupBy",
+          "old": null,
+          "new": "6:00 pm",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "Registration: Registration required Registration start: Tuesday, Sep 8, 2026 Registration end: Wednesday, Jun 9, 2027 APPLY NOW Program runs from: Tuesday, Sep 8, 2026 - Wednesday, Jun 9, 2027 Days offered: M, Tu, W, Th, F Time offered: 3:30 PM - 6:00 PM",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "cost",
+          "old": null,
+          "new": "Free, with meals, according to the City’s program locator.",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "price",
+          "old": null,
+          "new": "free",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "phone",
+          "old": null,
+          "new": "267-246-5240",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "email",
+          "old": null,
+          "new": "",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "website",
+          "old": null,
+          "new": "https://launchphilly.org/",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "register.how",
+          "old": null,
+          "new": "phone",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "register.note",
+          "old": null,
+          "new": "The City’s locator says registration is required, from September 8, 2026 to June 9, 2027. Peirce’s site says each part (before and after care, break camps, summer) needs its own sign-up. Call the program at 267-246-5240 or ask the school.",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "register.note",
+          "old": null,
+          "new": "The City’s locator says registration is required, from September 8, 2026 to June 9, 2027. Peirce’s site says each part (before and after care, break camps, summer) needs its own sign-up. Call the program at 267-246-5240 or ask the school.",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "Registration: Registration required Registration start: Tuesday, Sep 8, 2026 Registration end: Wednesday, Jun 9, 2027 APPLY NOW Program runs from: Tuesday, Sep 8, 2026 - Wednesday, Jun 9, 2027 Days offered: M, Tu, W, Th, F Time offered: 3:30 PM - 6:00 PM",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "note",
+          "old": null,
+          "new": "Peirce’s own site says it is an Extended Day, Extended Year school with free before- and after-school care, winter and spring break camps and six weeks of summer camp. The City’s locator lists Launch Philly (Communities In Schools of Philadelphia) running it at Peirce, with meals and no transportation. Launch Philly’s own site couldn’t be read automatically, so ask the program about activities.",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "sources[https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56].label",
+          "old": null,
+          "new": "City program locator: Launch Philly at T.M. Peirce",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "sources[https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56].url",
+          "old": null,
+          "new": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "sources[https://tmpeirce.philasd.org/].label",
+          "old": null,
+          "new": "Thomas M. Peirce: Extended Day, Extended Year",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "sources[https://tmpeirce.philasd.org/].url",
+          "old": null,
+          "new": "https://tmpeirce.philasd.org/",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "schools.peirce.relation",
+          "old": null,
+          "new": "onsite",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "schools.peirce.note",
+          "old": null,
+          "new": "The City’s locator lists Launch Philly at Peirce this school year, and Peirce’s own site says it is an Extended Day, Extended Year school with free before- and after-school care.",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "schools.peirce.sources[https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56].label",
+          "old": null,
+          "new": "City program locator: Launch Philly at T.M. Peirce",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "schools.peirce.sources[https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56].url",
+          "old": null,
+          "new": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "schools.peirce.sources[https://tmpeirce.philasd.org/].label",
+          "old": null,
+          "new": "Thomas M. Peirce: Extended Day, Extended Year",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "schools.peirce.sources[https://tmpeirce.philasd.org/].url",
+          "old": null,
+          "new": "https://tmpeirce.philasd.org/",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "CIS/Launch Philly @ T.M Peirce 26/27 School Year Share Print 2300 W CAMBRIA ST Philadelphia, PA19132 Organization Phone: (267) 278-8799 Activity Phone: (267) 246-5240 launchphilly.org",
+          "read": "2026-11-25",
+          "how": "browser"
+        }
+      ]
+    },
+    {
+      "item": "school:peirce",
+      "kind": "new-listing",
+      "listing": "p:peirce-clubs",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "name",
+          "old": null,
+          "new": "School clubs and partners",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "what",
+          "old": null,
+          "new": "Clubs, teams and partners Thomas M. Peirce School names on its own site: Building Stars STEAM, step, cheer, basketball, STARS and Steamworks",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "types",
+          "old": null,
+          "new": [
+            "clubs"
+          ],
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "keywords",
+          "old": null,
+          "new": [
+            "clubs",
+            "STEAM",
+            "step team",
+            "cheer",
+            "basketball",
+            "Steamworks",
+            "STARS",
+            "Peirce"
+          ],
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "address",
+          "old": null,
+          "new": "",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "gradeNote",
+          "old": null,
+          "new": "Ask the school",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "hours",
+          "old": null,
+          "new": "Not published; ask the school office",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "cost",
+          "old": null,
+          "new": "Not published",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "phone",
+          "old": null,
+          "new": "215-400-7020",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Phone: 215-400-7020 Fax: 215-400-7021",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "email",
+          "old": null,
+          "new": "",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "website",
+          "old": null,
+          "new": "https://tmpeirce.philasd.org/",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.how",
+          "old": null,
+          "new": "school",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.note",
+          "old": null,
+          "new": "Ask the school office (215-400-7020).",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Phone: 215-400-7020 Fax: 215-400-7021",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "note",
+          "old": null,
+          "new": "Peirce’s own site lists these clubs and community partners without days, times or grades. Ask the office what meets after school.",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://tmpeirce.philasd.org/].label",
+          "old": null,
+          "new": "Thomas M. Peirce: clubs and community partnerships",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://tmpeirce.philasd.org/].url",
+          "old": null,
+          "new": "https://tmpeirce.philasd.org/",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.peirce.relation",
+          "old": null,
+          "new": "onsite",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Building Stars STEAM].name",
+          "old": null,
+          "new": "Building Stars STEAM",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Building Stars STEAM].what",
+          "old": null,
+          "new": "A STEAM club",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Building Stars STEAM].tags",
+          "old": null,
+          "new": [
+            "stem"
+          ],
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Step Team].name",
+          "old": null,
+          "new": "Step Team",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Step Team].what",
+          "old": null,
+          "new": "Step",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Step Team].tags",
+          "old": null,
+          "new": [
+            "movement"
+          ],
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Cheer/STEP].name",
+          "old": null,
+          "new": "Cheer/STEP",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Cheer/STEP].what",
+          "old": null,
+          "new": "Cheer and step",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Cheer/STEP].tags",
+          "old": null,
+          "new": [
+            "movement"
+          ],
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Basketball].name",
+          "old": null,
+          "new": "Basketball",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Basketball].what",
+          "old": null,
+          "new": "Basketball",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Basketball].tags",
+          "old": null,
+          "new": [
+            "movement"
+          ],
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[STARS].name",
+          "old": null,
+          "new": "STARS",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[STARS].what",
+          "old": null,
+          "new": "Named as a community partner; the site doesn’t say what it runs",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[STARS].tags",
+          "old": null,
+          "new": [],
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[STARS].roster",
+          "old": null,
+          "new": false,
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Steamworks].name",
+          "old": null,
+          "new": "Steamworks",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Steamworks].what",
+          "old": null,
+          "new": "Named as a community partner",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Steamworks].tags",
+          "old": null,
+          "new": [
+            "stem"
+          ],
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Steamworks].roster",
+          "old": null,
+          "new": false,
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Free Library of Philadelphia].name",
+          "old": null,
+          "new": "Free Library of Philadelphia",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Free Library of Philadelphia].what",
+          "old": null,
+          "new": "Named as a community partner",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Free Library of Philadelphia].tags",
+          "old": null,
+          "new": [
+            "academics"
+          ],
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Free Library of Philadelphia].roster",
+          "old": null,
+          "new": false,
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Thomas M. Peirce Elementary School is a participating Extended Day, Extended Year school.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:welsh",
+      "kind": "new-listing",
+      "listing": "p:methodist-services-welsh",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "name",
+          "old": null,
+          "new": "Methodist Services after school at Welsh",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "what",
+          "old": null,
+          "new": "Free after-school program inside Welsh from Methodist Services: homework help, arts, sports, STEM and youth leadership",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "types",
+          "old": null,
+          "new": [
+            "aftercare"
+          ],
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "keywords",
+          "old": null,
+          "new": [
+            "aftercare",
+            "after school",
+            "free",
+            "homework help",
+            "Methodist Services",
+            "MSHN",
+            "OST",
+            "Welsh",
+            "North Philadelphia"
+          ],
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "address",
+          "old": null,
+          "new": "2331 N 4th St",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "grades",
+          "old": null,
+          "new": "K-8",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2331+N+4th+St&resource=ost_168",
+          "quote": "Creating and fun environment for students and parents to focus on youth leadership, homework help, positive development, etc. Ages: 5 to 10, 11 to 13 Grades: K, 1, 2, 3, 4, 5, 6, 7, 8 Costs: Free",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "gradeNote",
+          "old": null,
+          "new": "The City’s locator lists kindergarten to 8th grade",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2331+N+4th+St&resource=ost_168",
+          "quote": "Creating and fun environment for students and parents to focus on youth leadership, homework help, positive development, etc. Ages: 5 to 10, 11 to 13 Grades: K, 1, 2, 3, 4, 5, 6, 7, 8 Costs: Free",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "hours",
+          "old": null,
+          "new": "3:30 to 6:00 pm, Monday to Friday, September 11, 2026 to June 9, 2027, according to the City’s program locator.",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2331+N+4th+St&resource=ost_168",
+          "quote": "Registration: Registration required Registration start: Monday, Aug 10, 2026 Registration end: Wednesday, Jun 9, 2027 APPLY NOW Program runs from: Friday, Sep 11, 2026 - Wednesday, Jun 9, 2027 Days offered: M, Tu, W, Th, F Time offered: 3:30 PM - 6:00 PM",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "days",
+          "old": null,
+          "new": [
+            "mon",
+            "tue",
+            "wed",
+            "thu",
+            "fri"
+          ],
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "pickupBy",
+          "old": null,
+          "new": "6:00 pm",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2331+N+4th+St&resource=ost_168",
+          "quote": "Registration: Registration required Registration start: Monday, Aug 10, 2026 Registration end: Wednesday, Jun 9, 2027 APPLY NOW Program runs from: Friday, Sep 11, 2026 - Wednesday, Jun 9, 2027 Days offered: M, Tu, W, Th, F Time offered: 3:30 PM - 6:00 PM",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "cost",
+          "old": null,
+          "new": "Free, according to the City’s program locator.",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "price",
+          "old": null,
+          "new": "free",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "phone",
+          "old": null,
+          "new": "215-877-1925",
+          "source": "https://mshn.org/service/education/",
+          "quote": "For more information, please contact 215-877-1925 ext 114.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "email",
+          "old": null,
+          "new": "",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "website",
+          "old": null,
+          "new": "https://mshn.org/service/education/",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.how",
+          "old": null,
+          "new": "phone",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.note",
+          "old": null,
+          "new": "The City’s locator says registration is required, from August 10, 2026 to June 9, 2027. Methodist Services gives 215-877-1925 ext. 114 for its Out of School Time programs.",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.note",
+          "old": null,
+          "new": "The City’s locator says registration is required, from August 10, 2026 to June 9, 2027. Methodist Services gives 215-877-1925 ext. 114 for its Out of School Time programs.",
+          "source": "https://www.phila.gov/ost/program-locator/?address=2331+N+4th+St&resource=ost_168",
+          "quote": "Registration: Registration required Registration start: Monday, Aug 10, 2026 Registration end: Wednesday, Jun 9, 2027 APPLY NOW Program runs from: Friday, Sep 11, 2026 - Wednesday, Jun 9, 2027 Days offered: M, Tu, W, Th, F Time offered: 3:30 PM - 6:00 PM",
+          "read": "2026-11-25",
+          "how": "browser"
+        },
+        {
+          "path": "register.note",
+          "old": null,
+          "new": "The City’s locator says registration is required, from August 10, 2026 to June 9, 2027. Methodist Services gives 215-877-1925 ext. 114 for its Out of School Time programs.",
+          "source": "https://mshn.org/service/education/",
+          "quote": "For more information, please contact 215-877-1925 ext 114.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "note",
+          "old": null,
+          "new": "The City’s locator lists Methodist Services at John Welsh Elementary this school year, with a healthy snack and no transportation. Methodist Services’ own site describes its after-school care for ages 5 to 12 but doesn’t list its school sites, so ask it about Welsh.",
+          "source": "https://mshn.org/service/education/",
+          "quote": "After School Care (Ages 5-12) Low student-to-teacher ratios for individualized attention Dedicated homework and study time with tutoring and guidance Creative enrichment through artistic activities Healthy play and movement through athletic activities",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://www.phila.gov/ost/program-locator/?address=2331+N+4th+St&resource=ost_168].label",
+          "old": null,
+          "new": "City program locator: Methodist Services at Welsh",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://www.phila.gov/ost/program-locator/?address=2331+N+4th+St&resource=ost_168].url",
+          "old": null,
+          "new": "https://www.phila.gov/ost/program-locator/?address=2331+N+4th+St&resource=ost_168",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://mshn.org/service/education/].label",
+          "old": null,
+          "new": "Methodist Services: Out of School Time",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://mshn.org/service/education/].url",
+          "old": null,
+          "new": "https://mshn.org/service/education/",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.welsh.relation",
+          "old": null,
+          "new": "onsite",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.welsh.note",
+          "old": null,
+          "new": "The City’s program locator lists Methodist Services’ after-school program at John Welsh Elementary this school year.",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.welsh.sources[https://www.phila.gov/ost/program-locator/?address=2331+N+4th+St&resource=ost_168].label",
+          "old": null,
+          "new": "City program locator: Methodist Services at Welsh",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.welsh.sources[https://www.phila.gov/ost/program-locator/?address=2331+N+4th+St&resource=ost_168].url",
+          "old": null,
+          "new": "https://www.phila.gov/ost/program-locator/?address=2331+N+4th+St&resource=ost_168",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:welsh",
+      "kind": "new-listing",
+      "listing": "p:welsh-partners",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "name",
+          "old": null,
+          "new": "School partners",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "what",
+          "old": null,
+          "new": "Partners John Welsh School names on its own site that work with children: Phila ASAP, Taller Puertorriqueño’s art program, Philly Beatz, Kensington Soccer Club and others",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "types",
+          "old": null,
+          "new": [
+            "clubs"
+          ],
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "keywords",
+          "old": null,
+          "new": [
+            "partners",
+            "chess",
+            "ASAP",
+            "art",
+            "Taller Puertorriqueño",
+            "music",
+            "Philly Beatz",
+            "soccer",
+            "mindfulness",
+            "Welsh"
+          ],
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "address",
+          "old": null,
+          "new": "",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "gradeNote",
+          "old": null,
+          "new": "Ask the school",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "hours",
+          "old": null,
+          "new": "Not published; ask the school office",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "cost",
+          "old": null,
+          "new": "Not published",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "phone",
+          "old": null,
+          "new": "215-400-7130",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "email",
+          "old": null,
+          "new": "",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "website",
+          "old": null,
+          "new": "https://welsh.philasd.org/community-partnership/",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.how",
+          "old": null,
+          "new": "school",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.note",
+          "old": null,
+          "new": "Ask the school office (215-400-7130).",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "note",
+          "old": null,
+          "new": "Welsh’s own site lists these among its community partnerships, without saying what each runs, when, or for which grades. Ask the office which meet after school.",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://welsh.philasd.org/community-partnership/].label",
+          "old": null,
+          "new": "John Welsh: community partnerships",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://welsh.philasd.org/community-partnership/].url",
+          "old": null,
+          "new": "https://welsh.philasd.org/community-partnership/",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.welsh.relation",
+          "old": null,
+          "new": "onsite",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Phila ASAP].name",
+          "old": null,
+          "new": "Phila ASAP",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Phila ASAP].what",
+          "old": null,
+          "new": "Named as a community partner",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Phila ASAP].tags",
+          "old": null,
+          "new": [
+            "games"
+          ],
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Phila ASAP].roster",
+          "old": null,
+          "new": false,
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Taller Puertorriqueño Art Program].name",
+          "old": null,
+          "new": "Taller Puertorriqueño Art Program",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Taller Puertorriqueño Art Program].what",
+          "old": null,
+          "new": "An art program, named as a community partner",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Taller Puertorriqueño Art Program].tags",
+          "old": null,
+          "new": [
+            "art"
+          ],
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Taller Puertorriqueño Art Program].roster",
+          "old": null,
+          "new": false,
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Philly Beatz].name",
+          "old": null,
+          "new": "Philly Beatz",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Philly Beatz].what",
+          "old": null,
+          "new": "Named as a community partner",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Philly Beatz].tags",
+          "old": null,
+          "new": [
+            "music"
+          ],
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Philly Beatz].roster",
+          "old": null,
+          "new": false,
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Mindfulness through Movement].name",
+          "old": null,
+          "new": "Mindfulness through Movement",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Mindfulness through Movement].what",
+          "old": null,
+          "new": "Named as a community partner",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Mindfulness through Movement].tags",
+          "old": null,
+          "new": [
+            "movement"
+          ],
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Mindfulness through Movement].roster",
+          "old": null,
+          "new": false,
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Kensington Soccer Club].name",
+          "old": null,
+          "new": "Kensington Soccer Club",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Kensington Soccer Club].what",
+          "old": null,
+          "new": "Soccer, named as a community partner",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Kensington Soccer Club].tags",
+          "old": null,
+          "new": [
+            "movement"
+          ],
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Kensington Soccer Club].roster",
+          "old": null,
+          "new": false,
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Traveling Tree House].name",
+          "old": null,
+          "new": "Traveling Tree House",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Traveling Tree House].what",
+          "old": null,
+          "new": "Named as a community partner",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Traveling Tree House].tags",
+          "old": null,
+          "new": [],
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Traveling Tree House].roster",
+          "old": null,
+          "new": false,
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Global Citizen].name",
+          "old": null,
+          "new": "Global Citizen",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Global Citizen].what",
+          "old": null,
+          "new": "Named as a community partner",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Global Citizen].tags",
+          "old": null,
+          "new": [],
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Global Citizen].roster",
+          "old": null,
+          "new": false,
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[C.A.D.E Kids].name",
+          "old": null,
+          "new": "C.A.D.E Kids",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[C.A.D.E Kids].what",
+          "old": null,
+          "new": "Named as a community partner",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[C.A.D.E Kids].tags",
+          "old": null,
+          "new": [],
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[C.A.D.E Kids].roster",
+          "old": null,
+          "new": false,
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Al Maun (AMP)].name",
+          "old": null,
+          "new": "Al Maun (AMP)",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Al Maun (AMP)].what",
+          "old": null,
+          "new": "Named as a community partner",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Al Maun (AMP)].tags",
+          "old": null,
+          "new": [],
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Al Maun (AMP)].roster",
+          "old": null,
+          "new": false,
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[APM].name",
+          "old": null,
+          "new": "APM",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[APM].what",
+          "old": null,
+          "new": "Named as a community partner",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[APM].tags",
+          "old": null,
+          "new": [],
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[APM].roster",
+          "old": null,
+          "new": false,
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Sean’s Helping Hands].name",
+          "old": null,
+          "new": "Sean’s Helping Hands",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Sean’s Helping Hands].what",
+          "old": null,
+          "new": "Named as a community partner",
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Sean’s Helping Hands].tags",
+          "old": null,
+          "new": [],
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Sean’s Helping Hands].roster",
+          "old": null,
+          "new": false,
+          "source": "https://welsh.philasd.org/community-partnership/",
+          "quote": "Community Partnerships The 26th District Sean’s Helping Hands Traveling Tree House Global Citizen APM Phila ASAP WES (Counselor Support) C.A.D.E Kids Al Maun (AMP) Taller Puertorriqueno Art Program Villanova Philly Beatz Mindfulness through Movement Kensington Soccer Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:bregy",
+      "kind": "new-school",
+      "listing": "s:bregy",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "name",
+          "old": null,
+          "new": "F. Amedee Bregy School",
+          "source": "https://bregy.philasd.org/",
+          "quote": "located in the Marconi Plaza–Packer Park area of South Philadelphia, is a public school serving students from Pre-Kindergarten through 8th grade.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "shortName",
+          "old": null,
+          "new": "Bregy",
+          "source": "https://bregy.philasd.org/",
+          "quote": "located in the Marconi Plaza–Packer Park area of South Philadelphia, is a public school serving students from Pre-Kindergarten through 8th grade.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "aliases",
+          "old": null,
+          "new": [
+            "F. Amedee Bregy",
+            "Amedee Bregy",
+            "Bregy Elementary",
+            "Bregy Elementary School",
+            "Bregy School"
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "located in the Marconi Plaza–Packer Park area of South Philadelphia, is a public school serving students from Pre-Kindergarten through 8th grade.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "address",
+          "old": null,
+          "new": "1700 Bigler St, Philadelphia, PA 19145",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Phone: 215-400-8210 Fax: 215-400-8211 Address: 1700 Bigler Street Philadelphia, PA 19145 ➜ SEPTA – Trip Planner Grade Levels: PreK-8",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "neighborhood",
+          "old": null,
+          "new": "Girard Estates",
+          "source": "https://bregy.philasd.org/",
+          "quote": "located in the Marconi Plaza–Packer Park area of South Philadelphia, is a public school serving students from Pre-Kindergarten through 8th grade.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "grades",
+          "old": null,
+          "new": "PK-8",
+          "source": "https://bregy.philasd.org/",
+          "quote": "located in the Marconi Plaza–Packer Park area of South Philadelphia, is a public school serving students from Pre-Kindergarten through 8th grade.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "dismissal",
+          "old": null,
+          "new": "3:39 pm",
+          "source": "https://bregy.philasd.org/",
+          "quote": "School Day: 9:00 am – 3:39 pm Breakfast: 8:45 – 8:55 am Lunch & Recess Schedule: 3 separate combined lunch & recess periods: 11:45 AM, 12:30 PM, 1:15 PM Half-Day Schedule School Day: 9:00 AM – 12:39 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "dismissalNote",
+          "old": null,
+          "new": "the school’s site gives the school day as 9:00 am to 3:39 pm, with breakfast from 8:45 am; on half days school ends at 12:39 pm",
+          "source": "https://bregy.philasd.org/",
+          "quote": "School Day: 9:00 am – 3:39 pm Breakfast: 8:45 – 8:55 am Lunch & Recess Schedule: 3 separate combined lunch & recess periods: 11:45 AM, 12:30 PM, 1:15 PM Half-Day Schedule School Day: 9:00 AM – 12:39 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "phone",
+          "old": null,
+          "new": "215-400-8210",
+          "source": "https://bregy.philasd.org/",
+          "quote": "Phone: 215-400-8210 Fax: 215-400-8211 Address: 1700 Bigler Street Philadelphia, PA 19145 ➜ SEPTA – Trip Planner Grade Levels: PreK-8",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "website",
+          "old": null,
+          "new": "https://bregy.philasd.org/",
+          "source": "https://bregy.philasd.org/",
+          "quote": "located in the Marconi Plaza–Packer Park area of South Philadelphia, is a public school serving students from Pre-Kindergarten through 8th grade.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "notes",
+          "old": null,
+          "new": [
+            "Bregy’s own site says the Sunrise program is its after-school (Out-of-School Time) provider, Monday to Friday from 3:40 to 6:00 pm, and that families apply for a place. It has a listing here. Sunrise’s own list of its sites doesn’t name Bregy, so ask the school office how to apply.",
+            "The site also names its clubs and teams (Math 24, knitting, tutoring, safeties, lacrosse, football and intramurals) and its community partners (Community College of Philadelphia’s Jr. STEM Academy, UNICO, the Donatucci branch of the Free Library and PAWS). They are listed here as school clubs and partners. Its violin and band lessons are part of the school day.",
+            "Half days end at 12:39 pm. Ask Sunrise whether it runs on half days.",
+            "If you know a program that serves Bregy and isn’t here, send it in and it goes on this page."
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "School Day: 9:00 am – 3:39 pm Breakfast: 8:45 – 8:55 am Lunch & Recess Schedule: 3 separate combined lunch & recess periods: 11:45 AM, 12:30 PM, 1:15 PM Half-Day Schedule School Day: 9:00 AM – 12:39 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "notes",
+          "old": null,
+          "new": [
+            "Bregy’s own site says the Sunrise program is its after-school (Out-of-School Time) provider, Monday to Friday from 3:40 to 6:00 pm, and that families apply for a place. It has a listing here. Sunrise’s own list of its sites doesn’t name Bregy, so ask the school office how to apply.",
+            "The site also names its clubs and teams (Math 24, knitting, tutoring, safeties, lacrosse, football and intramurals) and its community partners (Community College of Philadelphia’s Jr. STEM Academy, UNICO, the Donatucci branch of the Free Library and PAWS). They are listed here as school clubs and partners. Its violin and band lessons are part of the school day.",
+            "Half days end at 12:39 pm. Ask Sunrise whether it runs on half days.",
+            "If you know a program that serves Bregy and isn’t here, send it in and it goes on this page."
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "At Bregy Elementary, the SUNRISE Program serves as our Out-of-School Time provider. Enrollment in the program requires the completion of an application by a student’s parent or guardian. In-person programming , Monday–Friday, 3:40–6:00 PM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "notes",
+          "old": null,
+          "new": [
+            "Bregy’s own site says the Sunrise program is its after-school (Out-of-School Time) provider, Monday to Friday from 3:40 to 6:00 pm, and that families apply for a place. It has a listing here. Sunrise’s own list of its sites doesn’t name Bregy, so ask the school office how to apply.",
+            "The site also names its clubs and teams (Math 24, knitting, tutoring, safeties, lacrosse, football and intramurals) and its community partners (Community College of Philadelphia’s Jr. STEM Academy, UNICO, the Donatucci branch of the Free Library and PAWS). They are listed here as school clubs and partners. Its violin and band lessons are part of the school day.",
+            "Half days end at 12:39 pm. Ask Sunrise whether it runs on half days.",
+            "If you know a program that serves Bregy and isn’t here, send it in and it goes on this page."
+          ],
+          "source": "https://bregy.philasd.org/",
+          "quote": "Math 24 Club Knitting Club Tutorial Club Safeties Forthcoming: National Elementary and Junior Honor Society Sports Participation in sports requires a completed physical form signed by a doctor. Available Sports Lacrosse Football Elementary Intramural Sports",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:peirce",
+      "kind": "new-school",
+      "listing": "s:peirce",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "name",
+          "old": null,
+          "new": "Thomas M. Peirce School",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Phone: 215-400-7020 Fax: 215-400-7021 Address: 2300 W Cambria St Philadelphia, PA 19132 ➜ SEPTA – Trip Planner Grade Levels: PreK–5",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "shortName",
+          "old": null,
+          "new": "Peirce",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Phone: 215-400-7020 Fax: 215-400-7021 Address: 2300 W Cambria St Philadelphia, PA 19132 ➜ SEPTA – Trip Planner Grade Levels: PreK–5",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "aliases",
+          "old": null,
+          "new": [
+            "Thomas M. Peirce",
+            "T.M. Peirce",
+            "T.M Peirce",
+            "TM Peirce",
+            "Peirce Elementary",
+            "Peirce School"
+          ],
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Phone: 215-400-7020 Fax: 215-400-7021 Address: 2300 W Cambria St Philadelphia, PA 19132 ➜ SEPTA – Trip Planner Grade Levels: PreK–5",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "address",
+          "old": null,
+          "new": "2300 W Cambria St, Philadelphia, PA 19132",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Phone: 215-400-7020 Fax: 215-400-7021 Address: 2300 W Cambria St Philadelphia, PA 19132 ➜ SEPTA – Trip Planner Grade Levels: PreK–5",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "neighborhood",
+          "old": null,
+          "new": "North Philadelphia",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Phone: 215-400-7020 Fax: 215-400-7021 Address: 2300 W Cambria St Philadelphia, PA 19132 ➜ SEPTA – Trip Planner Grade Levels: PreK–5",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "grades",
+          "old": null,
+          "new": "PK-5",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Phone: 215-400-7020 Fax: 215-400-7021 Address: 2300 W Cambria St Philadelphia, PA 19132 ➜ SEPTA – Trip Planner Grade Levels: PreK–5",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "dismissal",
+          "old": null,
+          "new": "3:24 pm",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "School Day: 8:45 AM – 3:24 PM Breakfast: 8:15 AM – 8:40 AM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "dismissalNote",
+          "old": null,
+          "new": "the school’s site gives the school day as 8:45 am to 3:24 pm, with breakfast from 8:15 am",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "School Day: 8:45 AM – 3:24 PM Breakfast: 8:15 AM – 8:40 AM",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "phone",
+          "old": null,
+          "new": "215-400-7020",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Phone: 215-400-7020 Fax: 215-400-7021 Address: 2300 W Cambria St Philadelphia, PA 19132 ➜ SEPTA – Trip Planner Grade Levels: PreK–5",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "website",
+          "old": null,
+          "new": "https://tmpeirce.philasd.org/",
+          "source": "https://tmpeirce.philasd.org/",
+          "quote": "Phone: 215-400-7020 Fax: 215-400-7021 Address: 2300 W Cambria St Philadelphia, PA 19132 ➜ SEPTA – Trip Planner Grade Levels: PreK–5",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "notes",
+          "old": null,
+          "new": [
+            "Peirce is an Extended Day, Extended Year school: its site says the program offers free before- and after-school care, winter and spring break camps and summer camp, with a separate sign-up for each. The City’s program locator lists Launch Philly (Communities In Schools) running it at Peirce this school year, 3:30 to 6:00 pm. It has a listing here.",
+            "The site also names its clubs and teams (Building Stars STEAM, step team, cheer and step, basketball) and two partners that work with children (STARS and Steamworks). They are listed here as school clubs and partners.",
+            "If you know a program that serves Peirce and isn’t here, send it in and it goes on this page."
+          ],
+          "source": "https://www.phila.gov/ost/program-locator/?address=2300+W+Cambria+St&resource=ost_56",
+          "quote": "Days offered: M, Tu, W, Th, F Time offered: 3:30 PM - 6:00 PM",
+          "read": "2026-11-25",
+          "how": "browser"
+        }
+      ]
+    },
+    {
+      "item": "school:welsh",
+      "kind": "new-school",
+      "listing": "s:welsh",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "name",
+          "old": null,
+          "new": "John Welsh School",
+          "source": "https://welsh.philasd.org/",
+          "quote": "School Start & End Time (Bell Schedule) Start Time: 9:00 am End Time: 3:39 pm",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "shortName",
+          "old": null,
+          "new": "Welsh",
+          "source": "https://welsh.philasd.org/",
+          "quote": "School Start & End Time (Bell Schedule) Start Time: 9:00 am End Time: 3:39 pm",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "aliases",
+          "old": null,
+          "new": [
+            "John Welsh",
+            "Welsh Elementary",
+            "Welsh School",
+            "John Welsh Elementary",
+            "Welsh, John"
+          ],
+          "source": "https://welsh.philasd.org/",
+          "quote": "School Start & End Time (Bell Schedule) Start Time: 9:00 am End Time: 3:39 pm",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "address",
+          "old": null,
+          "new": "2331 N 4th St, Philadelphia, PA 19133",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130 Grades: K-8",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "neighborhood",
+          "old": null,
+          "new": "North Philadelphia",
+          "source": "https://welsh.philasd.org/",
+          "quote": "School Start & End Time (Bell Schedule) Start Time: 9:00 am End Time: 3:39 pm",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "grades",
+          "old": null,
+          "new": "K-8",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130 Grades: K-8",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "dismissal",
+          "old": null,
+          "new": "3:39 pm",
+          "source": "https://welsh.philasd.org/",
+          "quote": "School Start & End Time (Bell Schedule) Start Time: 9:00 am End Time: 3:39 pm",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "dismissalNote",
+          "old": null,
+          "new": "the school’s site gives the school day as 9:00 am to 3:39 pm",
+          "source": "https://welsh.philasd.org/",
+          "quote": "School Start & End Time (Bell Schedule) Start Time: 9:00 am End Time: 3:39 pm",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "phone",
+          "old": null,
+          "new": "215-400-7130",
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130 Grades: K-8",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "website",
+          "old": null,
+          "new": "https://welsh.philasd.org/",
+          "source": "https://welsh.philasd.org/",
+          "quote": "School Start & End Time (Bell Schedule) Start Time: 9:00 am End Time: 3:39 pm",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "notes",
+          "old": null,
+          "new": [
+            "The City’s program locator lists Methodist Services’ free after-school program at Welsh this school year, Monday to Friday from 3:30 to 6:00 pm, for kindergarten to 8th grade. It has a listing here.",
+            "Welsh’s own site names its community partners. Those that work with children, such as Phila ASAP, Taller Puertorriqueño’s art program, Philly Beatz and Kensington Soccer Club, are listed here as school partners; the site doesn’t say which run after school, so ask the office.",
+            "If you know a program that serves Welsh and isn’t here, send it in and it goes on this page."
+          ],
+          "source": "https://welsh.philasd.org/",
+          "quote": "School Start & End Time (Bell Schedule) Start Time: 9:00 am End Time: 3:39 pm",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "notes",
+          "old": null,
+          "new": [
+            "The City’s program locator lists Methodist Services’ free after-school program at Welsh this school year, Monday to Friday from 3:30 to 6:00 pm, for kindergarten to 8th grade. It has a listing here.",
+            "Welsh’s own site names its community partners. Those that work with children, such as Phila ASAP, Taller Puertorriqueño’s art program, Philly Beatz and Kensington Soccer Club, are listed here as school partners; the site doesn’t say which run after school, so ask the office.",
+            "If you know a program that serves Welsh and isn’t here, send it in and it goes on this page."
+          ],
+          "source": "https://welsh.philasd.org/",
+          "quote": "John Welsh School 2331 North 4th Street Philadelphia, PA 19133 call us at 215-400-7130 Grades: K-8",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "notes",
+          "old": null,
+          "new": [
+            "The City’s program locator lists Methodist Services’ free after-school program at Welsh this school year, Monday to Friday from 3:30 to 6:00 pm, for kindergarten to 8th grade. It has a listing here.",
+            "Welsh’s own site names its community partners. Those that work with children, such as Phila ASAP, Taller Puertorriqueño’s art program, Philly Beatz and Kensington Soccer Club, are listed here as school partners; the site doesn’t say which run after school, so ask the office.",
+            "If you know a program that serves Welsh and isn’t here, send it in and it goes on this page."
+          ],
+          "source": "https://www.phila.gov/ost/program-locator/?address=2331+N+4th+St&resource=ost_168",
+          "quote": "Program runs from: Friday, Sep 11, 2026 - Wednesday, Jun 9, 2027 Days offered: M, Tu, W, Th, F Time offered: 3:30 PM - 6:00 PM",
+          "read": "2026-11-25",
+          "how": "browser"
+        }
+      ]
+    },
+    {
+      "item": "school:penn-alexander",
+      "kind": "update",
+      "listing": "p:penn-alexander-clubs",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "clubs[ASAP].name",
+          "old": null,
+          "new": "ASAP",
+          "source": "https://pennalexander.philasd.org/",
+          "quote": "University City Hospitality Coalition ASAP",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[ASAP].what",
+          "old": null,
+          "new": "Named among the school’s community partners; the site doesn’t say what ASAP runs at the school",
+          "source": "https://pennalexander.philasd.org/",
+          "quote": "University City Hospitality Coalition ASAP",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[ASAP].tags",
+          "old": null,
+          "new": [
+            "games"
+          ],
+          "source": "https://pennalexander.philasd.org/",
+          "quote": "University City Hospitality Coalition ASAP",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[ASAP].roster",
+          "old": null,
+          "new": false,
+          "source": "https://pennalexander.philasd.org/",
+          "quote": "University City Hospitality Coalition ASAP",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:fell",
+      "kind": "new-listing",
+      "listing": "p:fell-partners",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "name",
+          "old": null,
+          "new": "School partners",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "what",
+          "old": null,
+          "new": "Partners D. Newlin Fell School names on its own site: ASAP Philly, the After-school Activities Program",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "types",
+          "old": null,
+          "new": [
+            "clubs"
+          ],
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "keywords",
+          "old": null,
+          "new": [
+            "partners",
+            "ASAP",
+            "chess",
+            "Scrabble",
+            "Fell"
+          ],
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "address",
+          "old": null,
+          "new": "",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "gradeNote",
+          "old": null,
+          "new": "Ask the school",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "hours",
+          "old": null,
+          "new": "Not published; ask the school office",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "cost",
+          "old": null,
+          "new": "Not published",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "phone",
+          "old": null,
+          "new": "215-400-8260",
+          "source": "https://fell.philasd.org/",
+          "quote": "Phone: 215-400-8260",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "email",
+          "old": null,
+          "new": "",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "website",
+          "old": null,
+          "new": "https://fell.philasd.org/",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.how",
+          "old": null,
+          "new": "school",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.note",
+          "old": null,
+          "new": "Ask the school office (215-400-8260).",
+          "source": "https://fell.philasd.org/",
+          "quote": "Phone: 215-400-8260",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "note",
+          "old": null,
+          "new": "Fell’s own site lists ASAP Philly (After-school Activities Program) among its community partners, and names Fell students among ASAP’s chess and Scrabble tournament winners. It doesn’t say when ASAP’s clubs meet at Fell; ask the office.",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://fell.philasd.org/].label",
+          "old": null,
+          "new": "D. Newlin Fell: community partnerships",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://fell.philasd.org/].url",
+          "old": null,
+          "new": "https://fell.philasd.org/",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.fell.relation",
+          "old": null,
+          "new": "onsite",
+          "source": "https://fell.philasd.org/",
+          "quote": "Welcome to D. Newlin Fell School",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[ASAP Philly].name",
+          "old": null,
+          "new": "ASAP Philly",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[ASAP Philly].what",
+          "old": null,
+          "new": "After-school Activities Program, named as a community partner; the site also lists ASAP chess and Scrabble tournament winners",
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[ASAP Philly].tags",
+          "old": null,
+          "new": [
+            "games"
+          ],
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[ASAP Philly].roster",
+          "old": null,
+          "new": false,
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:mifflin",
+      "kind": "new-listing",
+      "listing": "p:pyb-mifflin",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "name",
+          "old": null,
+          "new": "Philadelphia Youth Basketball at Mifflin",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "what",
+          "old": null,
+          "new": "Philadelphia Youth Basketball, which Mifflin names as a partner, with the Wissahickon Boys & Girls Club, in its free on-site care, and on its list of clubs",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "types",
+          "old": null,
+          "new": [
+            "movement"
+          ],
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "keywords",
+          "old": null,
+          "new": [
+            "basketball",
+            "sports",
+            "Philadelphia Youth Basketball",
+            "PYB",
+            "Mifflin",
+            "East Falls"
+          ],
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "address",
+          "old": null,
+          "new": "",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "gradeNote",
+          "old": null,
+          "new": "Ask the school",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "hours",
+          "old": null,
+          "new": "Not published for PYB. Mifflin’s site gives its on-site after care as 3:39 to 6:00 pm.",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "After Care: 3:39–6:00 p.m.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "cost",
+          "old": null,
+          "new": "Not published for PYB. Mifflin’s site says the on-site care is free.",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "phone",
+          "old": null,
+          "new": "215-400-3830",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "215-400-3830",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "email",
+          "old": null,
+          "new": "",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "website",
+          "old": null,
+          "new": "https://www.phillyyouthbasketball.org/",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.how",
+          "old": null,
+          "new": "school",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.note",
+          "old": null,
+          "new": "Mifflin’s site says a new application for the on-site care is needed each fall and the Boys & Girls Club contacts families when a child is approved. Ask the school office (215-400-3830) about PYB.",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "215-400-3830",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "note",
+          "old": null,
+          "new": "Mifflin’s own site says it partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care, and lists Philadelphia Youth Basketball among its clubs and activities. PYB’s own site doesn’t name Mifflin, so ask the school what PYB runs there and when.",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://mifflin.philasd.org/].label",
+          "old": null,
+          "new": "Mifflin School: before- and after-school care and clubs",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://mifflin.philasd.org/].url",
+          "old": null,
+          "new": "https://mifflin.philasd.org/",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.mifflin.relation",
+          "old": null,
+          "new": "onsite",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.mifflin.note",
+          "old": null,
+          "new": "Mifflin’s own site names Philadelphia Youth Basketball as a partner in its on-site care and among its clubs.",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.mifflin.sources[https://mifflin.philasd.org/].label",
+          "old": null,
+          "new": "Mifflin School: before- and after-school care and clubs",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.mifflin.sources[https://mifflin.philasd.org/].url",
+          "old": null,
+          "new": "https://mifflin.philasd.org/",
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Mifflin partners with the Wissahickon Boys & Girls Club and Philadelphia Youth Basketball to provide free, on-site care for students. A new application is required each fall.",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:bayard-taylor",
+      "kind": "new-listing",
+      "listing": "p:bayard-taylor-partners",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "name",
+          "old": null,
+          "new": "School partners",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "what",
+          "old": null,
+          "new": "Partners Bayard Taylor names on its own site: Taller Puertorriqueño’s Taller Visitenos art program and Girls Inc. of Philadelphia",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "types",
+          "old": null,
+          "new": [
+            "clubs"
+          ],
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "keywords",
+          "old": null,
+          "new": [
+            "partners",
+            "art",
+            "Taller Puertorriqueño",
+            "Taller Visitenos",
+            "Girls Inc.",
+            "Bayard Taylor"
+          ],
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "address",
+          "old": null,
+          "new": "",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "gradeNote",
+          "old": null,
+          "new": "Ask the school",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "hours",
+          "old": null,
+          "new": "Not published; ask the school office",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "cost",
+          "old": null,
+          "new": "Not published",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "phone",
+          "old": null,
+          "new": "215-400-3880",
+          "source": "https://taylor.philasd.org/",
+          "quote": "215-400-3880",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "email",
+          "old": null,
+          "new": "",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "website",
+          "old": null,
+          "new": "https://taylor.philasd.org/",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.how",
+          "old": null,
+          "new": "school",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "register.note",
+          "old": null,
+          "new": "Ask the school office (215-400-3880).",
+          "source": "https://taylor.philasd.org/",
+          "quote": "215-400-3880",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "note",
+          "old": null,
+          "new": "Bayard Taylor’s own site lists the Taller Visitenos Art Program under arts, music and dance, and Girls Inc. of Philadelphia and Taller Puertorriqueño among its community partners, without saying whether they meet after school. Ask the office.",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://taylor.philasd.org/].label",
+          "old": null,
+          "new": "Bayard Taylor: arts and community partnerships",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "sources[https://taylor.philasd.org/].url",
+          "old": null,
+          "new": "https://taylor.philasd.org/",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.bayard-taylor.relation",
+          "old": null,
+          "new": "onsite",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Welcome to Bayard Taylor School",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Taller Visitenos Art Program].name",
+          "old": null,
+          "new": "Taller Visitenos Art Program",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Taller Visitenos Art Program].what",
+          "old": null,
+          "new": "An art program from Taller Puertorriqueño, listed under arts, music and dance",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Taller Visitenos Art Program].tags",
+          "old": null,
+          "new": [
+            "art"
+          ],
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Taller Visitenos Art Program].roster",
+          "old": null,
+          "new": false,
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Girls Inc. of Philadelphia].name",
+          "old": null,
+          "new": "Girls Inc. of Philadelphia",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Girls Inc. of Philadelphia].what",
+          "old": null,
+          "new": "Named as a community partner; the site doesn’t say what it runs at the school",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Girls Inc. of Philadelphia].tags",
+          "old": null,
+          "new": [],
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "clubs[Girls Inc. of Philadelphia].roster",
+          "old": null,
+          "new": false,
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:fell",
+      "kind": "update",
+      "listing": "s:fell",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "alsoListed.title",
+          "old": "Also named by Fell",
+          "new": null,
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.intro",
+          "old": "Fell’s own site names these, but we couldn’t confirm them on the program’s own page this time.",
+          "new": null,
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.items",
+          "old": [
+            "ASAP Philly (After-school Activities Program): on Fell’s list of community partners. ASAP’s site turned away our reader, so we couldn’t check which schools it serves. phillyasap.org"
+          ],
+          "new": null,
+          "source": "https://fell.philasd.org/",
+          "quote": "Community Partnerships Navy Yard Big Brothers/Big Sisters Program ASAP Philly – After-school Activities Program",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:mifflin",
+      "kind": "update",
+      "listing": "s:mifflin",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "alsoListed.title",
+          "old": "Also named by Mifflin",
+          "new": null,
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Oratorical Competition Philadelphia Youth Basketball Scrabble Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.intro",
+          "old": "Mifflin’s own site names these, but we couldn’t confirm them on the program’s own page this time.",
+          "new": null,
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Oratorical Competition Philadelphia Youth Basketball Scrabble Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.items",
+          "old": [
+            "Philadelphia Youth Basketball: on Mifflin’s list of clubs and activities. PYB’s own site doesn’t name the school; its Sixth Man Center is on Wissahickon Avenue, about a mile away. phillyyouthbasketball.org"
+          ],
+          "new": null,
+          "source": "https://mifflin.philasd.org/",
+          "quote": "Oratorical Competition Philadelphia Youth Basketball Scrabble Club",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    },
+    {
+      "item": "school:bayard-taylor",
+      "kind": "update",
+      "listing": "s:bayard-taylor",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "alsoListed.intro",
+          "old": "Bayard Taylor’s own site names these, but we couldn’t confirm an after-school program for the school on the program’s own page or in the City’s listings this time.",
+          "new": "Bayard Taylor’s address appears in the City’s listings for a program named for another school, and we couldn’t confirm which school it serves.",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.items",
+          "old": [
+            "Taller Puertorriqueño: the school lists a Taller Visitenos art program under arts, music and dance, without saying whether it meets after school. tallerpr.org",
+            "Girls Inc. of Philadelphia: on the school’s list of community partners. The City’s locator lists Girls Inc. programs elsewhere, not at Bayard Taylor. girlsincphillysnj.org",
+            "Legacy Youth Tennis and Education: the City’s locator lists a free Legacy after-school program “at McClure” at 3698 N Randolph St, which is Bayard Taylor’s address. McClure is a different school, on W Hunting Park Ave, so ask Legacy which school the program serves. legacyyte.org"
+          ],
+          "new": [
+            "Legacy Youth Tennis and Education: the City’s locator lists a free Legacy after-school program “at McClure” at 3698 N Randolph St, which is Bayard Taylor’s address. McClure is a different school, on W Hunting Park Ave, so ask Legacy which school the program serves. legacyyte.org"
+          ],
+          "read": "2026-11-25",
+          "source": "https://taylor.philasd.org/",
+          "quote": "Arts, Music, Dance ArtistYear Koresh Dance Dancing Classrooms Taller Visitenos Art Program Community Partnerships",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.items",
+          "old": [
+            "Taller Puertorriqueño: the school lists a Taller Visitenos art program under arts, music and dance, without saying whether it meets after school. tallerpr.org",
+            "Girls Inc. of Philadelphia: on the school’s list of community partners. The City’s locator lists Girls Inc. programs elsewhere, not at Bayard Taylor. girlsincphillysnj.org",
+            "Legacy Youth Tennis and Education: the City’s locator lists a free Legacy after-school program “at McClure” at 3698 N Randolph St, which is Bayard Taylor’s address. McClure is a different school, on W Hunting Park Ave, so ask Legacy which school the program serves. legacyyte.org"
+          ],
+          "new": [
+            "Legacy Youth Tennis and Education: the City’s locator lists a free Legacy after-school program “at McClure” at 3698 N Randolph St, which is Bayard Taylor’s address. McClure is a different school, on W Hunting Park Ave, so ask Legacy which school the program serves. legacyyte.org"
+          ],
+          "read": "2026-11-25",
+          "source": "https://www.phila.gov/ost/program-locator/?address=3698+N+Randolph+St&resource=ost_152",
+          "quote": "LEGACYYTE at McClure OST After School Program 26-27 Share Print 3698 N RANDOLPH ST",
+          "how": "browser"
+        }
+      ]
+    },
+    {
+      "item": "school:penn-alexander",
+      "kind": "update",
+      "listing": "s:penn-alexander",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "alsoListed.title",
+          "old": "Also named by Penn Alexander",
+          "new": null,
+          "source": "https://pennalexander.philasd.org/",
+          "quote": "University City Hospitality Coalition ASAP",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.intro",
+          "old": "Penn Alexander’s own site names this among its community partners, and we haven’t confirmed what it runs at the school.",
+          "new": null,
+          "source": "https://pennalexander.philasd.org/",
+          "quote": "University City Hospitality Coalition ASAP",
+          "read": "2026-11-25",
+          "how": "fetch"
+        },
+        {
+          "path": "alsoListed.items",
+          "old": [
+            "ASAP, listed by the school among its community partners. ASAP’s own site couldn’t be reached today, so we don’t know what it runs at Penn Alexander."
+          ],
+          "new": null,
+          "source": "https://pennalexander.philasd.org/",
+          "quote": "University City Hospitality Coalition ASAP",
+          "read": "2026-11-25",
+          "how": "fetch"
+        }
+      ]
+    }
+  ]
+}
