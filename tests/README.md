@@ -25,6 +25,9 @@ at a folder that has it. Without Playwright the browser tests are reported as sk
    (ignored by git) and builds there with `PAS_TODAY` set to the fixed day, so the repository's own `dist/` is left
    alone and the pages don't change as the calendar moves. The edit page's sign-in is swapped for a username and a
    password made up for the run; the real password is never anywhere but a hash in the config.
+   The copy's config turns on what the live site has switched off, so it is tested too: the site handling people's
+   mail (`"mail": { "people": "site" }`), outreach and the answer copies. The live settings are tested on their own
+   (`31-build-emails.mjs`, and `test_people` / `test_outreach` in `25-api-mail.mjs`).
 2. starts one small HTTP server that stands in for the outside world: Postmark (what the site would email lands in
    `ctx.mail`), Google's token check (a test registers a credential and the claims it should carry), a browser's push
    service, and GitHub (the private backup and ops repositories, and this repository's pull requests, files, merges,
@@ -64,6 +67,7 @@ time. When `data/days-off.json` moves to a new school year, move it (one place) 
 | `28-web-claim-code.mjs` | claims by code on the managers page in a browser: the code offered for an address that doesn't match, sent to the listing's published address, typed in, the listing claimed |
 | `29-api-manager-fields.mjs` | a program manager's own fields (days, hours, price, grades, pickup schools): from a claim at the program's own domain, a `manager-edit-` branch with the change, a told entry and the evidence, a pull request with no one's name in it, `told_check` answering yes only for that edit's values, and "Your update is live" after the merge; a price the rules catch, or no key on the host, sends it to the private queue instead |
 | `30-build-thin-listings.mjs` | a thin listing (`notPosted`) built from a copy of the data: "Not posted yet" on its card and page, its claim box, its neighborhood page with no school, the planner's label; the build refusing an unknown word and a school-less listing that isn't thin |
+| `31-build-emails.mjs` | the live email settings built from a copy of the repository: people's mail kept in the inbox, outreach and answer copies off, `/edit/emails/` listing only what goes out (the claims page's six emails included), an edit there reaching the claims page, and the reasons a decline can give |
 | `16-edit-gate.mjs` | `/edit/` asks for a sign-in, refuses a wrong password, and the cookie opens the editor and the queue |
 | `20-web-pages.mjs` | pages load without errors; the finder; the privacy page says what the notice promises; the sign-up notice sits under the email form; signing in through the page; quiet pages (account, profile, Passport, calendar, to-do) ask no other site for anything, fonts included, and the email list hears nothing about a child |
 | `21-web-planners.mjs` | each planner, signed in: a first name and a pick keep the plan in the profile, and it comes back on another device |

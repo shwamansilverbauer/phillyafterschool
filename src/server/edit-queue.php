@@ -44,7 +44,7 @@ function host_secret() {
 }
 function queue_page_ctx() {
   global $ROOT, $NAMES, $CITY, $OPS, $SITE_URL, $REVIEW_FRESH;
-  return array('root' => $ROOT, 'db' => edit_db(), 'names' => $NAMES, 'city' => $CITY, 'secret' => host_secret(), 'gh' => 'gh', 'ops' => $OPS, 'site' => $SITE_URL, 'fresh' => $REVIEW_FRESH);
+  return array('root' => $ROOT, 'db' => edit_db(), 'names' => $NAMES, 'city' => $CITY, 'secret' => host_secret(), 'gh' => 'gh', 'ops' => $OPS, 'site' => $SITE_URL, 'fresh' => $REVIEW_FRESH, 'mail' => $PEOPLE_MAIL);
 }
 // Who asked for each school from an account, for this page only, so the owner can write to them when the school goes
 // up. Read from the log next to the public folder; never written to the queue.

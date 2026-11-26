@@ -215,7 +215,7 @@ test('Needs you: Publish puts a held review on data/reviews.json on main with on
   excludes(github.repo.read('data/reviews.json'), rb.id);
 });
 
-test('a manager’s words, offer and pin go to the queue for a run to rate; its “ok” publishes only with the autopilot on and the site’s own checks agreeing, and the manager is told', async (ctx) => {
+test('a manager’s words, offer and pin go to the queue for a run to rate; its “ok” publishes only with the autopilot on and the site’s own checks agreeing, with no email about it', async (ctx) => {
   const { site, api, github, mail } = ctx;
   withKey(site); setSwitch(site, github, 'shadow');
   const t = Date.now().toString(36);
@@ -233,12 +233,11 @@ test('a manager’s words, offer and pin go to the queue for a run to rate; its 
   eq(row.status, 'new'); eq(row.say, 'ok'); ok(row.rated > 0);
   includes(await pages(site).get('needs/'), 'A run would publish this');
   ok(!item(github, 'x' + words.id), 'rated: out of the queue');
-  // The autopilot on: it publishes, and its manager is told in the site's own words.
+  // The autopilot on: it publishes, and no email goes to the manager (their listing tools show it).
   setSwitch(site, github, 'on');
   await hourly(api);
   eq(site.sql(`SELECT status FROM extras WHERE id = ${words.id}`)[0].status, 'ok');
-  const m = await mail.waitFor(mgr.email, /is on/);
-  includes(m.Subject, 'section in your own words'); includes(m.TextBody, 'passed the site’s checks');
+  eq(mail.to(mgr.email).filter(m => /is on/.test(m.Subject)).length, 0, 'nothing emailed about it');
   // A run's "ok" doesn't outrank the site's own checks: a web address in the words holds it, with the reason.
   const linky = await save('offer', `Open house at our studio, details at www.example-studio.com ${t}`, new Date(Date.now() + 20 * 864e5).toISOString().slice(0, 10));
   const pin = await save('pin', JSON.stringify({ n: 'Art Star', c: 2, i: 'art' }));
@@ -282,7 +281,7 @@ test('a photo needs the tick that everyone shown agreed; the queue carries a sig
   mail.clear();
   await hourly(api);
   eq(site.sql(`SELECT status FROM photos WHERE id = ${photo.id}`)[0].status, 'ok');
-  await mail.waitFor(mgr.email, /photo/);
+  eq(mail.to(mgr.email).filter(m => /photo/i.test(m.Subject)).length, 0, 'nothing emailed about it');
   setSwitch(site, github, 'shadow');
 });
 
@@ -304,6 +303,9 @@ test('claims by code: off until it’s switched on; then a code goes to the list
   eq(start.to, offer.code);
   const m = await mail.waitFor(p.email, /asked to manage/);
   includes(m.TextBody, 'Pat Lee'); includes(m.TextBody, pat.email);
+  includes(m.TextBody, 'It works for 2 hours:'); includes(m.TextBody, 'after-school programs and camps in Philadelphia');
+  const left = site.sql(`SELECT expires FROM logins WHERE next = 'claim:' || (SELECT id FROM claims WHERE user_id = ${pat.id} AND listing = '${key}') AND used = 0`)[0].expires - Date.now() / 1000;
+  ok(left > 7000 && left <= 7200, 'the code lasts two hours: ' + left);
   let c = site.sql(`SELECT status, via FROM claims WHERE user_id = ${pat.id} AND listing = '${key}'`)[0];
   eq(c.status, 'pending'); eq(c.via, 'code-sent');
   excludes(await pages(site).get('needs/'), `${pat.email}`, 'a code still good: not the owner’s to decide yet');
