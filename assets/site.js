@@ -3080,6 +3080,8 @@ document.addEventListener('click', function (e) {
           }
           var offDay = dayWarning(k.prog.days, k.prog.offerDays, k.note, [day[0]], true);
           if (offDay) { li.className += ' tc-off'; li.appendChild(el('span', 'tc-warn', offDay)); }
+          // a listing that went up before the program posted its days (notPosted): it can still be picked, and says so
+          else if (k.prog.np && k.prog.np.indexOf('days') > -1) li.appendChild(el('span', 'tc-np hint', 'Days not posted, check with the program'));
           if (k.prog.pickupBy) li.appendChild(el('span', 'by-time', 'Pick up by ' + k.prog.pickupBy));
           if (k.link.where) li.appendChild(el('span', 'hint', k.link.where));
           if (!k.prog.pickupBy) li.appendChild(el('span', 'hint', k.prog.hours));
