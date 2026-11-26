@@ -304,3 +304,22 @@ test('sign-ups in digest mode (morning summary off): a parent’s new account se
   const again = (await api().okay('POST', 'push_run', { digest_today: tomorrow, summary_mode: 'off' })).digest;
   ok(again.state !== 'sent', 'not twice the same day');
 });
+
+test('“It’s on the site” for a listing that went up before the program posted everything (notPosted) invites whoever runs it to claim it and add what’s missing', async ({ api, site, github, mail }) => {
+  const t = Date.now().toString(36);
+  withKey(site);
+  const email = `thin${t}@example.test`, program = `Thin Club ${t}`;
+  await suggest(site, { program, email, role: 'I run or work at the program' });
+  eq((await run(api)).state, 'written');
+  const id = itemFor(github, program).id;
+  // The run lists it on the hidden free test listing, which hasn't posted its days (data/test-listings.json).
+  github.ops.put(`outcomes/queue-thin-${t}.json`, JSON.stringify({ run: `queue-thin-${t}`, pr: 77, items: [{ item: id, outcome: 'published', listing: 'p:test-listing-free' }] }));
+  await run(api);
+  github.pulls[77] = { state: 'closed', merged: true, merged_at: new Date(Date.now() - 3600e3).toISOString() };
+  mail.clear();
+  await run(api);
+  const m = await mail.waitFor(email, /It’s on/);
+  includes(m.TextBody, 'The program hasn’t posted its days yet. If you run it, claim the listing with your work email at');
+  includes(m.TextBody, '/managers/?l=p%3Atest-listing-free');
+  noKey(site);
+});

@@ -27,7 +27,21 @@ Fields worth knowing:
 - `register.nextTerm`: optional. When sign-ups open for the next term, semester or school year, in a sentence with dates. Leave it out when the provider doesn't say.
 - `register.dates`: optional list of `{ "date": "YYYY-MM-DD", "label": "..." }` for registration openings and deadlines. Each upcoming one gets "Add to calendar" links on the card; past dates drop off by themselves.
 - `note`: the yellow caution box. Use it for anything unconfirmed.
+- `notPosted`: what the provider hasn't posted yet, from `days`, `hours`, `cost`, `grades` and `pickup` (each once).
+  Since November 25, 2026 a program goes on the site on a minimum: its own site shows it's real (the gate's new-listing
+  check), that it runs something for school-age kids, a street address and a way to reach it. Whatever else it hasn't
+  posted is listed here, never guessed. A thin listing writes `"hours": "Not posted yet; ask the program"` and `"cost":
+  "Not posted yet"` (the gate's `notPosted.lines` in `scripts/gate.config.json`, which need no quote), and `"grades":
+  null`. Its card and page show "Not posted yet, ask the program" for each, its page's claim box says what isn't posted
+  and that claiming it is how to add it, Build your week labels it "Days not posted, check with the program" instead of
+  showing it as open every day, and the "It's on the site" email invites whoever runs it to claim it. A word leaves the
+  list when the monthly check finds the fact on the provider's site, or when a manager sets it from the listing tools
+  (see "Program managers' own fields" in `docs/program-managers.md`).
 - `schools`: one entry per school the program serves. Leave it as `{}` only for a listing with `daysOff` or `weekend` that runs nothing on a weekday afternoon (a theater with Saturday classes and holiday camps, say). That listing gets its own page and a card on the day-camp page, and stays off every school page, the A to Z list, the type and neighborhood pages and the roster.
+  A thin listing (`notPosted`) is linked `nearby` to each covered school within about half a mile, with the note
+  "Doesn't say it picks up." When none is that close it may leave `schools` as `{}` too, with `neighborhoods` set: unlike
+  a day-camp listing it stays an after-school listing, on its neighborhood page, the A to Z list, the type pages, the
+  map and the roster, and joins a school page once a school near it goes up.
   Otherwise:
   - `relation`: `onsite`, `pickup` or `nearby`. Use `pickup` only when a source names the school.
   - `note`: a caution that applies to that school only.
@@ -450,8 +464,9 @@ and new values filled in, for the run to add the source, quote and how.
 ### What the gate checks
 
 `.github/workflows/autopilot.yml` runs on every pull request whose branch starts with `queue-`, `new-schools-`,
-`weekly-` or `monthly-check-`, from this repository (never a fork) and from the account the runs use. Anything else is
-left alone. It runs the workflow file and the gate as they are on `main`: GitHub's test merge of the pull request is
+`weekly-`, `monthly-check-` or `manager-edit-` (`branches` in `scripts/gate.config.json`), from this repository (never a
+fork) and from the account the runs use. Anything else is left alone, so a code pull request is never named with one of
+those starts: the gate would take it for a run's and comment. It runs the workflow file and the gate as they are on `main`: GitHub's test merge of the pull request is
 fetched as git objects and only the allowlisted data files are copied out of it, next to `main`'s code. Nothing else
 from the pull request is run. Then `scripts/gate.mjs`:
 
@@ -464,7 +479,18 @@ from the pull request is run. Then `scripts/gate.mjs`:
    pre-read does), finds the quote on the page with spaces and punctuation ignored, then finds the new numbers,
    times, prices and dates inside the quote. A page only a person can read, a PDF, or a Google Drive file can't be
    re-read, so its change waits. New links must open, or be linked from the page read, or be where the old link now
-   leads. A new email address must be on the page.
+   leads. A new email address must be on the page. What a thin listing says it doesn't know needs no quote: a
+   `notPosted` entry, and an `hours` or `cost` that is exactly one of `notPosted.lines` in `scripts/gate.config.json`
+   ("Not posted yet; ask the program", "Not posted yet", and the five-schools run's "Not published" lines).
+   **A program manager's own edit** (a `manager-edit-` pull request the site opens from the listing tools, see
+   "Program managers' own fields" in `docs/program-managers.md`) carries an evidence item of kind `told` with the
+   site's `edit` id. The gate passes it with no quote only when every record in the listing comes from that one edit,
+   only `days`, `hours`, `pickupBy`, `cost`, `grades`, `gradeNote`, `schools` (links added as pickup, or nearby turned
+   into pickup, nothing removed), `told` (one entry added, "by" "program manager", "how" "from its listing tools") and
+   `notPosted` change, and the site answers yes to `groups/api.php?action=told_check&id=…&listing=…&sum=…` (`toldLines()`:
+   the values the edit sets, one per line): the edit is real, its claim was made with an address at the program's own
+   website and still stands, and these are its values. Otherwise it is held for Josh, as every other new `told` entry
+   is.
 5. **The hold list,** below.
    **Reviews** (Phase 6) are checked their own way. A new entry in `data/reviews.json` must carry the site's own id
    (`r:<id>` is its key), the fields an entry has and no others, a program and a school the site lists, 1 to 5 stars,
@@ -537,7 +563,7 @@ arrive with those phases.
 | New listing | The site is a bare payment or sign-up page, or doesn't read as a children's program |
 | Pickup and on-site links | No quote names the school, a school has dropped off a provider's pickup list, or a school link is removed |
 | Closing | A program or camp reads as closed. A run never removes one |
-| What a program told us | A field the program told us would change to what its site says (it becomes a question to its managers instead), a `told` entry is added (the gate can't see the message until Phase 2), or an `asks` question is added (until the gate can tell claimed listings apart) |
+| What a program told us | A field the program told us would change to what its site says (it becomes a question to its managers instead), a `told` entry is added that the site doesn't confirm as a manager's own edit from a claim made with an address at the program's website (`told_check`; a run's proposals and emails always wait), or an `asks` question is added (until the gate can tell claimed listings apart) |
 | Prices and hours | A price moves by more than 40 percent, flips between free and paid, or a closing time moves by more than an hour |
 | Dates emailed to parents | The date is past or more than 12 months out, the quote gives no year and the date is more than 120 days away, the quote holds two dates for one label, or the change moves or removes a date that may already have been emailed (`register.dates`, `daysOff.dates`, a camp's `dates`, a school's `dates`) |
 | Notes emailed to parents | An `updates` note or a school's date title isn't built from an approved template (`noteTemplates` in `scripts/gate.config.json`), or a school date was sent in by a parent |

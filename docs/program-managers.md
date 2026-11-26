@@ -19,6 +19,33 @@ clicks to its website, times it was put on a family's plan, and people who asked
   most-opened listings for the owner. There is no public view.
 - The preview copy counts nothing.
 
+## Program managers' own fields
+
+Since November 25, 2026 a manager sets a listing's days, hours, price, grades and the schools it picks up from in its
+listing tools on `/managers/` ("Days, hours and price", above the free-text "Send an update"). Days are Monday to Friday
+boxes, hours a start (or "Starts at school dismissal") and an end time (written as "Dismissal to 6:00 pm" or "3:00 pm to
+6:00 pm", the end also as `pickupBy`), the price one line (no links, emails or phone numbers), grades the youngest and
+oldest, and pickup schools picked from the site's schools (adding only: a school leaves a listing through Josh). Only
+what changed is sent (`listing_fields` in `src/server/groups-api.php`, at most 6 a day).
+
+- **From a claim made with an address at the program's own website** (`claim_by_domain`: not by code, not one Josh
+  approved by hand), the site writes the change into `data/programs.json` on a branch of its own,
+  `manager-edit-<listing>-<edit>`, through the GitHub key: the fields, a `told` entry ("by" "program manager", "how"
+  "from its listing tools", the fields it covers, what they set in their words), and it takes what it covers out of
+  `notPosted`. A pickup school gets a link with the note "The program itself says it picks up here." It writes
+  `evidence/<branch>.json` (one item of kind `told` with the edit's id) and opens a pull request. The autopilot gate
+  confirms the edit with the site (`told_check`, see "What the gate checks" in `docs/listings.md`) and then needs no
+  quote; with the switch `on` it publishes at the next hourly merge, in `shadow` Josh merges it. The edit is also a
+  queue item waiting on that pull request (`e<id>`, run `listing-tools`), so the manager gets "Your update is live" once
+  it's merged and published, and Josh gets an email when it's sent. Nothing a manager typed is in the pull request
+  except the values they set, and no one's name or address.
+- **From any other claim**, a price the text rules catch (other than a link or contact details, which are refused), or
+  with `"managerFields": "review"` under `"groups"` in `site.config.json`: the edit goes to the private queue as a
+  proposal, like a free-text update, and the queue run records it as a `told` entry that waits for Josh. The same
+  happens if the pull request can't be made (no key on the host, GitHub refusing).
+- The program's own word wins after that: the monthly check never changes a field a `told` entry covers, and asks the
+  managers once after 120 days whether it still holds.
+
 ## Is there space
 
 A place with more than one listing (an after-school program and a camp, say) signs in once on `/managers/`, is shown

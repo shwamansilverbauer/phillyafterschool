@@ -1722,7 +1722,7 @@
     var CLAIM_CODE = claimsBox.getAttribute('data-claim-code') === '1';   // claims by code (scaling plan, Phase 6, call 2)
     var when = function (t) { try { return new Date(t * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); } catch (e) { return ''; } };
     var STATUS = { ok: 'Claimed', pending: 'Waiting for our yes', declined: 'Not approved' };
-    var EDIT = { 'new': 'Waiting to be read', done: 'Published', declined: 'Not made' };
+    var EDIT = { 'new': 'Waiting to be read', pr: 'Going on the listing', sending: 'Sending', done: 'Published', declined: 'Not made' };
     var pushStep = function (step) { (window.dataLayer = window.dataLayer || []).push({ event: 'pas_claim', step: step }); };
     var field = function (form, id, label, tag, attrs) {
       var l = el('label', null, label); l.htmlFor = id;
@@ -1730,6 +1730,65 @@
       Object.keys(attrs || {}).forEach(function (k) { i[k] = attrs[k]; });
       form.appendChild(l); form.appendChild(i);
       return i;
+    };
+    // The listing's own fields (listing_fields in the API): days, hours, cost, grades, and the schools it picks up from.
+    // c.fields: { now: what the listing says, np: what it hasn't posted, live: goes on by itself, schools: id -> name }.
+    var LF_DAYS = [['mon', 'Mon'], ['tue', 'Tue'], ['wed', 'Wed'], ['thu', 'Thu'], ['fri', 'Fri']];
+    var LF_GRADES = ['PK', 'K', '1', '2', '3', '4', '5', '6', '7', '8'];
+    var fieldsForm = function (c) {
+      var f = c.fields, now = f.now || {}, form = el('form', 'g-form claim-fields');
+      form.appendChild(el('h4', null, 'Days, hours and price'));
+      form.appendChild(el('p', 'hint', f.np && f.np.length ? 'Families see “Not posted yet” for what’s missing. Fill in what you can.' : 'Change what’s different. Leave the rest as it is.'));
+      var days = el('fieldset', 'lf-days'); days.appendChild(el('legend', null, 'Days it runs'));
+      var boxes = LF_DAYS.map(function (d) {
+        var lab = el('label', 'lf-day'), b = el('input'); b.type = 'checkbox'; b.value = d[0];
+        b.checked = !!(now.days && now.days.indexOf(d[0]) > -1);
+        lab.appendChild(b); lab.appendChild(document.createTextNode(' ' + d[1])); days.appendChild(lab); return b;
+      });
+      form.appendChild(days);
+      var dis = el('label', 'lf-dis'), disB = el('input'); disB.type = 'checkbox'; disB.checked = /^dismissal/i.test(now.hours || '');
+      dis.appendChild(disB); dis.appendChild(document.createTextNode(' Starts at school dismissal'));
+      var from = field(form, 'lf-from-' + c.listing, 'Starts at', 'input', { type: 'time' });
+      form.appendChild(dis);
+      var to = field(form, 'lf-to-' + c.listing, 'Ends at (pick up by)', 'input', { type: 'time' });
+      var tm = /^(\d{1,2}):(\d{2}) ?(am|pm)$/i.exec(now.pickupBy || '');   // "6:00 pm" back into the time box
+      if (tm) to.value = ('0' + ((+tm[1] % 12) + (/pm/i.test(tm[3]) ? 12 : 0))).slice(-2) + ':' + tm[2];
+      var hoursTouched = false; [from, to, disB].forEach(function (x) { x.addEventListener('change', function () { hoursTouched = true; }); });
+      var cost = field(form, 'lf-cost-' + c.listing, 'Price', 'input', { type: 'text', maxLength: 200, placeholder: '$75 a week', value: now.cost || '' });
+      var gRow = el('div', 'lf-grades');
+      var gSel = function (id, label) { var s = field(gRow, id, label, 'select'); s.appendChild(el('option', null, '')); LF_GRADES.forEach(function (g) { var o = el('option', null, g); o.value = g; s.appendChild(o); }); return s; };
+      var gFrom = gSel('lf-gf-' + c.listing, 'Youngest grade'), gTo = gSel('lf-gt-' + c.listing, 'Oldest grade');
+      var gm = /^(PK|K|\d)(?:-(K|\d))?$/.exec(now.grades || ''); if (gm) { gFrom.value = gm[1]; gTo.value = gm[2] || gm[1]; }
+      form.appendChild(gRow);
+      var had = now.schools || {}, choices = Object.keys(f.schools || {}).filter(function (id) { return had[id] !== 'pickup' && had[id] !== 'onsite'; });
+      var pick = null;
+      if (choices.length) {
+        pick = field(form, 'lf-pick-' + c.listing, 'Schools you pick up from (hold Ctrl or ⌘ to pick more than one)', 'select', { multiple: true, size: 6 });
+        choices.forEach(function (id) { var o = el('option', null, f.schools[id]); o.value = id; pick.appendChild(o); });
+      }
+      form.appendChild(el('p', 'hint', f.live ? 'You claimed this with your work email, so these go on the listing by themselves once our checks pass, marked as from the program itself. We’ll email you when they’re live.' : 'A person reads these first, usually within a few days. We’ll email you when they’re live.'));
+      var st = el('p', 'g-status'); st.setAttribute('aria-live', 'polite'); form.appendChild(st);
+      var sb = el('button', 'btn primary', 'Save to the listing'); sb.type = 'submit';
+      var acts = el('div', 'actions'); acts.appendChild(sb); form.appendChild(acts);
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var body = { listing: c.listing };
+        var ds = boxes.filter(function (b) { return b.checked; }).map(function (b) { return b.value; });
+        if (ds.length) body.days = ds;
+        if (hoursTouched) { body.to = to.value; body.from = disB.checked ? 'dismissal' : from.value; }
+        if (cost.value.replace(/\s+/g, '') !== '') body.cost = cost.value.trim();
+        if (gFrom.value) { body.gradeFrom = gFrom.value; body.gradeTo = gTo.value || gFrom.value; }
+        if (pick) body.pickup = Array.prototype.filter.call(pick.options, function (o) { return o.selected; }).map(function (o) { return o.value; });
+        sb.disabled = true; st.textContent = 'Saving…'; st.className = 'g-status';
+        call('listing_fields', body).then(function (r) {
+          sb.disabled = false;
+          if (!r.ok) { st.textContent = r.message; st.className = 'g-status bad'; return; }
+          said = r.live ? 'Saved. Your update to ' + c.name + ' goes on the listing once our checks pass. We’ll email you when it’s live.' : 'Sent. We’ll email you when the update to ' + c.name + ' is published.'; saidBad = false;
+          pushStep(r.live ? 'fields_live' : 'fields_sent');
+          cClaims = r.claims || []; render();
+        });
+      });
+      return form;
     };
 
     // Shrinks a chosen picture in the browser and hands back a JPEG, so the original file (and whatever is tucked
@@ -1881,6 +1940,9 @@
             T.word.appendChild(bBox);
           }
         }
+        // the listing's own fields: days, hours, cost, grades and pickup schools, set by the manager (listing_fields).
+        // From a claim made with an address at the program's own website they publish without a person reading them.
+        if (c.fields) T.update.appendChild(fieldsForm(c));
         // a change: dates, cost, hours, anything else
         var form = el('form', 'g-form claim-edit');
         form.appendChild(el('h4', null, 'Send an update'));

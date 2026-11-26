@@ -298,7 +298,9 @@ are sent.
 ## An email to you for each answer
 
 Each time the site's mailer emails a sender their answer (`queue_reply()` in `src/server/groups-api.php`: "It's on the
-site", "It's already listed", "We couldn't verify this one yet", "We weren't able to add this one", and the reviewer's
+site", "It's already listed", "We couldn't verify this one yet", "We weren't able to add this one", "Your update is live"
+(to a program manager whose own fields went on the listing; see "Program managers' own fields" in
+`docs/program-managers.md`), and the reviewer's
 thank-you), a copy goes to the site's contact address (`answer_copy()`): "[Philly After School] Answer sent: <the
 answer's subject>", saying who it went to and the outcome (with the run's reason, such as `not-a-program`, and for
 `not-on-site` what the program's site was missing, such as `not-on-site: hours, school`), then the

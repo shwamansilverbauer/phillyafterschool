@@ -39,6 +39,12 @@ const REL = {
   nearby: { pill: 'Nearby, no pickup', title: 'Nearby, no pickup found', blurb: 'Close to the school, but you or your child would need to get there. Best suited to older children or as a second stop.' },
 };
 const HOW = ['online', 'phone', 'contact', 'school', 'none'];
+// What a provider hasn't posted yet (docs/listings.md, "Edit a listing"): a listing can go up on the minimum (it's real,
+// it runs something for school-age kids, where it is, how to reach it) and say plainly what it doesn't know. The
+// program's managers fill these in once they claim it; the monthly check fills them in when the site posts them.
+const NOT_POSTED = ['days', 'hours', 'cost', 'grades', 'pickup'];
+const NOT_POSTED_LINE = 'Not posted yet, ask the program';
+const notPosted = (p, f) => Array.isArray(p.notPosted) && p.notPosted.includes(f);
 // Program types: what a family is shopping for. Each has a color and a small icon, used on filters and roster cards.
 // A program can have several; the first one listed in data/programs.json is the one its roster card wears.
 const TYPES = [
@@ -204,7 +210,9 @@ for (const p of programs) {
   for (const s of p.sources || []) if (!isUrl(s.url)) errors.push(`${at}: source "${s.label}" needs an https URL`);
   // A listing with no school is allowed only for a place that runs day camps and nothing on a weekday afternoon.
   if (!p.schools) p.schools = {};
-  if (!Object.keys(p.schools).length && !p.daysOff && !p.weekend) errors.push(`${at}: not linked to any school (only a listing with "daysOff" or "weekend" may leave "schools" empty)`);
+  if (p.notPosted !== undefined && (!Array.isArray(p.notPosted) || !p.notPosted.length || p.notPosted.some(f => !NOT_POSTED.includes(f)) || new Set(p.notPosted).size !== p.notPosted.length)) errors.push(`${at}: notPosted lists what the provider hasn't posted yet, each once, from: ${NOT_POSTED.join(', ')}`);
+  if (!Object.keys(p.schools).length && !p.daysOff && !p.weekend && !p.notPosted) errors.push(`${at}: not linked to any school (only a listing with "daysOff", "weekend" or "notPosted" may leave "schools" empty)`);
+  if (!Object.keys(p.schools).length && p.notPosted && !p.daysOff && !p.weekend && !p.neighborhoods?.length) errors.push(`${at}: a listing with no school needs "neighborhoods", so it shows on its neighborhood page`);
   if (p.weekend !== undefined) {   // Saturday or Sunday classes
     const w = p.weekend;
     if (!w || typeof w.summary !== 'string' || !w.summary.trim()) errors.push(`${at}: weekend needs a summary`);
@@ -950,7 +958,7 @@ const hoods = (() => {
   const m = new Map();
   const at = n => { const k = hoodSlug(n); if (!m.has(k)) m.set(k, { id: k, name: n, schools: [], programs: [] }); return m.get(k); };
   for (const s of schools) for (const n of schoolHoods(s)) at(n).schools.push(s);
-  for (const p of programs) if (Object.keys(p.schools || {}).length) for (const n of programHoods(p)) at(n).programs.push(p);
+  for (const p of programs) if (Object.keys(p.schools || {}).length || p.notPosted) for (const n of programHoods(p)) at(n).programs.push(p);
   return [...m.values()].sort((a, b) => (b.schools.length + b.programs.length) - (a.schools.length + a.programs.length) || a.name.localeCompare(b.name));
 })();
 const hoodPath = h => `neighborhoods/${h.id}/`;
@@ -1061,7 +1069,9 @@ const freeOnlyFor = p => kindsOf(p.price).includes('free') ? [] : schools.filter
 const schoolRun = p => p.types.includes('clubs');
 // A day-camp-only listing: it runs camps when school is closed but nothing on a weekday afternoon, so it is linked to
 // no school. It gets its own page and a place on the day-camp page, and stays off every after-school list.
-const campOnly = p => !Object.keys(p.schools).length;
+// A listing that went up on the minimum (notPosted) and isn't near a covered school yet is still an after-school listing:
+// it shows on its neighborhood page, the A to Z list, the type pages and the map, and joins a school page later.
+const campOnly = p => !Object.keys(p.schools).length && !p.notPosted;
 // A school's clubs, by the kind of program each one is. Used to mention them next to the citywide lists.
 const clubGrades = c => c.gradeNote || (c._grades == null ? '' : c._grades.length === 1 ? (c._grades[0] === 'K' ? 'Kindergarten' : c._grades[0] === 'PK' ? 'Pre-K' : 'Grade ' + c._grades[0]) : c._grades.length === GRADES.length - 1 && c._grades[0] === 'K' ? 'All grades' : `Grades ${c._grades[0]}–${c._grades[c._grades.length - 1]}`);
 const clubsOfType = (p, typeId) => (p.clubs || []).filter(c => c.roster !== false && (c.tags || []).includes(typeId));
@@ -1274,7 +1284,7 @@ function card(p, school) {
       <ul>${reviewItems(revs)}</ul></details>
     <a href="${reviewUrl}" data-track="review">Write a review</a>${more}`
     : `<span>No reviews yet.</span> <a href="${reviewUrl}" data-track="review">Write the first one</a>${more}`;
-  const rows = [['Where', esc(where)], ['Hours', esc(p.hours)], ['Days', esc(daysLine(p))], ['Pick up by', esc(p.pickupBy || '')], ['Cost', esc(l.cost || p.cost)], ['Days off', p.daysOff ? `Runs a camp or full day when school is closed. <a href="${link(dayCampsPath, 1)}#${esc(p.id)}">Dates and details</a>` : ''], ['Register', registerText(p)], ['Next term', esc(r.nextTerm || '') + datesHtml(p, 1)], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
+  const rows = [['Where', esc(where)], ['Hours', notPosted(p, 'hours') ? T(NOT_POSTED_LINE) : esc(p.hours)], ['Days', notPosted(p, 'days') ? T(NOT_POSTED_LINE) : esc(daysLine(p))], ['Pick up by', esc(p.pickupBy || '')], ['Cost', notPosted(p, 'cost') && !l.cost ? T(NOT_POSTED_LINE) : esc(l.cost || p.cost)], ['Days off', p.daysOff ? `Runs a camp or full day when school is closed. <a href="${link(dayCampsPath, 1)}#${esc(p.id)}">Dates and details</a>` : ''], ['Register', registerText(p)], ['Next term', esc(r.nextTerm || '') + datesHtml(p, 1)], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
     .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
   const flag = [p.note, l.note].filter(Boolean).join(' ');
   const fix = correctionHref(`Correction: ${p.name} (${school.shortName})`);
@@ -1681,7 +1691,7 @@ function programPage(p) {
   const clubsDetailed = !!p.clubs && p.clubs.some(c => c.days || c.time || c.what);   // a bare list of names stays a line of text
   const kinds = partsOf(p);
   const camp = campOnly(p), tied = campOf(p);
-  const rows = [[p.clubs ? 'Clubs' : 'Classes', clubsDetailed ? '' : fold(esc((p.offers || []).join(', ')))], ['Hours', fold(esc(p.hours))], ['Days', esc(daysLine(p))], ['Cost', fold(esc(p.cost))], ['Register', fold(registerText(p))], ['Next term', fold(esc(r.nextTerm || ''), datesHtml(p, D))], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
+  const rows = [[p.clubs ? 'Clubs' : 'Classes', clubsDetailed ? '' : fold(esc((p.offers || []).join(', ')))], ['Hours', notPosted(p, 'hours') ? T(NOT_POSTED_LINE) : fold(esc(p.hours))], ['Days', notPosted(p, 'days') ? T(NOT_POSTED_LINE) : esc(daysLine(p))], ['Cost', notPosted(p, 'cost') ? T(NOT_POSTED_LINE) : fold(esc(p.cost))], ['Register', fold(registerText(p))], ['Next term', fold(esc(r.nextTerm || ''), datesHtml(p, D))], ['Contact', r.how === 'school' ? '' : contactHtml(p)]]
     .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
   const schoolRows = served.map(s => {
     const l = p.schools[s.id];
@@ -1775,7 +1785,7 @@ ${p.clubs.map(c => `      <article class="club">
   ${offSection}
   ${summerSection}
   <section class="section">
-    ${listingTools('p:' + p.id, fullName(p), D, 'program')}
+    ${listingTools('p:' + p.id, fullName(p), D, 'program', p.notPosted)}
   </section>
   ${premiumSlot('p:' + p.id, fullName(p), D)}
   ${camp ? `<section class="section" id="schools" data-jump-to="Schools">
@@ -2035,7 +2045,7 @@ const milesPill = m => `<span class="pill mi-pill">${m < 0.1 ? 'Under 0.1 mi' : 
 const nearbyFor = x => {
   const at = [x.lat, x.lng];
   return {
-    after: nearTo(at, programs.filter(p => Object.keys(p.schools || {}).length && !schoolRun(p)), p => placesOf(p), 1),
+    after: nearTo(at, programs.filter(p => (Object.keys(p.schools || {}).length || p.notPosted) && !schoolRun(p)), p => placesOf(p), 1),
     weekend: nearTo(at, weekendPrograms, p => placesOf(p), 2).slice(0, 8),
     camps: nearTo(at, summerCamps, c => coordsOf(c.address), 2).slice(0, 8),
   };
@@ -3811,16 +3821,26 @@ const asksFor = p => [
   ...staleTold(p).map(t => ({ id: 'told-' + t.on, q: `On ${longDate(t.on)} you told us: “${t.says}” Is that still right? If anything has changed, reply to this email or propose a change from your listing’s tools, and the listing will be updated.` })),
 ];
 const claimListings = () => Object.fromEntries([
-  ...testListings.map(p => ['p:' + p.id, { n: p.name, d: p.claimDomain, m: 'match', h: 1 }]),
-  ...programs.map(p => ['p:' + p.id, { n: fullName(p), d: baseDomain(p.website), m: claimMode(baseDomain(p.website), !!p.clubs), ...(reviewsFor(p.id).length ? { r: reviewsFor(p.id).length } : {}), ...(upcomingDates(p).length ? { u: 1 } : {}), ...(asksFor(p).length ? { a: asksFor(p) } : {}), ...(/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(p.email || '') ? { e: p.email } : {}) }]),   // r:published reviews, u: a sign-up date still to come (for the emails to its managers), e: the address its website publishes (for a claim by code)
+  ...testListings.map(p => ['p:' + p.id, { n: p.name, d: p.claimDomain, m: 'match', h: 1, f: listingFields(p), ...(p.notPosted ? { np: p.notPosted } : {}) }]),
+  ...programs.map(p => ['p:' + p.id, { n: fullName(p), d: baseDomain(p.website), m: claimMode(baseDomain(p.website), !!p.clubs), ...(reviewsFor(p.id).length ? { r: reviewsFor(p.id).length } : {}), ...(upcomingDates(p).length ? { u: 1 } : {}), ...(asksFor(p).length ? { a: asksFor(p) } : {}), ...(/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(p.email || '') ? { e: p.email } : {}), ...(p.notPosted ? { np: p.notPosted } : {}), f: listingFields(p) }]),   // r:published reviews, u: a sign-up date still to come (for the emails to its managers), e: the address its website publishes (for a claim by code)
   ...summerCamps.map(c => ['c:' + c.id, { n: c.name + ' (summer camp)', d: baseDomain(c.website), m: claimMode(baseDomain(c.website)) }]),
 ]);
+// What a manager can set from the fields in its listing tools, as the listing has it now (src/server/groups-api.php,
+// "listing_fields"): days, hours, pick up by, cost, grades, and which schools it picks up from or runs at.
+function listingFields(p) {
+  return { days: p.days || null, hours: notPosted(p, 'hours') ? '' : p.hours, pickupBy: p.pickupBy || '', cost: notPosted(p, 'cost') ? '' : p.cost, grades: p.grades || null,
+    schools: Object.fromEntries(Object.entries(p.schools || {}).map(([sid, l]) => [sid, l.relation])) };
+}
 // Under a listing: suggest an update (anyone), and claim it (whoever runs it).
 // The box at the end of a listing for the people who run it: claim it (free, with a work email), or suggest an
 // update. Once the site says the listing is claimed (site.js asks), the box says so instead and keeps the update link.
-const listingTools = (key, name, depth, noun) => GROUPS ? `<div class="listing-tools claim-cta" data-claim-cta="${esc(key)}">
+// A listing that went up on the minimum (notPosted) says what isn't posted yet, and that claiming it is how to add it.
+const NOT_POSTED_WORDS = { days: 'days', hours: 'hours', cost: 'prices', grades: 'grades', pickup: 'pickup schools' };
+const notPostedWords = list => { const w = (list || []).map(f => NOT_POSTED_WORDS[f]).filter(Boolean); return w.length < 2 ? w.join('') : w.slice(0, -1).join(', ') + ' and ' + w[w.length - 1]; };
+const listingTools = (key, name, depth, noun, missing) => GROUPS ? `<div class="listing-tools claim-cta" data-claim-cta="${esc(key)}">
       <div class="claim-cta-say">
-        <b class="claim-cta-h when-free">${noun === 'camp' ? T(`Run this camp?`) : T(`Run this program?`)}</b><b class="claim-cta-h when-claimed">${T(`Claimed by the people who run it`)}</b>
+        <b class="claim-cta-h when-free">${noun === 'camp' ? T(`Run this camp?`) : T(`Run this program?`)}</b><b class="claim-cta-h when-claimed">${T(`Claimed by the people who run it`)}</b>${missing && missing.length ? `
+        <p class="when-free claim-np">${T(`Its {what} aren’t posted yet. Claim it to add them yourself.`, { what: notPostedWords(missing) })}</p>` : ''}
         <p class="when-free">${T(`Claim this listing, free, with your work email: keep its dates, costs and hours right yourself, say whether there’s space, and get its numbers each month.`)}</p>
         <p class="when-claimed">${T(`Updates come from them. Spotted something off?`)} ${T(`Also run it?`)} <a href="${link('managers/', depth)}?l=${encodeURIComponent(key)}">${T(`Claim it with your work email too.`)}</a></p>
       </div>
@@ -4659,7 +4679,7 @@ function groupPage() {
 // The server side: one file, copied from src/server with the few settings it needs.
 function groupsApiPhp() {
   const end = daysOff?.lastDay ? new Date(new Date(daysOff.lastDay + 'T12:00:00Z').getTime() + 14 * 86400000).toISOString().slice(0, 10) : '';
-  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, repo: /^[\w.-]+\/[\w.-]+$/.test(cfg.repo || '') ? cfg.repo : '', backupRepo: /^[\w.-]+\/[\w.-]+$/.test(cfg.backupRepo || '') ? cfg.backupRepo : '', opsRepo: OPS_REPO, ownerNotes: OWNER_NOTES, autopilot: AP_CONF, queueReplies: cfg.queueReplies !== false, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])), acts: KIDS_ACTS.map(a => a.id), citySchools: Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`])), moderation: MODERATION, claimByCode: CLAIM_BY_CODE, reviewNewAccount: REVIEW_NEW_ACCOUNT });
+  const conf = JSON.stringify({ siteName: cfg.siteName, siteUrl: cfg.siteUrl, repo: /^[\w.-]+\/[\w.-]+$/.test(cfg.repo || '') ? cfg.repo : '', backupRepo: /^[\w.-]+\/[\w.-]+$/.test(cfg.backupRepo || '') ? cfg.backupRepo : '', opsRepo: OPS_REPO, ownerNotes: OWNER_NOTES, autopilot: AP_CONF, queueReplies: cfg.queueReplies !== false, from: cfg.contactEmail, admins: GATED ? ADMINS : [], yearEnd: end, googleClientId: GROUPS.google, grades: GRADES, ages: AGES, listings: claimListings(), camps: summerCamps.map(c => c.id), photos: GROUPS.photos, premium: GROUPS.premium, premiumPage: PM_LISTED, premiumAlways: testListings.filter(p => p.premium === true).map(p => 'p:' + p.id), hoods: Object.fromEntries(accountHoods().map(h => [h.id, h.name])), acts: KIDS_ACTS.map(a => a.id), citySchools: Object.fromEntries(finderData.schools.filter(r => !r[5]).map(r => [r[0], `${r[1]} (${r[2]})`])), managerFields: cfg.groups?.managerFields === 'review' ? 'review' : 'publish', moderation: MODERATION, claimByCode: CLAIM_BY_CODE, reviewNewAccount: REVIEW_NEW_ACCOUNT });
   const src = phpCopy(fs.readFileSync(path.join(ROOT, 'src/server/groups-api.php'), 'utf8'));
   if (!src.includes(`'/*CONFIG*/'`)) throw new Error('src/server/groups-api.php has lost its /*CONFIG*/ marker');
   if (!src.includes('/*MAILER*/')) throw new Error('src/server/groups-api.php has lost its /*MAILER*/ marker');
@@ -4730,7 +4750,7 @@ function boardPage() {
     weekendPath: link(weekendPath, 1),
     weekend: Object.fromEntries(programs.filter(p => p.weekend).map(p => [p.id, { name: p.name, hood: programHoods(p)[0] || '', type: p.types[0], days: p.weekend.days, times: p.weekend.times || null, path: link(programPath(p), 1) }])),
     programs: Object.fromEntries(programs.filter(p => !campOnly(p)).map(p => [p.id, {
-      name: p.name, hours: p.hours, pickupBy: p.pickupBy || '', offers: p.offers || [], type: p.types[0], no: order.indexOf(p.id) + 1,
+      name: p.name, hours: notPosted(p, 'hours') ? NOT_POSTED_LINE : p.hours, pickupBy: p.pickupBy || '', offers: p.offers || [], type: p.types[0], no: order.indexOf(p.id) + 1, np: p.notPosted || null,
       days: p.days || null, offerDays: p.offerDays || null, rate: p.rate || null, types: p.types, grades: p._grades, kw: (p.keywords || []).map(k => k.toLowerCase()), cls: p._cls || null,
       path: link(programPath(p), 1), q: [p.name, ...(p.offers || []), ...(p.keywords || []), ...p.types.map(t => TYPE[t].label), ...programHoods(p), ...schools.filter(s => p.schools[s.id]).map(s => s.shortName)].join(' ').toLowerCase(),
       hoods: programHoods(p), free: p.price === 'free',

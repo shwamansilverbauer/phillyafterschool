@@ -20,6 +20,9 @@ const registered = new Map();   // domain -> ISO date
 const gh = { calls: [], pulls: [], comments: new Map(), main: '' };
 // The site's answer about a review (groups/api.php, review_check): by id, the sum it holds and whether its checks pass.
 const siteReviews = new Map();   // id -> { sum, clean }
+// The site's answer about a program manager's own edit (told_check): by edit id, its listing, sum and whether the claim
+// behind it was made with an address at the program's own website.
+const siteTold = new Map();   // id -> { listing, sum, verified }
 let server = null, origin = '';
 async function standin() {
   if (server) return;
@@ -46,6 +49,11 @@ async function standin() {
         if (!r) return json(200, { ok: true, known: false, match: false, clean: false });
         const match = r.sum === u.searchParams.get('sum');
         return json(200, { ok: true, known: true, match, clean: match && r.clean });
+      }
+      if (host === 'phillyafterschool.org' && u.pathname === '/groups/api.php' && u.searchParams.get('action') === 'told_check') {
+        const t = siteTold.get(+u.searchParams.get('id'));
+        if (!t || t.listing !== u.searchParams.get('listing')) return json(200, { ok: true, known: false, match: false, verified: false });
+        return json(200, { ok: true, known: true, match: t.sum === u.searchParams.get('sum'), verified: t.verified });
       }
       if (host === 'rdap.org') { const d = decodeURIComponent(u.pathname.replace('/domain/', '')); return registered.has(d) ? json(200, { events: [{ eventAction: 'registration', eventDate: registered.get(d) + 'T00:00:00Z' }] }) : json(404, {}); }
       if (u.pathname === '/robots.txt') { res.writeHead(404); return res.end(); }
@@ -228,6 +236,55 @@ test('the gate passes a new review that is the one the site stored and still cle
   includes(reasons(v), 'It removes a review');
   v = await judgeReview([e], [{ ...e, stars: 4 }], [rec(e.id)]);
   includes(reasons(v), 'changes a review already on the site');
+});
+
+test('a program manager’s own edit: the gate passes it with no quote once the site confirms it, and holds it unconfirmed, changed, from another claim, stretched to other fields or taking a school away', async () => {
+  const g = await gate();
+  const crypto = await import('node:crypto');
+  const branch = 'manager-edit-sunny-club-7', site = 'https://sunnyclub.example/';
+  const told = { on: TODAY, by: 'program manager', how: 'from its listing tools', fields: ['hours', 'pickupBy', 'schools.ridge.relation'], says: 'Hours: Dismissal to 6:30 pm. Picks up at: Ridge.' };
+  const edited = p => ({ ...p, hours: 'Dismissal to 6:30 pm', pickupBy: '6:30 pm', schools: { ...p.schools, ridge: { relation: 'pickup', note: 'The program itself says it picks up here.' } }, told: [told] });
+  const recs = (b, a, paths = ['hours', 'pickupBy', 'schools', 'told']) => paths.map(k => ({ path: k, old: b[k] ?? null, new: a[k] ?? null, source: site, quote: '', read: TODAY, how: 'person' }));
+  const run = async ({ after = edited(sunny()), records, edit = 7, verified = true, sumOf } = {}) => {
+    const b = sunny(), rs = records || recs(b, after);
+    const sum = crypto.createHash('sha256').update(g.toldLines(edit, 'p:sunny-club', sumOf || rs)).digest('hex');
+    siteTold.set(7, { listing: 'p:sunny-club', sum, verified }); g._reset();
+    const ev = JSON.stringify({ run: branch, items: [{ item: 'e' + edit, kind: 'told', outcome: 'published', listing: 'p:sunny-club', edit, fields: rs }] });
+    return g.judge({ before: world([b]), after: world([after]), changed: ['data/programs.json', `evidence/${branch}.json`], evidenceText: ev, branch, buildCheck: false });
+  };
+  let v = await run();
+  eq(v.verdict, 'publish', reasons(v));
+  // The site says the claim behind it was by code or by hand: Josh reads it.
+  v = await run({ verified: false });
+  includes(reasons(v), 'couldn’t confirm it came from the program’s own claim');
+  // Values that aren't the ones the manager set (the site's sum is for other values).
+  v = await run({ sumOf: recs(sunny(), { ...edited(sunny()), hours: 'Dismissal to 9:00 pm' }) });
+  includes(reasons(v), 'couldn’t confirm');
+  // An edit id the site doesn't know.
+  v = await run({ edit: 8 });
+  includes(reasons(v), 'couldn’t confirm');
+  // Stretched to a field the listing tools don't set.
+  const wider = { ...edited(sunny()), website: 'https://elsewhere.example/' };
+  v = await run({ after: wider, records: recs(sunny(), wider, ['hours', 'pickupBy', 'schools', 'told', 'website']) });
+  includes(reasons(v), 'couldn’t confirm');
+  // A school taken away.
+  const fewer = { ...edited(sunny()), schools: { ridge: { relation: 'pickup', note: 'The program itself says it picks up here.' } } };
+  v = await run({ after: fewer, records: recs(sunny(), fewer) });
+  includes(reasons(v), 'couldn’t confirm');
+  // A told entry that doesn't say it came from the listing tools.
+  const other = { ...edited(sunny()), told: [{ ...told, how: 'by email' }] };
+  v = await run({ after: other, records: recs(sunny(), other) });
+  includes(reasons(v), 'couldn’t confirm');
+});
+
+test('a thin listing: “Not posted yet” and notPosted need no quote, and any other words with no quote are still held', async () => {
+  const thin = p => ({ ...p, hours: 'Not posted yet; ask the program', cost: 'Not posted yet', notPosted: ['hours', 'cost'] });
+  const recs = [field('hours', '3:00 to 6:00 pm', 'Not posted yet; ask the program', ''), field('cost', '$200 a month', 'Not posted yet', ''), field('notPosted', null, ['hours', 'cost'], '')];
+  let v = await judgeChange(thin, recs);
+  excludes(reasons(v), 'no quote'); excludes(reasons(v), 'There is no quote');
+  // The same with words of its own: held.
+  v = await judgeChange(p => ({ ...p, hours: 'Mornings only' }), [field('hours', '3:00 to 6:00 pm', 'Mornings only', '')]);
+  includes(reasons(v), 'There is no quote for hours');
 });
 
 test('the gate doesn’t mistake ordinary words for instructions to an AI: an assistant principal, a painter named Claude', async () => {

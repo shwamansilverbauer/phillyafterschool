@@ -311,7 +311,7 @@ function readEvidence(text, branch) {
       else if (f.quote.length > CFG.quoteMax) errors.push(`${w}: the quote is ${f.quote.length} characters; ${CFG.quoteMax} at most`);
       if (!/^\d{4}-\d{2}-\d{2}$/.test(f.read || '')) errors.push(`${w}: "read" is not a date`);
       if (!HOWS.includes(f.how)) errors.push(`${w}: "how" must be fetch, browser or person`);
-      records.push({ item: it.item, kind: it.kind, outcome: it.outcome, listing: it.listing, path: f.path, old: f.old ?? null, new: f.new ?? null, source: f.source, quote: typeof f.quote === 'string' ? f.quote : '', read: f.read, how: HOWS.includes(f.how) ? f.how : 'fetch' });
+      records.push({ edit: it.kind === 'told' && Number.isInteger(it.edit) && it.edit > 0 ? it.edit : undefined, item: it.item, kind: it.kind, outcome: it.outcome, listing: it.listing, path: f.path, old: f.old ?? null, new: f.new ?? null, source: f.source, quote: typeof f.quote === 'string' ? f.quote : '', read: f.read, how: HOWS.includes(f.how) ? f.how : 'fetch' });
     });
   });
   return { errors, records, items: ev.items, run: ev.run };
@@ -421,11 +421,16 @@ export async function judge({ before, after, changed, evidenceText, branch, test
     }
     for (const m of missing.slice(0, 8)) it.held.push(list.some(x => x.path === m.path) ? `The evidence for ${m.path || 'the new record'} doesn't match the data: it should say ${short(m.old)} to ${short(m.new)}.` : `No evidence for ${m.path || 'the new record'} (${short(m.old)} to ${short(m.new)}).`);
     if (missing.length > 8) it.held.push(`And ${missing.length - 8} more changes with no evidence.`);
-    if (list.some(x => x.kind === 'told')) it.held.push('It writes in what the program told us. The gate can’t see the message itself until the private queue arrives (Phase 2), so Josh reads it.');
+    // A program manager's own edit from its listing tools (a claim made with an address at the program's own website):
+    // the site confirms it, and then it needs no quote (see "What the gate checks", manager edits).
+    if (type === 'p' && b && list.some(x => x.kind === 'told')) it.toldOk = await toldConfirmed(list, key, b, a);
+    if (list.some(x => x.kind === 'told') && !it.toldOk) it.held.push('It writes in what the program told us, and the site couldn’t confirm it came from the program’s own claim, so Josh reads it.');
 
     // Each record: an allowed source, a page that can be read, the quote on it.
     for (const g of groups) {
       g.found = [];
+      if (it.toldOk && g.records.every(x => x.edit)) { it.checked++; continue; }   // the program's own word, confirmed by the site
+      if (placeholder(g)) { it.checked++; continue; }   // "Not posted yet": nothing on a page to quote
       await Promise.all(g.records.map(async x => {
         const host = hostOf(x.source) || x.source;
         if (!sourceOk(x.source)) { it.held.push(`${host} isn't ${type === 's' || type === 'd' ? 'the school’s own site' : 'the program’s own site'}, a school’s site or the City’s listing (${g.path || 'new record'}).`); return; }
@@ -472,7 +477,7 @@ export async function judge({ before, after, changed, evidenceText, branch, test
     }
 
     // The table of what waits for Josh.
-    await holdRules(it, { type, b, a, groups, after, before, schoolsAfter, isSchoolSite, isCity, site });
+    await holdRules(it, { type, b, a, groups, after, before, schoolsAfter, isSchoolSite, isCity, site, toldOk: it.toldOk });
   }));
 
   // 5. The run as a whole: its size, the build's notes, the tests.
@@ -502,7 +507,7 @@ export async function judge({ before, after, changed, evidenceText, branch, test
 }
 
 // The rows of "What waits for Josh" that a pull request's data can show.
-async function holdRules(it, { type, b, a, groups, after, before, schoolsAfter, isSchoolSite, isCity }) {
+async function holdRules(it, { type, b, a, groups, after, before, schoolsAfter, isSchoolSite, isCity, toldOk }) {
   const ch = it.changes;
   const found = groups.flatMap(g => (g.found || []).map(f => ({ ...f, path: g.path })));
   const quotesFor = p => found.filter(f => f.path === p || isAncestor(f.path, p) || isAncestor(p, f.path)).map(f => f.quote).join(' ');
@@ -510,7 +515,7 @@ async function holdRules(it, { type, b, a, groups, after, before, schoolsAfter, 
   const schoolNames = id => { const s = schoolsAfter.find(x => x.id === id) || (before['data/schools.json'] || []).find(x => x.id === id); return s ? [s.name, s.shortName, ...(s.aliases || [])].filter(Boolean) : [id]; };
 
   // What the program told us wins over its site; a question for its managers waits until claims can be told apart.
-  if (type === 'p' && b) {
+  if (type === 'p' && b && !toldOk) {   // a confirmed manager edit is the program updating its own word
     const told = (b.told || []).flatMap(t => (t.fields || []).map(f => ({ f, on: t.on })));
     for (const c of flat) {
       if (c.path.startsWith('told') || c.path.startsWith('asks')) continue;
@@ -533,6 +538,7 @@ async function holdRules(it, { type, b, a, groups, after, before, schoolsAfter, 
       if (c.new === undefined) { it.held.push(`It takes ${schoolNames(id)[0]} off the listing.`); continue; }
       const rel = isObj(c.new) ? c.new.relation : (at(a, `schools.${id}.relation`));
       if (!['pickup', 'onsite'].includes(rel)) continue;
+      if (toldOk && rel === 'pickup') continue;   // the program itself says it picks up there (a confirmed manager edit)
       const q = norm(quotesFor(`schools.${id}`) + ' ' + quotesFor(`schools.${id}.relation`) + ' ' + quotesFor(''));
       if (!schoolNames(id).some(n => q.includes(norm(n)))) it.held.push(`No quote names ${schoolNames(id)[0]} for the ${rel === 'pickup' ? 'pickup' : 'on-site'} link.`);
     }
@@ -656,6 +662,69 @@ export function reviewTextReasons(t) {
   if ((m = modRe('profanity')?.exec(t))) out.push('It uses strong language.');
   for (const p of Array.isArray(MOD.personNames) ? MOD.personNames : []) if ((m = new RegExp(p).exec(t))) { out.push(`It may name a person (“${m[0]}”).`); break; }
   return out;
+}
+// ---------------------------------------------------------------- a program manager's own edit
+// A manager whose claim was made with an address at the program's own website sets days, hours, cost, grades and the
+// schools it picks up from in its listing tools; the site opens a pull request (branch manager-edit-…) with the change,
+// a "told" entry and an evidence item of kind "told" naming the site's edit id. The gate asks the site (told_check)
+// whether that edit is real, still backed by a claim made that way, and carries these very values. Only then does the
+// listing need no quote. Everything in the listing must come from such edits, and only these fields may change.
+const TOLD_PATHS = ['days', 'hours', 'pickupBy', 'cost', 'grades', 'gradeNote', 'schools', 'told', 'notPosted'];
+// The values the edit sets, one per line, the way the site words them (told_sum in src/server/groups-api.php).
+function toldLines(edit, key, recs) {
+  const v = p => { const r = recs.find(x => x.path === p); return r ? r.new : undefined; };
+  const sch = recs.find(x => x.path === 'schools');
+  const pick = sch && isObj(sch.new) ? Object.keys(sch.new).filter(id => isObj(sch.new[id]) && sch.new[id].relation === 'pickup' && !(isObj(sch.old) && isObj(sch.old[id]) && sch.old[id].relation === 'pickup')).sort() : [];
+  const str = x => x === undefined || x === null ? '' : Array.isArray(x) ? x.join(',') : String(x);
+  return [String(edit), key, str(v('days')), str(v('hours')), str(v('pickupBy')), str(v('cost')), str(v('grades')), pick.join(',')].join('\n');
+}
+const toldAsked = new Map();
+async function askTold(edit, key, sum) {
+  const k = edit + ' ' + key + ' ' + sum;
+  if (!toldAsked.has(k)) toldAsked.set(k, (async () => {
+    if (!SITE) return null;
+    try {
+      const r = await get(`${SITE}/groups/api.php?action=told_check&id=${edit}&listing=${encodeURIComponent(key)}&sum=${sum}`, { headers: { accept: 'application/json', 'user-agent': UA, 'x-pas': '1' }, redirect: 'follow', signal: AbortSignal.timeout(20000) });
+      if (!r.ok) return null;
+      const j = await r.json();
+      return j && j.ok === true ? { known: j.known === true, match: j.match === true, verified: j.verified === true } : null;
+    } catch { return null; }
+  })());
+  return toldAsked.get(k);
+}
+async function toldConfirmed(list, key, b, a) {
+  if (!list.length || !list.every(x => x.kind === 'told' && x.edit)) return false;
+  const edits = [...new Set(list.map(x => x.edit))];
+  if (edits.length !== 1) return false;
+  if (!list.every(x => TOLD_PATHS.includes(x.path) && sameish(x.old, at(b, x.path)) && sameish(x.new, at(a, x.path)))) return false;
+  // Schools: only links added as pickup, or a nearby link turned into pickup. Nothing taken away.
+  const sch = list.find(x => x.path === 'schools');
+  if (sch) {
+    const o = isObj(sch.old) ? sch.old : {}, n = isObj(sch.new) ? sch.new : {};
+    if (Object.keys(o).some(id => !(id in n))) return false;
+    for (const id of Object.keys(n)) {
+      if (!(id in o)) { if (!isObj(n[id]) || n[id].relation !== 'pickup') return false; continue; }
+      if (same(o[id], n[id])) continue;
+      if (!(isObj(o[id]) && o[id].relation === 'nearby' && isObj(n[id]) && n[id].relation === 'pickup')) return false;
+    }
+  }
+  // Told: what was there stays, and one entry is added, from the listing tools.
+  const tr = list.find(x => x.path === 'told');
+  if (!tr) return false;
+  const was = Array.isArray(tr.old) ? tr.old : [], now = Array.isArray(tr.new) ? tr.new : [];
+  if (now.length !== was.length + 1 || !was.every((t, i) => same(t, now[i]))) return false;
+  const t = now[now.length - 1];
+  if (!isObj(t) || t.by !== 'program manager' || t.how !== 'from its listing tools') return false;
+  const sum = crypto.createHash('sha256').update(toldLines(edits[0], key, list)).digest('hex');
+  const site = await askTold(edits[0], key, sum);
+  return !!(site && site.known && site.match && site.verified);
+}
+// "Not posted yet": what a listing that went up on the minimum says about what the provider hasn't posted. Nothing on a
+// page can be quoted for it, so it needs no quote (the words are fixed, in scripts/gate.config.json, "notPosted").
+function placeholder(g) {
+  if (/^notPosted(\[\d+\])?$/.test(g.path)) return true;
+  const lines = (CFG.notPosted && Array.isArray(CFG.notPosted.lines)) ? CFG.notPosted.lines : [];
+  return /(^|\.)(hours|cost)$/.test(g.path) && typeof g.new === 'string' && lines.includes(g.new.trim());
 }
 const asked = new Map();
 async function askSite(e) {
@@ -1077,8 +1146,8 @@ async function report() {
   console.log(md);
 }
 
-export const _reset = () => { pages.clear(); ages.clear(); asked.clear(); };
-export { windowWith, onTemplate, readEvidence, gh, ghOk, eligible, CFG, MARK, READY, REPO, TODAY };
+export const _reset = () => { pages.clear(); ages.clear(); asked.clear(); toldAsked.clear(); };
+export { windowWith, onTemplate, readEvidence, gh, ghOk, eligible, toldLines, CFG, MARK, READY, REPO, TODAY };
 
 // ---------------------------------------------------------------- start
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
