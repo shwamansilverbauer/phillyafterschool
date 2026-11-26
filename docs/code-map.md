@@ -6,110 +6,112 @@ Don't edit it or commit it from a branch: that copy would conflict. For a branch
 
 Use it to open only the lines you need: find the function here, then read from its line.
 
-## build.mjs (7251 lines)
+## build.mjs (7271 lines)
 
 Run as `node build.mjs`. Reads `data/` and `src/`, writes the finished site to `dist/`.
 
 | Lines | Section | Functions (line) |
 |---|---|---|
-| 1–76 | (top of the file) | `readJson` 13, `ageStep` 30, `gradesToAges` 32, `agesBetween` 33, `typeIcon` 75 |
-| 77–135 | site copy | `copyId` 83, `isRemoved` 87, `T` 88, `copyNow` 101, `emailCopy` 106, `dropEmpty` 119, `stamp` 127, `sharePagePath` 131, `sharePageStamp` 133 |
-| 136–157 | helpers | `esc` 137, `link` 138, `expandGrades` 144, `longDate` 151, `checkedOn` 154, `checkedLine` 155, `telHref` 156 |
-| 158–170 | validation | `isUrl` 170 |
-| 171–479 | links out to programs | `outUrl` 179, `bareHost` 187, `ownHosts` 189, `howToRead` 273, `flat` 275, `namesSchool` 276, `checkList` 279, `isIso` 371, `okDays` 372 |
-| 480–809 | page shell | `correctionHref` 495, `dayScene` 500, `weekendScene` 531, `summerScene` 564, `street` 590, `getAppDialog` 629, `layout` 653 |
-| 810–815 | calendar files for registration dates | — |
-| 816–888 | ↳ days of the week, and days off | `daysText` 817, `daysLine` 818, `pickyDays` 819, `isoAdd` 820, `weekday` 821, `dayDate` 822, `closedDays` 824, `schoolOff` 832, `schoolLastDay` 833, `campsOn` 836, `nextOff` 845, `ordinal` 852, `ordDate` 853, `offSpan` 854, `lowerSeason` 855, `offAsk` 856, `nextOffBar` 857, `ymd` 860, `nextDay` 861, `shortDate` 862, `upcomingDates` 863, `calTitle` 864, `calDetails` 865, `gcalUrl` 866, `icsFile` 870 |
-| 889–900 | reviews | `stars` 890, `allReviewsFor` 891, `reviewsFor` 892, `kidReviewsFor` 893, `gradeWord` 894, `kidBy` 896, `monthYear` 897, `schoolShort` 898 |
-| 901–937 | pieces shared by the program card and the program page | `gradeText` 902, `gradeStrip` 903, `phoneLink` 908, `contactHtml` 909, `registerText` 910, `datesHtml` 918, `average` 919, `reviewItems` 920, `reviewsBlock` 922, `sourceLinks` 930, `programPath` 931, `fullName` 933 |
-| 938–974 | neighborhoods | `hoodSlug` 941, `dayLabel` 943, `daySlug` 944, `dayPath` 945, `schoolHoods` 946, `programHoods` 947, `hoods` 949, `hoodPath` 956, `hoodLinks` 957, `plural` 958, `schoolRow` 961, `haystack` 971 |
-| 975–1090 | where things are | `coordsOf` 981, `milesApart` 988, `placesOf` 991, `NEAR_HOODS` 1001, `milesFrom` 1045, `milesText` 1046, `kindsOf` 1047, `saysHelp` 1052, `offersHelp` 1053, `costKinds` 1054, `freeOnlyFor` 1058, `schoolRun` 1061, `campOnly` 1064, `clubGrades` 1066, `clubsOfType` 1067, `clubDays` 1069, `clubBrief` 1070, `clubsByType` 1071, `itemAttrs` 1073, `typeTags` 1074, `mini` 1077, `servedLines` 1079, `programRow` 1083 |
-| 1091–1258 | one row for every list | `offBreaks` 1099, `campAgeList` 1105, `shapeFor` 1106, `listRow` 1110, `heroGo` 1143, `planLine` 1146, `nearRow` 1157, `nearMap` 1158, `sortedSchools` 1167, `focusOn` 1168, `schoolSelect` 1169, `focusCard` 1170, `filterBar` 1195, `bulb` 1256, `noMatch` 1257 |
-| 1259–1292 | program card | `card` 1260 |
-| 1293–1295 | a page per program | `listNames` 1294 |
-| 1296–1307 | dates by email | `longDay` 1305, `sendOn` 1307 |
-| 1308–1333 | ↳ this week at a school | `weekMonday` 1312, `schoolWeek` 1314, `weekLabel` 1330, `thisMonday` 1332 |
-| 1334–1621 | ↳ when did each date reach the site? | `phillyDay` 1340, `firstSeen` 1341, `postedOn` 1364, `dayAfter` 1365, `signupItems` 1369, `noteDays` 1381, `mailUrl` 1383, `mailLink` 1385, `leadPart` 1399, `lateAlertItems` 1445, `alertsFeed` 1475, `alertsBox` 1486, `followBox` 1522, `datesBox` 1546, `stopPage` 1549, `alertsPage` 1561, `servedBy` 1585, `servedSummary` 1587, `servedPills` 1596, `programAddress` 1600, `programTitle` 1608, `fold` 1617 |
-| 1622–1847 | a program's page | `campOf` 1627, `partsOf` 1629, `runsStrip` 1631, `kindSection` 1632, `offDatesHtml` 1638, `spotItem` 1662, `spotlight` 1663, `programPage` 1671, `programsPage` 1827 |
-| 1848–1936 | program types | `KIND_LIST` 1853, `ofKind` 1855, `typeCount` 1856, `liveTypes` 1857, `typeChips` 1858, `kindSections` 1861, `shapedAll` 1868, `typeSections` 1872, `pageNav` 1885, `typesPage` 1886, `typePage` 1896 |
-| 1937–1962 | by day of the week | `byDayPage` 1939 |
-| 1963–1971 | pages | `forSchool` 1964, `schoolChecked` 1967, `tally` 1968, `clock` 1969, `gradeSpan` 1970 |
-| 1972–2022 | the school finder | `streetKey` 1974, `milesBetween` 1975, `finderData` 1980, `finderBox` 1994, `schoolsPage` 2002 |
-| 2023–2485 | a page for each school that isn't covered yet | `uncoveredPath` 2032, `nearTo` 2033, `milesPill` 2034, `nearbyFor` 2035, `askPanel` 2047, `uncoveredSchoolPage` 2060, `uncoveredIndexed` 2117, `schoolRequestPage` 2120, `schoolRequestPhp` 2144, `schoolWeekSection` 2156, `schoolPage` 2192, `placeData` 2285, `placeInput` 2286, `offOption` 2289, `heroSearch` 2290, `homePage` 2315, `neighborhoodsPage` 2388, `neighborhoodPage` 2416 |
-| 2486–3091 | terms of use | `termsPage` 2490, `privacyPage` 2586, `supportPage` 2744, `aboutPage` 2770, `suggestPage` 2843, `ideasPage` 2931, `ideasThanksPage` 2970, `thanksPage` 2976, `sendPhp` 2984, `fail` 2991, `field` 2997, `one_line` 3002 |
-| 3092–3209 | contact | `contactPage` 3093, `contactThanksPage` 3143, `contactPhp` 3148, `fail` 3155, `field` 3161, `one_line` 3166 |
-| 3210 | days off | — |
-| 3211–3467 | a page for each day, or break, that school is closed | `fullDay` 3216, `monthDay` 3217, `dayOffPage` 3218, `daysOffBits` 3294, `offFacts` 3324, `headsUpBox` 3331, `dayCampsPage` 3335, `daysOffPage` 3376 |
-| 3468–3501 | share groups (accounts, class codes) | `premiumMode` 3473, `PM_PRICE` 3479, `PM_PAY` 3489 |
-| 3502–3560 | what each planner looks like, for someone who hasn't signed in | `planExample` 3507 |
-| 3561–3775 | the planners, for someone who hasn't signed in | `showIcon` 3582, `miniArt` 3604, `heroCta` 3606, `showExample` 3609, `planShow` 3708, `groupsAttrs` 3775 |
-| 3776–3844 | directors | `baseDomain` 3782, `claimMode` 3784, `daysSince` 3807, `staleTold` 3808, `asksFor` 3809, `claimListings` 3813, `listingTools` 3821, `photoSlot` 3829, `premiumSlot` 3832, `spaceSlot` 3834, `claimedMark` 3835, `jumpNav` 3837, `accountHoods` 3839, `groupsScript` 3844 |
-| 3845–4099 | small drawings for the account and managers pages, in the site's colors | `artWeek` 3849, `artChip` 3851, `artBox` 3852, `artKid` 3854, `artYearRibbon` 3857, `artPencil` 3867, `artListingKept` 3869, `artStar` 3905, `artBulb` 3906, `artPin` 3907, `artCloudQ` 3908, `artRow` 3910, `accountArt` 3913, `accountPage` 3995, `profilePage` 4080, `movedPage` 4092 |
-| 4100–5209 | for the people who manage a program | `CLAIM_GETS` 4102, `CLAIM_GETS_ALL` 4103, `claimDemo` 4111, `directorsPage` 4151, `premiumPage` 4232, `editClaimsPhp` 4359, `tell` 4482, `groupsInfo` 4624, `joinPage` 4629, `groupPage` 4648, `groupsApiPhp` 4660, `queuePhp` 4674, `mailPhp` 4677, `contentPhp` 4680, `MODERATION` 4683, `phpCopy` 4698, `boardPage` 4719, `rvNames` 4932, `reviewPage` 4933, `reviewPolicyPage` 5020, `reviewThanksPage` 5066, `reviewNoScriptPhp` 5078, `reviewPhp` 5088, `fail` 5100, `field` 5106, `one_line` 5111 |
-| 5210–5292 | sending mail | `pas_mail_key` 5216, `pas_mail_via` 5224, `pas_mail_note` 5226, `pas_mail_state` 5239, `pas_mail_week` 5244, `pas_mail_kind` 5252, `pas_postmark` 5255, `pas_mail_via` 5284, `pas_mail_note` 5285, `pas_mail_state` 5286, `pas_mail_week` 5287, `pas_mail_kind` 5288, `pas_postmark` 5289, `mailerPhp` 5291 |
-| 5293–5666 | edit mode | `editAuthPhp` 5302, `edit_key` 5306, `edit_db` 5322, `edit_account` 5344, `edit_admin` 5367, `edit_editor` 5375, `edit_signed_in` 5392, `editSignInPage` 5398, `editIndexPhp` 5412, `editStatsPhp` 5434, `editEmailsPage` 5570, `editEmailsPhp` 5581, `editPage` 5590, `editPhp` 5651, `ghPhp` 5665 |
-| 5667–5740 | the research runs' queue | `editQueuePhp` 5668 |
-| 5741–5768 | the autopilot as the owner sees it (scaling plan, Phase 3) | `autopilotPhp` 5747, `editAutopilotPage` 5748, `editNeedsPhp` 5766, `editAutopilotPhp` 5767 |
-| 5769–5790 | summer camps | `campAreas` 5789, `seasonPill` 5790 |
-| 5791–5844 | summer schedule | `utcDay` 5800, `plusDays` 5801, `mondayOf` 5802, `campWeeks` 5803, `summerPlan` 5830 |
-| 5845–5850 | my kids' calendar | — |
-| 5851–6267 | Kids' Playground | `mapHood` 5873, `HOOD_AREA` 5933, `mapArea` 5945, `mapAreas` 5946, `surpriseHoods` 5963, `kidsStar` 6000, `kidsDot` 6001, `kidsIcon` 6092, `bingoCard` 6101, `actHits` 6158, `kidsData` 6172, `kidsDataV` 6205, `kidsShowcase` 6210, `kidsHow` 6238, `kidsPage` 6249 |
-| 6268–6386 | Account Features | `FEATS` 6272, `featArt` 6275, `featPage` 6307 |
-| 6387–6799 | the planners in one place | `schedulesPage` 6389, `todoPage` 6457, `calendarPage` 6496, `summerSchedulePage` 6628, `summerWeeksPage` 6748 |
-| 6800–6957 | a page per summer camp | `campPath` 6802, `campLink` 6804, `campAsListing` 6806, `campAges` 6807, `campPrice` 6808, `campHoursShort` 6809, `campWeeksShort` 6810, `summerBlock` 6814, `campPage` 6847, `campMovedPage` 6904, `summerCampsPage` 6918 |
-| 6958–6993 | weekend classes | `weekendAreas` 6963, `weekendByArea` 6964, `weekendRow` 6965, `weekendPage` 6970 |
-| 6994–7083 | all programs | `allProgramsPage` 6999, `notFoundPage` 7077 |
-| 7084–7251 | write | `write` 7086 |
+| 1–82 | (top of the file) | `readJson` 13, `ageStep` 30, `gradesToAges` 32, `agesBetween` 33, `notPosted` 47, `typeIcon` 81 |
+| 83–141 | site copy | `copyId` 89, `isRemoved` 93, `T` 94, `copyNow` 107, `emailCopy` 112, `dropEmpty` 125, `stamp` 133, `sharePagePath` 137, `sharePageStamp` 139 |
+| 142–163 | helpers | `esc` 143, `link` 144, `expandGrades` 150, `longDate` 157, `checkedOn` 160, `checkedLine` 161, `telHref` 162 |
+| 164–176 | validation | `isUrl` 176 |
+| 177–487 | links out to programs | `outUrl` 185, `bareHost` 193, `ownHosts` 195, `howToRead` 281, `flat` 283, `namesSchool` 284, `checkList` 287, `isIso` 379, `okDays` 380 |
+| 488–817 | page shell | `correctionHref` 503, `dayScene` 508, `weekendScene` 539, `summerScene` 572, `street` 598, `getAppDialog` 637, `layout` 661 |
+| 818–823 | calendar files for registration dates | — |
+| 824–896 | ↳ days of the week, and days off | `daysText` 825, `daysLine` 826, `pickyDays` 827, `isoAdd` 828, `weekday` 829, `dayDate` 830, `closedDays` 832, `schoolOff` 840, `schoolLastDay` 841, `campsOn` 844, `nextOff` 853, `ordinal` 860, `ordDate` 861, `offSpan` 862, `lowerSeason` 863, `offAsk` 864, `nextOffBar` 865, `ymd` 868, `nextDay` 869, `shortDate` 870, `upcomingDates` 871, `calTitle` 872, `calDetails` 873, `gcalUrl` 874, `icsFile` 878 |
+| 897–908 | reviews | `stars` 898, `allReviewsFor` 899, `reviewsFor` 900, `kidReviewsFor` 901, `gradeWord` 902, `kidBy` 904, `monthYear` 905, `schoolShort` 906 |
+| 909–945 | pieces shared by the program card and the program page | `gradeText` 910, `gradeStrip` 911, `phoneLink` 916, `contactHtml` 917, `registerText` 918, `datesHtml` 926, `average` 927, `reviewItems` 928, `reviewsBlock` 930, `sourceLinks` 938, `programPath` 939, `fullName` 941 |
+| 946–982 | neighborhoods | `hoodSlug` 949, `dayLabel` 951, `daySlug` 952, `dayPath` 953, `schoolHoods` 954, `programHoods` 955, `hoods` 957, `hoodPath` 964, `hoodLinks` 965, `plural` 966, `schoolRow` 969, `haystack` 979 |
+| 983–1100 | where things are | `coordsOf` 989, `milesApart` 996, `placesOf` 999, `NEAR_HOODS` 1009, `milesFrom` 1053, `milesText` 1054, `kindsOf` 1055, `saysHelp` 1060, `offersHelp` 1061, `costKinds` 1062, `freeOnlyFor` 1066, `schoolRun` 1069, `campOnly` 1074, `clubGrades` 1076, `clubsOfType` 1077, `clubDays` 1079, `clubBrief` 1080, `clubsByType` 1081, `itemAttrs` 1083, `typeTags` 1084, `mini` 1087, `servedLines` 1089, `programRow` 1093 |
+| 1101–1268 | one row for every list | `offBreaks` 1109, `campAgeList` 1115, `shapeFor` 1116, `listRow` 1120, `heroGo` 1153, `planLine` 1156, `nearRow` 1167, `nearMap` 1168, `sortedSchools` 1177, `focusOn` 1178, `schoolSelect` 1179, `focusCard` 1180, `filterBar` 1205, `bulb` 1266, `noMatch` 1267 |
+| 1269–1302 | program card | `card` 1270 |
+| 1303–1305 | a page per program | `listNames` 1304 |
+| 1306–1317 | dates by email | `longDay` 1315, `sendOn` 1317 |
+| 1318–1343 | ↳ this week at a school | `weekMonday` 1322, `schoolWeek` 1324, `weekLabel` 1340, `thisMonday` 1342 |
+| 1344–1631 | ↳ when did each date reach the site? | `phillyDay` 1350, `firstSeen` 1351, `postedOn` 1374, `dayAfter` 1375, `signupItems` 1379, `noteDays` 1391, `mailUrl` 1393, `mailLink` 1395, `leadPart` 1409, `lateAlertItems` 1455, `alertsFeed` 1485, `alertsBox` 1496, `followBox` 1532, `datesBox` 1556, `stopPage` 1559, `alertsPage` 1571, `servedBy` 1595, `servedSummary` 1597, `servedPills` 1606, `programAddress` 1610, `programTitle` 1618, `fold` 1627 |
+| 1632–1857 | a program's page | `campOf` 1637, `partsOf` 1639, `runsStrip` 1641, `kindSection` 1642, `offDatesHtml` 1648, `spotItem` 1672, `spotlight` 1673, `programPage` 1681, `programsPage` 1837 |
+| 1858–1946 | program types | `KIND_LIST` 1863, `ofKind` 1865, `typeCount` 1866, `liveTypes` 1867, `typeChips` 1868, `kindSections` 1871, `shapedAll` 1878, `typeSections` 1882, `pageNav` 1895, `typesPage` 1896, `typePage` 1906 |
+| 1947–1972 | by day of the week | `byDayPage` 1949 |
+| 1973–1981 | pages | `forSchool` 1974, `schoolChecked` 1977, `tally` 1978, `clock` 1979, `gradeSpan` 1980 |
+| 1982–2032 | the school finder | `streetKey` 1984, `milesBetween` 1985, `finderData` 1990, `finderBox` 2004, `schoolsPage` 2012 |
+| 2033–2495 | a page for each school that isn't covered yet | `uncoveredPath` 2042, `nearTo` 2043, `milesPill` 2044, `nearbyFor` 2045, `askPanel` 2057, `uncoveredSchoolPage` 2070, `uncoveredIndexed` 2127, `schoolRequestPage` 2130, `schoolRequestPhp` 2154, `schoolWeekSection` 2166, `schoolPage` 2202, `placeData` 2295, `placeInput` 2296, `offOption` 2299, `heroSearch` 2300, `homePage` 2325, `neighborhoodsPage` 2398, `neighborhoodPage` 2426 |
+| 2496–3101 | terms of use | `termsPage` 2500, `privacyPage` 2596, `supportPage` 2754, `aboutPage` 2780, `suggestPage` 2853, `ideasPage` 2941, `ideasThanksPage` 2980, `thanksPage` 2986, `sendPhp` 2994, `fail` 3001, `field` 3007, `one_line` 3012 |
+| 3102–3219 | contact | `contactPage` 3103, `contactThanksPage` 3153, `contactPhp` 3158, `fail` 3165, `field` 3171, `one_line` 3176 |
+| 3220 | days off | — |
+| 3221–3477 | a page for each day, or break, that school is closed | `fullDay` 3226, `monthDay` 3227, `dayOffPage` 3228, `daysOffBits` 3304, `offFacts` 3334, `headsUpBox` 3341, `dayCampsPage` 3345, `daysOffPage` 3386 |
+| 3478–3511 | share groups (accounts, class codes) | `premiumMode` 3483, `PM_PRICE` 3489, `PM_PAY` 3499 |
+| 3512–3570 | what each planner looks like, for someone who hasn't signed in | `planExample` 3517 |
+| 3571–3785 | the planners, for someone who hasn't signed in | `showIcon` 3592, `miniArt` 3614, `heroCta` 3616, `showExample` 3619, `planShow` 3718, `groupsAttrs` 3785 |
+| 3786–3864 | directors | `baseDomain` 3792, `claimMode` 3794, `daysSince` 3817, `staleTold` 3818, `asksFor` 3819, `claimListings` 3823, `listingFields` 3830, `notPostedWords` 3839, `listingTools` 3840, `photoSlot` 3849, `premiumSlot` 3852, `spaceSlot` 3854, `claimedMark` 3855, `jumpNav` 3857, `accountHoods` 3859, `groupsScript` 3864 |
+| 3865–4119 | small drawings for the account and managers pages, in the site's colors | `artWeek` 3869, `artChip` 3871, `artBox` 3872, `artKid` 3874, `artYearRibbon` 3877, `artPencil` 3887, `artListingKept` 3889, `artStar` 3925, `artBulb` 3926, `artPin` 3927, `artCloudQ` 3928, `artRow` 3930, `accountArt` 3933, `accountPage` 4015, `profilePage` 4100, `movedPage` 4112 |
+| 4120–5229 | for the people who manage a program | `CLAIM_GETS` 4122, `CLAIM_GETS_ALL` 4123, `claimDemo` 4131, `directorsPage` 4171, `premiumPage` 4252, `editClaimsPhp` 4379, `tell` 4502, `groupsInfo` 4644, `joinPage` 4649, `groupPage` 4668, `groupsApiPhp` 4680, `queuePhp` 4694, `mailPhp` 4697, `contentPhp` 4700, `MODERATION` 4703, `phpCopy` 4718, `boardPage` 4739, `rvNames` 4952, `reviewPage` 4953, `reviewPolicyPage` 5040, `reviewThanksPage` 5086, `reviewNoScriptPhp` 5098, `reviewPhp` 5108, `fail` 5120, `field` 5126, `one_line` 5131 |
+| 5230–5312 | sending mail | `pas_mail_key` 5236, `pas_mail_via` 5244, `pas_mail_note` 5246, `pas_mail_state` 5259, `pas_mail_week` 5264, `pas_mail_kind` 5272, `pas_postmark` 5275, `pas_mail_via` 5304, `pas_mail_note` 5305, `pas_mail_state` 5306, `pas_mail_week` 5307, `pas_mail_kind` 5308, `pas_postmark` 5309, `mailerPhp` 5311 |
+| 5313–5686 | edit mode | `editAuthPhp` 5322, `edit_key` 5326, `edit_db` 5342, `edit_account` 5364, `edit_admin` 5387, `edit_editor` 5395, `edit_signed_in` 5412, `editSignInPage` 5418, `editIndexPhp` 5432, `editStatsPhp` 5454, `editEmailsPage` 5590, `editEmailsPhp` 5601, `editPage` 5610, `editPhp` 5671, `ghPhp` 5685 |
+| 5687–5760 | the research runs' queue | `editQueuePhp` 5688 |
+| 5761–5788 | the autopilot as the owner sees it (scaling plan, Phase 3) | `autopilotPhp` 5767, `editAutopilotPage` 5768, `editNeedsPhp` 5786, `editAutopilotPhp` 5787 |
+| 5789–5810 | summer camps | `campAreas` 5809, `seasonPill` 5810 |
+| 5811–5864 | summer schedule | `utcDay` 5820, `plusDays` 5821, `mondayOf` 5822, `campWeeks` 5823, `summerPlan` 5850 |
+| 5865–5870 | my kids' calendar | — |
+| 5871–6287 | Kids' Playground | `mapHood` 5893, `HOOD_AREA` 5953, `mapArea` 5965, `mapAreas` 5966, `surpriseHoods` 5983, `kidsStar` 6020, `kidsDot` 6021, `kidsIcon` 6112, `bingoCard` 6121, `actHits` 6178, `kidsData` 6192, `kidsDataV` 6225, `kidsShowcase` 6230, `kidsHow` 6258, `kidsPage` 6269 |
+| 6288–6406 | Account Features | `FEATS` 6292, `featArt` 6295, `featPage` 6327 |
+| 6407–6819 | the planners in one place | `schedulesPage` 6409, `todoPage` 6477, `calendarPage` 6516, `summerSchedulePage` 6648, `summerWeeksPage` 6768 |
+| 6820–6977 | a page per summer camp | `campPath` 6822, `campLink` 6824, `campAsListing` 6826, `campAges` 6827, `campPrice` 6828, `campHoursShort` 6829, `campWeeksShort` 6830, `summerBlock` 6834, `campPage` 6867, `campMovedPage` 6924, `summerCampsPage` 6938 |
+| 6978–7013 | weekend classes | `weekendAreas` 6983, `weekendByArea` 6984, `weekendRow` 6985, `weekendPage` 6990 |
+| 7014–7103 | all programs | `allProgramsPage` 7019, `notFoundPage` 7097 |
+| 7104–7271 | write | `write` 7106 |
 
-## src/server/groups-api.php (4631 lines)
+## src/server/groups-api.php (4873 lines)
 
 The accounts API. `build.mjs` writes it into the site as `groups/api.php`, with its settings filled in. Functions
-first, then the 90 routes, which live in one `switch` on the method and action.
+first, then the 92 routes, which live in one `switch` on the method and action.
 
 | Lines | Section | Functions (line) |
 |---|---|---|
 | 1–81 | (top of the file) | `out` 76, `fail` 77, `b64` 78, `h` 79, `now` 80 |
-| 82–284 | where things are kept | `data_dir` 83, `secret` 88, `db` 102, `seal_existing` 237, `q` 253, `row` 254, `val` 255, `bump` 257, `tidy` 262 |
-| 285–327 | a copy of the database, once a day | `today_ny` 291, `backup_dir` 292, `last_backup` 293, `backup` 298 |
-| 328–456 | a copy off the host, once a day | `offsite_repo` 340, `offsite_token` 341, `offsite_gh` 346, `offsite_key` 359, `offsite_seal` 360, `offsite_open` 365, `offsite_counts` 373, `offsite_state` 383, `offsite_photos_left` 389, `offsite_fail` 397, `offsite_run` 398 |
-| 457–463 | slowing down guessing and floods | `who` 458, `too_many` 459, `note` 462 |
-| 464–503 | the request | `str` 484, `first_name` 490, `person_name` 495, `group_name` 499 |
-| 504–533 | who is signed in | `set_session_cookie` 505, `session_ends` 509, `current_user` 512, `need_user` 528 |
-| 534–591 | email | `send_mail` 538, `t` 566, `paras` 573, `email_html` 578 |
-| 592–612 | group codes | `new_code` 593, `tidy_code` 599, `code_mac` 600, `code_seal` 601, `code_open` 606 |
-| 613–638 | what is kept about a child is encrypted in the file | `seal_key` 621, `seal` 622, `unseal` 629, `by_name` 637 |
-| 639–667 | a child's week | `programs` 640, `schools` 653, `school_names` 654, `hoods` 663 |
-| 668–691 | a phone number for texts | `phone_clean` 672, `phone_show` 677, `phone_set` 681 |
-| 692–945 | following and favorites | `mark_name` 696, `stop_code` 707, `stop_hash` 712, `stop_mark` 713, `muted` 719, `follow_kinds` 722, `only_mark` 729, `follow_on` 733, `follow_off` 747, `follow_off_all` 753, `fav_on` 757, `marks_out` 765, `clean_week` 780, `week_from_full` 800, `week_kid` 814, `week_count` 819, `week_follow` 821, `week_shares` 829, `clean_week_full` 840, `week_out` 865, `grade_list` 868, `kids_list` 870, `clean_summer` 880, `summer_out` 900, `clean_daysoff` 912, `daysoff_out` 935 |
-| 946–1228 | the passport | `school_year` 968, `passport_key` 973, `passport_clean` 974, `passport_kid` 1032, `passport_row` 1038, `passport_data` 1044, `passport_suggest` 1050, `passport_out` 1104, `program_pins` 1116, `passport_favs` 1130, `profile_out` 1136, `kid_out` 1142, `membership` 1146, `invited` 1152, `not_invited` 1155, `invite_out` 1158, `send_invite` 1165, `invite_one` 1198, `need_owner` 1210, `my_groups` 1215, `ready` 1227 |
-| 1229–1322 | co-parents | `home_id` 1238, `household` 1239, `in_list` 1245, `home_user` 1246, `named` 1251, `coparent_out` 1253, `send_coparent_invite` 1272, `me_out` 1290, `has_family` 1304, `is_admin` 1312, `role_of` 1319 |
-| 1323–1356 | directors | `listings` 1327, `base_domain` 1332, `email_domain` 1337, `stats_of` 1342 |
-| 1357–1543 | notifications on a phone or computer (web push) | `meta_get` 1362, `meta_set` 1363, `b64u_dec` 1364, `ec_point` 1368, `vapid` 1372, `push_endpoint_ok` 1392, `push_state` 1402, `push_send` 1408, `push_to_user` 1450, `push_feed` 1461, `push_due` 1469, `push_note` 1502, `push_run` 1516 |
-| 1544–1682 | premium listings | `premium_mode` 1548, `is_premium` 1553, `holds` 1559, `premium_shows` 1563, `photos_public` 1568, `photos_of` 1573, `social_url` 1582, `post_url` 1597, `extra_live` 1602, `extras_out` 1609, `stats_more` 1622, `premium_out` 1640, `claim_out` 1654, `space_of` 1669, `photo_live` 1674, `photo_file` 1677, `my_claims` 1678 |
-| 1683–1716 | asking for a school that isn't covered yet | `school_ask_on` 1687, `tell_owner` 1712 |
-| 1717–1890 | emails to the people who run a listing | `listing_url` 1724, `listing_plain` 1725, `mgr_holders` 1727, `mgr_send` 1737, `mgr_prompt` 1750, `mgr_plural` 1763, `mgr_numbers` 1765, `mgr_run` 1778 |
-| 1891–1952 | a new account | `owner_note_mode` 1898, `signup_note` 1905, `signup_named` 1917, `signup_catchup` 1924, `signup_digest` 1933 |
-| 1953–2253 | the private queue (scaling plan, Phase 2) | `ops_repo` 1979, `queue_ctx` 1980, `queue_run` 1989, `queue_outcomes` 2005, `queue_apply` 2038, `review_after_outcome` 2080, `queue_settle_proposal` 2086, `queue_merges` 2093, `queue_tell` 2119, `queue_reply` 2136, `answer_copies_on` 2149, `answer_copy` 2150, `queue_missing_words` 2169, `queue_reply_parts` 2178 |
-| 2254–2507 | the mailbox (scaling plan, Phase 5) | `mail_key` 2268, `mail_shared_key` 2270, `mail_auth` 2279, `mail_id_str` 2287, `mail_text_in` 2289, `mail_first_name` 2295, `mail_store` 2298, `mail_draft` 2352, `mail_after_outcome` 2369, `mail_answer` 2380, `mail_answer_text` 2389, `mail_beat` 2433, `mail_state` 2449, `outreach_copy` 2463 |
-| 2508–2634 | reviews and what managers add (scaling plan, Phase 6) | `mod_cfg` 2514, `mod_private` 2515, `review_fresh_mode` 2518, `listing_names` 2523, `content_mode` 2526, `claim_code_on` 2533, `mask_email` 2539, `content_decisions` 2544, `content_apply` 2574, `content_publish` 2600 |
-| 2635–2971 | the morning summary, and the pushes that can't wait (scaling plan, Phase 3) | `ap_ctx` 2643, `ap_github_ready` 2650, `summary_on` 2651, `owner_push` 2658, `publish_watch` 2671, `sum_plural` 2694, `sum_when` 2695, `owner_summary` 2697, `sign_in` 2856, `http_get` 2885, `google_email` 2898, `edit_key_state` 2923, `edit_key_out` 2958, `year_end` 2963 |
-| 2972–4631 | the routes: one `case` per request (listed under Routes) | — |
+| 82–291 | where things are kept | `data_dir` 83, `secret` 88, `db` 102, `seal_existing` 244, `q` 260, `row` 261, `val` 262, `bump` 264, `tidy` 269 |
+| 292–334 | a copy of the database, once a day | `today_ny` 298, `backup_dir` 299, `last_backup` 300, `backup` 305 |
+| 335–463 | a copy off the host, once a day | `offsite_repo` 347, `offsite_token` 348, `offsite_gh` 353, `offsite_key` 366, `offsite_seal` 367, `offsite_open` 372, `offsite_counts` 380, `offsite_state` 390, `offsite_photos_left` 396, `offsite_fail` 404, `offsite_run` 405 |
+| 464–470 | slowing down guessing and floods | `who` 465, `too_many` 466, `note` 469 |
+| 471–510 | the request | `str` 491, `first_name` 497, `person_name` 502, `group_name` 506 |
+| 511–540 | who is signed in | `set_session_cookie` 512, `session_ends` 516, `current_user` 519, `need_user` 535 |
+| 541–598 | email | `send_mail` 545, `t` 573, `paras` 580, `email_html` 585 |
+| 599–619 | group codes | `new_code` 600, `tidy_code` 606, `code_mac` 607, `code_seal` 608, `code_open` 613 |
+| 620–645 | what is kept about a child is encrypted in the file | `seal_key` 628, `seal` 629, `unseal` 636, `by_name` 644 |
+| 646–674 | a child's week | `programs` 647, `schools` 660, `school_names` 661, `hoods` 670 |
+| 675–698 | a phone number for texts | `phone_clean` 679, `phone_show` 684, `phone_set` 688 |
+| 699–952 | following and favorites | `mark_name` 703, `stop_code` 714, `stop_hash` 719, `stop_mark` 720, `muted` 726, `follow_kinds` 729, `only_mark` 736, `follow_on` 740, `follow_off` 754, `follow_off_all` 760, `fav_on` 764, `marks_out` 772, `clean_week` 787, `week_from_full` 807, `week_kid` 821, `week_count` 826, `week_follow` 828, `week_shares` 836, `clean_week_full` 847, `week_out` 872, `grade_list` 875, `kids_list` 877, `clean_summer` 887, `summer_out` 907, `clean_daysoff` 919, `daysoff_out` 942 |
+| 953–1235 | the passport | `school_year` 975, `passport_key` 980, `passport_clean` 981, `passport_kid` 1039, `passport_row` 1045, `passport_data` 1051, `passport_suggest` 1057, `passport_out` 1111, `program_pins` 1123, `passport_favs` 1137, `profile_out` 1143, `kid_out` 1149, `membership` 1153, `invited` 1159, `not_invited` 1162, `invite_out` 1165, `send_invite` 1172, `invite_one` 1205, `need_owner` 1217, `my_groups` 1222, `ready` 1234 |
+| 1236–1329 | co-parents | `home_id` 1245, `household` 1246, `in_list` 1252, `home_user` 1253, `named` 1258, `coparent_out` 1260, `send_coparent_invite` 1279, `me_out` 1297, `has_family` 1311, `is_admin` 1319, `role_of` 1326 |
+| 1330–1363 | directors | `listings` 1334, `base_domain` 1339, `email_domain` 1344, `stats_of` 1349 |
+| 1364–1550 | notifications on a phone or computer (web push) | `meta_get` 1369, `meta_set` 1370, `b64u_dec` 1371, `ec_point` 1375, `vapid` 1379, `push_endpoint_ok` 1399, `push_state` 1409, `push_send` 1415, `push_to_user` 1457, `push_feed` 1468, `push_due` 1476, `push_note` 1509, `push_run` 1523 |
+| 1551–1692 | premium listings | `premium_mode` 1555, `is_premium` 1560, `holds` 1566, `premium_shows` 1570, `photos_public` 1575, `photos_of` 1580, `social_url` 1589, `post_url` 1604, `extra_live` 1609, `extras_out` 1616, `stats_more` 1629, `premium_out` 1647, `claim_out` 1661, `space_of` 1684, `photo_live` 1689, `photo_file` 1692 |
+| 1693–1821 | a manager's own fields | `manager_fields_mode` 1705, `claim_by_domain` 1707, `lf_time` 1712, `lf_day_names` 1717, `told_sum` 1725, `lf_apply` 1741, `repo_json` 1775, `lf_publish` 1781, `my_claims` 1817 |
+| 1822–1855 | asking for a school that isn't covered yet | `school_ask_on` 1826, `tell_owner` 1851 |
+| 1856–2029 | emails to the people who run a listing | `listing_url` 1863, `listing_plain` 1864, `mgr_holders` 1866, `mgr_send` 1876, `mgr_prompt` 1889, `mgr_plural` 1902, `mgr_numbers` 1904, `mgr_run` 1917 |
+| 2030–2091 | a new account | `owner_note_mode` 2037, `signup_note` 2044, `signup_named` 2056, `signup_catchup` 2063, `signup_digest` 2072 |
+| 2092–2408 | the private queue (scaling plan, Phase 2) | `ops_repo` 2118, `queue_ctx` 2119, `queue_run` 2128, `queue_outcomes` 2144, `queue_apply` 2177, `review_after_outcome` 2219, `queue_settle_proposal` 2225, `queue_merges` 2232, `queue_tell` 2258, `queue_reply` 2275, `answer_copies_on` 2288, `answer_copy` 2289, `queue_missing_words` 2308, `queue_reply_parts` 2317 |
+| 2409–2662 | the mailbox (scaling plan, Phase 5) | `mail_key` 2423, `mail_shared_key` 2425, `mail_auth` 2434, `mail_id_str` 2442, `mail_text_in` 2444, `mail_first_name` 2450, `mail_store` 2453, `mail_draft` 2507, `mail_after_outcome` 2524, `mail_answer` 2535, `mail_answer_text` 2544, `mail_beat` 2588, `mail_state` 2604, `outreach_copy` 2618 |
+| 2663–2789 | reviews and what managers add (scaling plan, Phase 6) | `mod_cfg` 2669, `mod_private` 2670, `review_fresh_mode` 2673, `listing_names` 2678, `content_mode` 2681, `claim_code_on` 2688, `mask_email` 2694, `content_decisions` 2699, `content_apply` 2729, `content_publish` 2755 |
+| 2790–3126 | the morning summary, and the pushes that can't wait (scaling plan, Phase 3) | `ap_ctx` 2798, `ap_github_ready` 2805, `summary_on` 2806, `owner_push` 2813, `publish_watch` 2826, `sum_plural` 2849, `sum_when` 2850, `owner_summary` 2852, `sign_in` 3011, `http_get` 3040, `google_email` 3053, `edit_key_state` 3078, `edit_key_out` 3113, `year_end` 3118 |
+| 3127–4873 | the routes: one `case` per request (listed under Routes) | — |
 
 ### Routes
 
 | Group | Routes (line) |
 |---|---|
-| one more for a listing | `POST hit` 2977 |
-| is everything working? | `GET health` 2994 |
-| signing in | `POST login_start` 3004, `POST login_finish` 3033, `POST login_google` 3057, `POST email_start` 3068, `POST email_finish` 3095, `GET me` 3130, `GET school_ask` 3138, `POST school_ask` 3144, `POST logout` 3152, `POST logout_all` 3159, `POST set_name` 3167, `POST basics` 3178, `POST phone_save` 3199, `POST hood_save` 3207 |
-| following and favorites | `GET marks` 3217, `POST follow` 3224 |
-| stopping from an email, with no sign-in | `GET stopped` 3238, `POST stop` 3250, `POST unmute` 3281, `POST follow_synced` 3290, `POST follow_clear` 3303, `POST fav` 3309, `POST listed` 3322 |
-| co-parents | `POST coparent_invite` 3331, `POST coparent_resend` 3345, `POST coparent_cancel` 3354, `POST coparent_accept` 3360, `POST coparent_end` 3406, `POST delete_account` 3419 |
-| directors | `GET claimed` 3432, `GET photo` 3449, `GET extras` 3473 |
-| notifications | `GET push_key` 3482, `POST push_on` 3489, `POST push_off` 3507, `POST push_mode` 3517, `POST push_test` 3526, `POST push_run` 3538 |
-| reviews (scaling plan, Phase 6) | `POST review_add` 3583, `GET review_check` 3629, `GET photo_look` 3644 |
-| claims by code (Phase 6, call 2; off until "claimByCode" | `POST claim_code_start` 3665, `POST claim_code_finish` 3711 |
-| the mailbox script (scaling plan, Phase 5) | `POST mail_in` 3751, `POST mail_out` 3758, `POST mail_sent` 3778, `POST outreach_copy` 3795, `POST ask` 3802, `POST extra_save` 3839, `POST extra_drop` 3921, `POST photo_add` 3930, `POST photo_drop` 3977, `GET claims` 3991, `POST mgr_mail` 3997, `POST claim_add` 4007, `POST claim_drop` 4059, `POST premium_ask` 4069, `POST space_set` 4094, `POST edit_add` 4110 |
-| a profile | `GET profile` 4131 |
-| the passport | `GET passport` 4137, `POST passport_save` 4141, `POST passport_reset` 4168, `POST school_save` 4187, `POST grades_save` 4197, `POST ages_save` 4210, `POST kids_save` 4224, `POST week_save` 4251, `POST week_delete` 4270, `POST summer_save` 4285, `POST summer_delete` 4295, `POST daysoff_save` 4302, `POST daysoff_delete` 4312, `POST share_one` 4320 |
-| groups | `POST group_create` 4365, `POST group_peek` 4383, `POST group_join` 4396, `POST invite_add` 4442, `POST invite_remove` 4465, `POST kid_save` 4476, `POST sync` 4506, `POST kid_delete` 4534, `GET group` 4542, `POST member_decide` 4568, `POST group_leave` 4591, `POST group_code` 4602, `POST group_rename` 4611, `POST group_delete` 4621 |
+| one more for a listing | `POST hit` 3132 |
+| is everything working? | `GET health` 3149 |
+| signing in | `POST login_start` 3159, `POST login_finish` 3188, `POST login_google` 3212, `POST email_start` 3223, `POST email_finish` 3250, `GET me` 3285, `GET school_ask` 3293, `POST school_ask` 3299, `POST logout` 3307, `POST logout_all` 3314, `POST set_name` 3322, `POST basics` 3333, `POST phone_save` 3354, `POST hood_save` 3362 |
+| following and favorites | `GET marks` 3372, `POST follow` 3379 |
+| stopping from an email, with no sign-in | `GET stopped` 3393, `POST stop` 3405, `POST unmute` 3436, `POST follow_synced` 3445, `POST follow_clear` 3458, `POST fav` 3464, `POST listed` 3477 |
+| co-parents | `POST coparent_invite` 3486, `POST coparent_resend` 3500, `POST coparent_cancel` 3509, `POST coparent_accept` 3515, `POST coparent_end` 3561, `POST delete_account` 3574 |
+| directors | `GET claimed` 3587, `GET photo` 3604, `GET extras` 3628 |
+| notifications | `GET push_key` 3637, `POST push_on` 3644, `POST push_off` 3662, `POST push_mode` 3672, `POST push_test` 3681, `POST push_run` 3693 |
+| reviews (scaling plan, Phase 6) | `POST review_add` 3738, `GET review_check` 3784, `GET told_check` 3800, `GET photo_look` 3815 |
+| claims by code (Phase 6, call 2; off until "claimByCode" | `POST claim_code_start` 3836, `POST claim_code_finish` 3882 |
+| the mailbox script (scaling plan, Phase 5) | `POST mail_in` 3922, `POST mail_out` 3929, `POST mail_sent` 3949, `POST outreach_copy` 3966, `POST ask` 3973, `POST extra_save` 4010, `POST extra_drop` 4092, `POST photo_add` 4101, `POST photo_drop` 4148, `GET claims` 4162, `POST mgr_mail` 4168, `POST claim_add` 4178, `POST claim_drop` 4230, `POST premium_ask` 4240, `POST space_set` 4265, `POST edit_add` 4281 |
+| a manager sets its own days, hours, cost, grades and pickup schools (see "a… | `POST listing_fields` 4302 |
+| a profile | `GET profile` 4373 |
+| the passport | `GET passport` 4379, `POST passport_save` 4383, `POST passport_reset` 4410, `POST school_save` 4429, `POST grades_save` 4439, `POST ages_save` 4452, `POST kids_save` 4466, `POST week_save` 4493, `POST week_delete` 4512, `POST summer_save` 4527, `POST summer_delete` 4537, `POST daysoff_save` 4544, `POST daysoff_delete` 4554, `POST share_one` 4562 |
+| groups | `POST group_create` 4607, `POST group_peek` 4625, `POST group_join` 4638, `POST invite_add` 4684, `POST invite_remove` 4707, `POST kid_save` 4718, `POST sync` 4748, `POST kid_delete` 4776, `GET group` 4784, `POST member_decide` 4810, `POST group_leave` 4833, `POST group_code` 4844, `POST group_rename` 4853, `POST group_delete` 4863 |
