@@ -91,6 +91,8 @@
   <url><loc>https://phillyafterschool.org/bregy/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/peirce/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/welsh/</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://phillyafterschool.org/hartranft/</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://phillyafterschool.org/barry/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/types/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/types/aftercare/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/types/music/</loc><lastmod>2026-11-25</lastmod></url>
@@ -100,7 +102,7 @@
   <url><loc>https://phillyafterschool.org/types/stem/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/types/academics/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/types/games/</loc><lastmod>2026-11-25</lastmod></url>
-  <url><loc>https://phillyafterschool.org/types/nature/</loc><lastmod>2026-11-24</lastmod></url>
+  <url><loc>https://phillyafterschool.org/types/nature/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/types/daycamp/</loc><lastmod>2026-11-22</lastmod></url>
   <url><loc>https://phillyafterschool.org/types/rec-center/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/by-day/</loc><lastmod>2026-11-25</lastmod></url>
@@ -374,6 +376,10 @@
   <url><loc>https://phillyafterschool.org/programs/fell-partners/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/programs/pyb-mifflin/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/programs/bayard-taylor-partners/</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://phillyafterschool.org/programs/ymca-hartranft/</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://phillyafterschool.org/programs/hartranft-clubs/</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://phillyafterschool.org/programs/sunrise-barry/</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://phillyafterschool.org/programs/barry-clubs/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/neighborhoods/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/neighborhoods/west-philadelphia/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/neighborhoods/north-philadelphia/</loc><lastmod>2026-11-25</lastmod></url>
@@ -475,7 +481,7 @@
   <url><loc>https://phillyafterschool.org/schools/baldi-school/</loc><lastmod>2026-11-13</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/belmont-charter-school/</loc><lastmod>2026-11-22</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/boys-latin-of-philadelphia-charter-school/</loc><lastmod>2026-11-22</lastmod></url>
-  <url><loc>https://phillyafterschool.org/schools/carver-high-school-of-engineering-and-science/</loc><lastmod>2026-11-24</lastmod></url>
+  <url><loc>https://phillyafterschool.org/schools/carver-high-school-of-engineering-and-science/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/christopher-columbus-charter-school-south/</loc><lastmod>2026-11-24</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/clara-barton-school/</loc><lastmod>2026-11-21</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/crossroads-accelerated-academy/</loc><lastmod>2026-11-22</lastmod></url>
@@ -500,7 +506,7 @@
   <url><loc>https://phillyafterschool.org/schools/harambee-institute-of-science-and-technology-charter-school/</loc><lastmod>2026-11-22</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/henry-a-brown-school/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/hill-freedman-world-academy/</loc><lastmod>2026-11-12</lastmod></url>
-  <url><loc>https://phillyafterschool.org/schools/honorable-luis-munoz-marin-school/</loc><lastmod>2026-11-23</lastmod></url>
+  <url><loc>https://phillyafterschool.org/schools/honorable-luis-munoz-marin-school/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/impact-charter-school-west/</loc><lastmod>2026-11-23</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/inquiry-charter-school/</loc><lastmod>2026-11-22</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/isaac-a-sheppard-school/</loc><lastmod>2026-11-25</lastmod></url>
@@ -509,8 +515,6 @@
   <url><loc>https://phillyafterschool.org/schools/james-r-ludlow-school/</loc><lastmod>2026-11-19</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/jay-cooke-school/</loc><lastmod>2026-11-22</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/john-b-stetson-middle-school/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://phillyafterschool.org/schools/john-barry-school/</loc><lastmod>2026-11-22</lastmod></url>
-  <url><loc>https://phillyafterschool.org/schools/john-f-hartranft-school/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/john-f-mccloskey-school/</loc><lastmod>2026-11-12</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/john-h-taggart-school/</loc><lastmod>2026-11-24</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/john-h-webster-school/</loc><lastmod>2026-11-17</lastmod></url>
@@ -523,11 +527,11 @@
   <url><loc>https://phillyafterschool.org/schools/kipp-philadelphia-preparatory-academy/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/kipp-west-philadelphia-elementary-academy/</loc><lastmod>2026-11-23</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/kipp-west-philadelphia-preparatory-charter-school/</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://phillyafterschool.org/schools/laboratory-charter-school-of-communication-and-languages/</loc><lastmod>2026-11-23</lastmod></url>
+  <url><loc>https://phillyafterschool.org/schools/laboratory-charter-school-of-communication-and-languages/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/laura-w-waring-school/</loc><lastmod>2026-11-11</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/lewis-c-cassidy-academics-plus-school/</loc><lastmod>2026-11-22</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/lewis-elkin-school/</loc><lastmod>2026-11-17</lastmod></url>
-  <url><loc>https://phillyafterschool.org/schools/mary-m-bethune-school/</loc><lastmod>2026-11-23</lastmod></url>
+  <url><loc>https://phillyafterschool.org/schools/mary-m-bethune-school/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/mastery-charter-school-at-douglass/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/mastery-charter-school-at-gratz/</loc><lastmod>2026-11-22</lastmod></url>
   <url><loc>https://phillyafterschool.org/schools/mastery-charter-school-at-hardy-williams/</loc><lastmod>2026-11-23</lastmod></url>

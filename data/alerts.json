@@ -1,6 +1,6 @@
 {
   "about": "Dated reminders for Philly After School. Each one is emailed on its sendOn day to the people who follow that school, program or camp. Sign-up dates go the morning after they are posted, again the day before and on the morning itself; days off go in the weekly round-up.",
-  "generated": "2026-11-26",
+  "generated": "2026-11-27",
   "site": "https://phillyafterschool.org",
   "metric": "School dates",
   "sendDay": "Sunday",
@@ -360,6 +360,14 @@
     {
       "id": "welsh",
       "name": "Welsh"
+    },
+    {
+      "id": "hartranft",
+      "name": "Hartranft"
+    },
+    {
+      "id": "barry",
+      "name": "Barry"
     }
   ],
   "programs": [
@@ -2307,6 +2315,34 @@
       "parts": [
         "after"
       ]
+    },
+    {
+      "id": "ymca-hartranft",
+      "name": "YMCA Out of School Time at Hartranft",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "hartranft-clubs",
+      "name": "School clubs and teams at Hartranft",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "sunrise-barry",
+      "name": "Sunrise of Philadelphia at Barry",
+      "parts": [
+        "after"
+      ]
+    },
+    {
+      "id": "barry-clubs",
+      "name": "School clubs and partners at Barry",
+      "parts": [
+        "after"
+      ]
     }
   ],
   "camps": [
@@ -2530,88 +2566,20 @@
   },
   "alerts": [
     {
-      "id": "added-as-jenks",
+      "id": "added-barry",
       "kind": "added",
-      "date": "2026-11-24",
-      "sendOn": "2026-11-24",
-      "expires": "2026-11-26",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-25",
+      "expires": "2026-11-27",
       "schools": [],
       "programs": [],
       "waiting": [
-        "abram-s-jenks-school"
+        "john-barry-school"
       ],
       "when": "New",
-      "title": "A.S. Jenks now has a page",
-      "text": "You asked to be told. 2 programs are listed for A.S. Jenks so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/as-jenks/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the page"
-    },
-    {
-      "id": "added-dick",
-      "kind": "added",
-      "date": "2026-11-24",
-      "sendOn": "2026-11-24",
-      "expires": "2026-11-26",
-      "schools": [],
-      "programs": [],
-      "waiting": [
-        "william-dick-school"
-      ],
-      "when": "New",
-      "title": "William Dick now has a page",
-      "text": "You asked to be told. 3 programs are listed for William Dick so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/dick/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the page"
-    },
-    {
-      "id": "added-dobson",
-      "kind": "added",
-      "date": "2026-11-24",
-      "sendOn": "2026-11-24",
-      "expires": "2026-11-26",
-      "schools": [],
-      "programs": [],
-      "waiting": [
-        "james-dobson-school"
-      ],
-      "when": "New",
-      "title": "Dobson now has a page",
-      "text": "You asked to be told. 2 programs are listed for Dobson so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/dobson/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the page"
-    },
-    {
-      "id": "added-fitzpatrick",
-      "kind": "added",
-      "date": "2026-11-24",
-      "sendOn": "2026-11-24",
-      "expires": "2026-11-26",
-      "schools": [],
-      "programs": [],
-      "waiting": [
-        "a-l-fitzpatrick-school"
-      ],
-      "when": "New",
-      "title": "Fitzpatrick now has a page",
-      "text": "You asked to be told. 3 programs are listed for Fitzpatrick so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/fitzpatrick/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the page"
-    },
-    {
-      "id": "added-shawmont",
-      "kind": "added",
-      "date": "2026-11-24",
-      "sendOn": "2026-11-24",
-      "expires": "2026-11-26",
-      "schools": [],
-      "programs": [],
-      "waiting": [
-        "shawmont-school"
-      ],
-      "when": "New",
-      "title": "Shawmont now has a page",
-      "text": "You asked to be told. 2 programs are listed for Shawmont so far: the ones at the school, the ones that pick up from it and the ones close by.",
-      "url": "https://phillyafterschool.org/shawmont/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "title": "Barry now has a page",
+      "text": "You asked to be told. 2 programs are listed for Barry so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/barry/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },
     {
@@ -2629,6 +2597,23 @@
       "title": "Bregy now has a page",
       "text": "You asked to be told. 2 programs are listed for Bregy so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/bregy/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
+      "button": "See the page"
+    },
+    {
+      "id": "added-hartranft",
+      "kind": "added",
+      "date": "2026-11-25",
+      "sendOn": "2026-11-25",
+      "expires": "2026-11-27",
+      "schools": [],
+      "programs": [],
+      "waiting": [
+        "john-f-hartranft-school"
+      ],
+      "when": "New",
+      "title": "Hartranft now has a page",
+      "text": "You asked to be told. 2 programs are listed for Hartranft so far: the ones at the school, the ones that pick up from it and the ones close by.",
+      "url": "https://phillyafterschool.org/hartranft/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
     },
     {
@@ -2664,100 +2649,6 @@
       "text": "You asked to be told. 2 programs are listed for Welsh so far: the ones at the school, the ones that pick up from it and the ones close by.",
       "url": "https://phillyafterschool.org/welsh/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
       "button": "See the page"
-    },
-    {
-      "id": "camp-elite-sports-factory-2026-11-26",
-      "kind": "camp",
-      "part": "off",
-      "date": "2026-11-26",
-      "sendOn": "2026-11-15",
-      "schools": [],
-      "programs": [
-        "elite-sports-factory"
-      ],
-      "within": "off-2026-11-26",
-      "when": "Thursday, November 26 to Friday, November 27",
-      "title": "Elite Sports Factory: camp on a day off",
-      "text": "School is closed (Thanksgiving recess). Elite Sports Factory has posted a camp.",
-      "url": "https://phillyafterschool.org/programs/elite-sports-factory/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See the listing"
-    },
-    {
-      "id": "off-2026-11-26",
-      "kind": "dayoff",
-      "date": "2026-11-26",
-      "sendOn": "2026-11-15",
-      "schools": [
-        "*"
-      ],
-      "programs": [],
-      "notSchools": [
-        "independence-charter",
-        "byers",
-        "mastery-thomas",
-        "ad-prima",
-        "community-academy",
-        "mastery-prep",
-        "esperanza-elementary",
-        "mastery-cleveland",
-        "gla-southwest",
-        "mastery-harrity",
-        "mastery-wister",
-        "northwood",
-        "mastery-clymer",
-        "belmont-academy",
-        "mastery-mann"
-      ],
-      "when": "Thursday, November 26 to Friday, November 27",
-      "title": "No school: Thanksgiving recess",
-      "text": "One listed program has posted a camp: Elite Sports Factory.",
-      "url": "https://phillyafterschool.org/days-off/thanksgiving-break-2026-11-26/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates",
-      "button": "See who’s open"
-    },
-    {
-      "id": "off-esperanza-elementary-2026-11-26",
-      "kind": "dayoff",
-      "date": "2026-11-26",
-      "sendOn": "2026-11-15",
-      "schools": [
-        "esperanza-elementary"
-      ],
-      "programs": [],
-      "when": "Thursday, November 26 to Friday, November 27",
-      "title": "No school at Esperanza Elementary: Thanksgiving holiday",
-      "text": "From Esperanza Elementary’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
-      "url": "https://phillyafterschool.org/esperanza-elementary/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
-      "button": "See Esperanza Elementary’s week"
-    },
-    {
-      "id": "off-gla-southwest-2026-11-26",
-      "kind": "dayoff",
-      "date": "2026-11-26",
-      "sendOn": "2026-11-15",
-      "schools": [
-        "gla-southwest"
-      ],
-      "programs": [],
-      "when": "Thursday, November 26 to Friday, November 27",
-      "title": "No school at GLA Southwest: Thanksgiving break",
-      "text": "From GLA Southwest’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
-      "url": "https://phillyafterschool.org/gla-southwest/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
-      "button": "See GLA Southwest’s week"
-    },
-    {
-      "id": "off-northwood-2026-11-26",
-      "kind": "dayoff",
-      "date": "2026-11-26",
-      "sendOn": "2026-11-15",
-      "schools": [
-        "northwood"
-      ],
-      "programs": [],
-      "when": "Thursday, November 26 to Friday, November 27",
-      "title": "No school at Northwood: Thanksgiving break",
-      "text": "From Northwood’s own calendar. One listed program has posted a camp: Elite Sports Factory.",
-      "url": "https://phillyafterschool.org/northwood/?utm_source=klaviyo&utm_medium=email&utm_campaign=dates#this-week",
-      "button": "See Northwood’s week"
     },
     {
       "id": "reg-arden-drama-school-2026-11-27",

@@ -1,10 +1,10 @@
 {
   "about": "Made by build.mjs from data/programs.json, data/schools.json and data/reading.json. docs/listings.md, \"Keeping it current\", says how to use it.",
   "summary": {
-    "pages": 418,
-    "pagesNeedingABrowser": 76,
+    "pages": 421,
+    "pagesNeedingABrowser": 77,
     "pagesNeedingAPerson": 21,
-    "links": 402,
+    "links": 406,
     "pickupLinks": 135,
     "pickupOnAStoredList": 114,
     "pickupFromAThirdPartyList": 0,
@@ -3125,6 +3125,12 @@
       "checked": "2026-11-24"
     },
     {
+      "program": "barry-clubs",
+      "school": "barry",
+      "relation": "onsite",
+      "checked": "2026-11-25"
+    },
+    {
       "program": "bayard-taylor-partners",
       "school": "bayard-taylor",
       "relation": "onsite",
@@ -3139,6 +3145,12 @@
     {
       "program": "fell-partners",
       "school": "fell",
+      "relation": "onsite",
+      "checked": "2026-11-25"
+    },
+    {
+      "program": "hartranft-clubs",
+      "school": "hartranft",
       "relation": "onsite",
       "checked": "2026-11-25"
     },
@@ -3191,6 +3203,12 @@
       "checked": "2026-11-25"
     },
     {
+      "program": "sunrise-barry",
+      "school": "barry",
+      "relation": "onsite",
+      "checked": "2026-11-25"
+    },
+    {
       "program": "sunrise-bregy",
       "school": "bregy",
       "relation": "onsite",
@@ -3199,6 +3217,12 @@
     {
       "program": "welsh-partners",
       "school": "welsh",
+      "relation": "onsite",
+      "checked": "2026-11-25"
+    },
+    {
+      "program": "ymca-hartranft",
+      "school": "hartranft",
       "relation": "onsite",
       "checked": "2026-11-25"
     }
@@ -3297,7 +3321,25 @@
         "ymca-hopkinson",
         "ymca-rhodes",
         "ymca-duckrey",
-        "ymca-potter-thomas"
+        "ymca-potter-thomas",
+        "ymca-hartranft"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://www.sunriseofphila.org/school-year",
+      "how": "fetch",
+      "programs": [
+        "sunrise-mccall",
+        "sunrise-stanton",
+        "sunrise-kirkbride",
+        "sunrise-southwark",
+        "sunrise-blankenburg",
+        "sunrise-mcmichael",
+        "sunrise-bluford",
+        "sunrise-bryant",
+        "sunrise-bregy",
+        "sunrise-barry"
       ],
       "lists": []
     },
@@ -3318,18 +3360,19 @@
       "lists": []
     },
     {
-      "url": "https://www.sunriseofphila.org/school-year",
-      "how": "fetch",
+      "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
+      "how": "browser",
+      "why": "The page shows only six of its funded after-school schools until “Show all locations” is pressed, so read it in a browser and open the full list.",
       "programs": [
-        "sunrise-mccall",
-        "sunrise-stanton",
-        "sunrise-kirkbride",
-        "sunrise-southwark",
-        "sunrise-blankenburg",
-        "sunrise-mcmichael",
-        "sunrise-bluford",
-        "sunrise-bryant",
-        "sunrise-bregy"
+        "ymca-dunbar",
+        "ymca-kelley",
+        "ymca-gideon",
+        "ymca-blaine",
+        "ymca-hopkinson",
+        "ymca-rhodes",
+        "ymca-duckrey",
+        "ymca-potter-thomas",
+        "ymca-hartranft"
       ],
       "lists": []
     },
@@ -3349,22 +3392,6 @@
       "lists": []
     },
     {
-      "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
-      "how": "browser",
-      "why": "The page shows only six of its funded after-school schools until “Show all locations” is pressed, so read it in a browser and open the full list.",
-      "programs": [
-        "ymca-dunbar",
-        "ymca-kelley",
-        "ymca-gideon",
-        "ymca-blaine",
-        "ymca-hopkinson",
-        "ymca-rhodes",
-        "ymca-duckrey",
-        "ymca-potter-thomas"
-      ],
-      "lists": []
-    },
-    {
       "url": "https://www.sunriseofphila.org/services-8",
       "how": "fetch",
       "programs": [
@@ -3373,7 +3400,8 @@
         "sunrise-kirkbride",
         "sunrise-southwark",
         "sunrise-bluford",
-        "sunrise-bryant"
+        "sunrise-bryant",
+        "sunrise-barry"
       ],
       "lists": []
     },
@@ -4147,6 +4175,14 @@
       "lists": []
     },
     {
+      "url": "https://barry.philasd.org/",
+      "how": "fetch",
+      "programs": [
+        "barry-clubs"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://beaconcenterforchildren.com/after-school-program-tuition/",
       "how": "fetch",
       "programs": [
@@ -4678,6 +4714,14 @@
       "how": "fetch",
       "programs": [
         "greener-partners-belmont-academy"
+      ],
+      "lists": []
+    },
+    {
+      "url": "https://hartranft.philasd.org/about-us/",
+      "how": "fetch",
+      "programs": [
+        "hartranft-clubs"
       ],
       "lists": []
     },
@@ -6549,6 +6593,15 @@
       "lists": []
     },
     {
+      "url": "https://www.phila.gov/ost/program-locator/?address=5900+Race+St&resource=ost_244",
+      "how": "browser",
+      "why": "A JavaScript app: a plain fetch returns no listings.",
+      "programs": [
+        "sunrise-barry"
+      ],
+      "lists": []
+    },
+    {
       "url": "https://www.phila.gov/ost/program-locator/?address=600+Sharon+Ln&resource=ost_13",
       "how": "browser",
       "why": "A JavaScript app: a plain fetch returns no listings.",
@@ -7446,7 +7499,7 @@
         "schools.*.address"
       ],
       "says": "Old Pine Community Center and The Neighborhub are the same building after a rebrand, at 401 Lombard St; Fall II starts November 2, 2026, registration is open, and families can join whenever there is space, with the fee pro-rated.",
-      "daysAgo": 38,
+      "daysAgo": 39,
       "stale": false
     },
     {
@@ -7461,7 +7514,7 @@
         "daysNote"
       ],
       "says": "After-school care is $250 a month for full time, 4 or more days a week, or $175 a month for part time, 3 days a week, with a snack included.",
-      "daysAgo": 22,
+      "daysAgo": 23,
       "stale": false
     },
     {
@@ -7482,7 +7535,7 @@
         "schools.meredith"
       ],
       "says": "Homework Club is Everland’s Monday aftercare, run with Prep Academy Tutors, for 2nd to 4th graders at Meredith only: staff pick up from Meredith and walk the group to Everland, children do homework in small groups with certified teachers and then have organized downtime, parents pick up from Everland between 5:45 and 6:00 pm, 1:1 tutoring during the club is $65 per 40-minute session, and the 2027 semester is 17 Mondays from January 4 to June 7, ending with a showcase.",
-      "daysAgo": 17,
+      "daysAgo": 18,
       "stale": false
     },
     {
@@ -7497,7 +7550,7 @@
         "rate"
       ],
       "says": "The base cost of Homework Club for the 2027 semester is $1,190, which works out to $70 per 3-hour session over its 17 Mondays.",
-      "daysAgo": 17,
+      "daysAgo": 18,
       "stale": false
     },
     {
@@ -7519,7 +7572,7 @@
         "schools.childs"
       ],
       "says": "Makom is aftercare and a day camp, at 2401 Washington Ave, Unit C1. Aftercare runs 4 to 6 pm, five days a week, with days that differ by age group; K–5 starts at $280 a month for Fridays only and grades 6 and 7 at $746 a month for 3 days, with tuition assistance. Day camps are for ages 4 and up. It does not pick up at Nebinger or Coppin (it needs at least four children from a school to pick up there); at Independence Charter it picks up for early dismissal on Wednesdays, and at Childs it has a special early Friday pickup for pre-K children. It also picks up at The Philadelphia School, and runs summer camp.",
-      "daysAgo": 15,
+      "daysAgo": 16,
       "stale": false
     },
     {
@@ -7536,7 +7589,7 @@
         "note"
       ],
       "says": "Enrollment is open. Dandelion After School runs 3 to 6 pm and costs $165 a month for each weekday enrolled, and tuition includes certain day-off camps. It is a self-directed space with cooking, group games, park trips, arts and crafts, messy science and building projects, and each child decides how to spend their afternoon.",
-      "daysAgo": 14,
+      "daysAgo": 15,
       "stale": false
     },
     {
@@ -7555,7 +7608,7 @@
         "schools"
       ],
       "says": "Dates: After school enrollment for K-5 students at Coppin and K-2 students at Nebinger open in March for the upcoming school year.  There is a non-refundable deposit due by June 1 for newly enrolled students or July 1 for return students.  The deposit is applied to September's tuition and then renewal is on the 1st of each month after that. Cost: PT at $175/mo for 3 set days or FT at $250/mo for 4+ days Days and hours: Monday to Friday, dismissal to 5:45pm.  We operate on the SDP closure schedule. Other: We operate on-site for students who attend Fanny Jackson Coppin or George W Nebinger. In addition, we offer a 6 week summer camp at either SDP school location.",
-      "daysAgo": 1,
+      "daysAgo": 2,
       "stale": false
     }
   ],
