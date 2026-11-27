@@ -530,6 +530,28 @@
           }
         ],
         "checked": "2026-11-19"
+      },
+      "ben-franklin": {
+        "relation": "onsite",
+        "note": "Ben Franklin’s own site lists Girls on the Run among its sports for grades 6–8. Ask the school which season it runs.",
+        "sources": [
+          {
+            "label": "Ben Franklin School: sports",
+            "url": "https://franklin.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-27"
+      },
+      "forrest": {
+        "relation": "onsite",
+        "note": "Forrest’s own site names Girls on the Run among its community partners. Ask the school which season it runs.",
+        "sources": [
+          {
+            "label": "Forrest School: community partnerships",
+            "url": "https://forrest.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-27"
       }
     },
     "price": "paid",
@@ -24945,6 +24967,1326 @@
         "tags": [
           "movement"
         ],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "bgc-ben-franklin",
+    "name": "Boys & Girls Club at Ben Franklin",
+    "what": "A Boys & Girls Clubs of Philadelphia school extension site inside Ben Franklin, for students enrolled at the school",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "Boys & Girls Club",
+      "Boys and Girls Club",
+      "BGC",
+      "Ben Franklin",
+      "Crescentville"
+    ],
+    "address": "5737 Rising Sun Ave",
+    "grades": null,
+    "gradeNote": "For students enrolled at Ben Franklin",
+    "hours": "Not posted yet; ask the program",
+    "cost": "Not posted yet",
+    "notPosted": [
+      "days",
+      "hours",
+      "cost",
+      "grades"
+    ],
+    "phone": "215-986-7268",
+    "email": "",
+    "website": "https://bgcphila.org/club-locations/",
+    "register": {
+      "how": "phone",
+      "note": "The Boys & Girls Clubs give 215-986-7268 for the Ben Franklin site, and say students must be enrolled at the school."
+    },
+    "note": "The Boys & Girls Clubs of Philadelphia list Ben Franklin Elementary School among their school extension sites, which are for students enrolled at the school. Their list doesn’t give days, hours, grades or cost, and the City’s program locator lists nothing at the school this year, so call the site. Ben Franklin’s own site names the Boys and Girls Clubs of Philadelphia among its community partners.",
+    "sources": [
+      {
+        "label": "Boys & Girls Clubs of Philadelphia: club locations",
+        "url": "https://bgcphila.org/club-locations/"
+      }
+    ],
+    "lastVerified": "2026-11-27",
+    "schools": {
+      "ben-franklin": {
+        "relation": "onsite",
+        "note": "The Boys & Girls Clubs’ own list of locations names Ben Franklin Elementary School as a school extension site. Ben Franklin’s own site names the Boys and Girls Clubs of Philadelphia among its community partners.",
+        "checked": "2026-11-27"
+      }
+    }
+  },
+  {
+    "id": "bgc-sullivan",
+    "name": "Boys & Girls Club at Sullivan",
+    "what": "A Boys & Girls Clubs of Philadelphia school extension site inside Sullivan, for students enrolled at the school",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "Boys & Girls Club",
+      "Boys and Girls Club",
+      "BGC",
+      "Sullivan",
+      "Frankford"
+    ],
+    "address": "5300 Ditman St",
+    "grades": null,
+    "gradeNote": "For students enrolled at Sullivan",
+    "hours": "Not posted yet; ask the program",
+    "cost": "Not posted yet",
+    "notPosted": [
+      "days",
+      "hours",
+      "cost",
+      "grades"
+    ],
+    "phone": "215-986-7254",
+    "email": "",
+    "website": "https://bgcphila.org/club-locations/",
+    "register": {
+      "how": "phone",
+      "note": "The Boys & Girls Clubs give 215-986-7254 for the Sullivan site, and say students must be enrolled at the school."
+    },
+    "note": "The Boys & Girls Clubs of Philadelphia list Sullivan Elementary School among their school extension sites, which are for students enrolled at the school. Their list doesn’t give days, hours, grades or cost, and the City’s program locator lists nothing at the school this year, so call the site. Sullivan’s own site names the Boys and Girls Club as its community partner.",
+    "sources": [
+      {
+        "label": "Boys & Girls Clubs of Philadelphia: club locations",
+        "url": "https://bgcphila.org/club-locations/"
+      }
+    ],
+    "lastVerified": "2026-11-27",
+    "schools": {
+      "sullivan": {
+        "relation": "onsite",
+        "note": "The Boys & Girls Clubs’ own list of locations names Sullivan Elementary School as a school extension site. Sullivan’s own site names the Boys and Girls Club as its community partner.",
+        "checked": "2026-11-27"
+      }
+    }
+  },
+  {
+    "id": "bgc-forrest",
+    "name": "Boys & Girls Club at Forrest",
+    "what": "A Boys & Girls Clubs of Philadelphia school site inside Forrest, with free after-school programming for Forrest students as part of the City’s Extended Day, Extended Year program",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "Boys & Girls Club",
+      "Boys and Girls Club",
+      "BGC",
+      "EDEY",
+      "Extended Day",
+      "Forrest",
+      "Mayfair"
+    ],
+    "address": "7300 Cottage St",
+    "grades": "K-5",
+    "gradeNote": "For enrolled Forrest students; the City’s listing gives kindergarten to 5th grade",
+    "hours": "2:15–6:00 pm, Monday to Friday, September 1, 2026 to June 11, 2027, according to the City’s listing.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "445-210-7315",
+    "email": "",
+    "website": "https://bgcphila.org/club-locations/",
+    "register": {
+      "how": "phone",
+      "note": "The City’s listing says registration is required. The phone number is the one the Boys & Girls Clubs give for the Forrest site."
+    },
+    "note": "The Boys & Girls Clubs of Philadelphia list Edwin Forrest Elementary School as a school extension site for enrolled students, and Forrest’s own site names the Boys and Girls Club among its partners. The hours come from the City’s program locator, which lists it as a free Extended Day program with healthy snacks and no transportation.",
+    "sources": [
+      {
+        "label": "Boys & Girls Clubs of Philadelphia: club locations",
+        "url": "https://bgcphila.org/club-locations/"
+      },
+      {
+        "label": "City program locator: Boys & Girls Club at Forrest EDEY Program",
+        "url": "https://www.phila.gov/ost/program-locator/?address=7300+Cottage+St&resource=ost_13"
+      }
+    ],
+    "lastVerified": "2026-11-27",
+    "schools": {
+      "forrest": {
+        "relation": "onsite",
+        "note": "The Boys & Girls Clubs’ own list of locations names Edwin Forrest Elementary School as a school extension site, and the City’s program locator lists the club’s program at the school.",
+        "sources": [
+          {
+            "label": "Boys & Girls Clubs of Philadelphia: club locations",
+            "url": "https://bgcphila.org/club-locations/"
+          },
+          {
+            "label": "City program locator: Boys & Girls Club at Forrest EDEY Program",
+            "url": "https://www.phila.gov/ost/program-locator/?address=7300+Cottage+St&resource=ost_13"
+          }
+        ],
+        "checked": "2026-11-27"
+      }
+    }
+  },
+  {
+    "id": "methodist-services-farrell",
+    "name": "Methodist Services after school at Farrell",
+    "what": "Free after-school program inside Farrell from Methodist Services: homework help, enrichment and social-emotional development",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework help",
+      "Methodist Services",
+      "MSHN",
+      "OST",
+      "Farrell",
+      "Rhawnhurst"
+    ],
+    "address": "8300 Castor Ave",
+    "grades": "K-8",
+    "gradeNote": "The City’s locator lists kindergarten to 8th grade",
+    "hours": "Farrell’s own site gives 3:00–6:00 pm, Monday to Friday. The City’s locator lists 2:00–6:00 pm, September 1, 2026 to June 9, 2027.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free, according to the City’s program locator.",
+    "price": "free",
+    "phone": "215-960-4496",
+    "email": "",
+    "website": "https://mshn.org/service/education/",
+    "register": {
+      "how": "contact",
+      "note": "Farrell’s own site says to email the program for registration information. The City’s locator says registration is required, from August 10, 2026 to June 9, 2027, and gives 215-960-4496 for the program."
+    },
+    "note": "Farrell’s own site says its out-of-school-time programming is provided by Methodist Services: in person, Monday to Friday, 3:00 to 6:00 pm, with academic support, enrichment and year-round support including summer. The City’s program locator lists it free, with healthy snacks and no transportation, from 2:00 pm, so ask which start time is right. Methodist Services’ own site doesn’t list its school sites.",
+    "sources": [
+      {
+        "label": "Farrell School: after-school and summer programming",
+        "url": "https://farrell.philasd.org/"
+      },
+      {
+        "label": "City program locator: Methodist Services at Farrell",
+        "url": "https://www.phila.gov/ost/program-locator/?address=8300+Castor+Ave&resource=ost_162"
+      },
+      {
+        "label": "Methodist Services: Out of School Time",
+        "url": "https://mshn.org/service/education/"
+      }
+    ],
+    "lastVerified": "2026-11-27",
+    "schools": {
+      "farrell": {
+        "relation": "onsite",
+        "note": "Farrell’s own site says its after-school programming is provided by Methodist Services, and the City’s program locator lists the program at the school.",
+        "sources": [
+          {
+            "label": "Farrell School: after-school and summer programming",
+            "url": "https://farrell.philasd.org/"
+          },
+          {
+            "label": "City program locator: Methodist Services at Farrell",
+            "url": "https://www.phila.gov/ost/program-locator/?address=8300+Castor+Ave&resource=ost_162"
+          }
+        ],
+        "checked": "2026-11-27"
+      }
+    }
+  },
+  {
+    "id": "al-bustan-farrell",
+    "name": "Al-Bustan Arab Arts at Farrell",
+    "what": "Free after-school Arab percussion and visual art classes at Farrell for 5th to 8th graders, from Al-Bustan Seeds of Culture",
+    "types": [
+      "music",
+      "art"
+    ],
+    "keywords": [
+      "drumming",
+      "drums",
+      "percussion",
+      "music",
+      "visual art",
+      "art",
+      "Arab",
+      "Arabic",
+      "Al-Bustan",
+      "Al Bustan Seeds of Culture",
+      "Farrell"
+    ],
+    "offers": [
+      "Percussion",
+      "Visual art"
+    ],
+    "address": "8300 Castor Ave",
+    "grades": "5-8",
+    "gradeNote": "Farrell students in grades 5–8, according to the City’s listing",
+    "hours": "2:00–5:15 pm, Tuesdays and Thursdays, October 6, 2026 to June 8, 2027, according to the City’s listing.",
+    "days": [
+      "tue",
+      "thu"
+    ],
+    "pickupBy": "5:15 pm",
+    "cost": "Free, according to the City’s program locator.",
+    "price": "free",
+    "phone": "267-809-3668",
+    "email": "info@albustanseeds.org",
+    "website": "https://www.albustanseeds.org/",
+    "register": {
+      "how": "school",
+      "note": "The City’s listing says registration is required and the program is only open to Farrell students. Ask the Farrell office (215-400-3230) how to join."
+    },
+    "note": "The City’s program locator lists Al-Bustan’s School Arab Arts program at Farrell, open to Farrell students in grades 5 to 8, and Farrell’s own site names Al-Bustan among its programs. Al-Bustan’s own site describes its after-school Arab arts classes in Philadelphia schools without naming the schools.",
+    "sources": [
+      {
+        "label": "City program locator: School Arab Arts Program at Farrell",
+        "url": "https://www.phila.gov/ost/program-locator/?address=8300+Castor+Ave&resource=ost_4"
+      },
+      {
+        "label": "Farrell School: extracurricular programs",
+        "url": "https://farrell.philasd.org/"
+      },
+      {
+        "label": "Al-Bustan Seeds of Culture",
+        "url": "https://www.albustanseeds.org/"
+      }
+    ],
+    "lastVerified": "2026-11-27",
+    "schools": {
+      "farrell": {
+        "relation": "onsite",
+        "note": "The City’s program locator lists Al-Bustan’s program at Farrell for Farrell students in grades 5 to 8, Tuesdays and Thursdays, 2:00–5:15 pm.",
+        "sources": [
+          {
+            "label": "City program locator: School Arab Arts Program at Farrell",
+            "url": "https://www.phila.gov/ost/program-locator/?address=8300+Castor+Ave&resource=ost_4"
+          }
+        ],
+        "checked": "2026-11-27"
+      }
+    }
+  },
+  {
+    "id": "occcda-carnell",
+    "name": "OCCCDA After School at Carnell",
+    "what": "After-school program inside Carnell from Oxford Circle Christian Community Development Association: homework help, tutoring, STEAM and social-emotional learning",
+    "types": [
+      "aftercare",
+      "academics"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "homework help",
+      "tutoring",
+      "STEAM",
+      "summer camp",
+      "OCCCDA",
+      "Oxford Circle Christian Community Development Association",
+      "Carnell",
+      "Oxford Circle"
+    ],
+    "address": "1100 Devereaux Ave",
+    "grades": "K-5",
+    "gradeNote": "Open to all Carnell students, kindergarten to 5th grade",
+    "hours": "3:30–5:45 pm, Monday to Friday, September 8, 2026 to June 2, 2027.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:45 pm",
+    "cost": "Not published",
+    "phone": "215-288-8504",
+    "email": "infoAfterSchool@occcda.org",
+    "website": "https://occcda.org/programs/afterschool/",
+    "register": {
+      "how": "online",
+      "url": "https://occcda.org/programs/afterschool/",
+      "label": "Registration form",
+      "note": "OCCCDA’s page links its registration form, in English, Spanish, Haitian Creole and Russian. Students must register. Summer camp registration opens toward the end of spring."
+    },
+    "note": "OCCCDA’s own page says its after-school and summer camp programs are at Laura H. Carnell Elementary School and are open to all Carnell students from kindergarten to 5th grade. It doesn’t give a price, so ask.",
+    "sources": [
+      {
+        "label": "OCCCDA: After School & Summer Camp",
+        "url": "https://occcda.org/programs/afterschool/"
+      }
+    ],
+    "lastVerified": "2026-11-27",
+    "schools": {
+      "carnell": {
+        "relation": "onsite",
+        "note": "OCCCDA’s own page says its after-school program is at Carnell, for Carnell students in kindergarten to 5th grade. Carnell’s own site names OCCCDA among its partners.",
+        "sources": [
+          {
+            "label": "Carnell School: key partnerships",
+            "url": "https://carnell.philasd.org/about-us/"
+          }
+        ],
+        "checked": "2026-11-27"
+      }
+    }
+  },
+  {
+    "id": "yalc-carnell",
+    "name": "Young Achievers Learning Center at Carnell",
+    "what": "Free before and after care inside Carnell from Young Achievers Learning Center: a snack, homework help and project-based activities",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "before care",
+      "free",
+      "homework help",
+      "YALC",
+      "Young Achievers",
+      "Carnell",
+      "Oxford Circle"
+    ],
+    "address": "1100 Devereaux Ave",
+    "grades": "K-5",
+    "gradeNote": "Carnell students; the City’s listing gives kindergarten to 6th grade, and Carnell goes to 5th",
+    "hours": "Monday to Friday, September 1, 2026 to June 10, 2027, according to the City’s listing. Young Achievers’ own site says it takes children from dismissal until about 5:45 pm, including early dismissals, and runs a before-school program from 7:15 am.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:45 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-698-2347",
+    "email": "",
+    "website": "https://yalcpa.org/",
+    "register": {
+      "how": "online",
+      "url": "https://yalcpa.org/enroll-form/",
+      "label": "Enroll",
+      "note": "Young Achievers’ own site links this enrollment form. The City’s listing says registration is required."
+    },
+    "note": "Young Achievers’ own site lists Carnell Elementary School among its locations. The City’s program locator lists the after-school program free, Monday to Friday, with meals and no transportation; its end time reads “6:00 AM”, a slip, so go by Young Achievers’ own “about 5:45 pm” and ask.",
+    "sources": [
+      {
+        "label": "Young Achievers Learning Center",
+        "url": "https://yalcpa.org/"
+      },
+      {
+        "label": "City program locator: YALC After School at Carnell",
+        "url": "https://www.phila.gov/ost/program-locator/?address=1100+Devereaux+Ave&resource=ost_282"
+      }
+    ],
+    "lastVerified": "2026-11-27",
+    "schools": {
+      "carnell": {
+        "relation": "onsite",
+        "note": "Young Achievers’ own site lists Carnell Elementary School among its locations, and the City’s program locator lists the program for Carnell.",
+        "sources": [
+          {
+            "label": "Young Achievers Learning Center",
+            "url": "https://yalcpa.org/"
+          },
+          {
+            "label": "City program locator: YALC After School at Carnell",
+            "url": "https://www.phila.gov/ost/program-locator/?address=1100+Devereaux+Ave&resource=ost_282"
+          }
+        ],
+        "checked": "2026-11-27"
+      }
+    }
+  },
+  {
+    "id": "tarken-rec",
+    "name": "Tarken Recreation Center",
+    "what": "City rec center after-school program, with pickup from Carnell",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "after school",
+      "aftercare",
+      "Tarken",
+      "Oxford Circle",
+      "Carnell"
+    ],
+    "address": "6250 Frontenac St",
+    "neighborhoods": [
+      "Oxford Circle"
+    ],
+    "grades": null,
+    "gradeNote": "Ages 6–12",
+    "hours": "Not posted yet; ask the program",
+    "notPosted": [
+      "days",
+      "hours"
+    ],
+    "cost": "$60 a month in the City’s listing, which dates from September 2016; registration there shows open.",
+    "price": "paid",
+    "phone": "",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "contact",
+      "note": "Stop by the rec center, or find its phone number on the City’s Parks & Rec finder. There is no online sign-up."
+    },
+    "note": "The City’s Parks & Rec data lists Tarken’s After School Program for ages 6 to 12, $60 a month, open for registration, and says pickup from Carnell Elementary School is available. The entry was made in September 2016, so call to confirm the pickup, days and price this year.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City Parks & Rec program data",
+        "url": "https://phl.carto.com/api/v2/sql?format=json&q=select%20program_name%2C%20program_description%2C%20facility%2C%20age_low%2C%20age_high%2C%20fee%2C%20fee_frequency%2C%20registration_status%2C%20date_time_entered%20from%20ppr_programs%20where%20program_is_active%20and%20program_is_public%20and%20(program_name%20ilike%20'%25after%25school%25'%20or%20program_name%20ilike%20'%25afterschool%25')%20and%20(facility%20like%20'%2556a8f8607a8cee5e3a25b06b%25'%20or%20facility%20like%20'%2556a8f81f7a8cee5e3a25ae1d%25'%20or%20facility%20like%20'%2556a8f8187a8cee5e3a25ade1%25'%20or%20facility%20like%20'%2556a8f8177a8cee5e3a25add1%25')"
+      }
+    ],
+    "lastVerified": "2026-11-27",
+    "schools": {
+      "carnell": {
+        "relation": "pickup",
+        "distance": "a couple of blocks northeast, on Frontenac St",
+        "note": "The City’s Parks & Rec listing says pickup from Carnell Elementary School is available. The entry dates from 2016, so confirm with the center.",
+        "sources": [
+          {
+            "label": "City Parks & Rec program data",
+            "url": "https://phl.carto.com/api/v2/sql?format=json&q=select%20program_name%2C%20program_description%2C%20facility%2C%20age_low%2C%20age_high%2C%20fee%2C%20fee_frequency%2C%20registration_status%2C%20date_time_entered%20from%20ppr_programs%20where%20program_is_active%20and%20program_is_public%20and%20(program_name%20ilike%20'%25after%25school%25'%20or%20program_name%20ilike%20'%25afterschool%25')%20and%20(facility%20like%20'%2556a8f8607a8cee5e3a25b06b%25'%20or%20facility%20like%20'%2556a8f81f7a8cee5e3a25ae1d%25'%20or%20facility%20like%20'%2556a8f8187a8cee5e3a25ade1%25'%20or%20facility%20like%20'%2556a8f8177a8cee5e3a25add1%25')"
+          }
+        ],
+        "checked": "2026-11-27"
+      }
+    }
+  },
+  {
+    "id": "carmella-playground",
+    "name": "Carmella Playground",
+    "what": "City rec center after-school program: homework, activities, art projects and a snack",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "after school",
+      "aftercare",
+      "homework",
+      "art",
+      "Carmella",
+      "Frankford"
+    ],
+    "address": "2100 Wakeling St",
+    "neighborhoods": [
+      "Frankford"
+    ],
+    "grades": null,
+    "gradeNote": "Ages 5–12",
+    "hours": "Not posted yet; ask the program",
+    "notPosted": [
+      "days",
+      "hours"
+    ],
+    "cost": "$20 a month in the City’s listing, which dates from September 2017; registration there shows open.",
+    "price": "paid",
+    "phone": "",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "contact",
+      "note": "Stop by the rec center, or find its phone number on the City’s Parks & Rec finder. There is no online sign-up."
+    },
+    "note": "The City’s Parks & Rec data lists an after-school program at Carmella for ages 5 to 12, with homework, activities, art projects and snacks, $20 a month, open for registration. The entry was made in September 2017, so call to confirm this year’s days and price.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City Parks & Rec program data",
+        "url": "https://phl.carto.com/api/v2/sql?format=json&q=select%20program_name%2C%20program_description%2C%20facility%2C%20age_low%2C%20age_high%2C%20fee%2C%20fee_frequency%2C%20registration_status%2C%20date_time_entered%20from%20ppr_programs%20where%20program_is_active%20and%20program_is_public%20and%20(program_name%20ilike%20'%25after%25school%25'%20or%20program_name%20ilike%20'%25afterschool%25')%20and%20(facility%20like%20'%2556a8f8607a8cee5e3a25b06b%25'%20or%20facility%20like%20'%2556a8f81f7a8cee5e3a25ae1d%25'%20or%20facility%20like%20'%2556a8f8187a8cee5e3a25ade1%25'%20or%20facility%20like%20'%2556a8f8177a8cee5e3a25add1%25')"
+      }
+    ],
+    "lastVerified": "2026-11-27",
+    "schools": {
+      "sullivan": {
+        "relation": "nearby",
+        "distance": "about a third of a mile southwest, on Wakeling St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-27"
+      }
+    }
+  },
+  {
+    "id": "gambrel-playground",
+    "name": "Gambrel Playground",
+    "what": "City rec center after-school program: sports, games, arts, reading and STEM",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "after school",
+      "aftercare",
+      "sports",
+      "Gambrel",
+      "Frankford"
+    ],
+    "address": "1900 Wakeling St",
+    "neighborhoods": [
+      "Frankford"
+    ],
+    "grades": null,
+    "gradeNote": "Ages 6–12",
+    "hours": "Not posted yet; ask the program",
+    "notPosted": [
+      "days",
+      "hours"
+    ],
+    "cost": "$15 a week in the City’s listing, which dates from November 2016; registration there shows open.",
+    "price": "paid",
+    "phone": "",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "contact",
+      "note": "Stop by the rec center, or find its phone number on the City’s Parks & Rec finder. There is no online sign-up."
+    },
+    "note": "The City’s Parks & Rec data lists an after-school program at Gambrel for ages 6 to 12, $15 a week, open for registration. The entry was made in November 2016, so call to confirm this year’s days and price.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City Parks & Rec program data",
+        "url": "https://phl.carto.com/api/v2/sql?format=json&q=select%20program_name%2C%20program_description%2C%20facility%2C%20age_low%2C%20age_high%2C%20fee%2C%20fee_frequency%2C%20registration_status%2C%20date_time_entered%20from%20ppr_programs%20where%20program_is_active%20and%20program_is_public%20and%20(program_name%20ilike%20'%25after%25school%25'%20or%20program_name%20ilike%20'%25afterschool%25')%20and%20(facility%20like%20'%2556a8f8607a8cee5e3a25b06b%25'%20or%20facility%20like%20'%2556a8f81f7a8cee5e3a25ae1d%25'%20or%20facility%20like%20'%2556a8f8187a8cee5e3a25ade1%25'%20or%20facility%20like%20'%2556a8f8177a8cee5e3a25add1%25')"
+      }
+    ],
+    "lastVerified": "2026-11-27",
+    "schools": {
+      "sullivan": {
+        "relation": "nearby",
+        "distance": "about half a mile west, on Wakeling St",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-27"
+      }
+    }
+  },
+  {
+    "id": "russo-park",
+    "name": "Russo Park",
+    "what": "City rec center after-school program: homework, games, sports and trips",
+    "types": [
+      "rec-center",
+      "aftercare"
+    ],
+    "keywords": [
+      "rec center",
+      "recreation",
+      "parks and rec",
+      "city",
+      "after school",
+      "aftercare",
+      "homework",
+      "sports",
+      "Russo",
+      "Holmesburg",
+      "Mayfair"
+    ],
+    "address": "7321 Torresdale Ave",
+    "neighborhoods": [
+      "Holmesburg"
+    ],
+    "grades": null,
+    "gradeNote": "Ages 5–12",
+    "hours": "Not posted yet; ask the program",
+    "notPosted": [
+      "days",
+      "hours"
+    ],
+    "cost": "$100 a month in the City’s listing, which dates from September 2016; registration there shows open.",
+    "price": "paid",
+    "phone": "",
+    "email": "",
+    "website": "https://www.phila.gov/parks-rec-finder/#/locations",
+    "register": {
+      "how": "contact",
+      "note": "Stop by the rec center, or find its phone number on the City’s Parks & Rec finder. There is no online sign-up."
+    },
+    "note": "The City’s Parks & Rec data lists an after-school program at Russo Park for ages 5 to 12, with homework, games, sports and educational trips, $100 a month, open for registration. The entry was made in September 2016, so call to confirm this year’s days and price.",
+    "sources": [
+      {
+        "label": "City Parks & Rec finder",
+        "url": "https://www.phila.gov/parks-rec-finder/#/locations"
+      },
+      {
+        "label": "City Parks & Rec program data",
+        "url": "https://phl.carto.com/api/v2/sql?format=json&q=select%20program_name%2C%20program_description%2C%20facility%2C%20age_low%2C%20age_high%2C%20fee%2C%20fee_frequency%2C%20registration_status%2C%20date_time_entered%20from%20ppr_programs%20where%20program_is_active%20and%20program_is_public%20and%20(program_name%20ilike%20'%25after%25school%25'%20or%20program_name%20ilike%20'%25afterschool%25')%20and%20(facility%20like%20'%2556a8f8607a8cee5e3a25b06b%25'%20or%20facility%20like%20'%2556a8f81f7a8cee5e3a25ae1d%25'%20or%20facility%20like%20'%2556a8f8187a8cee5e3a25ade1%25'%20or%20facility%20like%20'%2556a8f8177a8cee5e3a25add1%25')"
+      }
+    ],
+    "lastVerified": "2026-11-27",
+    "schools": {
+      "forrest": {
+        "relation": "nearby",
+        "distance": "about a third of a mile southeast, on Torresdale Ave",
+        "note": "The City’s listing doesn’t mention pickup from any school, so plan on walking over or ask the center.",
+        "checked": "2026-11-27"
+      }
+    }
+  },
+  {
+    "id": "ben-franklin-clubs",
+    "name": "School clubs and partners",
+    "what": "Clubs, sports, arts and partners Benjamin Franklin School names on its own site: strings, cheerleading, art club, step team, middle-grades sports, History Hunters, Project Thrive and The Barnes Foundation",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "strings",
+      "music",
+      "cheerleading",
+      "art",
+      "step team",
+      "yearbook",
+      "baseball",
+      "basketball",
+      "soccer",
+      "track",
+      "volleyball",
+      "History Hunters",
+      "Project Thrive",
+      "Barnes Foundation",
+      "Lawncrest",
+      "Ben Franklin"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "notPosted": [
+      "days",
+      "hours",
+      "cost",
+      "grades"
+    ],
+    "phone": "215-400-3760",
+    "email": "",
+    "website": "https://franklin.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-3760)."
+    },
+    "note": "Ben Franklin’s own site lists these clubs, sports, arts and community partners without days or times. It gives grades for some: cheerleading for grades 3–5, art club and step team for grades 3–8, yearbook for 8th grade, and sports for grades 6–8. Ask the office what meets after school.",
+    "sources": [
+      {
+        "label": "Benjamin Franklin School: clubs and community partners",
+        "url": "https://franklin.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-27",
+    "schools": {
+      "ben-franklin": {
+        "relation": "onsite",
+        "checked": "2026-11-27"
+      }
+    },
+    "clubs": [
+      {
+        "name": "String Instrument",
+        "what": "String instruments",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Wind Instruments",
+        "what": "Wind instruments",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Seasonal School Shows",
+        "what": "School shows",
+        "tags": [
+          "theater"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Studio Visual Arts",
+        "what": "Visual arts",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Cheerleading",
+        "what": "Cheerleading",
+        "tags": [
+          "movement"
+        ],
+        "grades": "3-5"
+      },
+      {
+        "name": "Art Club",
+        "what": "Art",
+        "tags": [
+          "art"
+        ],
+        "grades": "3-8"
+      },
+      {
+        "name": "Step Team",
+        "what": "Step",
+        "tags": [
+          "movement"
+        ],
+        "grades": "3-8"
+      },
+      {
+        "name": "Yearbook Committee",
+        "what": "Yearbook",
+        "tags": [
+          "art"
+        ],
+        "grades": "8",
+        "roster": false
+      },
+      {
+        "name": "Baseball",
+        "what": "Baseball",
+        "tags": [
+          "movement"
+        ],
+        "grades": "6-8"
+      },
+      {
+        "name": "Basketball",
+        "what": "Basketball",
+        "tags": [
+          "movement"
+        ],
+        "grades": "6-8"
+      },
+      {
+        "name": "Soccer",
+        "what": "Soccer",
+        "tags": [
+          "movement"
+        ],
+        "grades": "6-8"
+      },
+      {
+        "name": "Track",
+        "what": "Track",
+        "tags": [
+          "movement"
+        ],
+        "grades": "6-8"
+      },
+      {
+        "name": "Volleyball",
+        "what": "Volleyball",
+        "tags": [
+          "movement"
+        ],
+        "grades": "6-8"
+      },
+      {
+        "name": "Project GIVE Community Service Network",
+        "what": "Community service, named as a community partner",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "History Hunters",
+        "what": "Named as a community partner",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Project Thrive",
+        "what": "Named as a community partner",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "The Barnes Foundation",
+        "what": "An art museum, named as a community partner",
+        "tags": [
+          "art"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Lawncrest Recreation Center",
+        "what": "A City rec center, named as a community partner",
+        "tags": [
+          "rec-center"
+        ],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "sullivan-clubs",
+    "name": "School clubs and partners",
+    "what": "Clubs James J. Sullivan School names on its own site: Sun Up Sharks, drama, art and a Saturday enrichment program",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "drama",
+      "art",
+      "Saturday enrichment",
+      "Sun Up Sharks",
+      "Sullivan"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "notPosted": [
+      "days",
+      "hours",
+      "cost",
+      "grades"
+    ],
+    "phone": "215-400-3960",
+    "email": "",
+    "website": "https://sullivan.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-3960)."
+    },
+    "note": "Sullivan’s own site lists these clubs without days, times or grades. Its art and drama club gives students a way to express their creativity, and students take part in the District’s Young Artists showcase each year. Ask the office what meets after school.",
+    "sources": [
+      {
+        "label": "James J. Sullivan School: clubs and community partners",
+        "url": "https://sullivan.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-27",
+    "schools": {
+      "sullivan": {
+        "relation": "onsite",
+        "checked": "2026-11-27"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Sun Up Sharks",
+        "what": "Named as a club",
+        "tags": []
+      },
+      {
+        "name": "Drama Club",
+        "what": "Drama",
+        "tags": [
+          "theater"
+        ]
+      },
+      {
+        "name": "Art Club",
+        "what": "Art",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Saturday Enrichment Program",
+        "what": "Saturday enrichment",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "farrell-clubs",
+    "name": "School clubs and partners",
+    "what": "Clubs, music and sports Louis H. Farrell School names on its own site: Kensington Soccer, Musicopia Dance, STEAM, archery, rock band, choir, strings and Brazilian and Korean drums",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "soccer",
+      "dance",
+      "STEAM",
+      "archery",
+      "rock band",
+      "choir",
+      "strings",
+      "drums",
+      "drumming",
+      "basketball",
+      "volleyball",
+      "track",
+      "Kensington Soccer",
+      "Musicopia",
+      "Farrell"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "notPosted": [
+      "days",
+      "hours",
+      "cost",
+      "grades"
+    ],
+    "phone": "215-400-3230",
+    "email": "",
+    "website": "https://farrell.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-3230)."
+    },
+    "note": "Farrell’s own site says it offers these programs during the school day, and lists them without days or times. Sports need a physical form signed by a doctor; kindergarten to 5th grade play intramural sports and grades 6–8 play in the Middle Grades Conference. Ask the office which meet after school.",
+    "sources": [
+      {
+        "label": "Louis H. Farrell School: clubs and community partners",
+        "url": "https://farrell.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-27",
+    "schools": {
+      "farrell": {
+        "relation": "onsite",
+        "checked": "2026-11-27"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Kensington Soccer",
+        "what": "Soccer, named among the school’s programs",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Musicopia Dance",
+        "what": "Dance, named among the school’s programs",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "STEAM",
+        "what": "STEAM",
+        "tags": [
+          "stem"
+        ]
+      },
+      {
+        "name": "Archery",
+        "what": "Archery",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Student Council",
+        "what": "Student council",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "Rock Band",
+        "what": "Rock band",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Art Club",
+        "what": "Art",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Choir",
+        "what": "Choir",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Strings",
+        "what": "String instruments",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Instrumental",
+        "what": "Instrumental music",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Brazilian Drums",
+        "what": "Brazilian drumming",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Korean Drums",
+        "what": "Korean drumming",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Soccer",
+        "what": "Soccer",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Basketball",
+        "what": "Basketball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Volleyball",
+        "what": "Volleyball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Track",
+        "what": "Track",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Mamadele Foundation",
+        "what": "Named as a community partner",
+        "tags": [],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "forrest-clubs",
+    "name": "School clubs and partners",
+    "what": "Clubs and partners Edwin Forrest School names on its own site: choir, dance, instrumental music, cooking, running, Settlement Music School, the Vetri Cooking Club and Philadelphia Youth Basketball",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "choir",
+      "dance",
+      "music",
+      "cooking",
+      "running",
+      "Settlement Music School",
+      "Vetri",
+      "Philadelphia Youth Basketball",
+      "PYB",
+      "basketball",
+      "Forrest"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "notPosted": [
+      "days",
+      "hours",
+      "cost",
+      "grades"
+    ],
+    "phone": "215-400-3330",
+    "email": "",
+    "website": "https://forrest.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-3330)."
+    },
+    "note": "Forrest’s own site lists these clubs and community partners without days, times or grades. Ask the office what meets after school.",
+    "sources": [
+      {
+        "label": "Edwin Forrest School: clubs and community partners",
+        "url": "https://forrest.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-27",
+    "schools": {
+      "forrest": {
+        "relation": "onsite",
+        "checked": "2026-11-27"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Choir",
+        "what": "Choir",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Dance Club",
+        "what": "Dance",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Instrumental",
+        "what": "Instrumental music",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Cooking Club",
+        "what": "Cooking",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Running Club",
+        "what": "Running",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Settlement Music School",
+        "what": "Music, named as a community partner",
+        "tags": [
+          "music"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Vetri Cooking Club",
+        "what": "Cooking, named as a community partner",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "Philadelphia Youth Basketball (PYB)",
+        "what": "Basketball, named as a community partner",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "carnell-clubs",
+    "name": "School partners",
+    "what": "A partner Laura H. Carnell School names on its own site: CADEkids",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "partners",
+      "CADEkids",
+      "prevention education",
+      "Carnell"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "notPosted": [
+      "days",
+      "hours",
+      "cost",
+      "grades"
+    ],
+    "phone": "215-400-3150",
+    "email": "",
+    "website": "https://carnell.philasd.org/about-us/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-3150)."
+    },
+    "note": "Carnell’s own site names CADEkids among its key partnerships, without saying what it runs at the school. Ask the office.",
+    "sources": [
+      {
+        "label": "Laura H. Carnell School: key partnerships",
+        "url": "https://carnell.philasd.org/about-us/"
+      }
+    ],
+    "lastVerified": "2026-11-27",
+    "schools": {
+      "carnell": {
+        "relation": "onsite",
+        "checked": "2026-11-27"
+      }
+    },
+    "clubs": [
+      {
+        "name": "CADEkids",
+        "what": "Social-emotional skills and prevention education, named as a key partner",
+        "tags": [],
         "roster": false
       }
     ]
