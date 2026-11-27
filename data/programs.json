@@ -24528,6 +24528,1025 @@
     ]
   },
   {
+    "id": "legacy-oec",
+    "name": "LEGACY Champions on the Rise at OEC",
+    "what": "A free after-school program inside Overbrook Educational Center, built around tennis, with homework help, literacy, STEM, the arts and social-emotional learning, plus before care",
+    "types": [
+      "aftercare",
+      "movement"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "before care",
+      "free",
+      "tennis",
+      "sports",
+      "homework",
+      "literacy",
+      "STEM",
+      "LEGACY",
+      "Legacy Youth Tennis",
+      "OEC",
+      "Overbrook",
+      "West Philadelphia"
+    ],
+    "address": "6722 Lansdowne Ave",
+    "grades": "K-8",
+    "gradeNote": "OEC students; the City lists the after-school program for kindergarten to 5th grade and before care for kindergarten to 8th grade",
+    "hours": "3:00–6:00 pm, Monday to Friday, September 1, 2026 to June 8, 2027, according to the City’s listing. Before care runs 7:30–8:00 am.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-487-3477",
+    "email": "",
+    "website": "https://legacyyte.org/ost-schools/overbrook-educational-center/",
+    "register": {
+      "how": "online",
+      "url": "https://www.cognitoforms.com/LegacyYouthTennisAndEducation1/OSTOEC20252026Application",
+      "label": "Register",
+      "note": "LEGACY’s page for OEC links this application. The City’s listing says registration is required."
+    },
+    "note": "Hours and dates come from the City’s program locator, which lists the after-school program free, Monday to Friday from 3:00 to 6:00 pm, September 1, 2026 to June 8, 2027, with before care from 7:30 to 8:00 am and no transportation. LEGACY’s own page lists Overbrook Educational Center as one of its four school sites, and OEC’s site names Legacy Youth Tennis and Education among its partners.",
+    "sources": [
+      {
+        "label": "LEGACY Champions on the Rise",
+        "url": "https://legacyyte.org/community-programs/after-school-program/"
+      },
+      {
+        "label": "LEGACY at Overbrook Educational Center",
+        "url": "https://legacyyte.org/ost-schools/overbrook-educational-center/"
+      },
+      {
+        "label": "City program locator: LEGACY at OEC Elementary After School 26–27",
+        "url": "https://www.phila.gov/ost/program-locator/?address=6722+Lansdowne+Ave&resource=ost_156"
+      },
+      {
+        "label": "City program locator: LEGACY at OEC Before School 26–27",
+        "url": "https://www.phila.gov/ost/program-locator/?address=6722+Lansdowne+Ave&resource=ost_155"
+      },
+      {
+        "label": "OEC: community partnerships",
+        "url": "https://oec.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-26",
+    "schools": {
+      "oec": {
+        "relation": "onsite",
+        "note": "LEGACY’s own page lists Overbrook Educational Center as one of its four school sites, OEC’s site names Legacy Youth Tennis and Education among its partners, and the City’s program locator lists the program for OEC.",
+        "sources": [
+          {
+            "label": "LEGACY Champions on the Rise",
+            "url": "https://legacyyte.org/community-programs/after-school-program/"
+          },
+          {
+            "label": "OEC: community partnerships",
+            "url": "https://oec.philasd.org/"
+          },
+          {
+            "label": "City program locator: LEGACY at OEC Elementary After School 26–27",
+            "url": "https://www.phila.gov/ost/program-locator/?address=6722+Lansdowne+Ave&resource=ost_156"
+          }
+        ],
+        "checked": "2026-11-26"
+      }
+    }
+  },
+  {
+    "id": "oec-clubs",
+    "name": "School clubs, teams and partners",
+    "what": "Clubs, music, sports and partners Overbrook Educational Center names on its own site: drama, drumline, cheerleading, Scrabble, STEAM, Girls on the Run, soccer, basketball, SquashSmarts and others",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "drama",
+      "drumline",
+      "cheerleading",
+      "color guard",
+      "Scrabble",
+      "STEAM",
+      "Girls on the Run",
+      "strings",
+      "band",
+      "soccer",
+      "basketball",
+      "squash",
+      "SquashSmarts",
+      "dance",
+      "Rock School",
+      "Methodist Services",
+      "OEC",
+      "Overbrook"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-7540",
+    "email": "",
+    "website": "https://oec.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-7540)."
+    },
+    "note": "OEC’s own site lists these clubs, music lessons, sports and community partners, without saying when each meets or for which grades. Ask the office which meet after school.",
+    "sources": [
+      {
+        "label": "Overbrook Educational Center: clubs, sports and community partnerships",
+        "url": "https://oec.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-26",
+    "schools": {
+      "oec": {
+        "relation": "onsite",
+        "checked": "2026-11-26"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Instrumental strings",
+        "what": "String instruction",
+        "tags": [
+          "music"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Instrumental band",
+        "what": "Band instruction",
+        "tags": [
+          "music"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Student Council",
+        "what": "Named as a club or activity",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "Cheerleading and Color Guard",
+        "what": "Named as a club or activity",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Drumline",
+        "what": "Named as a club or activity",
+        "tags": [
+          "music"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Drama Club",
+        "what": "An annual musical production",
+        "tags": [
+          "theater"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Scrabble Club",
+        "what": "Named as a club or activity",
+        "tags": [
+          "games"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Girls on the Run",
+        "what": "Named as a club or activity",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Black History Club",
+        "what": "Named as a club or activity",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "STEAM Club",
+        "what": "Named as a club or activity",
+        "tags": [
+          "stem"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Soccer",
+        "what": "A school sport; needs a physical form signed by a doctor",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Basketball",
+        "what": "A school sport; needs a physical form signed by a doctor",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Methodist Services",
+        "what": "Named as a community partner",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "West Philadelphia Alliance for Children",
+        "what": "Named as a community partner",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "SquashSmarts",
+        "what": "Named as a community partner",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      },
+      {
+        "name": "The Rock School for Dance Education",
+        "what": "Named as a community partner",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Eat Right Philly",
+        "what": "Named as a community partner",
+        "tags": [],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "legacy-pennell",
+    "name": "LEGACY Champions on the Rise at Pennell",
+    "what": "A free after-school program inside Pennell, built around tennis, with homework help, literacy, STEM, the arts and social-emotional learning, plus before care",
+    "types": [
+      "aftercare",
+      "movement"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "before care",
+      "free",
+      "tennis",
+      "sports",
+      "homework",
+      "literacy",
+      "STEM",
+      "LEGACY",
+      "Legacy Youth Tennis",
+      "Pennell",
+      "Ogontz"
+    ],
+    "address": "1800 Nedro Ave",
+    "grades": "K-5",
+    "gradeNote": "Pennell students, kindergarten to 5th grade in the City’s listing",
+    "hours": "3:00–6:00 pm, Monday to Friday, September 1, 2026 to June 8, 2027, according to the City’s listing. Before care runs 7:30–8:00 am.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-487-3477",
+    "email": "",
+    "website": "https://legacyyte.org/ost-schools/the-joseph-pennell-school/",
+    "register": {
+      "how": "online",
+      "url": "https://www.cognitoforms.com/LegacyYouthTennisAndEducation1/OSTPennell20252026Application",
+      "label": "Register",
+      "note": "LEGACY’s page for Pennell links this application. The City’s listing says registration is required."
+    },
+    "note": "Hours and dates come from the City’s program locator, which lists the after-school program free, Monday to Friday from 3:00 to 6:00 pm, September 1, 2026 to June 8, 2027, with meals and snacks and before care from 7:30 to 8:00 am. LEGACY’s own page lists the Joseph Pennell School as one of its four school sites.",
+    "sources": [
+      {
+        "label": "LEGACY Champions on the Rise",
+        "url": "https://legacyyte.org/community-programs/after-school-program/"
+      },
+      {
+        "label": "LEGACY at the Joseph Pennell School",
+        "url": "https://legacyyte.org/ost-schools/the-joseph-pennell-school/"
+      },
+      {
+        "label": "City program locator: LEGACY at Pennell OST After School 26–27",
+        "url": "https://www.phila.gov/ost/program-locator/?address=1800+Nedro+Ave&resource=ost_158"
+      },
+      {
+        "label": "City program locator: LEGACY at Pennell OST Before School 26–27",
+        "url": "https://www.phila.gov/ost/program-locator/?address=1800+Nedro+Ave&resource=ost_159"
+      }
+    ],
+    "lastVerified": "2026-11-26",
+    "schools": {
+      "pennell": {
+        "relation": "onsite",
+        "note": "LEGACY’s own page lists the Joseph Pennell School as one of its four school sites, and the City’s program locator lists the program for Pennell.",
+        "sources": [
+          {
+            "label": "LEGACY Champions on the Rise",
+            "url": "https://legacyyte.org/community-programs/after-school-program/"
+          },
+          {
+            "label": "City program locator: LEGACY at Pennell OST After School 26–27",
+            "url": "https://www.phila.gov/ost/program-locator/?address=1800+Nedro+Ave&resource=ost_158"
+          }
+        ],
+        "checked": "2026-11-26"
+      }
+    }
+  },
+  {
+    "id": "pennell-clubs",
+    "name": "School clubs and partners",
+    "what": "Activities and partners Joseph Pennell Elementary names on its own site: tutoring, a school play, student government, Spotlight on Jazz, Writers Matter, MET Ballet and others",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "tutoring",
+      "play",
+      "musical",
+      "student government",
+      "jazz",
+      "Spotlight on Jazz",
+      "writing",
+      "Writers Matter",
+      "ballet",
+      "MET Ballet",
+      "mentoring",
+      "Men Who Care of Germantown",
+      "hockey",
+      "Flyers",
+      "Pennell"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-3680",
+    "email": "",
+    "website": "https://pennell.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-3680)."
+    },
+    "note": "Pennell’s own site lists these activities and community partners, without saying when each meets or for which grades. Ask the office which meet after school.",
+    "sources": [
+      {
+        "label": "Joseph Pennell: clubs, activities and community partnerships",
+        "url": "https://pennell.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-26",
+    "schools": {
+      "pennell": {
+        "relation": "onsite",
+        "checked": "2026-11-26"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Tutoring",
+        "what": "Named as a club or activity",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Play",
+        "what": "Named as a club or activity; the site also mentions The Wiz and Annie musicals",
+        "tags": [
+          "theater"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Student Government Association",
+        "what": "Named as a club or activity",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "Spotlight on Jazz",
+        "what": "Named as a community partner",
+        "tags": [
+          "music"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Men Who Care of Germantown",
+        "what": "Named as a community partner",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "Writers Matter",
+        "what": "Named as a community partner",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "MET Ballet",
+        "what": "Named as a community partner",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Flyers Alumni Association and Flyers Warriors",
+        "what": "Named as a community partner",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Library",
+        "what": "Named as a community partner",
+        "tags": [],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "right-at-school-prince-hall",
+    "name": "Right At School at Prince Hall",
+    "what": "Free after-school program inside Prince Hall: homework help, STEM, arts, games and physical activity",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "Right At School",
+      "RAS",
+      "homework help",
+      "STEM",
+      "Prince Hall",
+      "West Oak Lane"
+    ],
+    "address": "6101 N Gratz St",
+    "neighborhoods": [
+      "West Oak Lane"
+    ],
+    "grades": "K-5",
+    "gradeNote": "For Prince Hall students",
+    "hours": "3:30–6:00 pm, Monday to Friday, September 1, 2026 to June 9, 2027, according to the City’s listing. Right At School’s page says the program ends at 6:00 pm.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "6:00 pm",
+    "cost": "Free ($0.00 a month on Right At School’s page)",
+    "price": "free",
+    "phone": "215-960-6934",
+    "email": "",
+    "website": "https://www.rightatschool.com/school/?school=prince-hall&district=pa-philadelphia-city&tab=2026-27-after-school",
+    "register": {
+      "how": "online",
+      "url": "https://www.rightatschool.com/school/?school=prince-hall&district=pa-philadelphia-city&tab=2026-27-after-school",
+      "label": "Join the waitlist",
+      "note": "Right At School’s page says the program is at capacity, with a waitlist."
+    },
+    "note": "Right At School’s own page for Prince Hall lists the 2026–27 after-school program at no charge, 1 to 5 days a week, ending at 6:00 pm, and says it is full, with a waitlist. Prince Hall’s site says the school partners with Right At School; the City lists the program for Prince Hall students, K–5, 3:30–6:00 pm. The phone number is the one on Right At School’s page.",
+    "sources": [
+      {
+        "label": "Right At School at Prince Hall",
+        "url": "https://www.rightatschool.com/school/?school=prince-hall&district=pa-philadelphia-city&tab=2026-27-after-school"
+      },
+      {
+        "label": "Prince Hall School: after-school programming and partners",
+        "url": "https://princehall.philasd.org/"
+      },
+      {
+        "label": "City program locator: Right At School at Prince Hall",
+        "url": "https://www.phila.gov/ost/program-locator/?address=6101+N+Gratz+St&resource=ost_235"
+      }
+    ],
+    "lastVerified": "2026-11-26",
+    "schools": {
+      "prince-hall": {
+        "relation": "onsite",
+        "note": "Right At School’s own page lists its program at Prince Hall, and the school’s site and the City’s locator name it too.",
+        "sources": [
+          {
+            "label": "Right At School at Prince Hall",
+            "url": "https://www.rightatschool.com/school/?school=prince-hall&district=pa-philadelphia-city&tab=2026-27-after-school"
+          },
+          {
+            "label": "Prince Hall School: after-school programming and partners",
+            "url": "https://princehall.philasd.org/"
+          },
+          {
+            "label": "City program locator: Right At School at Prince Hall",
+            "url": "https://www.phila.gov/ost/program-locator/?address=6101+N+Gratz+St&resource=ost_235"
+          }
+        ],
+        "checked": "2026-11-26"
+      }
+    }
+  },
+  {
+    "id": "prince-hall-clubs",
+    "name": "School clubs and partners",
+    "what": "Programs and partners Prince Hall School names on its own site: the OES Mentorship Program, Boys to Men Mentorship and Scouting America",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "mentoring",
+      "mentorship",
+      "Boys to Men",
+      "scouts",
+      "Scouting America",
+      "Boy Scouts",
+      "Prince Hall"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-3690",
+    "email": "",
+    "website": "https://princehall.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-3690)."
+    },
+    "note": "Prince Hall’s own site lists these among its clubs, activities and community partners, without saying when each meets or for which grades. Ask the office.",
+    "sources": [
+      {
+        "label": "Prince Hall School: clubs, activities and community partnerships",
+        "url": "https://princehall.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-26",
+    "schools": {
+      "prince-hall": {
+        "relation": "onsite",
+        "checked": "2026-11-26"
+      }
+    },
+    "clubs": [
+      {
+        "name": "OES Mentorship Program",
+        "what": "Named as a club or activity",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "Boys to Men Mentorship",
+        "what": "Named as a club or activity",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "Scouting America (Boy Scouts of America)",
+        "what": "Named as a community partner",
+        "tags": [
+          "nature"
+        ],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "mural-arts-lamberton",
+    "name": "Mural Arts after school at Lamberton",
+    "what": "After-school art programs inside Lamberton from Mural Arts Philadelphia, with professional artists",
+    "types": [
+      "art"
+    ],
+    "keywords": [
+      "art",
+      "mural",
+      "Mural Arts",
+      "painting",
+      "after school",
+      "Lamberton",
+      "Overbrook Park",
+      "West Philadelphia"
+    ],
+    "address": "7501 Woodbine Ave",
+    "grades": null,
+    "gradeNote": "Ask the school which grades; Mural Arts says its school-year programs run at middle school sites for ages 10 to 13",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "notPosted": [
+      "days",
+      "hours",
+      "cost",
+      "grades"
+    ],
+    "phone": "215-400-7530",
+    "email": "",
+    "website": "https://muralarts.org/programs/art-education/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-7530)."
+    },
+    "note": "Lamberton’s own site says Mural Arts Philadelphia brings professional artists into the school for after-school programs, with paid opportunities for older students. Mural Arts’ own page describes twice-a-week school-year programming at middle school sites but doesn’t list them, so ask the school which days, which grades and how to sign up.",
+    "sources": [
+      {
+        "label": "Robert E. Lamberton School: arts and community partnerships",
+        "url": "https://lamberton.philasd.org/"
+      },
+      {
+        "label": "Mural Arts Philadelphia: Art Education",
+        "url": "https://muralarts.org/programs/art-education/"
+      }
+    ],
+    "lastVerified": "2026-11-26",
+    "schools": {
+      "lamberton": {
+        "relation": "onsite",
+        "note": "Lamberton’s own site names Mural Arts Philadelphia as a partner that runs after-school programs in the school.",
+        "sources": [
+          {
+            "label": "Robert E. Lamberton School: arts and community partnerships",
+            "url": "https://lamberton.philasd.org/"
+          }
+        ],
+        "checked": "2026-11-26"
+      }
+    }
+  },
+  {
+    "id": "lamberton-clubs",
+    "name": "School clubs and partners",
+    "what": "Clubs and partners Robert E. Lamberton School names on its own site: the Lamberton Dance Club, a sewing club, music, the WEPAC library, the TGR Learning Lab and Boy Scouts and Girl Scouts",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "dance",
+      "sewing",
+      "music",
+      "library",
+      "WEPAC",
+      "STEM",
+      "TGR Learning Lab",
+      "scouts",
+      "Boy Scouts",
+      "Girl Scouts",
+      "Lamberton"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-7530",
+    "email": "",
+    "website": "https://lamberton.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-7530)."
+    },
+    "note": "Lamberton’s own site lists these clubs and partners, without saying when each meets or for which grades. Ask the office which meet after school.",
+    "sources": [
+      {
+        "label": "Robert E. Lamberton School: arts, clubs and community partnerships",
+        "url": "https://lamberton.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-26",
+    "schools": {
+      "lamberton": {
+        "relation": "onsite",
+        "checked": "2026-11-26"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Lamberton Dance Club",
+        "what": "Dance club and dance instruction",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Sewing Club",
+        "what": "Design and sewing",
+        "tags": [
+          "art"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Music",
+        "what": "The school’s music program",
+        "tags": [
+          "music"
+        ],
+        "roster": false
+      },
+      {
+        "name": "WEPAC library",
+        "what": "The West Philadelphia Alliance for Children runs the school’s library",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "TGR Learning Lab",
+        "what": "A STEM partnership named by the school",
+        "tags": [
+          "stem"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Boy Scouts and Girl Scouts",
+        "what": "On site, the school says",
+        "tags": [
+          "nature"
+        ],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "yalc-ellwood",
+    "name": "Young Achievers Learning Center at Ellwood",
+    "what": "Free after-school program inside Ellwood from Young Achievers Learning Center: a snack, homework help and project-based activities",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework help",
+      "YALC",
+      "Young Achievers",
+      "Ellwood",
+      "East Oak Lane"
+    ],
+    "address": "6701 N 13th St",
+    "grades": "K-5",
+    "gradeNote": "Ellwood students; the City’s listing gives kindergarten to 6th grade, and Ellwood goes to 5th",
+    "hours": "2:45–6:00 pm, Monday to Friday, September 1, 2026 to June 10, 2027, according to the City’s listing. Young Achievers’ own site says it takes children from dismissal, from about 2:45 to 5:45 pm, including early dismissals.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:45 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "215-698-2347",
+    "email": "",
+    "website": "https://yalcpa.org/",
+    "register": {
+      "how": "online",
+      "url": "https://yalcpa.org/enroll-form/",
+      "label": "Enroll",
+      "note": "Young Achievers’ own site links this enrollment form. The City’s listing says registration is required."
+    },
+    "note": "Young Achievers’ own site lists Ellwood Elementary among its locations. The City’s program locator lists the program free, Monday to Friday from 2:45 to 6:00 pm, with meals, and no transportation. Young Achievers’ site gives about 5:45 pm as the end, so ask which time is right.",
+    "sources": [
+      {
+        "label": "Young Achievers Learning Center",
+        "url": "https://yalcpa.org/"
+      },
+      {
+        "label": "City program locator: YALC After School at Ellwood",
+        "url": "https://www.phila.gov/ost/program-locator/?address=6701+N+13th+St&resource=ost_283"
+      }
+    ],
+    "lastVerified": "2026-11-26",
+    "schools": {
+      "ellwood": {
+        "relation": "onsite",
+        "note": "Young Achievers’ own site lists Ellwood Elementary among its locations, and the City’s program locator lists the program for Ellwood.",
+        "sources": [
+          {
+            "label": "Young Achievers Learning Center",
+            "url": "https://yalcpa.org/"
+          },
+          {
+            "label": "City program locator: YALC After School at Ellwood",
+            "url": "https://www.phila.gov/ost/program-locator/?address=6701+N+13th+St&resource=ost_283"
+          }
+        ],
+        "checked": "2026-11-26"
+      }
+    }
+  },
+  {
+    "id": "ellwood-clubs",
+    "name": "School clubs",
+    "what": "Clubs and activities Ellwood School names on its own site: glee, homework, math, sewing and sight-word clubs, art, instrumental lessons and intramural volleyball and basketball",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "glee",
+      "choir",
+      "homework",
+      "math",
+      "sewing",
+      "reading",
+      "art",
+      "instrumental",
+      "music",
+      "volleyball",
+      "basketball",
+      "library",
+      "Ellwood"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-3540",
+    "email": "",
+    "website": "https://ellwood.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-3540)."
+    },
+    "note": "Ellwood’s own site lists these clubs, arts, sports and community partners, without saying when each meets or for which grades. Ask the office which meet after school.",
+    "sources": [
+      {
+        "label": "Ellwood School: clubs, arts, sports and community partnerships",
+        "url": "https://ellwood.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-26",
+    "schools": {
+      "ellwood": {
+        "relation": "onsite",
+        "checked": "2026-11-26"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Glee Club",
+        "what": "Named as a club or activity",
+        "tags": [
+          "music"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Homework Club",
+        "what": "Named as a club or activity",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Homework Help",
+        "what": "Named as a club or activity",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Knowledge and Vocabulary",
+        "what": "Named as a club or activity",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Math Club",
+        "what": "Named as a club or activity",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Motivating Mathematicians",
+        "what": "Named as a club or activity",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Sewing Club",
+        "what": "Named as a club or activity",
+        "tags": [
+          "art"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Sight Word Club",
+        "what": "Named as a club or activity",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Art Club",
+        "what": "Named under arts",
+        "tags": [
+          "art"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Instrumental Instruction",
+        "what": "Named under music",
+        "tags": [
+          "music"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Intramural volleyball",
+        "what": "A school sport, K–5",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Intramural basketball",
+        "what": "A school sport, K–5",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Lindley Communities",
+        "what": "Named as a community partner",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "Oak Lane Library",
+        "what": "Named as a community partner",
+        "tags": [],
+        "roster": false
+      }
+    ]
+  },
+  {
     "id": "ymca-hartranft",
     "name": "YMCA Out of School Time at Hartranft",
     "what": "Free after care inside Hartranft from the Greater Philadelphia YMCA: homework help, STEM, literacy, art, fitness and social-emotional learning",

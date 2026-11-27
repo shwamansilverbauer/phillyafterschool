@@ -3781,6 +3781,131 @@
     ]
   },
   {
+    "id": "oec",
+    "name": "Overbrook Educational Center",
+    "shortName": "OEC",
+    "aliases": [
+      "Overbrook Educational Center",
+      "OEC",
+      "Overbrook Educational",
+      "Overbrook Ed Center"
+    ],
+    "address": "6722 Lansdowne Ave, Philadelphia, PA 19151",
+    "neighborhood": "West Philadelphia",
+    "grades": "K-8",
+    "dismissal": "2:54 pm",
+    "dismissalNote": "the school’s site gives the school day as 8:15 am to 2:54 pm",
+    "phone": "215-400-7540",
+    "website": "https://oec.philasd.org/",
+    "lastReviewed": "2026-11-26",
+    "added": "2026-11-26",
+    "notes": [
+      "LEGACY Youth Tennis and Education runs its free Champions on the Rise after-school program at OEC; LEGACY’s own page lists OEC as one of its four school sites, and the City’s program locator lists it this school year, Monday to Friday from 3:00 to 6:00 pm for kindergarten to 5th grade, with before care from 7:30 to 8:00 am. It has a listing here.",
+      "OEC’s own site lists its clubs, music and sports (drama, drumline, cheerleading and color guard, Scrabble, STEAM, Girls on the Run, soccer and basketball) and its community partners, among them LEGACY, Methodist Services, SquashSmarts and The Rock School for Dance Education. They are listed here as the school’s clubs and partners; the site doesn’t say which meet after school, so ask the office.",
+      "If you know a program that serves OEC and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "pennell",
+    "name": "Joseph Pennell Elementary School",
+    "shortName": "Pennell",
+    "aliases": [
+      "Joseph Pennell",
+      "Pennell Elementary",
+      "Pennell School",
+      "Joseph Pennell School",
+      "The Joseph Pennell School"
+    ],
+    "address": "1800 Nedro Ave, Philadelphia, PA 19141",
+    "neighborhood": "Ogontz",
+    "grades": "PK-5",
+    "dismissal": "2:54 pm",
+    "dismissalNote": "the school’s site gives the school day as 8:15 am to 2:54 pm",
+    "phone": "215-400-3680",
+    "website": "https://pennell.philasd.org/",
+    "lastReviewed": "2026-11-26",
+    "added": "2026-11-26",
+    "notes": [
+      "LEGACY Youth Tennis and Education runs its free Champions on the Rise after-school program at Pennell; LEGACY’s own page lists Pennell as one of its four school sites, and the City’s program locator lists it this school year, Monday to Friday from 3:00 to 6:00 pm for kindergarten to 5th grade, with before care from 7:30 to 8:00 am. It has a listing here.",
+      "Pennell’s own site names tutoring, a school play and the Student Government Association among its activities, and community partners such as Spotlight on Jazz, Writers Matter, MET Ballet and Men Who Care of Germantown. They are listed here as the school’s clubs and partners; the site doesn’t say which meet after school, so ask the office.",
+      "If you know a program that serves Pennell and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "prince-hall",
+    "name": "Prince Hall School",
+    "shortName": "Prince Hall",
+    "aliases": [
+      "Prince Hall",
+      "Prince Hall Elementary",
+      "Hall, Prince"
+    ],
+    "address": "6101 N Gratz St, Philadelphia, PA 19141",
+    "neighborhood": "West Oak Lane",
+    "grades": "PK-5",
+    "dismissal": "3:39 pm",
+    "dismissalNote": "the school’s site gives the school day as 9:00 am to 3:39 pm",
+    "phone": "215-400-3690",
+    "website": "https://princehall.philasd.org/",
+    "lastReviewed": "2026-11-26",
+    "added": "2026-11-26",
+    "notes": [
+      "Prince Hall’s own site says the school partners with Right At School for its after-school program. The City’s program locator lists it free this school year, Monday to Friday from 3:30 to 6:00 pm, for kindergarten to 5th grade, and Right At School’s own page says it is full, with a waitlist. It has a listing here.",
+      "The site also names two mentorship programs and Scouting America among its activities and partners. They are listed here as the school’s clubs and partners; ask the office when they meet.",
+      "If you know a program that serves Prince Hall and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "lamberton",
+    "name": "Robert E. Lamberton School",
+    "shortName": "Lamberton",
+    "aliases": [
+      "Robert E. Lamberton",
+      "Lamberton School",
+      "Lamberton Elementary",
+      "Robert Lamberton"
+    ],
+    "address": "7501 Woodbine Ave, Philadelphia, PA 19151",
+    "neighborhood": "West Philadelphia",
+    "grades": "PK-8",
+    "dismissal": "2:39 pm",
+    "dismissalNote": "the school’s site gives arrival from 7:30 am, instruction from 8:30 am and dismissal at 2:39 pm",
+    "phone": "215-400-7530",
+    "website": "https://lamberton.philasd.org/",
+    "lastReviewed": "2026-11-26",
+    "added": "2026-11-26",
+    "notes": [
+      "Lamberton’s own site says Mural Arts Philadelphia brings professional artists into the school for after-school programs. It has a listing here, on the school’s word; ask the office how to sign up.",
+      "The site also names a dance club, a sewing club, music, the WEPAC library, the TGR Learning Lab and on-site Boy Scouts and Girl Scouts. They are listed here as the school’s clubs and partners; ask the office which meet after school.",
+      "The City’s program locator lists no after-school program for Lamberton’s grades this school year.",
+      "If you know a program that serves Lamberton and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "ellwood",
+    "name": "Ellwood School",
+    "shortName": "Ellwood",
+    "aliases": [
+      "Ellwood",
+      "Ellwood Elementary",
+      "Ellwood Elementary School"
+    ],
+    "address": "6701 N 13th St, Philadelphia, PA 19126",
+    "neighborhood": "East Oak Lane",
+    "grades": "PK-5",
+    "dismissal": "2:54 pm",
+    "dismissalNote": "the school’s site gives the school day as 8:15 am to 2:54 pm",
+    "phone": "215-400-3540",
+    "website": "https://ellwood.philasd.org/",
+    "lastReviewed": "2026-11-26",
+    "added": "2026-11-26",
+    "notes": [
+      "Young Achievers Learning Center runs a free after-school program at Ellwood; its own site lists Ellwood among its locations, and the City’s program locator lists it this school year, Monday to Friday from 2:45 to 6:00 pm. It has a listing here.",
+      "Ellwood’s own site names its clubs (glee, homework, math, sewing, sight words, art and others), instrumental lessons and intramural volleyball and basketball. They are listed here as the school’s clubs; the site doesn’t say which meet after school, so ask the office.",
+      "If you know a program that serves Ellwood and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
     "id": "hartranft",
     "name": "John F. Hartranft School",
     "shortName": "Hartranft",
