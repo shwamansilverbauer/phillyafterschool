@@ -5935,6 +5935,19 @@
         "relation": "nearby",
         "distance": "about a 5-minute walk east of the school",
         "checked": "2026-10-10"
+      },
+      "carnell": {
+        "relation": "nearby",
+        "address": "Bushrod Library, 6304 Castor Ave",
+        "distance": "about an eight-minute walk, at the Bushrod branch on Castor Ave",
+        "note": "Carnell’s counselor page points families to LEAP at the Bushrod branch, Mondays and Tuesdays 3:00–6:00 pm and Wednesdays to Fridays 3:00–5:00 pm. It doesn’t pick up; check the hours with the branch.",
+        "sources": [
+          {
+            "label": "Carnell Counselor Corner: before and after school",
+            "url": "https://sites.google.com/philasd.org/carnell-counselor-corner/parent-resources/before-and-after-school"
+          }
+        ],
+        "checked": "2026-11-27"
       }
     }
   },

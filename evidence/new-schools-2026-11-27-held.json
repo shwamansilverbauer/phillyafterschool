@@ -1,0 +1,67 @@
+{
+  "run": "new-schools-2026-11-27-held",
+  "items": [
+    {
+      "item": "school:carnell",
+      "kind": "link",
+      "listing": "p:free-library-leap",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "schools.carnell.relation",
+          "old": null,
+          "new": "nearby",
+          "source": "https://sites.google.com/philasd.org/carnell-counselor-corner/parent-resources/before-and-after-school",
+          "quote": "Check out the LEAP program at Bushrod Library! Located at 6304 Castor Ave, Philadelphia, PA 19149 (just an 8-min walk away! Open Mondays & Tuesdays: 3:00 PM - 6:00 PM or Wednesdays - Fridays: 3:00 PM - 5:00 PM.",
+          "read": "2026-11-27",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.carnell.address",
+          "old": null,
+          "new": "Bushrod Library, 6304 Castor Ave",
+          "source": "https://sites.google.com/philasd.org/carnell-counselor-corner/parent-resources/before-and-after-school",
+          "quote": "Check out the LEAP program at Bushrod Library! Located at 6304 Castor Ave, Philadelphia, PA 19149 (just an 8-min walk away! Open Mondays & Tuesdays: 3:00 PM - 6:00 PM or Wednesdays - Fridays: 3:00 PM - 5:00 PM.",
+          "read": "2026-11-27",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.carnell.distance",
+          "old": null,
+          "new": "about an eight-minute walk, at the Bushrod branch on Castor Ave",
+          "source": "https://sites.google.com/philasd.org/carnell-counselor-corner/parent-resources/before-and-after-school",
+          "quote": "Check out the LEAP program at Bushrod Library! Located at 6304 Castor Ave, Philadelphia, PA 19149 (just an 8-min walk away! Open Mondays & Tuesdays: 3:00 PM - 6:00 PM or Wednesdays - Fridays: 3:00 PM - 5:00 PM.",
+          "read": "2026-11-27",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.carnell.note",
+          "old": null,
+          "new": "Carnell’s counselor page points families to LEAP at the Bushrod branch, Mondays and Tuesdays 3:00–6:00 pm and Wednesdays to Fridays 3:00–5:00 pm. It doesn’t pick up; check the hours with the branch.",
+          "source": "https://sites.google.com/philasd.org/carnell-counselor-corner/parent-resources/before-and-after-school",
+          "quote": "Check out the LEAP program at Bushrod Library! Located at 6304 Castor Ave, Philadelphia, PA 19149 (just an 8-min walk away! Open Mondays & Tuesdays: 3:00 PM - 6:00 PM or Wednesdays - Fridays: 3:00 PM - 5:00 PM.",
+          "read": "2026-11-27",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.carnell.sources[https://sites.google.com/philasd.org/carnell-counselor-corner/parent-resources/before-and-after-school].label",
+          "old": null,
+          "new": "Carnell Counselor Corner: before and after school",
+          "source": "https://sites.google.com/philasd.org/carnell-counselor-corner/parent-resources/before-and-after-school",
+          "quote": "Check out the LEAP program at Bushrod Library! Located at 6304 Castor Ave, Philadelphia, PA 19149 (just an 8-min walk away! Open Mondays & Tuesdays: 3:00 PM - 6:00 PM or Wednesdays - Fridays: 3:00 PM - 5:00 PM.",
+          "read": "2026-11-27",
+          "how": "fetch"
+        },
+        {
+          "path": "schools.carnell.sources[https://sites.google.com/philasd.org/carnell-counselor-corner/parent-resources/before-and-after-school].url",
+          "old": null,
+          "new": "https://sites.google.com/philasd.org/carnell-counselor-corner/parent-resources/before-and-after-school",
+          "source": "https://sites.google.com/philasd.org/carnell-counselor-corner/parent-resources/before-and-after-school",
+          "quote": "Check out the LEAP program at Bushrod Library! Located at 6304 Castor Ave, Philadelphia, PA 19149 (just an 8-min walk away! Open Mondays & Tuesdays: 3:00 PM - 6:00 PM or Wednesdays - Fridays: 3:00 PM - 5:00 PM.",
+          "read": "2026-11-27",
+          "how": "fetch"
+        }
+      ]
+    }
+  ]
+}
