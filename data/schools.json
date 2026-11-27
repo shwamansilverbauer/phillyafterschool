@@ -3829,5 +3829,144 @@
       "Barry’s own site names its clubs (an early-morning homework club, girls’ flag football, intramural basketball, chess, a run club, tutoring and gardening) and partners that work with children, including Big Brothers Big Sisters’ Power Up, WePAC and two youth football teams. They are listed here as school clubs and partners.",
       "If you know a program that serves Barry and isn’t here, send it in and it goes on this page."
     ]
+  },
+  {
+    "id": "ben-franklin",
+    "name": "Benjamin Franklin School",
+    "shortName": "Ben Franklin",
+    "aliases": [
+      "Benjamin Franklin",
+      "Ben Franklin Elementary",
+      "Ben Franklin Elementary School",
+      "Benjamin Franklin Elementary",
+      "Benjamin Franklin Elementary School",
+      "Franklin, Benjamin"
+    ],
+    "address": "5737 Rising Sun Ave, Philadelphia, PA 19120",
+    "neighborhood": "Crescentville",
+    "grades": "K-8",
+    "dismissal": "2:09 pm",
+    "dismissalNote": "the school’s site gives the school day as 7:30 am to 2:09 pm",
+    "phone": "215-400-3760",
+    "website": "https://franklin.philasd.org/",
+    "lastReviewed": "2026-11-27",
+    "added": "2026-11-27",
+    "notes": [
+      "The Boys & Girls Clubs of Philadelphia list Ben Franklin Elementary as one of their school extension sites, for students enrolled at the school, and Ben Franklin’s own site names the Boys & Girls Clubs among its community partners. The club’s list doesn’t give days, hours or cost, so call the site. It has a listing here.",
+      "Ben Franklin’s own site names its clubs and partners: string and wind instruments, cheerleading, art club, step team, yearbook, middle-grades sports and Girls on the Run, and partners that work with children, such as History Hunters, Project Thrive, The Barnes Foundation and the Lawncrest Recreation Center. They are listed here as school clubs and partners; the site doesn’t say which meet after school, so ask the office.",
+      "Ben Franklin’s school day ends early, and its site sends families to the City’s program locator for after-school programs. The City’s locator lists none at the school this school year, so ask the office who picks up here.",
+      "If you know a program that serves Ben Franklin and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "carnell",
+    "name": "Laura H. Carnell School",
+    "shortName": "Carnell",
+    "aliases": [
+      "Laura H. Carnell",
+      "Laura Carnell",
+      "Carnell Elementary",
+      "Carnell Elementary School",
+      "Laura H. Carnell Elementary",
+      "Carnell, Laura H."
+    ],
+    "address": "1100 Devereaux Ave, Philadelphia, PA 19111",
+    "neighborhood": "Oxford Circle",
+    "grades": "K-5",
+    "dismissalNote": "the school’s admission and dismissal page gives the day as 8:45 am to 3:24 pm, but the page is several years old, so ask the office for this year’s times",
+    "phone": "215-400-3150",
+    "website": "https://carnell.philasd.org/",
+    "lastReviewed": "2026-11-27",
+    "added": "2026-11-27",
+    "notes": [
+      "Two after-school programs run inside Carnell. Oxford Circle Christian Community Development Association (OCCCDA) runs one for Carnell students, and Young Achievers Learning Center runs before and after care, which the City’s program locator lists as free. Both have listings here.",
+      "Carnell’s own site names OCCCDA and CADEkids among its partners. CADEkids is listed here as a school partner; ask the office what it runs at Carnell.",
+      "The school counselor’s page also points families to the Free Library’s LEAP homework help at the Bushrod branch on Castor Avenue, a short walk away.",
+      "If you know a program that serves Carnell and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "sullivan",
+    "name": "James J. Sullivan School",
+    "shortName": "Sullivan",
+    "aliases": [
+      "James J. Sullivan",
+      "James Sullivan",
+      "Sullivan Elementary",
+      "Sullivan Elementary School",
+      "James J. Sullivan Elementary",
+      "Sullivan, James J."
+    ],
+    "address": "5300 Ditman St, Philadelphia, PA 19124",
+    "neighborhood": "Frankford",
+    "grades": "K-5",
+    "dismissal": "3:39 pm",
+    "dismissalNote": "the school’s site gives the school day as 9:00 am to 3:39 pm",
+    "phone": "215-400-3960",
+    "website": "https://sullivan.philasd.org/",
+    "lastReviewed": "2026-11-27",
+    "added": "2026-11-27",
+    "notes": [
+      "The Boys & Girls Clubs of Philadelphia list Sullivan Elementary as one of their school extension sites, for students enrolled at the school, and Sullivan’s own site names the Boys and Girls Club as its community partner. The club’s list doesn’t give days, hours or cost, so call the site. It has a listing here.",
+      "Sullivan’s own site names its clubs: Sun Up Sharks, a drama club, an art club and a Saturday enrichment program. They are listed here as school clubs; the site doesn’t give days or times, so ask the office.",
+      "If you know a program that serves Sullivan and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "farrell",
+    "name": "Louis H. Farrell School",
+    "shortName": "Farrell",
+    "aliases": [
+      "Louis H. Farrell",
+      "Louis Farrell",
+      "Farrell Elementary",
+      "Farrell Elementary School",
+      "Louis H. Farrell Elementary",
+      "Louis H. Farrell Elementary School",
+      "Farrell, Louis H.",
+      "Farrell, Louis"
+    ],
+    "address": "8300 Castor Ave, Philadelphia, PA 19152",
+    "neighborhood": "Rhawnhurst",
+    "grades": "K-8",
+    "dismissal": "2:09 pm",
+    "dismissalNote": "the school’s site gives the school day as 7:30 am to 2:09 pm",
+    "phone": "215-400-3230",
+    "website": "https://farrell.philasd.org/",
+    "lastReviewed": "2026-11-27",
+    "added": "2026-11-27",
+    "notes": [
+      "Farrell’s own site says its after-school and summer programming is provided by Methodist Services, Monday to Friday, in person. The City’s program locator lists it free, for kindergarten to 8th grade. It has a listing here.",
+      "Al-Bustan Seeds of Culture runs a free after-school Arab arts program at Farrell, in percussion and visual art, for Farrell students in grades 5 to 8, according to the City’s program locator. Farrell’s own site names Al-Bustan among its programs. It has a listing here.",
+      "Farrell’s own site names its other programs, music and sports, including Kensington Soccer, Musicopia Dance, archery, rock band, choir, strings and Brazilian and Korean drums. It says they run during the school day, so they are listed here as school clubs; ask the office which meet after school.",
+      "If you know a program that serves Farrell and isn’t here, send it in and it goes on this page."
+    ]
+  },
+  {
+    "id": "forrest",
+    "name": "Edwin Forrest School",
+    "shortName": "Forrest",
+    "aliases": [
+      "Edwin Forrest",
+      "Forrest Elementary",
+      "Forrest Elementary School",
+      "Edwin Forrest Elementary",
+      "Edwin Forrest Elementary School",
+      "Forrest, Edwin"
+    ],
+    "address": "7300 Cottage St, Philadelphia, PA 19136",
+    "neighborhood": "Mayfair",
+    "grades": "PK-5",
+    "dismissal": "2:09 pm",
+    "dismissalNote": "the school’s site gives the school day as 7:30 am to 2:09 pm",
+    "phone": "215-400-3330",
+    "website": "https://forrest.philasd.org/",
+    "lastReviewed": "2026-11-27",
+    "added": "2026-11-27",
+    "notes": [
+      "Forrest is one of the City’s Extended Day, Extended Year schools, and its site says these schools provide free before and after school care, winter and spring break camps and summer camp. The Boys & Girls Clubs of Philadelphia run the after-school program inside Forrest, which the City’s program locator lists as free. It has a listing here.",
+      "Forrest’s own site names its clubs and partners: choir, a dance club, instrumental music, a cooking club and a running club, and partners that work with children: Settlement Music School, Girls on the Run, the Vetri Cooking Club and Philadelphia Youth Basketball. They are listed here as school clubs and partners; ask the office which meet after school.",
+      "If you know a program that serves Forrest and isn’t here, send it in and it goes on this page."
+    ]
   }
 ]
