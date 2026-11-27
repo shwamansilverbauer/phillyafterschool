@@ -25545,5 +25545,427 @@
         "roster": false
       }
     ]
+  },
+  {
+    "id": "ymca-hartranft",
+    "name": "YMCA Out of School Time at Hartranft",
+    "what": "Free after care inside Hartranft from the Greater Philadelphia YMCA: homework help, STEM, literacy, art, fitness and social-emotional learning",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "homework",
+      "STEM",
+      "art",
+      "YMCA",
+      "Y",
+      "OST",
+      "Hartranft",
+      "North Philadelphia"
+    ],
+    "address": "720 W Cumberland St",
+    "grades": "K-8",
+    "gradeNote": "The YMCA lists John F. Hartranft School for kindergarten to 8th grade",
+    "hours": "From the end of the school day to 5:30 pm, according to the YMCA’s page.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:30 pm",
+    "cost": "Free. The YMCA says the program is offered at no charge at the schools it lists.",
+    "price": "free",
+    "phone": "215-608-5823",
+    "email": "",
+    "website": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/",
+    "register": {
+      "how": "online",
+      "url": "https://gpy.tfaforms.net/134",
+      "label": "Apply",
+      "note": "The YMCA’s page links this application. Applying doesn’t guarantee a place: the YMCA confirms enrollment afterwards."
+    },
+    "note": "The YMCA’s page lists John F. Hartranft School among the District schools where it runs its free, City-funded after-school program. The City’s program data also has the YMCA at Hartranft this school year, but the City’s locator page doesn’t show that entry. Hartranft’s own site doesn’t mention the YMCA, so ask the school office too.",
+    "sources": [
+      {
+        "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+        "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+      }
+    ],
+    "lastVerified": "2026-11-25",
+    "schools": {
+      "hartranft": {
+        "relation": "onsite",
+        "note": "The Greater Philadelphia YMCA’s own page lists John F. Hartranft School as one of its funded after-school sites, for kindergarten to 8th grade.",
+        "sources": [
+          {
+            "label": "Greater Philadelphia YMCA: Funded Out of School Time and After School Enrichment",
+            "url": "https://www.philaymca.org/child-care/school-age-care-programs/funded-out-of-school-time-and-after-school-enrichment/"
+          }
+        ],
+        "checked": "2026-11-25"
+      }
+    }
+  },
+  {
+    "id": "hartranft-clubs",
+    "name": "School clubs and teams",
+    "what": "Clubs and teams John F. Hartranft School names on its own site: a Hispanic club, Mighty Writers, dance, band and strings, art, music, basketball and volleyball",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "Mighty Writers",
+      "writing",
+      "dance",
+      "band",
+      "strings",
+      "art",
+      "music",
+      "basketball",
+      "volleyball",
+      "tutoring",
+      "Hartranft"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-7090",
+    "email": "",
+    "website": "https://hartranft.philasd.org/about-us/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-7090)."
+    },
+    "note": "Hartranft’s About Us page lists these as its extracurricular activities, without days, times or grades. Ask the office what meets after school this year.",
+    "sources": [
+      {
+        "label": "John F. Hartranft: About Us",
+        "url": "https://hartranft.philasd.org/about-us/"
+      }
+    ],
+    "lastVerified": "2026-11-25",
+    "schools": {
+      "hartranft": {
+        "relation": "onsite",
+        "checked": "2026-11-25"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Hispanic Club",
+        "what": "A Hispanic culture club",
+        "tags": []
+      },
+      {
+        "name": "Mighty Writers",
+        "what": "Writing with Mighty Writers, named among the school’s activities",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Girls’ Club (GEMS)",
+        "what": "A girls’ club",
+        "tags": []
+      },
+      {
+        "name": "Gentlemen’s Club",
+        "what": "A boys’ club",
+        "tags": []
+      },
+      {
+        "name": "Dance Club",
+        "what": "Dance",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Boys Basketball Team",
+        "what": "Basketball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Girls Volleyball Team",
+        "what": "Volleyball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Band and Strings",
+        "what": "Band and string instruments",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Art Club",
+        "what": "Art",
+        "tags": [
+          "art"
+        ]
+      },
+      {
+        "name": "Panther Press",
+        "what": "The school newspaper",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Music Club",
+        "what": "Music",
+        "tags": [
+          "music"
+        ]
+      },
+      {
+        "name": "Student Voices",
+        "what": "A student voice group",
+        "tags": []
+      },
+      {
+        "name": "Math and reading clubs and tutoring",
+        "what": "Math and reading help",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Student Government",
+        "what": "Student government",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "Saturday PSSA Prep Academy",
+        "what": "Saturday test preparation",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      }
+    ]
+  },
+  {
+    "id": "sunrise-barry",
+    "name": "Sunrise of Philadelphia at Barry",
+    "what": "Free after-school program inside Barry, with small-group academic help, a snack, STEM and social-emotional activities",
+    "types": [
+      "aftercare"
+    ],
+    "keywords": [
+      "aftercare",
+      "after school",
+      "free",
+      "Sunrise",
+      "homework help",
+      "Barry",
+      "West Philadelphia",
+      "childcare"
+    ],
+    "address": "5900 Race St",
+    "grades": "K-8",
+    "gradeNote": "For Barry students",
+    "hours": "3:30 to 5:45 pm, Monday to Friday, September 1, 2026 to June 8, 2027, according to the City’s program locator.",
+    "days": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri"
+    ],
+    "pickupBy": "5:45 pm",
+    "cost": "Free",
+    "price": "free",
+    "phone": "445-221-2336",
+    "email": "",
+    "website": "https://www.sunriseofphila.org/school-year",
+    "register": {
+      "how": "online",
+      "url": "https://www.sunriseofphila.org/services-8",
+      "note": "Sunrise’s enrollment page has its K–8 application; choose Barry. The City’s locator says the program is only open to Barry students and registration is open until June 1, 2027."
+    },
+    "note": "Sunrise’s own page lists Barry Elementary School among its sites and says its after-school programs are free at all of its sites. The City’s locator lists it at 5900 Race St for kindergarten to 8th grade, with a healthy snack and no transportation.",
+    "sources": [
+      {
+        "label": "Sunrise of Philadelphia: school-year program and sites",
+        "url": "https://www.sunriseofphila.org/school-year"
+      },
+      {
+        "label": "Sunrise enrollment",
+        "url": "https://www.sunriseofphila.org/services-8"
+      },
+      {
+        "label": "City program locator: Sunrise @ Barry",
+        "url": "https://www.phila.gov/ost/program-locator/?address=5900+Race+St&resource=ost_244"
+      }
+    ],
+    "lastVerified": "2026-11-25",
+    "schools": {
+      "barry": {
+        "relation": "onsite",
+        "note": "Sunrise’s own list of sites names Barry Elementary School, and the City’s locator lists Sunrise at Barry this school year.",
+        "sources": [
+          {
+            "label": "Sunrise of Philadelphia: school-year program and sites",
+            "url": "https://www.sunriseofphila.org/school-year"
+          },
+          {
+            "label": "City program locator: Sunrise @ Barry",
+            "url": "https://www.phila.gov/ost/program-locator/?address=5900+Race+St&resource=ost_244"
+          }
+        ],
+        "checked": "2026-11-25"
+      }
+    }
+  },
+  {
+    "id": "barry-clubs",
+    "name": "School clubs and partners",
+    "what": "Clubs and partners John Barry School names on its own site: homework club, flag football, basketball, chess, running, gardening, Power Up and youth football",
+    "types": [
+      "clubs"
+    ],
+    "keywords": [
+      "clubs",
+      "homework club",
+      "flag football",
+      "basketball",
+      "chess",
+      "running",
+      "gardening",
+      "tutoring",
+      "mentoring",
+      "Big Brothers Big Sisters",
+      "WePAC",
+      "football",
+      "Barry"
+    ],
+    "address": "",
+    "grades": null,
+    "gradeNote": "Ask the school",
+    "hours": "Not published; ask the school office",
+    "cost": "Not published",
+    "phone": "215-400-7640",
+    "email": "",
+    "website": "https://barry.philasd.org/",
+    "register": {
+      "how": "school",
+      "note": "Ask the school office (215-400-7640)."
+    },
+    "note": "Barry’s own site lists these clubs and community partners without days, times or grades. The homework club meets early in the morning. Ask the office what meets after school.",
+    "sources": [
+      {
+        "label": "John Barry: clubs and community partners",
+        "url": "https://barry.philasd.org/"
+      }
+    ],
+    "lastVerified": "2026-11-25",
+    "schools": {
+      "barry": {
+        "relation": "onsite",
+        "checked": "2026-11-25"
+      }
+    },
+    "clubs": [
+      {
+        "name": "Early Morning Homework Club",
+        "what": "Homework help before school",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Girls Flag Football",
+        "what": "Flag football for girls",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Intramural Basketball",
+        "what": "Basketball",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Chess Club",
+        "what": "Chess",
+        "tags": [
+          "games"
+        ]
+      },
+      {
+        "name": "Run Club",
+        "what": "Running",
+        "tags": [
+          "movement"
+        ]
+      },
+      {
+        "name": "Tutoring",
+        "what": "Tutoring",
+        "tags": [
+          "academics"
+        ]
+      },
+      {
+        "name": "Gardening",
+        "what": "Gardening",
+        "tags": [
+          "nature"
+        ]
+      },
+      {
+        "name": "Power Up/Big Brothers Big Sisters",
+        "what": "Mentoring, named as a community partner",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "WePAC",
+        "what": "Named as a community partner",
+        "tags": [
+          "academics"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Eat Right Philadelphia",
+        "what": "A nutrition program, named as a community partner",
+        "tags": [],
+        "roster": false
+      },
+      {
+        "name": "West Philly Panthers youth football",
+        "what": "Youth football, named as a community partner",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      },
+      {
+        "name": "Zone 6 West Philly youth football",
+        "what": "Youth football, named as a community partner",
+        "tags": [
+          "movement"
+        ],
+        "roster": false
+      }
+    ]
   }
 ]
