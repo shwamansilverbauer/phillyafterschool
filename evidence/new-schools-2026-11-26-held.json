@@ -1,0 +1,58 @@
+{
+  "run": "new-schools-2026-11-26-held",
+  "items": [
+    {
+      "item": "news:new-schools-2026-11-26",
+      "kind": "news",
+      "listing": "n:2026-11-26|Five more schools: OEC, Pennell, Prince Hall, Lamberton and Ellwood",
+      "outcome": "published",
+      "fields": [
+        {
+          "path": "date",
+          "old": null,
+          "new": "2026-11-26",
+          "source": "https://oec.philasd.org/",
+          "quote": "",
+          "read": "2026-11-26",
+          "how": "fetch"
+        },
+        {
+          "path": "title",
+          "old": null,
+          "new": "Five more schools: OEC, Pennell, Prince Hall, Lamberton and Ellwood",
+          "source": "https://oec.philasd.org/",
+          "quote": "",
+          "read": "2026-11-26",
+          "how": "fetch"
+        },
+        {
+          "path": "text",
+          "old": null,
+          "new": "Each has its own page with what runs there, what picks up from it and what’s a short walk away. New to the site are LEGACY’s free tennis-based after-school program at Overbrook Educational Center and Pennell, Right At School’s free after-school program at Prince Hall, Mural Arts’ after-school art at Lamberton and Young Achievers Learning Center’s free after-school program at Ellwood, each with the clubs and partners the school names on its own site. That makes 94 schools in all.",
+          "source": "https://oec.philasd.org/",
+          "quote": "",
+          "read": "2026-11-26",
+          "how": "fetch"
+        },
+        {
+          "path": "href",
+          "old": null,
+          "new": "oec/",
+          "source": "https://oec.philasd.org/",
+          "quote": "",
+          "read": "2026-11-26",
+          "how": "fetch"
+        },
+        {
+          "path": "link",
+          "old": null,
+          "new": "See OEC",
+          "source": "https://oec.philasd.org/",
+          "quote": "",
+          "read": "2026-11-26",
+          "how": "fetch"
+        }
+      ]
+    }
+  ]
+}
