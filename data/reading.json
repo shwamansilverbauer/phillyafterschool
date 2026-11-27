@@ -286,5 +286,11 @@
     "how": "person",
     "why": "A plain fetch answered HTTP 403 on 2026-11-24.",
     "seen": "2026-11-24"
+  },
+  {
+    "match": "libwww.freelibrary.org/locations",
+    "how": "person",
+    "why": "A plain fetch of the Bushrod branch page answered HTTP 403 on 2026-11-27.",
+    "seen": "2026-11-27"
   }
 ]
